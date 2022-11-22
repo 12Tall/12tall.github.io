@@ -2,6 +2,7 @@
 title: 生命起源 
 date: 2022-10-15    
 timeLine: true
+sidebar: false  
 icon: react  
 category:  
     - 胡思乱想  

@@ -5,7 +5,6 @@ article: false
 timeline: false
 editLink: false 
 pageInfo: false
-sidebar: true 
 icon: nodeJS   
 ---    
 

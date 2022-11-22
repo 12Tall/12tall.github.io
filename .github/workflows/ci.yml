@@ -23,6 +23,7 @@ jobs:
         run: |
           cd ./src/.vuepress/dist/
           echo 12tall.cn > CNAME  
+          echo > .nojekyll
           git config --global user.name "${GITHUB_ACTOR}"
           git init
           git add -A

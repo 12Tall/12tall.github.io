@@ -33,7 +33,7 @@ export default hopeTheme({
       navbar: zhNavbar,
 
       // sidebar
-      sidebar: zhSidebar,
+      sidebar: false, // zhSidebar,
 
       footer: "蝉噪林愈静 鸟鸣山更幽",
 
@@ -130,7 +130,7 @@ export default hopeTheme({
       vuePlayground: true,
     },
 
-    pwa: {
+   /*  pwa: {
       favicon: "/favicon.ico",
       cacheHTML: true,
       cachePic: true,
@@ -168,28 +168,28 @@ export default hopeTheme({
             type: "image/png",
           },
         ],
-        // shortcuts: [
-        //   {
-        //     name: "Demo",
-        //     short_name: "Demo",
-        //     url: "/demo/",
-        //     icons: [
-        //       {
-        //         src: "/assets/icon/guide-maskable.png",
-        //         sizes: "192x192",
-        //         purpose: "maskable",
-        //         type: "image/png",
-        //       },
-        //       {
-        //         src: "/assets/icon/guide-monochrome.png",
-        //         sizes: "192x192",
-        //         purpose: "monochrome",
-        //         type: "image/png",
-        //       },
-        //     ],
-        //   },
-        // ],
+        shortcuts: [
+          {
+            name: "Demo",
+            short_name: "Demo",
+            url: "/demo/",
+            icons: [
+              {
+                src: "/assets/icon/guide-maskable.png",
+                sizes: "192x192",
+                purpose: "maskable",
+                type: "image/png",
+              },
+              {
+                src: "/assets/icon/guide-monochrome.png",
+                sizes: "192x192",
+                purpose: "monochrome",
+                type: "image/png",
+              },
+            ],
+          },
+        ],
       },
-    },
+    }, */
   },
 });
