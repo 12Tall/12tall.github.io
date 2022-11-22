@@ -10,4 +10,7 @@ icon: nodeJS
 
 Javascript 编码相关的项目，包括但不限于Vanilla、Node 等    
 
-## 项目列表    
+## 笔记    
+
+1. [前缀树 Trie](./trie/README.md)的理解与实现  
+

@@ -5,9 +5,9 @@ timeLine: true
 sidebar: false  
 icon: react  
 category:  
-    - 胡思乱想  
+    - 我理解的  
 tag:  
-    - 胡思乱想  
+    - 我理解的  
 ---
 
 我们所说的灵魂应该是建立在自我意识之上的  
