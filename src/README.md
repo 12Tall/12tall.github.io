@@ -9,15 +9,15 @@ tagline: 蝉噪林愈静 鸟鸣山更幽
 # heroFullScreen: true
 bgImage: /bg.png
 projects:
-  # - icon: project
-  #   name: project name
-  #   desc: project detailed description
-  #   link: https://your.project.link
+  - icon: python
+    name: Python 相关
+    desc: Python 编码相关的项目，主要包括：Web、数学、控制与仿真等  
+    link: ./python/
 
-  # - icon: link
-  #   name: link name
-  #   desc: link detailed description
-  #   link: https://link.address
+  - icon: nodeJS
+    name: Javascript 相关  
+    desc: 包括但不限于Vanilla、Node  
+    link: ./node/
 
   # - icon: book
   #   name: book name
