@@ -3,7 +3,7 @@ title: 我理解的神经网络
 date: 2022-10-07    
 timeLine: true
 sidebar: false  
-icon: react  
+icon: creative  
 category:  
     - 我理解的  
 tag:  

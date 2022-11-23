@@ -20,20 +20,20 @@ projects:
     desc: 包括但不限于Vanilla、Node  
     link: /node/
 
-  # - icon: book
-  #   name: book name
-  #   desc: Detailed description of the book
-  #   link: https://link.to.your.book
+  - icon: superscript
+    name: 数学相关  
+    desc: 常用的数学概念、仿真工具的使用  
+    link: /math/
 
-  # - icon: article
-  #   name: article name
-  #   desc: Detailed description of the article
-  #   link: https://link.to.your.article
+  - icon: editor
+    name: 笔记
+    desc: 编程与学习过程中用到的技巧、工具等  
+    link: /notes/
 
-  # - icon: friend
-  #   name: friend name
-  #   desc: Detailed description of friend
-  #   link: https://link.to.your.friend
+  - icon: config
+    name: 运维
+    desc: 运维相关，包括：路由、交换、操作系统等软硬件
+    link: /maintenance/
 
   # - icon: /logo.svg
   #   name: custom item

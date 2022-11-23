@@ -1,7 +1,7 @@
 import { defineUserConfig } from "vuepress";
 import theme from "./theme.js";
-import {path} from '@vuepress/utils'  
-import {registerComponentsPlugin} from '@vuepress/plugin-register-components'
+import { path } from '@vuepress/utils'
+import { registerComponentsPlugin } from '@vuepress/plugin-register-components'
 
 export default defineUserConfig({
   base: "/",
@@ -13,6 +13,10 @@ export default defineUserConfig({
       description: "12Tall 的博客",
     },
   },
+
+  head: [
+    ['meta', { charset: 'utf-8' }],
+  ],
 
   theme,
 

@@ -13,5 +13,12 @@ Python 编码相关的项目，主要包括：Web、数学、控制与仿真等
 
 ## 项目列表    
 
-1. 串口信号发生器   
+1. [串口信号发生器](./multithread/signal-generator.md)   
 2. 串口示波器（进行中）  
+
+
+## 其他  
+1. [PySide2 的学习笔记](./pyside2/README.md)  
+2. [PyInstaller 程序逆向](./pyinstaller-inversion/README.md)  
+3. [Python 请求UAC](./uac.md)  
+4. [Python 多进程](./multiprocessing.md)
