@@ -45,4 +45,16 @@ Samba 内置有一个DNS 服务器，不支持多个域、且在域名解析转�
 - [SAMBA](https://www.jianshu.com/p/15893eece2ee)  
 - [Installing Samba as Active Directory Domain Controller Using Internal DNS on Ubuntu 18.04](http://biroinfotek.com/installing-samba-as-active-directory-domain-controller-using-internal-dns-on-ubuntu-18-04/)：在新版Ubuntu 中依然可用    
 - [Install Samba 4.7.6 AD DC – Ubuntu 18.04 – Bind 9.11 DNS – Backend AD RFC2307](http://biroinfotek.com/install-samba-4-7-6-ad-dc-ubuntu-18-04-bind-9-11-dns-backend-ad-rfc2307/)：在新版Ubuntu 中依然可用  
-- [VPN Single SignOn with Samba AD](https://wiki.samba.org/index.php/VPN_Single_SignOn_with_Samba_AD)：主要是Radius 服务器配置  
+- [VPN Single SignOn with Samba AD](https://wiki.samba.org/index.php/VPN_Single_SignOn_with_Samba_AD)：主要是Radius 服务器配置   
+- [How to Compile Samba 4.10.5 on Ubuntu 16.04](https://www.kombitz.com/2019/07/08/how-to-compile-samba-4-10-5-on-ubuntu-16-04/) 在Ubuntu 22.04+Samba 4.17.2 依然可用。编译前配置如下：  
+    ```bash  
+    ./configure \
+    --with-systemd \
+    --systemd-install-services \
+    --with-systemddir=/etc/systemd/system \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --enable-selftest \
+    --with-smbpasswd-file=/etc/samba/smbpasswd \
+    --enable-fhs
+    ```
