@@ -17,7 +17,8 @@ icon: config
 ## Ubuntu Server  
 - [域控制器杂谈](./ubuntu/active-directory-controller/README.md)  
 - [Gogs 安装与维护](./service_tools/gogs.md)  
-- [Github Actions](./service_tools/github-actions.md)
+- [Github Actions](./service_tools/github-actions.md)  
+- [MariaDB 运维](./ubuntu/mariadb/README.md)
 
 ## 路由与交换      
 - [eve-ng安装与镜像导入](./router_switch/eve-ng.md)  
