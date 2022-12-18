@@ -17,6 +17,7 @@ icon: superscript
 3. [卷积](./integral_transform/convolution.md)  
 4. [Z 变换](./integral_transform/z-transform.md)  
 5. [龙格-库塔算法求微分方程（组）](./integral_transform/runge-kutta/README.md)
+6. [新龙格-库塔算法求微分方程（组）的实现](./integral_transform/runge-kutta/new_rk4.md)
 
 ## 工程数学    
 1. [滞回曲线 Hysteresis ](./engineering-mathematics/hystersis/README.md)  
