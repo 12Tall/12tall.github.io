@@ -154,7 +154,118 @@ m.simulate(stop_at=1)
 print(m.res)
 ```  
 
-如果需要更高的精度，还可以升级到更高的阶数。只需修改状态变量中高亮的代码部分就行了。[源代码](./rk4.py)   
+## 系统对象  
+2022-12-18 更新。上面的代码直接可以复制运行，而下面的部分是根据上述想法，将模块提取为一个中间层，方便复杂系统的建模与抽象。代码已经更新到[rk4.py](./rk4.py)，具体改动为：  
+1. 最大的改动是要代码能够满足IDE 的提示需求
+2. `create_*()` 函数会自动创建并添加到`self` 对象，同时返回创建对象的引用  
+   1. 需要注意的是，不要有重名的现象  
+3. 无论是模块、还是状态，都会根据`System` 获取步长`h` 和`index` 信息  
+4. 取消状态方程的传入参数，因为复杂的系统通过引用传递更方便
+5. 龙哥-库塔的迭代过程也由`System` 完成
+6. 考虑系统的复杂程度，`System.calc()` 不再自动记录计算结果，需要用户自己统计需要的数据。不排除后面会添加，但是现在能写出来就不错了。  
+
+下面是`System` 类的代码：  
+```python  
+class System():
+    def __init__(self, h=0.01) -> None:
+        self.h = h
+        self.index = 1
+        self.create_timer()
+        pass
+
+    def get_h(self):
+        return self.h
+
+    def create_module(self, name="module"):
+        module_name = "/"+name
+        module = Module(module_name, get_h=lambda: self.h,
+                        get_index=lambda: self.index)
+        setattr(self, module_name, module)
+        return module
+
+    def create_timer(self):  # system 的timer 是一个状态的引用，如果是一个模块的引用的话，将会导致该timer 被计算两次
+        timer = self.create_module("timer")
+        self.timer = timer.create_state(
+            "time", lambda: 1, init_value=0)
+
+    def calc_k1_to_k4(self):
+        for index in range(1, 5):  # 计算每个属性的 k1,k2,k3,k4
+            self.index = index
+            for module_name in dir(self):
+                # 遍历所有属性，筛选State 类型用于计算，似乎是按属性名排序的
+                module: Module = getattr(self, module_name)
+                if (isinstance(module, Module)):
+                    module.index = index  # 更新状态变量的阶数，使得prop.val() 函数能返回正确的值
+                    module.calc_k1_to_k4()
+
+    def calc_k0(self):
+        # 根据上面计算的k1~k4 数据，计算这一步的k0 和结果，并以数组的形式返回
+        for module_name in dir(self):
+            # 遍历所有属性，筛选State 类型用于计算，似乎是按属性名排序的
+            module: Module = getattr(self, module_name)
+            if (isinstance(module, Module)):
+                module.calc_k0()
+
+    def reset(self):
+        for module_name in dir(self):
+            module: Module = getattr(self, module_name)
+            if (isinstance(module, Module)):
+                module.reset()
+
+    def calc(self):
+        self.calc_k1_to_k4()
+        self.calc_k0()
+
+    def simulate(self):
+        pass
+    pass
+```  
+
+测试代码如下：  
+```python
+##### Test #####
+# u = 5v
+# r = 1 Ω
+# c = 1 H
+# 三种元件串联，得：
+# 1. du_vol = 0, u_vol_0 = 5
+# 2. dc_vol = i/c  = r_vol/r/c,  c_vol_0 = 0  # 流入为正
+# 3. dr_vol = -i/c = -r_vol/r/c, r_vol = -5
+
+sys = System(0.01)
+U = 5
+R = 1
+C = 1
+
+
+u = sys.create_module("u")  # 电源模型
+u_h = u.create_state("u_h", func=lambda: U*math.cos(sys.timer.val()), init_value=0)
+u_l = u.create_state("u_l", func=lambda: 0, init_value=0)
+
+r = sys.create_module("r")  # 电阻模型
+r_i = r.create_state("r_i", func=lambda: (
+    u_h.func()-r_l.func())/R, init_value=0)  # lambda 函数中可以通过.fun()调用其他状态的微分 # 初始值在某种程度上决定了电路的运行状态
+
+c = sys.create_module("c")  # 电容模型
+c_h = c.create_state("c_h", func=lambda: u_l.func() +
+                     r_i.val()/C)
+
+# 连接点处电压相同
+r_h = u_h
+c_l = u_l
+r_l = c_h
+# 环路电流处处相等
+u_i = c_i = r_i
+
+for i in range(3200):
+    sys.calc()
+    print(i*0.01,c_h.curr_value, c_i.curr_value)
+
+```
+电感的响应如下：  
+![](./img/rc-circuit.png)
+
+如果需要更高的精度，还可以升级到更高的阶数。只需修改状态变量中高亮的代码部分就行了。[源代码](./rk4.py)。需要用户对物理模型非常非常熟悉才行，算是一种不完整的模块化吧。照着真正的建模语言还有很大的差距 :(   
 
 -----  
 2022-12-18 上海
