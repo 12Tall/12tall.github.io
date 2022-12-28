@@ -48,6 +48,9 @@ icon: superscript
 - [偏微分方程](./modeling/openmodelica/pde.md)
 - [常见问题](./modeling/openmodelica/faq.md)  
 
+### OpenHydraulics 一维液压仿真  
+- [液压油](./modeling/openhydraulics/oil/README.md)
+
 ## 其他  
 1. [Nabla算子与梯度、散度、旋度](./nabla/README.md)  
 2. [斯特里贝克曲线](./stribeck-curve/README.md)
