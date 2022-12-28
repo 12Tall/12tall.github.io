@@ -24,6 +24,7 @@ export default hopeTheme({
     medias: {
       BiliBili: "https://space.bilibili.com/66003054",
       GitHub: "https://github.com/12Tall",
+      Rss: "/rss.xml"
     },
   },
 
