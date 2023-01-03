@@ -33,7 +33,9 @@ icon: superscript
 5. [线性控制器设计](./engineering-mathematics/02-control-theory/05-linear-controller-design/README.md)  
 6. [状态观测器设计](./engineering-mathematics/02-control-theory/06-linear-observer-design/README.md)  
 7. [倒立摆状态反馈控制](engineering-mathematics/02-control-theory/07-sigle-inverted-pendulum/README.md)  
-8. [连续系统的离散化](./engineering-mathematics/02-control-theory/08-discrete/README.md)
+8. [连续系统的离散化](./engineering-mathematics/02-control-theory/08-discrete/README.md)  
+
+20. [PID 控制算法](./engineering-mathematics/02-control-theory/20-pid/README.md)
 
 ## OpenModelica 建模工具   
 - [初识Modelica](./modeling/openmodelica/intro.md)  
