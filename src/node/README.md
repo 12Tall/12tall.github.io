@@ -13,5 +13,6 @@ Javascript 编码相关的项目，包括但不限于Vanilla、Node 等
 ## 笔记    
 
 1. [前缀树 Trie](./trie/README.md)的理解与实现    
-2. [LDAP 认证](./ldap-auth/README.md)
+2. [LDAP 认证](./ldap-auth/README.md)  
+3. [Element-Plus 可编辑单元格](./editable-cell/README.md)
 
