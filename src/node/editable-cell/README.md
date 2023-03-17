@@ -215,6 +215,70 @@ const editable = ref(false)
 </script>
 ```
 
+### 可编辑性  
+
+有时我们还需要根据条件去判断表格内容是否可编辑，例如人员权限等，所以需要额外的判断条件。另外因为`vue` 在渲染空白字符串时可能会造成`<div></div>` 标签高度为0，所以还需要人为修复一个小bug，以下就是完整代码：  
+```vue{35-43,51}
+<template>
+    <div @click="edit" class="editable-cell">
+        <!-- 如果单元格是可编辑的，则鼠标移上去之后会变形，且会有消息提示 -->
+        <ElTooltip v-if="editable && !isBeingEdited" placement="bottom">
+            <template v-if="editable" #content>Click to edit<br />Press Enter/Esc/Tab to exit</template>
+
+            <slot></slot>
+        </ElTooltip>
+        <component ref="input" autofocus="true" v-else-if="editable && isBeingEdited" :is="component" v-bind="$attrs"
+            @keyup.enter="finishEditing" @keyup.esc="finishEditing" @keyup.tab="finishEditing">
+            <slot name="sub-component"></slot>
+        </component>
+        <div v-else class="uneditable-cell">
+            <slot></slot>
+        </div>
+    </div>
+</template>
+
+<script setup lang="ts">
+import { ElTooltip } from 'element-plus';
+import { nextTick, ref } from 'vue';
+
+defineProps([
+    'editable',   // the editable switch
+    'component',  // editable componenet instance
+]);
+const isBeingEdited = ref(false);  // internal editing state
+const input = ref()
+
+
+function finishEditing() {
+    isBeingEdited.value = false
+}
+
+function edit(e) {
+    if (props.editable) {
+        isBeingEdited.value = true
+        // can not get ref input before the element is created
+        nextTick(() => {
+            input.value.focus()
+        })
+    }
+}
+
+</script>
+
+
+
+<style scoped>
+.editable-cell {
+    min-height: 32px;
+    /* set minimum height to extend the div container */
+    cursor: pointer;
+}
+
+.uneditable-cell {
+    cursor: default;
+}
+</style>
+```
 
 
 #### 使用示例   
@@ -222,34 +286,78 @@ const editable = ref(false)
 下面的例子可以演示用法，双击文本就可以打开一个`<el-select></el-select>` 并编辑选项，按`enter` 或`esc` 键就能退出编辑状态。唯一需要注意的是：如果`res_1` 的类型与`<el-select></el-select>` 中的`<el-option></el-option>` 中`value` 的类型不一致，则`label` 标签渲染可能会有异常。  
 
 ```vue
-<editablecell component_type="el-select"  v-model="value">  
-    <template #edit-component-slot>
+<editablecell component="el-select" v-model="res_1" @change="test" editable="true"> 
+    <span>单击这里：-- {{res_1}} --</span>
+    <template #sub-component>
         <el-option v-for="n in 3" :key="n" :label="`option: ${n}`" :value="n"/>
     </template>
 </editablecell>
 ```
 
-<editablecell component_type="el-select" v-model="res_1" @change="test"> 
-    <template #content>
-        <span>双击这里：-- {{res_1}} --</span>
-    </template>
-    <template #edit-component-slot>
+<editablecell component="el-select" v-model="res_1" @change="test" editable="true"> 
+    <span>单击这里：-- {{res_1}} --</span>
+    <template #sub-component>
         <el-option v-for="n in 3" :key="n" :label="`option: ${n}`" :value="n"/>
     </template>
-</editablecell>
+</editablecell>  
 
 
+关于表格的示例：  
+```vue
+<div>
+    <ElTable :data="data">
+        <ElTableColumn label="name" prop="name" width="150">   
+        </ElTableColumn>
+        <ElTableColumn label="Date">
+            <template #default="scope">
+                <editablecell component="el-date-picker" editable="true" type="date" placeholder="Pick a day" v-model="scope.row.date">{{ scope.row.date }}</editablecell>
+            </template>
+        </ElTableColumn>
+        <ElTableColumn label="Gender">
+                <template #default="scope">
+                <editablecell component="el-select" :editable="scope.row.name=='Tuffy'" v-model="scope.row.gender">{{ scope.row.gender }}
+                    <template #sub-component>
+                        <el-option v-for="n in ['male','female']" :key="n" :label="n" :value="n"/>
+                    </template>
+                </editablecell>
+            </template>
+        </ElTableColumn>
+    </ElTable>
+</div>
+```
+<div>
+    <ElTable :data="data">
+        <ElTableColumn label="name" prop="name" width="150">   
+        </ElTableColumn>
+        <ElTableColumn label="Date">
+            <template #default="scope">
+                <editablecell component="el-date-picker" editable="true" type="date" placeholder="Pick a day" v-model="scope.row.date">{{ scope.row.date }}</editablecell>
+            </template>
+        </ElTableColumn>
+        <ElTableColumn label="Gender">
+                <template #default="scope">
+                <editablecell component="el-select" :editable="scope.row.name=='Tuffy'" v-model="scope.row.gender">{{ scope.row.gender }}
+                    <template #sub-component>
+                        <el-option v-for="n in ['male','female']" :key="n" :label="n" :value="n"/>
+                    </template>
+                </editablecell>
+            </template>
+        </ElTableColumn>
+    </ElTable>
+</div>
+可以看到所有的日期信息都是可以修改的，并且只有`Tuffy` 的性别可以被修改：  
+<div>{{ `${data[3].name}: ${data[3].date}: ${data[3].gender}` }}</div>
 
 <script setup lang="ts">
 import {ref} from 'vue'
 
 /** 表格1 所需的数据 */
-const data=[
+const data=ref([
     {name:'Tom', date:'2023-03-15', gender:'male'},
     {name:'Jerry', date:'2023-03-15', gender:'male'},
     {name:'Tara', date:'2023-03-15', gender:'female'},
-    {name:'Tuffy', date:'2023-03-15', gender:'female'},
-]
+    {name:'Tuffy', date:'2023-03-15', gender:'male'},
+])
 
 const component_type= ref('el-link');
 function switch_component(c){
