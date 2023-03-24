@@ -16,6 +16,8 @@ jobs:
           persist-credentials: false
           
       - name: Install and Build
+        env: 
+          NODE_OPTIONS: "--max_old_space_size=8192"
         run: |
           npm i  
           npm  run docs:build
@@ -25,6 +27,7 @@ jobs:
           echo 12tall.cn > CNAME  
           echo > .nojekyll
           git config --global user.name "${GITHUB_ACTOR}"
+          git config --global init.defaultBranch master
           git init
           git add -A
           git commit -m "Auto Deploy"

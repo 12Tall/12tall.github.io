@@ -15,5 +15,9 @@
     "vue": "^3.2.45",
     "vuepress": "2.0.0-beta.53",
     "vuepress-theme-hope": "2.0.0-beta.125"
+  },
+  "dependencies": {
+    "@vuepress/plugin-register-components": "^2.0.0-beta.53",
+    "element-plus": "^2.3.0"
   }
 }
