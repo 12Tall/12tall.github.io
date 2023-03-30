@@ -346,7 +346,82 @@ function edit(e) {
     </ElTable>
 </div>
 可以看到所有的日期信息都是可以修改的，并且只有`Tuffy` 的性别可以被修改：  
-<div>{{ `${data[3].name}: ${data[3].date}: ${data[3].gender}` }}</div>
+<div>{{ `${data[3].name}: ${data[3].date}: ${data[3].gender}` }}</div>   
+
+
+## Bug 修复  
+- 添加按键，用于修复`el-select` 点击`option` 时导致选择框失焦的问题。  
+
+
+```vue{3-5,8}
+<template>
+    <div class="editable-cell">
+        <div v-if="editable && !isBeingEdited" placement="bottom" @click="edit">
+            <el-link type="primary" :icon="Edit" plain />
+            <slot></slot>
+        </div>
+        <div v-else-if="editable && isBeingEdited">
+            <el-link type="success" :icon="Check" plain @click="finishSelectEditing" />
+            <component ref="input" autofocus="true" :is="component" v-bind="$attrs" @blur="finishEditing">
+                <slot name="sub-component"></slot>
+            </component>
+        </div>
+        <div v-else class="uneditable-cell">
+            <slot></slot>
+        </div>
+    </div>
+</template>
+
+<script setup lang="ts">
+import { Check, Edit } from '@element-plus/icons-vue';
+import { computed, nextTick, ref } from 'vue';
+
+const props = defineProps([
+    'editable',   // the editable switch
+    'component',  // editable componenet instance
+]);
+const isSelect = computed(() => {
+    return props.component == 'el-select'
+})
+const isBeingEdited = ref(false);  // internal editing state
+const input = ref()
+
+
+function finishEditing() {
+    if (isSelect.value) {
+    } else {
+        isBeingEdited.value = false
+    }
+}
+
+
+function edit(e) {
+    isBeingEdited.value = true
+    // can not get ref input before the element is created
+    nextTick(() => {
+        input.value.focus()
+    })
+}
+
+function finishSelectEditing() {
+    isBeingEdited.value = false
+}
+</script>
+
+
+
+<style scoped>
+.editable-cell {
+    min-height: zpx;
+    /* set minimum height to extend the div container */
+    cursor: pointer;
+}
+
+.uneditable-cell {
+    cursor: default;
+}
+</style>
+```
 
 <script setup lang="ts">
 import {ref} from 'vue'

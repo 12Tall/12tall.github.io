@@ -1,14 +1,15 @@
 <template>
-    <div @click="edit" class="editable-cell">
-        <ElTooltip v-if="editable && !isBeingEdited" placement="bottom">
-            <template v-if="editable" #content>Click to edit<br />Press Enter/Esc/Tab to exit</template>
-
+    <div class="editable-cell">
+        <div v-if="editable && !isBeingEdited" placement="bottom" @click="edit">
+            <el-link type="primary" :icon="Edit" plain />
             <slot></slot>
-        </ElTooltip>
-        <component ref="input" autofocus="true" v-else-if="editable && isBeingEdited" :is="component" v-bind="$attrs"
-            @keyup.enter="finishEditing" @keyup.esc="finishEditing" @keyup.tab="finishEditing">
-            <slot name="sub-component"></slot>
-        </component>
+        </div>
+        <div v-else-if="editable && isBeingEdited">
+            <el-link type="success" :icon="Check" plain @click="finishSelectEditing" />
+            <component ref="input" autofocus="true" :is="component" v-bind="$attrs" @blur="finishEditing">
+                <slot name="sub-component"></slot>
+            </component>
+        </div>
         <div v-else class="uneditable-cell">
             <slot></slot>
         </div>
@@ -16,38 +17,46 @@
 </template>
 
 <script setup lang="ts">
-import { ElTooltip } from 'element-plus';
-import { nextTick, ref } from 'vue';
+import { Check, Edit } from '@element-plus/icons-vue';
+import { computed, nextTick, ref } from 'vue';
 
 const props = defineProps([
     'editable',   // the editable switch
     'component',  // editable componenet instance
 ]);
+const isSelect = computed(() => {
+    return props.component == 'el-select'
+})
 const isBeingEdited = ref(false);  // internal editing state
 const input = ref()
 
 
 function finishEditing() {
-    isBeingEdited.value = false
-}
-
-function edit(e) {
-    if (props.editable) {
-        isBeingEdited.value = true
-        // can not get ref input before the element is created
-        nextTick(() => {
-            input.value.focus()
-        })
+    if (isSelect.value) {
+    } else {
+        isBeingEdited.value = false
     }
 }
 
+
+function edit(e) {
+    isBeingEdited.value = true
+    // can not get ref input before the element is created
+    nextTick(() => {
+        input.value.focus()
+    })
+}
+
+function finishSelectEditing() {
+    isBeingEdited.value = false
+}
 </script>
 
 
 
 <style scoped>
 .editable-cell {
-    min-height: 32px;
+    min-height: zpx;
     /* set minimum height to extend the div container */
     cursor: pointer;
 }
