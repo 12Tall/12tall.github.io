@@ -17,7 +17,8 @@ Python 编码相关的项目，主要包括：Web、数学、控制与仿真等
 2. 串口示波器（进行中）  
 
 ## 编译原理  
-1. [ply 词法分析器](./ply/lex/REAMDE.md)
+1. [ply 词法分析](./ply/lex/REAMDE.md)  
+2. [ply 语法分析](./ply/yacc/README.md)
 
 ## 其他  
 1. [PySide2 的学习笔记](./pyside2/README.md)  

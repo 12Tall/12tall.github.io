@@ -1,0 +1,432 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> expression
+Rule 1     empty -> <empty>
+Rule 2     factor -> INT
+Rule 3     factor -> LPAREN expression RPAREN
+Rule 4     term -> factor empty
+Rule 5     term -> term MUL term
+Rule 6     term -> term DIV term
+Rule 7     sign -> term empty
+Rule 8     sign -> ADD sign
+Rule 9     sign -> SUB sign
+Rule 10    expression -> sign empty
+Rule 11    expression -> expression ADD expression
+Rule 12    expression -> expression SUB expression
+
+Terminals, with rules where they appear
+
+ADD                  : 8 11
+DIV                  : 6
+INT                  : 2
+LPAREN               : 3
+MUL                  : 5
+RPAREN               : 3
+SUB                  : 9 12
+error                : 
+
+Nonterminals, with rules where they appear
+
+empty                : 4 7 10
+expression           : 3 11 11 12 12 0
+factor               : 4
+sign                 : 8 9 10
+term                 : 5 5 6 6 7
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . expression
+    (10) expression -> . sign empty
+    (11) expression -> . expression ADD expression
+    (12) expression -> . expression SUB expression
+    (7) sign -> . term empty
+    (8) sign -> . ADD sign
+    (9) sign -> . SUB sign
+    (4) term -> . factor empty
+    (5) term -> . term MUL term
+    (6) term -> . term DIV term
+    (2) factor -> . INT
+    (3) factor -> . LPAREN expression RPAREN
+
+    ADD             shift and go to state 3
+    SUB             shift and go to state 4
+    INT             shift and go to state 7
+    LPAREN          shift and go to state 8
+
+    expression                     shift and go to state 1
+    sign                           shift and go to state 2
+    term                           shift and go to state 5
+    factor                         shift and go to state 6
+
+state 1
+
+    (0) S' -> expression .
+    (11) expression -> expression . ADD expression
+    (12) expression -> expression . SUB expression
+
+    ADD             shift and go to state 9
+    SUB             shift and go to state 10
+
+
+state 2
+
+    (10) expression -> sign . empty
+    (1) empty -> .
+
+    ADD             reduce using rule 1 (empty -> .)
+    SUB             reduce using rule 1 (empty -> .)
+    $end            reduce using rule 1 (empty -> .)
+    RPAREN          reduce using rule 1 (empty -> .)
+
+    empty                          shift and go to state 11
+
+state 3
+
+    (8) sign -> ADD . sign
+    (7) sign -> . term empty
+    (8) sign -> . ADD sign
+    (9) sign -> . SUB sign
+    (4) term -> . factor empty
+    (5) term -> . term MUL term
+    (6) term -> . term DIV term
+    (2) factor -> . INT
+    (3) factor -> . LPAREN expression RPAREN
+
+    ADD             shift and go to state 3
+    SUB             shift and go to state 4
+    INT             shift and go to state 7
+    LPAREN          shift and go to state 8
+
+    sign                           shift and go to state 12
+    term                           shift and go to state 5
+    factor                         shift and go to state 6
+
+state 4
+
+    (9) sign -> SUB . sign
+    (7) sign -> . term empty
+    (8) sign -> . ADD sign
+    (9) sign -> . SUB sign
+    (4) term -> . factor empty
+    (5) term -> . term MUL term
+    (6) term -> . term DIV term
+    (2) factor -> . INT
+    (3) factor -> . LPAREN expression RPAREN
+
+    ADD             shift and go to state 3
+    SUB             shift and go to state 4
+    INT             shift and go to state 7
+    LPAREN          shift and go to state 8
+
+    sign                           shift and go to state 13
+    term                           shift and go to state 5
+    factor                         shift and go to state 6
+
+state 5
+
+    (7) sign -> term . empty
+    (5) term -> term . MUL term
+    (6) term -> term . DIV term
+    (1) empty -> .
+
+    MUL             shift and go to state 15
+    DIV             shift and go to state 16
+    ADD             reduce using rule 1 (empty -> .)
+    SUB             reduce using rule 1 (empty -> .)
+    $end            reduce using rule 1 (empty -> .)
+    RPAREN          reduce using rule 1 (empty -> .)
+
+    empty                          shift and go to state 14
+
+state 6
+
+    (4) term -> factor . empty
+    (1) empty -> .
+
+    MUL             reduce using rule 1 (empty -> .)
+    DIV             reduce using rule 1 (empty -> .)
+    ADD             reduce using rule 1 (empty -> .)
+    SUB             reduce using rule 1 (empty -> .)
+    $end            reduce using rule 1 (empty -> .)
+    RPAREN          reduce using rule 1 (empty -> .)
+
+    empty                          shift and go to state 17
+
+state 7
+
+    (2) factor -> INT .
+
+    MUL             reduce using rule 2 (factor -> INT .)
+    DIV             reduce using rule 2 (factor -> INT .)
+    ADD             reduce using rule 2 (factor -> INT .)
+    SUB             reduce using rule 2 (factor -> INT .)
+    $end            reduce using rule 2 (factor -> INT .)
+    RPAREN          reduce using rule 2 (factor -> INT .)
+
+
+state 8
+
+    (3) factor -> LPAREN . expression RPAREN
+    (10) expression -> . sign empty
+    (11) expression -> . expression ADD expression
+    (12) expression -> . expression SUB expression
+    (7) sign -> . term empty
+    (8) sign -> . ADD sign
+    (9) sign -> . SUB sign
+    (4) term -> . factor empty
+    (5) term -> . term MUL term
+    (6) term -> . term DIV term
+    (2) factor -> . INT
+    (3) factor -> . LPAREN expression RPAREN
+
+    ADD             shift and go to state 3
+    SUB             shift and go to state 4
+    INT             shift and go to state 7
+    LPAREN          shift and go to state 8
+
+    expression                     shift and go to state 18
+    sign                           shift and go to state 2
+    term                           shift and go to state 5
+    factor                         shift and go to state 6
+
+state 9
+
+    (11) expression -> expression ADD . expression
+    (10) expression -> . sign empty
+    (11) expression -> . expression ADD expression
+    (12) expression -> . expression SUB expression
+    (7) sign -> . term empty
+    (8) sign -> . ADD sign
+    (9) sign -> . SUB sign
+    (4) term -> . factor empty
+    (5) term -> . term MUL term
+    (6) term -> . term DIV term
+    (2) factor -> . INT
+    (3) factor -> . LPAREN expression RPAREN
+
+    ADD             shift and go to state 3
+    SUB             shift and go to state 4
+    INT             shift and go to state 7
+    LPAREN          shift and go to state 8
+
+    expression                     shift and go to state 19
+    sign                           shift and go to state 2
+    term                           shift and go to state 5
+    factor                         shift and go to state 6
+
+state 10
+
+    (12) expression -> expression SUB . expression
+    (10) expression -> . sign empty
+    (11) expression -> . expression ADD expression
+    (12) expression -> . expression SUB expression
+    (7) sign -> . term empty
+    (8) sign -> . ADD sign
+    (9) sign -> . SUB sign
+    (4) term -> . factor empty
+    (5) term -> . term MUL term
+    (6) term -> . term DIV term
+    (2) factor -> . INT
+    (3) factor -> . LPAREN expression RPAREN
+
+    ADD             shift and go to state 3
+    SUB             shift and go to state 4
+    INT             shift and go to state 7
+    LPAREN          shift and go to state 8
+
+    expression                     shift and go to state 20
+    sign                           shift and go to state 2
+    term                           shift and go to state 5
+    factor                         shift and go to state 6
+
+state 11
+
+    (10) expression -> sign empty .
+
+    ADD             reduce using rule 10 (expression -> sign empty .)
+    SUB             reduce using rule 10 (expression -> sign empty .)
+    $end            reduce using rule 10 (expression -> sign empty .)
+    RPAREN          reduce using rule 10 (expression -> sign empty .)
+
+
+state 12
+
+    (8) sign -> ADD sign .
+
+    ADD             reduce using rule 8 (sign -> ADD sign .)
+    SUB             reduce using rule 8 (sign -> ADD sign .)
+    $end            reduce using rule 8 (sign -> ADD sign .)
+    RPAREN          reduce using rule 8 (sign -> ADD sign .)
+
+
+state 13
+
+    (9) sign -> SUB sign .
+
+    ADD             reduce using rule 9 (sign -> SUB sign .)
+    SUB             reduce using rule 9 (sign -> SUB sign .)
+    $end            reduce using rule 9 (sign -> SUB sign .)
+    RPAREN          reduce using rule 9 (sign -> SUB sign .)
+
+
+state 14
+
+    (7) sign -> term empty .
+
+    ADD             reduce using rule 7 (sign -> term empty .)
+    SUB             reduce using rule 7 (sign -> term empty .)
+    $end            reduce using rule 7 (sign -> term empty .)
+    RPAREN          reduce using rule 7 (sign -> term empty .)
+
+
+state 15
+
+    (5) term -> term MUL . term
+    (4) term -> . factor empty
+    (5) term -> . term MUL term
+    (6) term -> . term DIV term
+    (2) factor -> . INT
+    (3) factor -> . LPAREN expression RPAREN
+
+    INT             shift and go to state 7
+    LPAREN          shift and go to state 8
+
+    term                           shift and go to state 21
+    factor                         shift and go to state 6
+
+state 16
+
+    (6) term -> term DIV . term
+    (4) term -> . factor empty
+    (5) term -> . term MUL term
+    (6) term -> . term DIV term
+    (2) factor -> . INT
+    (3) factor -> . LPAREN expression RPAREN
+
+    INT             shift and go to state 7
+    LPAREN          shift and go to state 8
+
+    term                           shift and go to state 22
+    factor                         shift and go to state 6
+
+state 17
+
+    (4) term -> factor empty .
+
+    MUL             reduce using rule 4 (term -> factor empty .)
+    DIV             reduce using rule 4 (term -> factor empty .)
+    ADD             reduce using rule 4 (term -> factor empty .)
+    SUB             reduce using rule 4 (term -> factor empty .)
+    $end            reduce using rule 4 (term -> factor empty .)
+    RPAREN          reduce using rule 4 (term -> factor empty .)
+
+
+state 18
+
+    (3) factor -> LPAREN expression . RPAREN
+    (11) expression -> expression . ADD expression
+    (12) expression -> expression . SUB expression
+
+    RPAREN          shift and go to state 23
+    ADD             shift and go to state 9
+    SUB             shift and go to state 10
+
+
+state 19
+
+    (11) expression -> expression ADD expression .
+    (11) expression -> expression . ADD expression
+    (12) expression -> expression . SUB expression
+
+  ! shift/reduce conflict for ADD resolved as shift
+  ! shift/reduce conflict for SUB resolved as shift
+    $end            reduce using rule 11 (expression -> expression ADD expression .)
+    RPAREN          reduce using rule 11 (expression -> expression ADD expression .)
+    ADD             shift and go to state 9
+    SUB             shift and go to state 10
+
+  ! ADD             [ reduce using rule 11 (expression -> expression ADD expression .) ]
+  ! SUB             [ reduce using rule 11 (expression -> expression ADD expression .) ]
+
+
+state 20
+
+    (12) expression -> expression SUB expression .
+    (11) expression -> expression . ADD expression
+    (12) expression -> expression . SUB expression
+
+  ! shift/reduce conflict for ADD resolved as shift
+  ! shift/reduce conflict for SUB resolved as shift
+    $end            reduce using rule 12 (expression -> expression SUB expression .)
+    RPAREN          reduce using rule 12 (expression -> expression SUB expression .)
+    ADD             shift and go to state 9
+    SUB             shift and go to state 10
+
+  ! ADD             [ reduce using rule 12 (expression -> expression SUB expression .) ]
+  ! SUB             [ reduce using rule 12 (expression -> expression SUB expression .) ]
+
+
+state 21
+
+    (5) term -> term MUL term .
+    (5) term -> term . MUL term
+    (6) term -> term . DIV term
+
+  ! shift/reduce conflict for MUL resolved as shift
+  ! shift/reduce conflict for DIV resolved as shift
+    ADD             reduce using rule 5 (term -> term MUL term .)
+    SUB             reduce using rule 5 (term -> term MUL term .)
+    $end            reduce using rule 5 (term -> term MUL term .)
+    RPAREN          reduce using rule 5 (term -> term MUL term .)
+    MUL             shift and go to state 15
+    DIV             shift and go to state 16
+
+  ! MUL             [ reduce using rule 5 (term -> term MUL term .) ]
+  ! DIV             [ reduce using rule 5 (term -> term MUL term .) ]
+
+
+state 22
+
+    (6) term -> term DIV term .
+    (5) term -> term . MUL term
+    (6) term -> term . DIV term
+
+  ! shift/reduce conflict for MUL resolved as shift
+  ! shift/reduce conflict for DIV resolved as shift
+    ADD             reduce using rule 6 (term -> term DIV term .)
+    SUB             reduce using rule 6 (term -> term DIV term .)
+    $end            reduce using rule 6 (term -> term DIV term .)
+    RPAREN          reduce using rule 6 (term -> term DIV term .)
+    MUL             shift and go to state 15
+    DIV             shift and go to state 16
+
+  ! MUL             [ reduce using rule 6 (term -> term DIV term .) ]
+  ! DIV             [ reduce using rule 6 (term -> term DIV term .) ]
+
+
+state 23
+
+    (3) factor -> LPAREN expression RPAREN .
+
+    MUL             reduce using rule 3 (factor -> LPAREN expression RPAREN .)
+    DIV             reduce using rule 3 (factor -> LPAREN expression RPAREN .)
+    ADD             reduce using rule 3 (factor -> LPAREN expression RPAREN .)
+    SUB             reduce using rule 3 (factor -> LPAREN expression RPAREN .)
+    $end            reduce using rule 3 (factor -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 3 (factor -> LPAREN expression RPAREN .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for ADD in state 19 resolved as shift
+WARNING: shift/reduce conflict for SUB in state 19 resolved as shift
+WARNING: shift/reduce conflict for ADD in state 20 resolved as shift
+WARNING: shift/reduce conflict for SUB in state 20 resolved as shift
+WARNING: shift/reduce conflict for MUL in state 21 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 21 resolved as shift
+WARNING: shift/reduce conflict for MUL in state 22 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 22 resolved as shift
