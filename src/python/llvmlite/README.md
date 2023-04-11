@@ -134,6 +134,9 @@ print(r)
 🦒 hello world!  
 > echo $LASTEXITCODE
 0
+
+# 编译C 到ir，用于对照代码
+> clang -emit-llvm -Wimplicit-function-declaration -S -c main.c -o main.ll
 ```  
 
 从上面的实验结果可以得出：通过llvmlite 构建并编辑可执行程序是行得通的。但是真的要设计一门语言还要结合词法分析、语法分析、语义分析以及通过遍历AST 构建IR 的过程。此过程可以想象是比较繁琐的，通过面向对象的设计方法设计AST 节点可能能简化这一过程。但应该也不会太多。  
