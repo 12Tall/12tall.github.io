@@ -29,9 +29,13 @@ go install github.com/akavel/rsrc
 # 编译资源文件，有些注意事项可以查找上面的仓库  
 rsrc -manifest nac.manifest -o nac.syso  
 go build
+
+# 在go 1.16 开始，编译器会自动加载`.syso` 的文件并将其嵌入到二进制文件中，不需要额外指定。  
 ```  
 
-### nac.mainfest  
+### nac.manifest  
+至于名字为什么是`nac.manifest`？其实不是必须的，最好与APP 同名就好了。  
+
 ```xml{6,9}
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
@@ -53,9 +57,11 @@ go build
 ```  
 
 ## Go 代码   
-主要是可以通过`cmd` 调用`icacls` 命令来修改`.dll` 的权限。  
+主要是可以通过`cmd` 调用`icacls` 命令来修改`.dll` 的权限。下面是递归遍历文件夹的函数：  
+  
 ```go  
 userName = "everyone"
+fileExt = ".dll"
 // 递归遍历文件夹
 func walkDir(dir string) {
 	files, err := ioutil.ReadDir(dir)
@@ -73,7 +79,7 @@ func walkDir(dir string) {
 
 			ext := path.Ext(absPath)  // 获取文件扩展名
 
-			if strings.ToLower(ext) == ".dll" {
+			if strings.ToLower(ext) == fileExt {
                 // cmd 执行`icacls` 修改文件权限
 				cmd := exec.Command("icacls", absPath, "/grant", userName+":F")
 				_, err := cmd.CombinedOutput()
@@ -88,4 +94,8 @@ func walkDir(dir string) {
 		}
 	}
 }
-```
+```  
+
+-----    
+
+感谢[@Arrnitage](https://github.com/Arrnitage) 给的问题反馈^_^
