@@ -49,7 +49,7 @@ $$\begin{bmatrix}
 \end{bmatrix} = \begin{bmatrix}
     0 & 1 & 0  \\  
     0 & \frac{-b}{J} & \frac{k_t}{J}  \\  
-    0 & \frac{-k_e}{L} & \frac{-k_e}{L}
+    0 & \frac{-k_e}{L} & \frac{-R}{L}
 \end{bmatrix}\begin{bmatrix}
     \theta  \\  
     \omega  \\
