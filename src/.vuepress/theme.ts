@@ -16,7 +16,7 @@ export default hopeTheme({
 
   repo: "12Tall/12tall.github.io",
 
-  docsDir: "docs",
+  docsDir: "src",
 
   pageInfo: ["Author", "Original", "Date", "Category", "Tag", "ReadingTime"],
 

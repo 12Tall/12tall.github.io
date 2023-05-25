@@ -25,4 +25,5 @@ Python 编码相关的项目，主要包括：Web、数学、控制与仿真等
 1. [PySide2 的学习笔记](./pyside2/README.md)  
 2. [PyInstaller 程序逆向](./pyinstaller-inversion/README.md)  
 3. [Python 请求UAC](./uac.md)  
-4. [Python 多进程](./multiprocessing.md)
+4. [Python 多进程](./multiprocessing.md)  
+5. [Python 简单的遗传算法实现](./ga/README.md)
