@@ -21,10 +21,13 @@ Python 编码相关的项目，主要包括：Web、数学、控制与仿真等
 2. [ply 语法分析](./ply/yacc/README.md)  
 3. [llvmlite 笔记](./llvmlite/README.md)
 
+## 算法  
+1. [Python 简单的遗传算法实现](./algorithm/ga/README.md)  
+2. [Python 模拟退火算法实现](./algorithm/sa/README.md)  
+3. [Python 粒子群算法理解](./algorithm/pso/README.md)
+
 ## 其他  
 1. [PySide2 的学习笔记](./pyside2/README.md)  
 2. [PyInstaller 程序逆向](./pyinstaller-inversion/README.md)  
 3. [Python 请求UAC](./uac.md)  
 4. [Python 多进程](./multiprocessing.md)  
-5. [Python 简单的遗传算法实现](./ga/README.md)  
-6. [Python 模拟退火算法实现](./sa/README.md)  
