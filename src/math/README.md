@@ -55,4 +55,5 @@ icon: superscript
 
 ## 其他  
 1. [Nabla算子与梯度、散度、旋度](./nabla/README.md)  
-2. [斯特里贝克曲线](./stribeck-curve/README.md)
+2. [斯特里贝克曲线](./stribeck-curve/README.md)  
+3. [有限元计算电磁场](./fem_in_em/README.md)
