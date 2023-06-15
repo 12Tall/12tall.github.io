@@ -164,7 +164,7 @@ plt.colorbar()
 # 显示图像
 plt.show()
 ```  
-![](./img/divergence.png)  
+![](./img/divergence.png)
 
 从上面的图像中可以看到，温度越高的地方，对应函数梯度是向外发散的，证明此处函数是凹进去的。  
 
