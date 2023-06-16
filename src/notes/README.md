@@ -15,7 +15,8 @@ icon: editor
 4. [DLL 注入相关](./c-like/dll-injection.md)
 5. [Windows 平台上的高精度定时器](./c-like/win-high-accuracy-timmer.md)
 6. [x86 操作系统笔记](./c-like/tinyos/README.md)
-7. [C 语言内存管理](./c-like/memory-management/README.md)
+7. [C 语言内存管理](./c-like/memory-management/README.md)  
+8. [GCC 中的符号 ](./c-like/symbol/REAMDE.md)
 
 ## Rust 编程语言  
 1. [Rust 编译DLL](./rust/natavie_dll/README.md)  
