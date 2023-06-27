@@ -36,7 +36,7 @@ export default hopeTheme({
       // sidebar
       sidebar: false, // zhSidebar,
 
-      footer: "蝉噪林愈静 鸟鸣山更幽",
+      footer: "蝉噪林愈静 鸟鸣山更幽 | 加入<a href=\"https://github.com/12Tall/12tall.github.io/discussions\" target=\"blank\">Discussions</a>",
 
       displayFooter: true,
 

@@ -40,5 +40,5 @@ projects:
   #   desc: Detailed description of this custom item
   #   link: https://link.to.your.friend
 
-footer: 评论功能暂不开启，如有问题，请提交Issue  
+# footer: 评论功能暂不开启，如有问题，请提交Issue  
 ---
