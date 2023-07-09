@@ -97,6 +97,120 @@ $$w_h(x) = (x^2-2x) \tag{1.3.11}$$
 仔细观察我们的边界条件可以看到$w_h'(1)=0$，即可得到$\alpha_2=-2\alpha_1$。表面上有两组基底但实际上只有一组。所以在选取基底时，一定要先注意基底间的耦合关系。并且要能满足边界条件。  
 
 ## 一维有限元  
-> todo  
+同样取$(1.2.1)$ 作为示例，假设一维场景，令$V(x=0) = V_0, V(x=d)=0,\rho=\rho_0,\epsilon_r$ 为常数。则有：  
+$$\nabla^2\cdot V(x) =\frac{d^2V(x)}{dx^2} = -\frac{\rho_0}{\epsilon_r\cdot\epsilon_0} \tag{2.1.1}$$    
 
+### 划分网格  
+![](./img/discrerization_of_the_1-D_domain.png)
 
+划分网格在一维条件下就表现为划分线段。假设在$x \in [0,d]$ 划分了$N_e$ 个小的线段，则我们可以先求得每个小线段上的电势，最后再将结果组合起来，得到最终解。  
+
+### 插值函数  
+插值函数，也称作形函数，也是上文中的[实验函数](#加权余量法)。对于插值函数得选择，我们往往会做一些优化：  
+![](./img/interpolation_functions_and_xi_axis.png)  
+
+上图$(a)$ 表示从网格中任意取一个线段$e$，并且假定其起止位置分别为$x^e_1,x^e_2$，**但是由于根据起止点求积分不太方便，这里我们考虑将其转化到新的$\xi$ 坐标系下**。令：  
+$$\xi = \frac{2(x-x^e_1)}{x^e_2 - x^e_1}-1 \tag{2.2.1}$$  
+可以得到$\xi\in [-1,1]$。这样在计算积分、最后组装结果时会相对简单一些。  
+
+同样为了简化计算，我们取形函数为一次线性函数，并且只与起止点有关：  
+$$V(\xi) = V^e_1N_1(\xi) + V^e_2N_2(\xi) \tag{2.2.2}$$  
+这里$V^e_1,V^e_2$ 表示线段端点的电压，是未知量。要式上式成立则要求**形函数**：  
+$$\begin{cases}
+    N_1(\xi) = \frac{1-\xi}{2}  \\
+    N_2(\xi) = \frac{1+\xi}{2}
+\end{cases} \tag{2.2.3}$$  
+![](./img/interpolation_functions_and_xi_axis_2.png)
+
+提一嘴，形函数的数量表示自由度，一般来说自由度越多，最后的解也就越精确。  
+
+### 伽辽金法  
+![](./img/1-D_element.png)
+在[加权余量法](#加权余量法) 中，我们提到了伽辽金法是一种特殊的加权余量法，其权重函数等于形函数。对于一维静电场的问题，我们的形函数只有两个自由度，在任意一条线段上，其电压的函数应如下式：  
+$$V(x) = \sum\limits^n_{j=1}v^e_jN_j(x) \tag{2.3.1}$$  
+
+其中$j$ 表示自由度，那么结合式$(2.1.1)$，其加权残差可以表示为：  
+$$r^e = \int^{x^e_2}_{x^e_1}w [\frac{d}{dx}(\epsilon^e\frac{dV}{dx})+\rho^e_v]dx \tag{2.3.2}$$  
+其中$\epsilon^e = \epsilon^e_r\epsilon_0$ 表示材料的固有属性，$\rho^e_v$ 表示材料中得电荷密度，为常数$0$。  
+要令残差等于零，那么我们就需要寻找合适的$V(x)$，因为上面方程中唯一能调整的只有$V(x)$，也就是去发现接近于真实解得电压值。考虑分部积分法，式$(2.3.2)$ 可以化简为下面形式：  
+$$\int^{x^e_2}_{x^e_1} (\frac{dw}{dx})\epsilon^e(\frac{dV}{dx})dx - \int^{x^e_2}_{x^e_1} w\rho^e_v dx - w\epsilon^e\frac{dV}{dx}|^{x^e_2}_{x^e_1} = 0 \tag{2.3.3}$$  
+
+令$D^e_x(x) = -\epsilon^e\frac{dV(x)}{dx}$，则式$(2.3.3)$ 可以写作：  
+$$\int^{x^e_2}_{x^e_1} (\frac{dw}{dx})\epsilon^e(\frac{dV}{dx})dx - \int^{x^e_2}_{x^e_1} w\rho^e_v dx + w(x^e_2)D^e_x(x^e_2) - w(x^e_1)D^e_x(x^e_1) = 0 \tag{2.3.4}$$
+
+因为我们选取的自由度等于$2$，所以结合式$(2.3.1)$，可以构造出下面两个方程，用以求解线段两端得电压（电势）：  
+$$\begin{cases}
+    \int^{x^e_2}_{x^e_1} (\frac{dN_1}{dx})\epsilon^e(\sum\limits^n_{j=1}v^e_j\frac{dN_j}{dx})dx = \int^{x^e_2}_{x^e_1} N_1\rho^e_v dx - N_1(x^e_2)D^e_x(x^e_2) + N_1(x^e_1)D^e_x(x^e_1) \\    
+    \int^{x^e_2}_{x^e_1} (\frac{dN_2}{dx})\epsilon^e(\sum\limits^n_{j=1}v^e_j\frac{dN_j}{dx})dx = \int^{x^e_2}_{x^e_1} N_2\rho^e_v dx - N_2(x^e_2)D^e_x(x^e_2) + N_2(x^e_1)D^e_x(x^e_1) \\
+\end{cases} \tag{2.3.5}$$  
+又因为：  
+$$\begin{cases}
+    N_1(x^e_1) = 1  \\ 
+    N_2(x^e_1) = 0  \\ 
+    N_1(x^e_1) = 0  \\ 
+    N_2(x^e_1) = 1 
+\end{cases}$$  
+所以可以得到如下形式：  
+$$\begin{cases}
+    \int^{x^e_2}_{x^e_1} (\frac{dN_1}{dx})\epsilon^e\frac{dN_1}{dx}dx \cdot v^e_1 + \int^{x^e_2}_{x^e_1} (\frac{dN_1}{dx})\epsilon^e\frac{dN_2}{dx}dx \cdot v^e_2 = \int^{x^e_2}_{x^e_1} N_1\rho^e_v dx + D^e_x(x^e_1) \\    
+    \int^{x^e_2}_{x^e_1} (\frac{dN_2}{dx})\epsilon^e\frac{dN_1}{dx}dx \cdot v^e_1 + \int^{x^e_2}_{x^e_1} (\frac{dN_2}{dx})\epsilon^e\frac{dN_2}{dx}dx \cdot v^e_2 = \int^{x^e_2}_{x^e_1} N_2\rho^e_v dx -D^e_x(x^e_2) \\
+\end{cases} \tag{2.3.6}$$  
+令$K^e_{ij} = \int^{x^e_2}_{x^e_1} (\frac{dN_i}{dx})\epsilon^e\frac{dN_j}{dx}dx, f^e_i= \int^{x^e_2}_{x^e_1} N_i\rho^e_v dx, \boldsymbol{d^e}=\begin{bmatrix}
+    D^e_1  \\
+    -D^e_2
+\end{bmatrix} $，那么式$(2.3.6)$ 可以进一步精简为：  
+$$\begin{bmatrix}
+    K^e_{11} & K^e_{12} \\
+    K^e_{21} & K^e_{22} 
+\end{bmatrix}\begin{bmatrix}
+    v^e_{1}  \\
+    v^e_{2} 
+\end{bmatrix} = \begin{bmatrix}
+    f^e_{1}  \\
+    f^e_{2} 
+\end{bmatrix} + \begin{bmatrix}
+    D^e_{1}  \\
+    -D^e_{2} 
+\end{bmatrix} \tag{2.3.7}$$  
+
+回忆[插值函数](#插值函数) 中的坐标系变换部分，我们容易得到：  
+$$d\xi = \frac{2}{x^e_2 - x^e_1}dx = \frac{2}{l^e}dx \tag{2.3.8}$$  
+亦有：  
+$$\frac{dN_i}{dx} = \frac{dN_i}{d\xi}\frac{d\xi}{dx} = \frac{2}{l^e}\frac{N_i}{d\xi} \tag{2.3.9}$$  
+可以根据式$(2.3.9)$ 计算$K^e_{ij}$：  
+$$K^e_{ij} = \int^{+1}_{-1}(\frac{2}{l^e}\frac{dN_i}{d\xi})\epsilon^e(\frac{2}{l^e}\frac{dN_j}{d\xi})\frac{l^e}{2}d\xi = \frac{2\epsilon^e}{l^e}\int^{+1}_{-1}\frac{dN_i}{d\xi}\frac{dN_j}{d\xi}d\xi \tag{2.3.10}$$  
+有根据式$(2.2.3)$ 可得：  
+$$\begin{cases}
+    \frac{dN_1}{d\xi} = -\frac{1}{2}  \\
+    \frac{dN_2}{d\xi} = \frac{1}{2}  
+\end{cases} \tag{2.3.11}$$  
+于是：  
+$$K^e = \frac{\epsilon^e}{l^e}\begin{bmatrix}
+    +1 & -1  \\
+    -1 & +1
+\end{bmatrix} \tag{2.3.12}$$    
+同理，我们可以求$f^e_i=-\frac{l^e\rho^e_v}{2}\int^{+1}_{-1}N_i{\xi}d\xi$：  
+$$f^e = -\frac{l^e\rho_0}{2}\begin{bmatrix}
+    1 \\
+    1
+\end{bmatrix} \tag{2.3.13}$$  
+这里的$\rho$ 取为常数。于是我们求节点电压（电势）的方程$(2.3.7)$ 可以进一步简写为：  
+$$\frac{\epsilon^e}{l^e}\begin{bmatrix}
+    +1 & -1  \\
+    -1 & +1
+\end{bmatrix} \begin{bmatrix}
+    v^e_1  \\
+    v^e_2
+\end{bmatrix} = -\frac{l^e\rho_0}{2}\begin{bmatrix}
+    1 \\
+    1
+\end{bmatrix} + \begin{bmatrix}
+    D^e_1  \\
+    -D^e_2
+\end{bmatrix} \tag{2.3.14}$$  
+
+现在可以看出来为什么切换坐标系可以简化计算了。  
+
+## 组装结果  
+
+> 去做饭了，未完待续……
