@@ -158,7 +158,7 @@ $$\begin{cases}
 令$K^e_{ij} = \int^{x^e_2}_{x^e_1} (\frac{dN_i}{dx})\epsilon^e\frac{dN_j}{dx}dx, f^e_i= \int^{x^e_2}_{x^e_1} N_i\rho^e_v dx, \boldsymbol{d^e}=\begin{bmatrix}
     D^e_1  \\
     -D^e_2
-\end{bmatrix} $，那么式$(2.3.6)$ 可以进一步精简为：  
+\end{bmatrix}$，那么式$(2.3.6)$ 可以进一步精简为：  
 $$\begin{bmatrix}
     K^e_{11} & K^e_{12} \\
     K^e_{21} & K^e_{22} 
@@ -211,6 +211,134 @@ $$\frac{\epsilon^e}{l^e}\begin{bmatrix}
 
 现在可以看出来为什么切换坐标系可以简化计算了。  
 
-## 组装结果  
+## 组装结果   
+
+我们在划分网格，也就是线段的时候，线段是彼此首尾相连的，也就是说一个线段尾端的各种参数应该是等于下一条线段首端的参数。由式$(2.3.7)$，可以写出所有线段的方程：  
+$$\begin{cases}
+    \begin{rcases}
+        K^{(1)}_{11}v^{(1)}_{1} + K^{(1)}_{12}v^{(1)}_{2} & = & f^{(1)}_{1} + D^{(1)}_{1} \\
+        K^{(1)}_{21}v^{(1)}_{1} + K^{(1)}_{22}v^{(1)}_{2} & = &  f^{(1)}_{2} - D^{(1)}_{2} \\
+    \end{rcases} & l1\\
+    \begin{rcases}
+        K^{(2)}_{11}v^{(2)}_{1} + K^{(2)}_{12}v^{(2)}_{2} & = &  f^{(2)}_{1} + D^{(2)}_{1} \\
+        K^{(2)}_{21}v^{(2)}_{1} + K^{(2)}_{22}v^{(2)}_{2} & = & f^{(2)}_{2} - D^{(2)}_{2} \\
+    \end{rcases} & l2 \\
+    \vdots  \\
+    \begin{rcases}
+        K^{(n)}_{11}v^{(n)}_{1} + K^{(n)}_{12}v^{(n)}_{2} & = &  f^{(n)}_{1} + D^{(n)}_{1} \\
+        K^{(n)}_{21}v^{(n)}_{1} + K^{(n)}_{22}v^{(n)}_{2} & = & f^{(n)}_{2} - D^{(n)}_{2} \\
+    \end{rcases} & ln\\
+\end{cases} \tag{2.4.1}$$
+
+并且有$v^{e}_2 = v^{e+1}_1$，令$v^{(1)}_i = v^{(2)}_{i-1} =V_i$，则上式可写作：  
+$$\begin{cases}
+    \begin{rcases}
+        K^{(1)}_{11}V_1 + K^{(1)}_{12}V_2 & = & f^{(1)}_{1} + D^{(1)}_{1} \\
+        K^{(1)}_{21}V_1 + K^{(1)}_{22}V_2 & = &  f^{(1)}_{2} - D^{(1)}_{2} \\
+    \end{rcases} & l1\\
+    \begin{rcases}
+        K^{(2)}_{11}V_2 + K^{(2)}_{12}V_3 & = &  f^{(2)}_{1} + D^{(2)}_{1} \\
+        K^{(2)}_{21}V_2 + K^{(2)}_{22}V_3 & = & f^{(2)}_{2} - D^{(2)}_{2} \\
+    \end{rcases} & l2 \\
+    \vdots  \\
+    \begin{rcases}
+        K^{(n)}_{11}V_{n} + K^{(n)}_{12}V_{n+1} & = &  f^{(n)}_{1} + D^{(n)}_{1} \\
+        K^{(n)}_{21}V_{n} + K^{(n)}_{22}V_{n+1} & = & f^{(n)}_{2} - D^{(n)}_{2} \\
+    \end{rcases} & ln\\
+\end{cases} \tag{2.4.2}$$  
+
+考虑线段首尾相连，故将$l1.(2), l2.(1)$ 式相加可得：  
+$$K^{(1)}_{21}V_1 + (K^{(1)}_{22} + K^{(2)}_{11})V_2 + K^{(2)}_{12}V_3 = f^{(1)}_{2} - D^{(1)}_{2} + f^{(2)}_{1} + D^{(2)}_{1} \tag{2.4.3}$$  
+
+如此类推，可以将式$(2.4.2)$ 写作矩阵的形式：  
+$$\begin{bmatrix}
+    K^{(1)}_{11} & K^{(1)}_{12} \\  
+    K^{(1)}_{21} & (K^{(1)}_{22} + K^{(2)}_{11}) & K^{(2)}_{12} \\  
+    & K^{(2)}_{21} & (K^{(2)}_{22} + K^{(3)}_{11}) & K^{(3)}_{12} \\  
+    & & K^{(3)}_{21} & (K^{(3)}_{22} + K^{(4)}_{11}) & K^{(4)}_{12} \\  
+    \vdots & \vdots & \vdots & \vdots & \vdots & \vdots  \\
+    & & & K^{(N_e-1)}_{21} & (K^{(N_e-1)}_{22} + K^{(N_e)}_{11}) & K^{(N_e)}_{12} \\  
+    & & & & K^{(N_e)}_{21} & K^{(N_e)}_{22}  \\  
+\end{bmatrix} \begin{bmatrix}
+    V_1 \\ 
+    V_2 \\ 
+    V_3 \\ 
+    V_4 \\ 
+    \vdots \\  
+    V_{N_e} \\
+    V_{N_e+1}
+\end{bmatrix} = \begin{bmatrix}
+    f^{(1)}_1 \\ 
+    f^{(1)}_2 + f^{(2)}_1 \\ 
+    f^{(2)}_2 + f^{(3)}_1 \\ 
+    f^{(3)}_2 + f^{(4)}_1 \\ 
+    \vdots \\  
+    f^{(N_e-1)}_2 + f^{(N_e)}_1 \\
+    f^{(N_e)}_2
+\end{bmatrix} + \begin{bmatrix}
+    D^{(1)}_1 \\ 
+    -D^{(1)}_2 + D^{(2)}_1 \\ 
+    -D^{(2)}_2 + D^{(3)}_1 \\ 
+    -D^{(3)}_2 + D^{(4)}_1 \\ 
+    \vdots \\  
+    -D^{(N_e-1)}_2 + D^{(N_e)}_1 \\
+    -D^{(N_e)}_2
+\end{bmatrix} \tag{2.4.4}$$  
+
+上式中的最右边一项表示电通量的密度，以第二行为例：  
+$$ -D^{(1)}_2 + D^{(2)}_1 = \epsilon^{(1)}\frac{dV}{dx}|_{x=x^{(1)}_2} -  \epsilon^{(2)}\frac{dV}{dx}|_{x=x^{(2)}_1} \tag{2.4.5}$$  
+
+如果是介质、电场变化连续，则式$(2.4.5)$ 应当近似等于$0$，这也是矩阵中最多的情况。  
+$$\boldsymbol{d} = \begin{bmatrix}
+    D^{(1)}_1 \\ 
+    0 \\ 
+    0 \\ 
+    0 \\ 
+    \vdots \\  
+    0 \\
+    -D^{(N_e)}_2
+\end{bmatrix} \tag{2.4.6}$$
+由此也可以看出，这一项一般用来表示边界条件。  
+
+考虑式$(2.3.12), (2.3.13)$，则矩阵也可以写作如下形式：  
+$$KV=\boldsymbol{b}+\boldsymbol{d} \tag{2.4.7}$$  
+其中：  
+$$K=\begin{bmatrix}
+    \frac{\epsilon^{(1)}}{l^{(1)}} & -\frac{\epsilon^{(1)}}{l^{(1)}} \\
+    -\frac{\epsilon^{(1)}}{l^{(1)}} & \frac{\epsilon^{(1)}}{l^{(1)}} + \frac{\epsilon^{(2)}}{l^{(2)}} &  -\frac{\epsilon^{(2)}}{l^{(2)}}  \\ 
+    & -\frac{\epsilon^{(2)}}{l^{(2)}} & \frac{\epsilon^{(2)}}{l^{(2)}} + \frac{\epsilon^{(3)}}{l^{(3)}}  &  -\frac{\epsilon^{(3)}}{l^{(3)}} \\ 
+    & & -\frac{\epsilon^{(3)}}{l^{(3)}} & \frac{\epsilon^{(3)}}{l^{(3)}} + \frac{\epsilon^{(4)}}{l^{(4)}}  &  -\frac{\epsilon^{(4)}}{l^{(4)}} \\ 
+    \vdots & \vdots & \vdots & \vdots & \vdots & \vdots  \\
+    & & & -\frac{\epsilon^{(N_e-1)}}{l^{(N_e-1)}} & \frac{\epsilon^{(N_e-1)}}{l^{(N_e-1)}} + \frac{\epsilon^{(N_e)}}{l^{(N_e)}}  &  -\frac{\epsilon^{(N_e)}}{l^{(N_e)}} \\ 
+    & & & & -\frac{\epsilon^{(N_e)}}{l^{(N_e)}} & \frac{\epsilon^{(N_e)}}{l^{(N_e)}} \\ 
+\end{bmatrix} \tag{2.4.8}$$  
+$$\boldsymbol{b} = -\frac{\rho_0}{2}\begin{bmatrix}
+    l^{(1)}  \\ 
+    l^{(1)}+l^{(2)}  \\ 
+    l^{(2)}+l^{(3)}  \\ 
+    l^{(1)}+l^{(4)}  \\ 
+    \vdots  \\
+    l^{(N_e-1)}+l^{(N_e)}  \\ 
+    l^{(N_e)}  \\ 
+\end{bmatrix}$$  
+> 这里是照着书上抄的，假设有$N_e$ 条线段。组装结果矩阵需要多次循环完成  
+```matlab   
+% 伪代码
+% Initialize the global matrix
+K=sparse(Nn,Nn);
+b=zeros(Nn,1);
+% Loop through the elements
+for e=1:Ne
+    % Double loop through the local nodes of each element
+    for i=1:2
+        for j=1:2
+            K(elmconn(e,i),elmconn(e,j))=K(elmconn(e,i),elmconn(e,j))+Ke(i,j);
+        end
+    b(elmconn(e,i))=b(elmconn(e,i))+fe(i);
+    end
+end
+```
+
+## 边界条件  
 
 > 去做饭了，未完待续……
