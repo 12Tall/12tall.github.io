@@ -38,7 +38,7 @@ tag:
 ![](./img/demo.png)   
 
 ## 2023-07-14 更新   
-`pnetlab v5` 及以前是基于`ubuntu 18.04` 的，而这个版本的操作系统默认的`python` 版本是`3.6` 的，而`ishare2 webgui` 工具需要`python v3.7+`。所以需要手动安装`ishare2 webgui`，下面是具体步骤：  
+`pnetlab v5` 及以前是基于`ubuntu 18.04` 的，而这个版本的操作系统默认的`python` 版本是`3.6` 的，而`ishare2 webgui` 工具需要`python v3.7+`。所以需要手动安装`ishare2 webgui`，可以下载[虚拟机镜像](https://transfer.sh/VGGNnroo67/Pnet-Lab-v5.3.11.ova)，或者按下面具体步骤安装：  
 
 ```shell  
 ## 在安装完系统后，启用root 账号，并赋予ssh 远程登录的权限
