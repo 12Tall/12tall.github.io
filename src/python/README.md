@@ -19,7 +19,8 @@ Python 编码相关的项目，主要包括：Web、数学、控制与仿真等
 ## 编译原理  
 1. [ply 词法分析](./ply/lex/REAMDE.md)  
 2. [ply 语法分析](./ply/yacc/README.md)  
-3. [llvmlite 笔记](./llvmlite/README.md)
+3. [llvmlite 笔记](./llvmlite/README.md)  
+4. [antlr4 笔记](./antlr4/README.md)
 
 ## 算法  
 1. [Python 简单的遗传算法实现](./algorithm/ga/README.md)  
