@@ -27,8 +27,46 @@ tag:
 > - 相比于EVE，它支持热插拔   
 > - 自带了一款镜像管理软件`ishare2`，可以方便地下载很多镜像  
 
+## 安装过程  
+通过下载官方提供的[v6.ova 镜像](https://labhub.eu.org/api/raw/?path=/UNETLAB%20I/OVA/PNETLab-6.ova)。下载并运行虚拟机后可以使用`root/pnet` 登录。  
+但是在安装`ishare2` 的时候，会遇到`sourcelist` 报404 的问题，这时需要将其注释掉（在`/etc/apt/sources.list` 文件中注释掉含`repo.pnetlab.com` 字样的行）。  
+然后再安装并更新`ishare2` 和`ishare2 gui`。    
+```shell
+root@pnetlab:~# wget -O /usr/sbin/ishare2 https://raw.githubusercontent.com/pnetlabrepo/ishare2/main/ishare2 > /dev/null 2>&1 && chmod +x /usr/sbin/ishare2 && ishare2  
+root@pnetlab:~# ishare2 upgrade  
+root@pnetlab:~# ishare2  
+root@pnetlab:~# ishare2 gui install
+```
+
+### 裸机安装  
+裸机安装分两步，先是安装系统，这一步与官网的[教程](https://www.pnetlab.com/pages/documentation?slug=install-bare-metal)一致。但是后面因为`repo` 不再可用，所以需要使用以下命令安装：  
+```shell  
+user@pnetlab:~$ sudo -i # 进入root 账号  
+# 安装v5  
+root@pnetlab:~#  bash -c "$(curl -sL https://labhub.eu.org/api/raw/?path=/UNETLAB%20I/upgrades_pnetlab/bionic/install_pnetlab_latest_v5.sh)" 
+
+# 安装v6
+root@pnetlab:~#  bash -c "$(curl -sL https://labhub.eu.org/api/raw/?path=/UNETLAB%20I/upgrades_pnetlab/Focal/install_pnetlab_v6.sh)" 
+
+root@pnetlab:~#  reboot  
+
+# 安装ishare2  
+root@pnetlab:~# wget -O /usr/sbin/ishare2 https://raw.githubusercontent.com/pnetlabrepo/ishare2/main/ishare2 > /dev/null 2>&1 && chmod +x /usr/sbin/ishare2 && ishare2  
+root@pnetlab:~# ishare2 upgrade  
+root@pnetlab:~# ishare2  
+root@pnetlab:~# ishare2 gui install
+```
+
+
+### 使用踩坑  
+
+1. 在VMware 中运行虚拟机时，要注意勾选[VT-x 虚拟化支持](https://www.pnetlab.com/pages/documentation?slug=install-PNETlab)。否则基于QEMU 的镜像在启动后会闪退。  
+
+-----  
+
+## 以下内容已过期，但是不舍得删  
+
 这里仅记录几个使用的坑：  
-- 在VMware 中运行虚拟机时，要注意勾选[VT-x 虚拟化支持](https://www.pnetlab.com/pages/documentation?slug=install-PNETlab)。否则基于QEMU 的镜像在启动后会闪退。  
 - 如果国内网络不能下载[ishar2](https://github.com/pnetlabrepo/ishare2)。则可以手动将该仓库下的`ishare2` 文件内容复制到`/usr/sbin/ishare2`，然后对照说明设置权限`chmod +x /usr/sbin/ishare2`即可。  
 - 官网下载的OVA 虚拟机是`v4.2.10` 版本的。很多镜像包括`ishare2` 不能正确运行。于是可以通过`ishare2 upgrade` 先升级pnet-lab 到最新稳定版，然后在升级`ishare2` 到最新稳定版（当前是`v5.3`）即可。  
 - `ishare2 web gui` 需要python 3.7 及以上版本才能运行，如果使用官方的虚拟机还需要升级python 环境，但是一般通过cli 就已经够用了。  
@@ -37,16 +75,20 @@ tag:
 
 ![](./img/demo.png)   
 
-## 2023-07-14 更新   
-`pnetlab v5` 及以前是基于`ubuntu 18.04` 的，而这个版本的操作系统默认的`python` 版本是`3.6` 的，而`ishare2 webgui` 工具需要`python v3.7+`。所以需要手动安装`ishare2 webgui`，可以下载[虚拟机镜像](https://transfer.sh/VGGNnroo67/Pnet-Lab-v5.3.11.ova)，或者按下面具体步骤安装：  
+### 2023-07-14 更新   
+`pnetlab v5` 及以前是基于`ubuntu 18.04` 的，而这个版本的操作系统默认的`python` 版本是`3.6` 的，而`ishare2 webgui` 工具需要手工安装`python v3.7+`。所以需要手动安装`ishare2 webgui`，可以下载[虚拟机镜像](https://transfer.sh/VGGNnroo67/Pnet-Lab-v5.3.11.ova)，或者按下面具体步骤安装：  
 
 ```shell  
+# 安装系统时，默认的用户/密码为：pnet/pnet
 ## 在安装完系统后，启用root 账号，并赋予ssh 远程登录的权限
 sudo -i 
 passwd # input password  
 sed -i -e "s/.*PermitRootLogin .*/PermitRootLogin yes/" /etc/ssh/sshd_config 
 # allow remote login
-service sshd restart  
+service sshd restart    
+
+# 退出重新以root 登录，并删除掉pnet 用户  
+userdel pnet
 
 ## 在国内设置系统代理，如果本地局域网中没有代理的话，可以安装v2raya 服务在系统上  
 ## 参见下一节：  
@@ -62,8 +104,8 @@ python3.7 -m pip install -U pip setuptools wheel
 echo -e "\ndeb [trusted=yes] http://repo.pnetlab.com ./" >> /etc/apt/sources.list
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
 apt-get update
-apt-get purge netplan.io -y
-apt-get install pnetlab -y
+apt-get purge netplan.io -y  
+apt-get install pnetlab -y  # 在安装完这一步之前不要重启电脑
 # 在ubuntu 20.04 中解决包不兼容、损坏的问题： https://www.cnblogs.com/lvdongjie/p/15787306.html
 # apt-get install aptitude  
 # aptitude  install pnetlab -y

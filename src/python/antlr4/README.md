@@ -20,10 +20,12 @@ tag:
 `antlr4` 是一个编译器前端工具，由Java 语言开发，可以完成词法分析和语法分析，最终生成抽象语法树（AST）。虽然`antlr4` 起于Java，但是其支持多种目标语言，例如：C++, Python, JavaScript 等。  
 现在使用`antlr4` 也并不一定需要安装Java，官方提供了基于Python3 的工具包：`pip install antlr4-tools`。该工具包包含两个命令：  
 - `antlr4` 生成器主程序（首次运行时可能会提示安装jre 环境）。关键参数：  
-  - `-Dlanguage=[Cpp|JavaScript|Python]` 目标语言，默认会生成Java 语言的解析器代码。这个目标语言要与语法规则文件中内嵌的`action` 等语言一致；      
+  - `-Dlanguage=[Cpp|JavaScript|Python3|Python2]` 目标语言，默认会生成Java 语言的解析器代码。这个目标语言要与语法规则文件中内嵌的`action` 等语言一致；      
 - `antlr4-parse` 可以用来验证语法规则、并生成可视化的预览。关键参数：  
   - `-gui` 生成可视化AST 预览  
   - `ctrl-D/ctrl-Z` 快捷键退出程序      
+
+另外，如果要运行生成的Python 目标代码的话，还需要安装运行环境：`pip install antlr4-python3-runtime`。
 
 ## ANTLR4 语法  
 `antlr4` 的描述语法基本上派生于C 语言，会有少量的扩展。  
