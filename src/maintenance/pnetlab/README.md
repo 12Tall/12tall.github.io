@@ -27,6 +27,9 @@ tag:
 > - 相比于EVE，它支持热插拔   
 > - 自带了一款镜像管理软件`ishare2`，可以方便地下载很多镜像  
 
+## 安装过程  
+通过下载官方提供的[ova 镜像--奶牛快传（口令：zjbj1m）](https://cowtransfer.com/s/62442b23aef54d)。下载并运行虚拟机后可以使用`root/pnet` 登录。（目前`sourcelist` 好像有些问题——2023-08-30）  
+
 这里仅记录几个使用的坑：  
 - 在VMware 中运行虚拟机时，要注意勾选[VT-x 虚拟化支持](https://www.pnetlab.com/pages/documentation?slug=install-PNETlab)。否则基于QEMU 的镜像在启动后会闪退。  
 - 如果国内网络不能下载[ishar2](https://github.com/pnetlabrepo/ishare2)。则可以手动将该仓库下的`ishare2` 文件内容复制到`/usr/sbin/ishare2`，然后对照说明设置权限`chmod +x /usr/sbin/ishare2`即可。  
@@ -38,15 +41,19 @@ tag:
 ![](./img/demo.png)   
 
 ## 2023-07-14 更新   
-`pnetlab v5` 及以前是基于`ubuntu 18.04` 的，而这个版本的操作系统默认的`python` 版本是`3.6` 的，而`ishare2 webgui` 工具需要`python v3.7+`。所以需要手动安装`ishare2 webgui`，可以下载[虚拟机镜像](https://transfer.sh/VGGNnroo67/Pnet-Lab-v5.3.11.ova)，或者按下面具体步骤安装：  
+`pnetlab v5` 及以前是基于`ubuntu 18.04` 的，而这个版本的操作系统默认的`python` 版本是`3.6` 的，而`ishare2 webgui` 工具需要手工安装`python v3.7+`。所以需要手动安装`ishare2 webgui`，可以下载[虚拟机镜像](https://transfer.sh/VGGNnroo67/Pnet-Lab-v5.3.11.ova)，或者按下面具体步骤安装：  
 
 ```shell  
+# 安装系统时，默认的用户/密码为：pnet/pnet
 ## 在安装完系统后，启用root 账号，并赋予ssh 远程登录的权限
 sudo -i 
 passwd # input password  
 sed -i -e "s/.*PermitRootLogin .*/PermitRootLogin yes/" /etc/ssh/sshd_config 
 # allow remote login
-service sshd restart  
+service sshd restart    
+
+# 退出重新以root 登录，并删除掉pnet 用户  
+userdel pnet
 
 ## 在国内设置系统代理，如果本地局域网中没有代理的话，可以安装v2raya 服务在系统上  
 ## 参见下一节：  
@@ -62,8 +69,8 @@ python3.7 -m pip install -U pip setuptools wheel
 echo -e "\ndeb [trusted=yes] http://repo.pnetlab.com ./" >> /etc/apt/sources.list
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
 apt-get update
-apt-get purge netplan.io -y
-apt-get install pnetlab -y
+apt-get purge netplan.io -y  
+apt-get install pnetlab -y  # 在安装完这一步之前不要重启电脑
 # 在ubuntu 20.04 中解决包不兼容、损坏的问题： https://www.cnblogs.com/lvdongjie/p/15787306.html
 # apt-get install aptitude  
 # aptitude  install pnetlab -y
