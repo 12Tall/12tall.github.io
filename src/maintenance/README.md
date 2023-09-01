@@ -21,7 +21,9 @@ icon: config
 - [MariaDB 运维](./ubuntu/mariadb/README.md)
 
 ## 路由与交换      
-- [eve-ng安装与镜像导入](./router_switch/eve-ng.md)  
+- [eve-ng安装与镜像导入](./router_switch/eve-ng.md)   
+- [pnetlab6 安装](./pnetlab/README.md)   
+- [VMware 安装OpenWRT 并配置透明代理](./openwrt/README.md)
 
 ### CCNA  
 - [TCP/IP 基础](./router_switch/CCNA/tcp-ip.md)
