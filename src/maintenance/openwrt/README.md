@@ -164,4 +164,6 @@ root@OpenWrt:~# /etc/init.d/v2raya start
 3. [OpenWrt 新手配置使用指南](https://www.moewah.com/archives/4054.html)  
 4. [OpenWrt 存储空间扩容的两种方案](https://www.moewah.com/archives/4719.html)  
 5. [OpenWrt - v2rayA](https://v2raya.org/docs/prologue/installation/openwrt/)  
-6. [2023最简路由器-透明代理-个人实现：OpenWRT + v2Ray + v2RayA](https://www.youtube.com/watch?v=ixnidCvk0DI)
+6. [2023最简路由器-透明代理-个人实现：OpenWRT + v2Ray + v2RayA](https://www.youtube.com/watch?v=ixnidCvk0DI)  
+
+<busuanzi></busuanzi>

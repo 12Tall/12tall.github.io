@@ -19,6 +19,7 @@ export default defineUserConfig({
 
   head: [
     ['meta', { charset: 'utf-8' }],
+    ['script', {type:'text/javascript', src:'/scripts/bsz.pure.mini.js'}],
   ],
 
   theme,
