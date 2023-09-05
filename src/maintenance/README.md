@@ -13,6 +13,7 @@ icon: config
 - [DNS 服务器](./windows/server/01_dns.md)  
 - [AD 域](./windows/server/02_ad.md)
 - [DHCP 服务器](./windows/server/03_dhcp.md)  
+- [封装自定义Windows 安装镜像 ](./windows/encapsulate_custom_installer_image/README.md)
 
 ## Ubuntu Server  
 - [域控制器杂谈](./ubuntu/active-directory-controller/README.md)  
