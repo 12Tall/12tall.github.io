@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@vuepress/plugin-register-components": "^2.0.0-beta.53",
-    "element-plus": "^2.3.0"
+    "element-plus": "^2.3.0",
+    "three": "^0.156.1"
   }
 }
