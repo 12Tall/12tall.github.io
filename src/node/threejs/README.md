@@ -10,7 +10,10 @@ category:
 tag:  
     - ThreeJS    
     - 3D  
-    - Simulation      
+    - Simulation    
+    - HACD
+    - 碰撞检测  
+    - 凸分解  
 ---   
 
 > 上周看到一个`Unity` 的项目，可以在Web 页面中开挖掘机。感觉挺好玩的，于是想着是否可以通过`ThreeJS` 实现一个乞丐版的demo。还有一个比较难的点在物理引擎上面吧，具体问题还描述不清楚。  
@@ -114,9 +117,17 @@ onMounted(() => {
     <threedemo></threedemo>  
 </ClientOnly>
 
+上面的笔记只是为了便于理解联动是怎么实现的，如果真的要实现在线开挖掘机的功能，还需要添加物理引擎，例如`connon.js`。不重复发明轮子，但是多学点东西总没错。加油！
 
 ## 参考资料  
 1. [WebGL教程_Three.js教程_郭隆邦技术博客](http://www.yanhuangxueyuan.com/)。这是一个不错的技术博客，其中工具资源部分也挺好。 
 2. [Web3D系统课程视频_Three.js中文网](http://www.webgl3d.cn/pages/aac9ab/)   
 3. [国外破碎锤demo](https://www.trigonal.fr/brise-roche/ )  
-4. [国内挖掘机demo](https://www.hightopo.com/demo/ht-excavator/)
+4. [国内挖掘机demo](https://www.hightopo.com/demo/ht-excavator/)  
+5. [郭先生的博客](https://www.mrguo.link/home)。里面有一些关于`connon.js` 的讲解，蛮好。  
+6. [three-to-cannon](https://github.com/donmccurdy/three-to-cannon)  
+7. [three-to-ammo](https://github.com/InfiniteLee/three-to-ammo)  
+8. [近似凸分解](http://kmamou.blogspot.com/2011/10/hacd-hierarchical-approximate-convex.html)  
+9. [碰撞检测示例](https://codesandbox.io/s/threejs-cannonjs-convex-polyhedrons-from-collision-mesh-fcfz2?file=/src/client/client.ts)  
+10. [Cannon.js 复杂形状](https://stackoverflow.com/questions/30675493/cannon-js-complex-shapes?rq=2)  
+11. [HACD](https://github.com/kmammou/v-hacd) 近似凸分解源码。  
