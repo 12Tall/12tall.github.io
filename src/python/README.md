@@ -27,7 +27,9 @@ Python 编码相关的项目，主要包括：Web、数学、控制与仿真等
 2. [Python 模拟退火算法实现](./algorithm/sa/README.md)  
 3. [Python 粒子群算法理解](./algorithm/pso/README.md)  
 4. [Python 蚁群算法理解](./algorithm/aco/README.md)  
-5. [A* 路径规划算法](./algorithm/a-star/README.md)
+5. [A* 路径规划算法](./algorithm/a-star/README.md)  
+6. [Pymoo 多目标优化](./pymoo/README.md)  
+7. [Pymoo 多目标优化（二）](./pymoo/README2.md)
 
 ## 其他  
 1. [PySide2 的学习笔记](./pyside2/README.md)  
