@@ -13,12 +13,19 @@ tag:
     - optimization  
     - multiple object  
     - pareto
+    - multiprocessing  
+    - BaseManager  
+    - 分布式  
+    - parallelization  
+    - 多线程  
+    - 多进程
 ---     
 
 > 因为许多任务并不是一个简单的函数调用可以解决的，但是我们可以将`pymoo` 问题定义为一个泛函数，下面的点**很重要**：  
 > - `n_offspring`：每一代产生多少个新个体，如果太小，则会收敛的很慢，如果太大，则会过度探索空间；  
 > - 需要将`g` 都写作：$g(x) \le 0$ 的形式；  
-> - 并且`f` 也都应写作$min$ 形式；  
+> - 并且`f` 也都应写作$min$ 形式；    
+> - 在Windows 上使用多进程，必须要在`__main__` 代码块中才行；    
 
 ## 定义问题  
 
@@ -143,9 +150,113 @@ problem = DemoProblem01(elementwise_runner=runner)
 > 上面代码运行时间：1min30s  
 
 
-可以通过 ~~命名管道（不适合）~~ 来实现与子进程/子线程的通信，但是也要看目标程序是不是支持很多特性。最简单的还是文件读写。
+可以通过 ~~命名管道（不适合）~~ 来实现与子进程/子线程的通信，但是也要看目标程序是不是支持很多特性。最简单的还是文件读写。  
+
+## Manager 通信  
+自从`python 2.7` 以后，内置了多进程模块，其中的`Manager` 模块可以用于跨进程（父子进程间）通信：  
+```python
+from multiprocessing import Process, Manager
+
+# 定义一个共享列表
+def add_data(shared_list, item):
+    shared_list.append(item)
+
+if __name__ == '__main__':
+    # 创建一个共享的Manager对象
+    manager = Manager()
+    
+    # 创建一个共享列表
+    shared_list = manager.list()
+    
+    # 创建两个进程，分别向共享列表中添加数据
+    p1 = Process(target=add_data, args=(shared_list, 'A'))
+    p2 = Process(target=add_data, args=(shared_list, 'B'))
+    
+    # 启动进程
+    p1.start()
+    p2.start()
+    
+    # 等待两个进程结束
+    p1.join()
+    p2.join()
+    
+    # 打印最终的共享列表内容
+    print(shared_list)
+```  
+
+### BaseManager 
+而通过BaseManager 则可以创建无关联的进程间的通信，将来也可以用在不同的机器上做分布式计算。看上去应该是基于`socket` 的，但是封装的比较好，使用起来也比较简单。一般不直接使用`BaseManager`，而是采用派生子类的方法：  
+
+#### 服务端  
+```python{22-23,26,33-35}
+### server 端
+import multiprocessing
+from time import sleep
+
+def comServer():
+    '''创建一个BaseManager 的服务进程，含有一个内部字典变量。
+    暴露两个函数接口：Read 和Write'''
+    from multiprocessing.managers import BaseManager
+    innerDict = {}
+
+    class DictManager(BaseManager):
+        '''一般不直接使用BaseManager，而是派生一个子类'''
+        pass
+
+    def read(key):
+        return innerDict[key]
+
+    def write(key, value):
+        innerDict[key] = value
+
+    # 在派生子类中注册接口，而不是在BaseManager 中
+    DictManager.register('read', read)
+    DictManager.register('write', write)
+
+    # 设置加密和监听端口
+    manager = DictManager(address=('0.0.0.0', 5000), authkey=b'secret_key')
+    server = manager.get_server()
+    server.serve_forever()
+
+
+if __name__ == '__main__':
+    '''在后台启动DictManager'''
+    background_process = multiprocessing.Process(name='comServer', target=comServer)
+    background_process.daemon = True
+    background_process.start()  
+
+    while True:  
+        sleep(20)
+        pass
+```  
+
+#### 客户端  
+```python{9-10,13-14}
+### client 端
+from multiprocessing.managers import BaseManager
+
+class DictManager(BaseManager):
+    pass
+
+if __name__ == '__main__':
+    # 向派生类注册端口，其实派生类的名字未必要一致
+    DictManager.register('read')
+    DictManager.register('write')
+
+    # 连接远程服务
+    manager = DictManager(address=('127.0.0.1', 5000), authkey=b'secret_key')
+    manager.connect()
+
+    # 方法调用
+    manager.write("hello", "world!")
+    print(manager.read("hello"))
+```  
+
+> 不知道通过文件交换会不会影响硬盘使用寿命，尽管有缓存的存在。   
 
 ## 参考资料  
 1. [pymoo - Parallelization](https://pymoo.org/problems/parallelization.html)  
 2. [Python笔记-windows管道通信](https://juejin.cn/post/7087742273043038239)  
-3. [Python通过Manager方式实现多个无关联进程共享数据](https://blog.csdn.net/hellocsz/article/details/79520479)
+3. [Python通过Manager方式实现多个无关联进程共享数据](https://blog.csdn.net/hellocsz/article/details/79520479)  
+4. [解决jupyter中无法运行multiprocessing的问题](https://blog.csdn.net/weixin_56921066/article/details/122155926)  
+5. [python在windows上使用多进程的坑](https://www.jianshu.com/p/da902aa987ee)
