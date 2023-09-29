@@ -37,4 +37,5 @@ Python 编码相关的项目，主要包括：Web、数学、控制与仿真等
 3. [Python 请求UAC](./uac.md)  
 4. [Python 多进程](./multiprocessing.md)  
 5. [pywinauto 办公自动化](./pywinauto/README.md)  
-6. [Qt Quick 的学习笔记（一）](./qt_quick/README.md)
+6. [Qt Quick 的学习笔记（一）](./qt_quick/README.md)  
+7. [Qt Quick 的学习笔记（二）](./qt_quick/README2.md)
