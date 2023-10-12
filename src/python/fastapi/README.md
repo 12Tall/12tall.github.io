@@ -77,6 +77,7 @@ if __name__ == "__main__":
 3. [lulu-ui](https://l-ui.com/)    
 4. [How to use macros in a included file](https://stackoverflow.com/a/45024799)  
 5. [SQLModel](https://sqlmodel.tiangolo.com/) FastAPI 作者开发的ORM 库，应该是见过的最简洁的Python ORM 库了    
+6. [Pydantic](https://docs.pydantic.dev/latest/) 一个比较好用的数据校验工具，尤其是对于JSON 到对象、对象到对象的类型转换非常友好  
 
 -----  
 

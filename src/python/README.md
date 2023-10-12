@@ -39,4 +39,5 @@ Python 编码相关的项目，主要包括：Web、数学、控制与仿真等
 5. [pywinauto 办公自动化](./pywinauto/README.md)  
 6. [Qt Quick 的学习笔记（一）](./qt_quick/README.md)  
 7. [Qt Quick 的学习笔记（二）](./qt_quick/README2.md)  
-8. [Python FMU 相关](./fmu/README.md)
+8. [Python FMU 相关](./fmu/README.md)  
+9. [FastAPI 工程化](./fastapi/README.md) 不包含路由和中间件的开发  
