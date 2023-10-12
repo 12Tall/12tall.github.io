@@ -29,7 +29,7 @@ Python 编码相关的项目，主要包括：Web、数学、控制与仿真等
 4. [Python 蚁群算法理解](./algorithm/aco/README.md)  
 5. [A* 路径规划算法](./algorithm/a-star/README.md)  
 6. [Pymoo 多目标优化](./pymoo/README.md)  
-7. [Pymoo 多目标优化（二）](./pymoo/README2.md)
+7. [Pymoo 多目标优化（二）](./pymoo/README2.md)  
 
 ## 其他  
 1. [PySide2 的学习笔记](./pyside2/README.md)  
@@ -38,4 +38,5 @@ Python 编码相关的项目，主要包括：Web、数学、控制与仿真等
 4. [Python 多进程](./multiprocessing.md)  
 5. [pywinauto 办公自动化](./pywinauto/README.md)  
 6. [Qt Quick 的学习笔记（一）](./qt_quick/README.md)  
-7. [Qt Quick 的学习笔记（二）](./qt_quick/README2.md)
+7. [Qt Quick 的学习笔记（二）](./qt_quick/README2.md)  
+8. [Python FMU 相关](./fmu/README.md)

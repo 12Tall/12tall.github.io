@@ -65,7 +65,7 @@ class Resistor(Fmi2Slave):
 通过以下命令就可以打包生成`Resistor.fmu`：  
 ```shell
 pythonfmu build -f demoslave.py
-```
+```  
 
 ## Python 调用FMU  
 
@@ -152,6 +152,17 @@ if __name__ == '__main__':
 其实有了这些基础之后可以玩点更疯狂的举动，比如在第一节定义FMU 时，我们可以在`do_step` 内部初始化一个虚拟的微控制器，像AVR 或者ARM。感觉还是要学一下状态机了。
 
 
+## 关于PythonFMU 中C++ 调用关系的笔记    
+`PythonFMU` 通过`fmi-native-export` 模块导出FMU 文件（For Co-simulation Only）。其中分为三个部分：  
+1. `fmi` 模块表示fmi 标准函数   
+2. `cppfmu` 中定义了二进制文件的导出（接口）函数，用于和其他程序进行通信   
+3. `pythonfmu` 中通过C/C++ 调用Python 完成实际的运算  
+
+其中承上启下的函数名字是`CppfmuInstantiateSlave` 定义在`pythonfmu/PySlaveInstance.cpp` 而在`cppfmu/fmi_functions.cpp` 中被调用。看命名应该在`cppfmu` 但其实并不是。  
+
+![Alt text](./img/pythonfmu-cpp.png)
+
 ## 参考资料  
 1. [NTNU-IHB/PythonFMU](https://github.com/NTNU-IHB/PythonFMU) 其中的示例比文档更好懂  
-2. [CATIA-Systems/FMPy](https://github.com/CATIA-Systems/FMPy) 同样看示例和函数的注释更好懂一些
+2. [CATIA-Systems/FMPy](https://github.com/CATIA-Systems/FMPy) 同样看示例和函数的注释更好懂一些  
+3. [https://fmi-standard.org/](https://fmi-standard.org/) FMI 标准与头文件的下载。  
