@@ -47,7 +47,66 @@ if __name__ == "__main__":
 项目的文件结构如下：  
 ![Alt text](./img/file-structure.png)     
 
-这样组织`static` 文件夹，可以让前后端引用js 的路径一致，便于开发时预览页面效果。   
+这样组织`static` 文件夹，可以让前后端引用js 的路径一致，便于开发时预览页面效果。     
+
+### 路由  
+FastAPI 的路由写法还不算反人类，只是需要很多的`import`，不过要注意路由匹配顺序是自上而下的  
+> `from . import ***` 这种写法不能用在`main` 模块中，不然会报错  
+
+![Alt text](./img/router.png)  
+
+### 中间件  
+> FastAPI 中间件本质上是一个异步函数，包含`request, call_next` 两个参数。  
+
+中间件可以在`main` 模块定义：  
+```python{6}
+@app.middleware("http")
+# 必须用 async
+async def add_process_time_header(request: Request, call_next):
+    start_time = time.time()
+    # 必须用 await
+    response = await call_next(request)
+    process_time = time.time() - start_time
+    # 自定义请求头
+    response.headers["X-Process-Time"] = str(process_time)
+    # 返回响应
+    return response
+```  
+
+也可以在单独的文件中定义（此方法的执行效率似乎更高一些）：  
+```python{11-20}
+import time
+from fastapi import Request
+
+class TimerMiddleware:
+    def __init__(
+            self,
+            attrs
+    ):
+        self.attrs = attrs  # 一些可选的属性数据
+
+    async def __call__(self, request: Request, call_next):
+        start_time = time.time()
+        # 必须用 await
+        response = await call_next(request)
+        process_time = time.time() - start_time
+        # 自定义请求头
+        response.headers["X-Process-Time"] = str(process_time)
+        response.headers["X-Attrs"] = self.attrs
+        # 返回响应
+        return response
+```
+使用`app.add_middleware` 启用中间件：  
+```python
+from fastapi import FastAPI, Request, templating, staticfiles
+from middleware.mw import TimerMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
+
+app = FastAPI()
+app.add_middleware(BaseHTTPMiddleware, dispatch=TimerMiddleware("attrs"))
+```
+
+也可以让中间件类直接继承`BaseHTTPMiddleware`，但是这样似乎会存在一些内存泄露的问题。参见[How to write a custom FastAPI middleware class](https://stackoverflow.com/a/71526036)。所以还是有必要像路由一样统一管理中间件。  
 
 ## 前端  
 
@@ -78,6 +137,7 @@ if __name__ == "__main__":
 4. [How to use macros in a included file](https://stackoverflow.com/a/45024799)  
 5. [SQLModel](https://sqlmodel.tiangolo.com/) FastAPI 作者开发的ORM 库，应该是见过的最简洁的Python ORM 库了    
 6. [Pydantic](https://docs.pydantic.dev/latest/) 一个比较好用的数据校验工具，尤其是对于JSON 到对象、对象到对象的类型转换非常友好  
+7. [How to write a custom FastAPI middleware class](https://stackoverflow.com/a/71526036)
 
 -----  
 

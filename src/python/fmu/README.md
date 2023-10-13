@@ -165,4 +165,5 @@ if __name__ == '__main__':
 ## 参考资料  
 1. [NTNU-IHB/PythonFMU](https://github.com/NTNU-IHB/PythonFMU) 其中的示例比文档更好懂  
 2. [CATIA-Systems/FMPy](https://github.com/CATIA-Systems/FMPy) 同样看示例和函数的注释更好懂一些  
-3. [https://fmi-standard.org/](https://fmi-standard.org/) FMI 标准与头文件的下载。  
+3. [https://fmi-standard.org/](https://fmi-standard.org/) FMI 标准与头文件的下载  
+4. [hyumo/qFMU](https://github.com/hyumo/qFMU/tree/main/src/qfmu/codegen/templates) 这个仓库更是硬核，利用`jinja` 来生成C 代码，进而编译成原生的dll。不过其中关于控制系统的功能还是蛮值得借鉴的  
