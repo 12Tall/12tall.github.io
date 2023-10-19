@@ -116,7 +116,7 @@ app.add_middleware(BaseHTTPMiddleware, dispatch=TimerMiddleware("attrs"))
 
 不太好的地方是后端通过表单获取数据时写法有点复杂，但是可以通过拦截`submit` 或者其他的手段来曲线救国。   
 
-## Jinja2   
+### Jinja2   
 虽然专业的前端设计很漂亮，但是打包工具未免也太复杂了些。而后端渲染的方式简单粗暴，深得我心。尤其是`jinja2` 既可以实现继承（`extend`）又可以实现组件化（`import/include`）。看起来也还挺方便的，只是还不知道使用起来感觉怎么样。  
 
 1. 通过`include` 导入模板文件     
@@ -126,8 +126,141 @@ app.add_middleware(BaseHTTPMiddleware, dispatch=TimerMiddleware("attrs"))
 3. 通过`extends` 继承模板文件  
 ![Alt text](./img/extends.png)  
 
-这篇笔记记录的都是一些可行性的问题，具体项目中的代码肯定还需要很多细节性的问题需要解决。
 
+## 数据库   
+一般的教程都会推荐`SQLAlchemy`，但是这个框架着实不好理解。好在`FastAPI` 的作者基于`SQLAlchemy` 封装了一个新的库`SQLModel`，和其他静态语言的数据库组件设计思路很像。如果不考虑数据库迁移的的话，模型和引擎可以不定义在同一个文件中。  
+![Alt text](./img/sqlmodel.png)  
+
+并且支持`SQLAlchemy` 的[查询语法](https://docs.sqlalchemy.org/en/14/tutorial/data_select.html#)：  
+```python
+from sqlmodel import SQLModel, Session, select, func, desc
+from model.node import Node
+from model.db import engine
+
+with Session(engine) as s:
+    statement = select(Node.id, 
+                       Node.data,
+                       func.count(Node.parent_id).label('count')
+                       ).group_by(
+                           Node.parent_id
+                        )
+    nodes = s.exec(statement) 
+    print(nodes.all())
+    s.commit()
+```  
+
+定义树状的数据结构：  
+```python
+from typing import Optional
+from sqlmodel import Field, Relationship, Session, SQLModel, create_engine
+
+
+class Node(SQLModel, table=True):
+    __tablename__ = 'node'  # 显式声明数据表
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    data: str
+    parent_id: Optional[int] = Field(
+        foreign_key='node.id',  # 小写的n 表示外键连
+        default=None,
+        nullable=True
+    )
+    parent: Optional['Node'] = Relationship(
+        back_populates='children',
+        sa_relationship_kwargs=dict(
+            remote_side='Node.id'  # 大写的N 表示本表中的字段
+        )
+    )
+    children: list['Node'] = Relationship(back_populates='parent')
+```
+
+递归查询：可以通过`remote_side` 来实现自递归，项目结构如下：  
+![Alt text](./img/sqlmodel2.png)
+
+
+
+### 异步  
+参考[Add documentation about how to use the async tools (session, etc)](https://github.com/tiangolo/sqlmodel/issues/626#issuecomment-1669841104)。
+或者[FastAPI with Async SQLAlchemy, SQLModel, and Alembic](https://testdriven.io/blog/fastapi-sqlmodel/)：  
+```python
+import os
+
+from sqlmodel import SQLModel, create_engine
+from sqlmodel.ext.asyncio.session import AsyncSession, AsyncEngine
+
+from sqlalchemy.orm import sessionmaker
+
+
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+engine = AsyncEngine(create_engine(DATABASE_URL, echo=True, future=True))
+
+async def init_db():
+    async with engine.begin() as conn:
+        # await conn.run_sync(SQLModel.metadata.drop_all)
+        await conn.run_sync(SQLModel.metadata.create_all)
+
+
+async def get_session() -> AsyncSession:
+    async_session = sessionmaker(
+        engine, class_=AsyncSession, expire_on_commit=False
+    )
+    async with async_session() as session:
+        yield session
+
+################################################################################
+
+from fastapi import Depends, FastAPI
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.db import get_session, init_db
+from app.models import Song, SongCreate
+
+app = FastAPI()
+
+
+@app.on_event("startup")
+async def on_startup():
+    await init_db()
+
+
+@app.get("/ping")
+async def pong():
+    return {"ping": "pong!"}
+
+
+@app.get("/songs", response_model=list[Song])
+async def get_songs(session: AsyncSession = Depends(get_session)):
+    result = await session.execute(select(Song))
+    songs = result.scalars().all()
+    return [Song(name=song.name, artist=song.artist, id=song.id) for song in songs]
+
+
+@app.post("/songs")
+async def add_song(song: SongCreate, session: AsyncSession = Depends(get_session)):
+    song = Song(name=song.name, artist=song.artist)
+    session.add(song)
+    await session.commit()
+    await session.refresh(song)
+    return song        
+```
+
+
+
+
+另外，一个好玩的点：  
+```python  
+from typing import TYPE_CHECKING  
+
+if TYPE_CHECKING:  
+    '''
+    代码块里面的代码并不会被执行，但是可以为编辑器提供类型提示
+    '''
+    import libs  
+```
+
+这篇笔记记录的都是一些可行性的问题，具体项目中的代码肯定还需要很多细节性的问题需要解决。
 
 
 ## 参考资料  
@@ -137,7 +270,9 @@ app.add_middleware(BaseHTTPMiddleware, dispatch=TimerMiddleware("attrs"))
 4. [How to use macros in a included file](https://stackoverflow.com/a/45024799)  
 5. [SQLModel](https://sqlmodel.tiangolo.com/) FastAPI 作者开发的ORM 库，应该是见过的最简洁的Python ORM 库了    
 6. [Pydantic](https://docs.pydantic.dev/latest/) 一个比较好用的数据校验工具，尤其是对于JSON 到对象、对象到对象的类型转换非常友好  
-7. [How to write a custom FastAPI middleware class](https://stackoverflow.com/a/71526036)
+7. [How to write a custom FastAPI middleware class](https://stackoverflow.com/a/71526036)  
+8. [How do I construct a self-referential/recursive SQLModel](https://stackoverflow.com/a/73420019)  
+9. [Aggregate functions with GROUP BY / HAVING](https://docs.sqlalchemy.org/en/14/tutorial/data_select.html#aggregate-functions-with-group-by-having)
 
 -----  
 
