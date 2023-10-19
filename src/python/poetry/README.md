@@ -26,7 +26,8 @@ tag:
 > poetry init  # 初始化项目，需要填写一些信息  
 > poetry env use Python  # 创建虚拟环境，移除用remove       
 > poetry add packages  # 添加依赖项  
-> poetry add packages --dev  # 添加开发依赖项，如打包工具等  
+> poetry add packages -G dev  # 添加开发依赖项，如打包工具等  
+> poetry add --editable git+ssh://github.com/sdispater/pendulum.git#develop
 > poetry show [--tree] 显示依赖项  
 
 ## 其他命令 ##  
