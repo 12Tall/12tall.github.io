@@ -34,6 +34,7 @@ tag:
 
 > poetry export # 导出依赖项到requirement.txt  
 > poetry shell  # 启动shell 命令行  
+> poetry run python -m pip install *** --no-use-pep517  # 安装一些不支持pep517 的包，例如PyQt5
 ```  
 
 `Poetry` 生成的项目中，`pyproject.toml` 的作用类似于`pakage.json`。  
