@@ -17,6 +17,7 @@ icon: editor
 6. [x86 操作系统笔记](./c-like/tinyos/README.md)
 7. [C 语言内存管理](./c-like/memory-management/README.md)  
 8. [GCC 中的符号 ](./c-like/symbol/REAMDE.md)
+9. [简陋的Buddy 算法](./c-like/buddy/README.md)
 
 ## Rust 编程语言  
 1. [Rust 编译DLL](./rust/natavie_dll/README.md)  
