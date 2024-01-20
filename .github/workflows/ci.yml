@@ -27,6 +27,7 @@ jobs:
           echo 12tall.cn > CNAME  
           echo > .nojekyll
           git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email fb.ouyang@outlook.com
           git config --global init.defaultBranch master
           git init
           git add -A
