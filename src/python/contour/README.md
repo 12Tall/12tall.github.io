@@ -16,6 +16,7 @@ tag:
 
 ### 预设参数  
 提前设置几个可以手动调整的绘图参数：  
+
 ```python  
 import numpy as np
 input_csv = 'data.csv'  # 输入文件地址  
@@ -30,6 +31,7 @@ contourf_levels = np.linspace(0,1.0,200)  # 等高线渲染密度
 
 ### 数据预处理  
 读取数据，并获取坐标轴的名字：  
+
 ```python
 import pandas as pd
 
@@ -51,6 +53,7 @@ data_z = data[axis_z]*z_scale
 
 ### 插值并处理异常数据   
 这里遇到了布尔掩码加速异常处理的操作，蛮有意思的：  
+
 ```python
 from scipy.interpolate import griddata
 
@@ -70,6 +73,7 @@ mask = y_grid > edge_interp
 z_interp[mask] = np.nan
 ```
 ### 绘制图像  
+
 ```python
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
@@ -124,5 +128,4 @@ plt.show()
 ```  
 
 得到结果如下：  
-![]()
 ![alt text](./img/image.png)
