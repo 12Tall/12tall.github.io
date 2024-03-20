@@ -26,5 +26,6 @@ icon: editor
 ## 运维相关    
 1. [容器技术简介](./container/README.md)  
 2. [LDAP 相关](./ldap.md)  
-3. [HeidiSQL 相关](./heidiSQL/README.md)
+3. [HeidiSQL 相关](./heidiSQL/README.md)  
+4. [简单PM2 笔记](./pm2/README.md)
 

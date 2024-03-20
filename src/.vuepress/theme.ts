@@ -35,7 +35,7 @@ export default hopeTheme({
       // sidebar
       sidebar: false, // zhSidebar,
 
-      footer: '蝉噪林愈静 鸟鸣山更幽 | 👀<span id="busuanzi_value_page_pv">Loading</span> | 加入<a href="https://github.com/12Tall/12tall.github.io/discussions" target="blank">Discussions</a>',
+      footer: '蝉噪林愈静 鸟鸣山更幽 | 👀<span id="busuanzi_value_site_pv">Loading</span> | 加入<a href="https://github.com/12Tall/12tall.github.io/discussions" target="blank">Discussions</a>',
 
       displayFooter: true,
 
