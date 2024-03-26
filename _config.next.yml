@@ -38,10 +38,10 @@ custom_file_path:
 # ---------------------------------------------------------------
 
 # Schemes
-scheme: Muse
-#scheme: Mist
-#scheme: Pisces
-#scheme: Gemini
+# scheme: Muse
+scheme: Mist
+# scheme: Pisces
+# scheme: Gemini
 
 # Dark Mode
 darkmode: false
@@ -117,8 +117,8 @@ menu_settings:
 
 sidebar:
   # Sidebar Position.
-  position: left
-  #position: right
+  # position: left
+  position: right
 
   # Manual define the sidebar width. If commented, will be default for:
   # Muse | Mist: 320
@@ -140,7 +140,7 @@ sidebar:
 # Sidebar Avatar
 avatar:
   # Replace the default image and set the url here.
-  url: #/images/avatar.gif
+  url: /img/logo.png #/images/avatar.gif
   # If true, the avatar will be displayed in circle.
   rounded: false
   # If true, the avatar will be rotated with the cursor.
@@ -154,8 +154,8 @@ site_state: true
 # Key is the link label showing to end users.
 # Value before `||` delimiter is the target permalink, value after `||` delimiter is the name of Font Awesome icon.
 social:
-  #GitHub: https://github.com/yourname || fab fa-github
-  #E-Mail: mailto:yourname@gmail.com || fa fa-envelope
+  GitHub: https://github.com/12tall || fab fa-github
+  E-Mail: mailto:fb.ouyang@outlook.com || fa fa-envelope
   #Weibo: https://weibo.com/yourname || fab fa-weibo
   #Twitter: https://twitter.com/yourname || fab fa-twitter
   #FB Page: https://www.facebook.com/yourname || fab fa-facebook
@@ -281,6 +281,7 @@ follow_me:
   #Twitter: https://twitter.com/username || fab fa-twitter
   #Telegram: https://t.me/channel_name || fab fa-telegram
   #WeChat: /images/wechat_channel.png || fab fa-weixin
+  BiliBili: https://space.bilibili.com/66003054
   RSS: /atom.xml || fa fa-rss
 
 # Related popular posts
@@ -369,12 +370,12 @@ codeblock:
     dark: prism-dark
   # Add copy button on codeblock
   copy_button:
-    enable: false
+    enable: true
     # Available values: default | flat | mac
     style:
   # Fold code block
   fold:
-    enable: false
+    enable: true
     height: 500
 
 back2top:
@@ -386,7 +387,7 @@ back2top:
 
 # Reading progress bar
 reading_progress:
-  enable: false
+  enable: true
   # Available values: left | right
   start_at: left
   # Available values: top | bottom
