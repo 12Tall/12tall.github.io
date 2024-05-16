@@ -25,6 +25,282 @@ $ hexo deploy
 ]]></content>
   </entry>
   <entry>
+    <title>Gitlab简单安装</title>
+    <url>/2024/05/16/notation/Gitlab%E7%AE%80%E5%8D%95%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<p>以前一直在用Gogs，但是Gitlab 提供了CI/CD 的功能，故而尝试部署下。</p>
+<h2 id="安装gitlab"><a class="markdownIt-Anchor" href="#安装gitlab"></a> 安装Gitlab</h2>
+<p>Gitlab 官方提供了安装包，不用手动写启动脚本了。按照官方教程安装即可，安装时需要注意使用<code>ce</code> 版本。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 安装依赖   </span>
+<span class="token function">sudo</span> <span class="token function">apt-get</span> update
+<span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> <span class="token parameter variable">-y</span> <span class="token function">curl</span> openssh-server ca-certificates tzdata perl
+
+<span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> <span class="token parameter variable">-y</span> postfix
+
+<span class="token comment"># 注意，这里安装的是ce 版本  </span>
+<span class="token function">curl</span> https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">bash</span>
+<span class="token comment"># 预设域名，执行安装  </span>
+<span class="token function">sudo</span> <span class="token assign-left variable">EXTERNAL_URL</span><span class="token operator">=</span><span class="token string">"https://gitlab.example.com"</span> <span class="token function">apt-get</span> <span class="token function">install</span> gitlab-ce
+<span class="token comment"># sudo EXTERNAL_URL="http://ip:8080" apt-get install gitlab-ce  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>安装后可以通过域名或IP 访问，默认管理员账号是<code>root</code>。密码可以通过以下命令进行重置：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> gitlab-rails console  
+<span class="token comment"># 需要等待几秒   </span>
+<span class="token operator">></span> user <span class="token operator">=</span> User.where<span class="token punctuation">(</span>@root<span class="token punctuation">)</span>.first  
+<span class="token operator">></span> <span class="token assign-left variable">user.password</span><span class="token operator">=</span><span class="token string">'password'</span>  
+<span class="token operator">></span> user.save<span class="token operator">!</span>  
+<span class="token operator">></span> <span class="token builtin class-name">exit</span>  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="自定义配置"><a class="markdownIt-Anchor" href="#自定义配置"></a> 自定义配置</h2>
+<h3 id="启用自定义nginx"><a class="markdownIt-Anchor" href="#启用自定义nginx"></a> 启用自定义Nginx</h3>
+<p>GitLab 自带了Nginx 服务，但是我们可以选择禁用，然后利用系统上的Nginx 配置代理服务。</p>
+<ol>
+<li>首先编辑配置文件</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">vim</span> /etc/gitlab/gitlab.rb<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ol start="2">
+<li>修改相关配置如下：</li>
+</ol>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml">external_url 'http<span class="token punctuation">:</span>//localhost<span class="token punctuation">:</span>8081'  <span class="token comment"># 没有作用</span>
+
+nginx<span class="token punctuation">[</span><span class="token string">'enable'</span><span class="token punctuation">]</span> = false  <span class="token comment"># 禁用默认Nginx</span>
+web_server<span class="token punctuation">[</span><span class="token string">'external_users'</span><span class="token punctuation">]</span> = <span class="token punctuation">[</span><span class="token string">'www-data'</span><span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>Nginx 在Ubuntu 上的默认用户是<code>www-data</code>，但是不清楚是否需要将用户添加到<code>gitlab-www</code> 用户组（应该是不用）。</p>
+<ol start="3">
+<li>更新配置</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> gitlab-ctl reconfigure
+<span class="token comment"># 手动更新用户组</span>
+<span class="token function">sudo</span> <span class="token function">usermod</span> <span class="token parameter variable">-a</span> <span class="token parameter variable">-G</span> gitlab-www www-data
+<span class="token function">sudo</span> <span class="token function">chmod</span> g+rx /home/git/<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="配置nginx"><a class="markdownIt-Anchor" href="#配置nginx"></a> 配置Nginx</h4>
+<p>修改配置文件内容如下：</p>
+<pre class="line-numbers language-nginx" data-language="nginx"><code class="language-nginx"><span class="token comment"># sudo vim /etc/nginx/sites-enabled/gitlab.xxxx.com  </span>
+
+<span class="token directive"><span class="token keyword">upstream</span> gitlab-workhorse</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment"># 连接到Socket（参考资料里面的配置已经过期）</span>
+        <span class="token directive"><span class="token keyword">server</span> unix:/var/opt/gitlab/gitlab-workhorse/sockets/socket</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token directive"><span class="token keyword">map</span> <span class="token variable">$http_upgrade</span> <span class="token variable">$connection_upgrade_gitlab</span></span> <span class="token punctuation">&#123;</span>
+    <span class="token directive"><span class="token keyword">default</span> upgrade</span><span class="token punctuation">;</span>
+    ''      <span class="token directive"><span class="token keyword">close</span></span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token directive"><span class="token keyword">log_format</span> gitlab_access <span class="token string">'<span class="token variable">$remote_addr</span> - <span class="token variable">$remote_user</span> [<span class="token variable">$time_local]</span> "<span class="token variable">$request_method</span> <span class="token variable">$gitlab_filtered_request_uri</span> <span class="token variable">$server_protocol</span>" <span class="token variable">$status</span> <span class="token variable">$body_bytes_sent</span> "<span class="token variable">$gitlab_filtered_http_referer</span>" "<span class="token variable">$http_user_agent</span>"'</span></span><span class="token punctuation">;</span>
+
+<span class="token directive"><span class="token keyword">map</span> <span class="token variable">$request_uri</span> <span class="token variable">$gitlab_temp_request_uri_1</span></span> <span class="token punctuation">&#123;</span>
+  <span class="token directive"><span class="token keyword">default</span> <span class="token variable">$request_uri</span></span><span class="token punctuation">;</span>
+  ~(?i)^(?&lt;start>.*)(?&lt;temp>[\?&amp;]private[\-_]token)=[^&amp;]*(?&lt;rest>.*)$ "$start$temp=[FILTERED]$rest"<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token directive"><span class="token keyword">map</span> <span class="token variable">$gitlab_temp_request_uri_1</span> <span class="token variable">$gitlab_temp_request_uri_2</span></span> <span class="token punctuation">&#123;</span>
+  <span class="token directive"><span class="token keyword">default</span> <span class="token variable">$gitlab_temp_request_uri_1</span></span><span class="token punctuation">;</span>
+  ~(?i)^(?&lt;start>.*)(?&lt;temp>[\?&amp;]authenticity[\-_]token)=[^&amp;]*(?&lt;rest>.*)$ "$start$temp=[FILTERED]$rest"<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token directive"><span class="token keyword">map</span> <span class="token variable">$gitlab_temp_request_uri_2</span> <span class="token variable">$gitlab_filtered_request_uri</span></span> <span class="token punctuation">&#123;</span>
+  <span class="token directive"><span class="token keyword">default</span> <span class="token variable">$gitlab_temp_request_uri_2</span></span><span class="token punctuation">;</span>
+  ~(?i)^(?&lt;start>.*)(?&lt;temp>[\?&amp;]feed[\-_]token)=[^&amp;]*(?&lt;rest>.*)$ "$start$temp=[FILTERED]$rest"<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token directive"><span class="token keyword">map</span> <span class="token variable">$http_referer</span> <span class="token variable">$gitlab_filtered_http_referer</span></span> <span class="token punctuation">&#123;</span>
+  <span class="token directive"><span class="token keyword">default</span> <span class="token variable">$http_referer</span></span><span class="token punctuation">;</span>
+  ~^(?&lt;temp>.*)\? $temp<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token directive"><span class="token keyword">server</span></span> <span class="token punctuation">&#123;</span>
+  <span class="token directive"><span class="token keyword">listen</span> <span class="token number">80</span></span> <span class="token punctuation">;</span>
+  <span class="token directive"><span class="token keyword">server_name</span> gitlab.xxxxx.com</span><span class="token punctuation">;</span> 
+  <span class="token directive"><span class="token keyword">server_tokens</span> <span class="token boolean">off</span></span><span class="token punctuation">;</span> 
+
+  <span class="token directive"><span class="token keyword">real_ip_header</span> X-Real-IP</span><span class="token punctuation">;</span> 
+  <span class="token directive"><span class="token keyword">real_ip_recursive</span> <span class="token boolean">off</span></span><span class="token punctuation">;</span>    
+
+  <span class="token directive"><span class="token keyword">access_log</span>  /var/log/nginx/gitlab_access.log gitlab_access</span><span class="token punctuation">;</span>
+  <span class="token directive"><span class="token keyword">error_log</span>   /var/log/nginx/gitlab_error.log</span><span class="token punctuation">;</span>
+
+  <span class="token directive"><span class="token keyword">location</span> /</span> <span class="token punctuation">&#123;</span>
+    <span class="token directive"><span class="token keyword">client_max_body_size</span> <span class="token number">0</span></span><span class="token punctuation">;</span>
+    <span class="token directive"><span class="token keyword">gzip</span> <span class="token boolean">off</span></span><span class="token punctuation">;</span>
+
+    <span class="token directive"><span class="token keyword">proxy_read_timeout</span>      <span class="token number">300</span></span><span class="token punctuation">;</span>
+    <span class="token directive"><span class="token keyword">proxy_connect_timeout</span>   <span class="token number">300</span></span><span class="token punctuation">;</span>
+    <span class="token directive"><span class="token keyword">proxy_redirect</span>          <span class="token boolean">off</span></span><span class="token punctuation">;</span>
+
+    <span class="token directive"><span class="token keyword">proxy_http_version</span> 1.1</span><span class="token punctuation">;</span>
+
+    <span class="token directive"><span class="token keyword">proxy_set_header</span>    Host                <span class="token variable">$http_host</span></span><span class="token punctuation">;</span>
+    <span class="token directive"><span class="token keyword">proxy_set_header</span>    X-Real-IP           <span class="token variable">$remote_addr</span></span><span class="token punctuation">;</span>
+    <span class="token directive"><span class="token keyword">proxy_set_header</span>    X-Forwarded-For     <span class="token variable">$proxy_add_x_forwarded_for</span></span><span class="token punctuation">;</span>
+    <span class="token directive"><span class="token keyword">proxy_set_header</span>    X-Forwarded-Proto   <span class="token variable">$scheme</span></span><span class="token punctuation">;</span>
+    <span class="token directive"><span class="token keyword">proxy_set_header</span>    Upgrade             <span class="token variable">$http_upgrade</span></span><span class="token punctuation">;</span>
+    <span class="token directive"><span class="token keyword">proxy_set_header</span>    Connection          <span class="token variable">$connection_upgrade_gitlab</span></span><span class="token punctuation">;</span>
+
+    <span class="token directive"><span class="token keyword">proxy_pass</span> http://gitlab-workhorse</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token directive"><span class="token keyword">error_page</span> <span class="token number">404</span> /404.html</span><span class="token punctuation">;</span>
+  <span class="token directive"><span class="token keyword">error_page</span> <span class="token number">422</span> /422.html</span><span class="token punctuation">;</span>
+  <span class="token directive"><span class="token keyword">error_page</span> <span class="token number">500</span> /500.html</span><span class="token punctuation">;</span>
+  <span class="token directive"><span class="token keyword">error_page</span> <span class="token number">502</span> /502.html</span><span class="token punctuation">;</span>
+  <span class="token directive"><span class="token keyword">error_page</span> <span class="token number">503</span> /503.html</span><span class="token punctuation">;</span>
+  <span class="token directive"><span class="token keyword">location</span> ~ ^/(404|422|500|502|503)\.html$</span> <span class="token punctuation">&#123;</span>
+    <span class="token directive"><span class="token keyword">root</span> /home/git/gitlab/public</span><span class="token punctuation">;</span>
+    <span class="token directive"><span class="token keyword">internal</span></span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment"># sudo systemctl restart nginx.service</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>需要注意的是，在修改代理之后需要重启浏览器登录，或者刷新缓存，否则会导致用户登录异常，例如无法跳转、资源错误等。</strong></p>
+<h3 id="启用ldap-登录"><a class="markdownIt-Anchor" href="#启用ldap-登录"></a> 启用LDAP 登录</h3>
+<p>下面是配合群晖<code>Active Directory Server</code> 的示例：</p>
+<ol>
+<li>首先编辑配置文件</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">vim</span> /etc/gitlab/gitlab.rb<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ol start="2">
+<li>修改<code>LDAP</code> 相关配置如下：</li>
+</ol>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml">gitlab_rails<span class="token punctuation">[</span><span class="token string">'ldap_enabled'</span><span class="token punctuation">]</span> = true
+gitlab_rails<span class="token punctuation">[</span><span class="token string">'prevent_ldap_sign_in'</span><span class="token punctuation">]</span> = false
+gitlab_rails<span class="token punctuation">[</span><span class="token string">'ldap_servers'</span><span class="token punctuation">]</span> = YAML.load &lt;&lt;<span class="token punctuation">-</span><span class="token string">'EOS'</span>
+  <span class="token key atrule">main</span><span class="token punctuation">:</span> <span class="token comment"># 'main' is the GitLab 'provider ID' of this LDAP server</span>
+    <span class="token key atrule">label</span><span class="token punctuation">:</span> <span class="token string">'Synology'</span>
+    <span class="token key atrule">host</span><span class="token punctuation">:</span> <span class="token string">'IP'</span>
+    <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">389</span>
+    <span class="token key atrule">uid</span><span class="token punctuation">:</span> <span class="token string">'sAMAccountName'</span>
+    <span class="token comment"># 管理员的DN（必须</span>
+    <span class="token key atrule">bind_dn</span><span class="token punctuation">:</span> <span class="token string">'CN=xxxx,CN=Users,DC=your_domain,DC=com'</span>
+    <span class="token comment"># 管理员的密码（必须</span>
+    <span class="token key atrule">password</span><span class="token punctuation">:</span> <span class="token string">'password'</span>
+    <span class="token key atrule">encryption</span><span class="token punctuation">:</span> <span class="token string">'start_tls'</span>  <span class="token comment"># 与389 端口匹配</span>
+    <span class="token key atrule">verify_certificates</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>  <span class="token comment"># 不验证用户</span>
+    <span class="token key atrule">active_directory</span><span class="token punctuation">:</span> <span class="token boolean important">true</span> 
+    <span class="token comment"># 用户过滤</span>
+    <span class="token key atrule">user_filter</span><span class="token punctuation">:</span> <span class="token string">'(&amp;(objectClass=user)(memberOf=CN=GitLab_Users,CN=Users,DC=your_domain,DC=com))'</span>
+    <span class="token key atrule">lowercase_usernames</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
+    <span class="token key atrule">base</span><span class="token punctuation">:</span> <span class="token string">'CN=Users,DC=your_domain,DC=com'</span>
+EOS<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="3">
+<li>更新配置</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> gitlab-ctl reconfigure<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ol start="4">
+<li>检查</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> gitlab-rake gitlab:ldap:check<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="smtp-邮件服务器"><a class="markdownIt-Anchor" href="#smtp-邮件服务器"></a> SMTP 邮件服务器</h3>
+<p>下面是SMTP 服务器（SSL/TLS）配置的示例：</p>
+<ol>
+<li>首先编辑配置文件</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">vim</span> /etc/gitlab/gitlab.rb<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ol start="2">
+<li>修改<code>SMTP</code> 相关配置如下：</li>
+</ol>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml">gitlab_rails<span class="token punctuation">[</span><span class="token string">'smtp_enable'</span><span class="token punctuation">]</span> = true
+gitlab_rails<span class="token punctuation">[</span><span class="token string">'smtp_address'</span><span class="token punctuation">]</span> = "smtp.domain.com"
+gitlab_rails<span class="token punctuation">[</span><span class="token string">'smtp_port'</span><span class="token punctuation">]</span> = 465
+gitlab_rails<span class="token punctuation">[</span><span class="token string">'smtp_user_name'</span><span class="token punctuation">]</span> = "xxx@domain.com"
+gitlab_rails<span class="token punctuation">[</span><span class="token string">'smtp_password'</span><span class="token punctuation">]</span> = "password"
+gitlab_rails<span class="token punctuation">[</span><span class="token string">'smtp_domain'</span><span class="token punctuation">]</span> = "smtp.domain.com"
+gitlab_rails<span class="token punctuation">[</span><span class="token string">'smtp_authentication'</span><span class="token punctuation">]</span> = "login"
+
+<span class="token comment"># 下面两种加密方式只能二选一：start_tls 或SSL/TLS</span>
+gitlab_rails<span class="token punctuation">[</span><span class="token string">'smtp_enable_starttls_auto'</span><span class="token punctuation">]</span> = false
+gitlab_rails<span class="token punctuation">[</span><span class="token string">'smtp_tls'</span><span class="token punctuation">]</span> = true
+
+gitlab_rails<span class="token punctuation">[</span><span class="token string">'smtp_pool'</span><span class="token punctuation">]</span> = false
+
+<span class="token comment"># gitlab_rails['gitlab_email_enabled'] = true</span>
+
+gitlab_rails<span class="token punctuation">[</span><span class="token string">'gitlab_email_from'</span><span class="token punctuation">]</span> = 'xxx@domain.com'
+gitlab_rails<span class="token punctuation">[</span><span class="token string">'gitlab_email_display_name'</span><span class="token punctuation">]</span> = 'GitLab'<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="3">
+<li>更新配置</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> gitlab-ctl reconfigure<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ol start="4">
+<li>检查</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> gitlab-rails console
+irb<span class="token punctuation">(</span>main<span class="token punctuation">)</span>:001:<span class="token operator"><span class="token file-descriptor important">0</span>></span> Notify.test_email<span class="token punctuation">(</span><span class="token string">'XXXXXX@gmail.com'</span>,<span class="token string">'test Gitlab Email'</span>,<span class="token string">'Test'</span><span class="token punctuation">)</span>.deliver_now<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h3>
+<ol>
+<li><a href="https://qiita.com/inakadegaebal/items/3cc0603141a334fcc8af">CentOS7にGitLabをインストールする(既存nginxを使用)</a></li>
+<li><a href="https://docs.gitlab.com/omnibus/settings/nginx.html#using-a-non-bundled-web-server">NGINX:Using a non-bundled web-server</a></li>
+<li><a href="https://gitlab.com/gitlab-org/gitlab/-/tree/master/lib/support/nginx">gitlab/lib/support/nginx</a></li>
+<li><a href="https://juejin.cn/post/6991924908242501669">Gitlab服务器邮箱配置，实现自动为用户发送邮件</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>运维</category>
+      </categories>
+      <tags>
+        <tag>Gitlab</tag>
+        <tag>Ubuntu</tag>
+        <tag>ldap</tag>
+        <tag>synology</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PnetLab v6 的安装</title>
+    <url>/2024/04/05/notation/pnetlab/00_%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<p><code>PnetLab</code> 是一个非常有用的网工实验环境，包含有非常丰富的硬件资源。但是官网提供的安装教程过于陈旧，于是这里将电报群中最新的安装方法记录下。</p>
+<span id="more"></span>  
+<h2 id="安装pnetlab-v6"><a class="markdownIt-Anchor" href="#安装pnetlab-v6"></a> 安装PnetLab v6</h2>
+<blockquote>
+<p>推荐在VMware 或者VirtualBox 虚拟机中安装，虽然直接在裸机上安装也可以，但是在虚拟机中可以快速地做快照和恢复。<br />
+在VMware 中运行虚拟机时，要注意勾选<a href="https://www.pnetlab.com/pages/documentation?slug=install-PNETlab">VT-x 虚拟化支持</a>。否则基于QEMU 的镜像在启动后会闪退。</p>
+</blockquote>
+<ol>
+<li>首先安装<code>Ubuntu 20.04</code>,启用<code>root</code> 账户密码：<code>sudo passwd root</code>;</li>
+<li>在root 用户下运行(<code>su</code>)： <code>curl -sL https://labhub.eu.org/api/raw/?path=/UNETLAB%20I/upgrades_pnetlab/Focal/install_pnetlab_v6.sh | bash</code></li>
+<li>安装后重启电脑，重启后进入<code>root</code> 默认密码是<code>pnet</code>，进入后可以保持默认配置;</li>
+<li>可以通过<code>http://ip</code> 访问服务，选择离线模式，账号<code>admin</code>，密码<code>pnet</code>。</li>
+</ol>
+<h2 id="安装ishare2"><a class="markdownIt-Anchor" href="#安装ishare2"></a> 安装IShare2</h2>
+<blockquote>
+<p>安装ishare2-cli, webgui 需要安装python3.11</p>
+</blockquote>
+<ol>
+<li>首先切换到root 账户<code>su</code>;</li>
+<li>移除以前（可能）存在的安装：<code>rm -rf /opt/ishare2/ &amp;&amp; rm -rf /usr/sbin/ishare2</code>；</li>
+<li>安装：<code>wget -O /usr/sbin/ishare2 https://raw.githubusercontent.com/ishare2-org/ishare2-cli/main/ishare2 &amp;&amp; chmod +x /usr/sbin/ishare2 &amp;&amp; ishare2</code></li>
+</ol>
+<h3 id="使用ishare2-cli"><a class="markdownIt-Anchor" href="#使用ishare2-cli"></a> 使用ishare2-cli</h3>
+<blockquote>
+<p>以下命令在root 用户下运行：</p>
+</blockquote>
+<p>一般安装后会自动修复权限，如果没有的话需要在PNetlab 的Web 界面（系统设置），手动修复。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ishare2 search forti  <span class="token comment"># 搜索镜像  </span>
+
+ishare2 pull qemu <span class="token number">384</span>  <span class="token comment"># 根据类型，id 拉取镜像</span>
+
+ishre2 upgrade <span class="token comment"># 此命令可以用来升级pnetlab、ishare2 和ishare2 gui  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="安装inshare2-gui"><a class="markdownIt-Anchor" href="#安装inshare2-gui"></a> 安装inshare2-gui</h3>
+<p>Ubuntu 官方并没有提供Python 3.11 的安装包，需要通过第三方库安装。但是最好还是通过cli 安装，因为能够看到进度。通过Web 页面安装看不到进度条。</p>
+<pre class="highlight"><code class="bash">add-apt-repository ppa:deadsnakes/ppa -y  <span class="hljs-comment"># 添加三方库  </span>
+
+apt update  
+
+apt install python3.11  
+
+ishare2 gui install <span class="hljs-comment"># 但是不好用</span>
+</code></pre>
+<p>还是通过源码安装比较好一些：<a href="https://github.com/ishare2-org/ishare2-web-gui">https://github.com/ishare2-org/ishare2-web-gui</a></p>
+]]></content>
+      <categories>
+        <category>运维</category>
+      </categories>
+      <tags>
+        <tag>pnetlab</tag>
+        <tag>ubuntu</tag>
+        <tag>switch</tag>
+        <tag>router</tag>
+        <tag>firewall</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>pm2 简单教程</title>
     <url>/2024/03/22/notation/pm2/pm2%20%E7%AE%80%E5%8D%95%E6%95%99%E7%A8%8B/</url>
     <content><![CDATA[<blockquote>
