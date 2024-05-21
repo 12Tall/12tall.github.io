@@ -281,7 +281,8 @@ follow_me:
   #Twitter: https://twitter.com/username || fab fa-twitter
   #Telegram: https://t.me/channel_name || fab fa-telegram
   #WeChat: /images/wechat_channel.png || fab fa-weixin
-  BiliBili: https://space.bilibili.com/66003054
+  Github: https://github.com/12Tall || fa-brands fa-github
+  BiliBili: https://space.bilibili.com/66003054 || fa-brands fa-bilibili
   RSS: /atom.xml || fa fa-rss
 
 # Related popular posts

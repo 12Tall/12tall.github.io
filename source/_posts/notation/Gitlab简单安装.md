@@ -48,7 +48,7 @@ sudo vim /etc/gitlab/gitlab.rb
 
 2. 修改相关配置如下：  
 ```yaml  
-external_url 'http://localhost:8081'  # 没有作用
+external_url 'http://localhost:8081'  # 在克隆项目时显示的域名
 
 nginx['enable'] = false  # 禁用默认Nginx
 web_server['external_users'] = ['www-data']
