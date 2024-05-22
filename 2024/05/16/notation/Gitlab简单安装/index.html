@@ -27,7 +27,7 @@
 <meta property="og:description" content="Gitlab 的简单安装配置教程">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-05-16T01:31:21.000Z">
-<meta property="article:modified_time" content="2024-05-16T04:56:28.566Z">
+<meta property="article:modified_time" content="2024-05-16T05:33:56.952Z">
 <meta property="article:author" content="12Tall">
 <meta property="article:tag" content="Gitlab">
 <meta property="article:tag" content="Ubuntu">
@@ -165,7 +165,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -176,7 +176,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -241,7 +241,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2024-05-16 09:31:21 / 修改时间：12:56:28" itemprop="dateCreated datePublished" datetime="2024-05-16T09:31:21+08:00">2024-05-16</time>
+      <time title="创建时间：2024-05-16 09:31:21 / 修改时间：13:33:56" itemprop="dateCreated datePublished" datetime="2024-05-16T09:31:21+08:00">2024-05-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -301,7 +301,7 @@
 <ol start="2">
 <li>修改相关配置如下：</li>
 </ol>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml">external_url 'http<span class="token punctuation">:</span>//localhost<span class="token punctuation">:</span>8081'  <span class="token comment"># 没有作用</span>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml">external_url 'http<span class="token punctuation">:</span>//localhost<span class="token punctuation">:</span>8081'  <span class="token comment"># 在克隆项目时显示的域名</span>
 
 nginx<span class="token punctuation">[</span><span class="token string">'enable'</span><span class="token punctuation">]</span> = false  <span class="token comment"># 禁用默认Nginx</span>
 web_server<span class="token punctuation">[</span><span class="token string">'external_users'</span><span class="token punctuation">]</span> = <span class="token punctuation">[</span><span class="token string">'www-data'</span><span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
@@ -488,9 +488,19 @@ irb<span class="token punctuation">(</span>main<span class="token punctuation">)
   <div class="social-list">
 
       <div class="social-item">
+          <a target="_blank" class="social-link" href="https://github.com/12Tall">
+            <span class="icon">
+              <i class="fa-brands fa-github"></i>
+            </span>
+
+            <span class="label">Github</span>
+          </a>
+      </div>
+
+      <div class="social-item">
           <a target="_blank" class="social-link" href="https://space.bilibili.com/66003054">
             <span class="icon">
-              <i class=""></i>
+              <i class="fa-brands fa-bilibili"></i>
             </span>
 
             <span class="label">BiliBili</span>
@@ -525,6 +535,9 @@ irb<span class="token punctuation">(</span>main<span class="token punctuation">)
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2024/05/17/gui/pyside6/pyside6/" rel="next" title="PySide6 小记">
+                  PySide6 小记 <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>

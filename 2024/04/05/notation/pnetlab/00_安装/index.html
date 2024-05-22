@@ -27,7 +27,7 @@
 <meta property="og:description" content="PnetLab 是一个非常有用的网工实验环境，包含有非常丰富的硬件资源。但是官网提供的安装教程过于陈旧，于是这里将电报群中最新的安装方法记录下。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-04-05T14:30:40.000Z">
-<meta property="article:modified_time" content="2024-04-06T07:07:11.184Z">
+<meta property="article:modified_time" content="2024-05-16T05:05:59.825Z">
 <meta property="article:author" content="12Tall">
 <meta property="article:tag" content="pnetlab">
 <meta property="article:tag" content="ubuntu">
@@ -166,7 +166,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -177,7 +177,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -248,7 +248,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-04-06 15:07:11" itemprop="dateModified" datetime="2024-04-06T15:07:11+08:00">2024-04-06</time>
+      <time title="修改时间：2024-05-16 13:05:59" itemprop="dateModified" datetime="2024-05-16T13:05:59+08:00">2024-05-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -283,21 +283,25 @@
 <p>推荐在VMware 或者VirtualBox 虚拟机中安装，虽然直接在裸机上安装也可以，但是在虚拟机中可以快速地做快照和恢复。<br />
 在VMware 中运行虚拟机时，要注意勾选<a target="_blank" rel="noopener" href="https://www.pnetlab.com/pages/documentation?slug=install-PNETlab">VT-x 虚拟化支持</a>。否则基于QEMU 的镜像在启动后会闪退。</p>
 </blockquote>
-<ol>
-<li>首先安装<code>Ubuntu 20.04</code>,启用<code>root</code> 账户密码：<code>sudo passwd root</code>;</li>
-<li>在root 用户下运行(<code>su</code>)： <code>curl -sL https://labhub.eu.org/api/raw/?path=/UNETLAB%20I/upgrades_pnetlab/Focal/install_pnetlab_v6.sh | bash</code></li>
-<li>安装后重启电脑，重启后进入<code>root</code> 默认密码是<code>pnet</code>，进入后可以保持默认配置;</li>
-<li>可以通过<code>http://ip</code> 访问服务，选择离线模式，账号<code>admin</code>，密码<code>pnet</code>。</li>
-</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 首先安装`Ubuntu 20.04`,启用`root` 账户密码：</span>
+<span class="token function">sudo</span> <span class="token function">passwd</span> root  
+
+<span class="token comment"># 切换到root 账户  </span>
+<span class="token function">su</span>  
+<span class="token comment"># 安装Pnetlab  </span>
+<span class="token function">curl</span> <span class="token parameter variable">-sL</span> https://labhub.eu.org/api/raw/?path<span class="token operator">=</span>/UNETLAB%20I/upgrades_pnetlab/Focal/install_pnetlab_v6.sh <span class="token operator">|</span> <span class="token function">bash</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>安装后重启电脑，重启后进入<code>root</code> 默认密码是<code>pnet</code>，进入后可以保持默认配置。可以通过<code>http://ip</code> 访问服务，选择离线模式，账号<code>admin</code>，密码<code>pnet</code>。</p>
 <h2 id="安装ishare2"><a class="markdownIt-Anchor" href="#安装ishare2"></a> 安装IShare2</h2>
 <blockquote>
 <p>安装ishare2-cli, webgui 需要安装python3.11</p>
 </blockquote>
-<ol>
-<li>首先切换到root 账户<code>su</code>;</li>
-<li>移除以前（可能）存在的安装：<code>rm -rf /opt/ishare2/ &amp;&amp; rm -rf /usr/sbin/ishare2</code>；</li>
-<li>安装：<code>wget -O /usr/sbin/ishare2 https://raw.githubusercontent.com/ishare2-org/ishare2-cli/main/ishare2 &amp;&amp; chmod +x /usr/sbin/ishare2 &amp;&amp; ishare2</code></li>
-</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 切换到root 账户  </span>
+<span class="token function">su</span>  
+
+<span class="token comment"># 移除以前（可能）存在的安装：</span>
+<span class="token function">rm</span> <span class="token parameter variable">-rf</span> /opt/ishare2/ <span class="token operator">&amp;&amp;</span> <span class="token function">rm</span> <span class="token parameter variable">-rf</span> /usr/sbin/ishare2
+<span class="token comment"># 安装IShare2    </span>
+<span class="token function">wget</span> <span class="token parameter variable">-O</span> /usr/sbin/ishare2 https://raw.githubusercontent.com/ishare2-org/ishare2-cli/main/ishare2 <span class="token operator">&amp;&amp;</span> <span class="token function">chmod</span> +x /usr/sbin/ishare2 <span class="token operator">&amp;&amp;</span> ishare2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="使用ishare2-cli"><a class="markdownIt-Anchor" href="#使用ishare2-cli"></a> 使用ishare2-cli</h3>
 <blockquote>
 <p>以下命令在root 用户下运行：</p>
@@ -333,9 +337,19 @@ ishare2 gui install <span class="hljs-comment"># 但是不好用</span>
   <div class="social-list">
 
       <div class="social-item">
+          <a target="_blank" class="social-link" href="https://github.com/12Tall">
+            <span class="icon">
+              <i class="fa-brands fa-github"></i>
+            </span>
+
+            <span class="label">Github</span>
+          </a>
+      </div>
+
+      <div class="social-item">
           <a target="_blank" class="social-link" href="https://space.bilibili.com/66003054">
             <span class="icon">
-              <i class=""></i>
+              <i class="fa-brands fa-bilibili"></i>
             </span>
 
             <span class="label">BiliBili</span>

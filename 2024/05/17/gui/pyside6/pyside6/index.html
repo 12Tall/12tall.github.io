@@ -1,251 +1,277 @@
-<?xml version="1.0" encoding="utf-8"?>
-<search>
-  <entry>
-    <title>Hello World</title>
-    <url>/2024/03/24/hello-world/</url>
-    <content><![CDATA[<p><code>Hexo Next</code> 在使用中遇到的问题与结局办法汇总。</p>
-<span id="more"></span>
-<pre class="highlight"><code class="bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span>  
-$ hexo new -p  notation/pm2/pm2-简单教程
-$ hexo clean  
-$ hexo generate
-$ hexo server  
-$ hexo deploy
-</code></pre>
-<ul>
-<li>代码块显示异常：代码块结束符``` 后不要跟空格</li>
-<li>轻易使用<code>markdown-it</code> 会导致<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>L</mi><mi>A</mi></msup><msub><mi>T</mi><mi>E</mi></msub><mi>X</mi></mrow><annotation encoding="application/x-tex">L^AT_EX</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.991331em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">A</span></span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05764em;">E</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span></span></span></span> 显示异常</li>
-</ul>
-<h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
-<ol>
-<li><a href="https://github.com/next-theme/hexo-next-giscus">启用Hexo Next Giscus 评论系统</a></li>
-<li><a href="https://giscus.app/">Giscus</a> 在这个界面上可以得到Giscus 所需的所有参数</li>
-<li><a href="https://yueyue200830.github.io/2020/02/23/%E8%AE%BE%E7%BD%AEhexo%E9%A6%96%E9%A1%B5%E5%8F%AA%E6%98%BE%E7%A4%BA%E9%83%A8%E5%88%86%E6%91%98%E8%A6%81%EF%BC%88%E4%B8%8D%E6%98%BE%E7%A4%BA%E5%85%A8%E6%96%87%EF%BC%89/">显示摘要</a></li>
-</ol>
-]]></content>
-  </entry>
-  <entry>
-    <title>Gitlab简单安装</title>
-    <url>/2024/05/16/notation/Gitlab%E7%AE%80%E5%8D%95%E5%AE%89%E8%A3%85/</url>
-    <content><![CDATA[<p>以前一直在用Gogs，但是Gitlab 提供了CI/CD 的功能，故而尝试部署下。</p>
-<h2 id="安装gitlab"><a class="markdownIt-Anchor" href="#安装gitlab"></a> 安装Gitlab</h2>
-<p>Gitlab 官方提供了安装包，不用手动写启动脚本了。按照官方教程安装即可，安装时需要注意使用<code>ce</code> 版本。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 安装依赖   </span>
-<span class="token function">sudo</span> <span class="token function">apt-get</span> update
-<span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> <span class="token parameter variable">-y</span> <span class="token function">curl</span> openssh-server ca-certificates tzdata perl
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
 
-<span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> <span class="token parameter variable">-y</span> postfix
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-<span class="token comment"># 注意，这里安装的是ce 版本  </span>
-<span class="token function">curl</span> https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">bash</span>
-<span class="token comment"># 预设域名，执行安装  </span>
-<span class="token function">sudo</span> <span class="token assign-left variable">EXTERNAL_URL</span><span class="token operator">=</span><span class="token string">"https://gitlab.example.com"</span> <span class="token function">apt-get</span> <span class="token function">install</span> gitlab-ce
-<span class="token comment"># sudo EXTERNAL_URL="http://ip:8080" apt-get install gitlab-ce  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>安装后可以通过域名或IP 访问，默认管理员账号是<code>root</code>。密码可以通过以下命令进行重置：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> gitlab-rails console  
-<span class="token comment"># 需要等待几秒   </span>
-<span class="token operator">></span> user <span class="token operator">=</span> User.where<span class="token punctuation">(</span>@root<span class="token punctuation">)</span>.first  
-<span class="token operator">></span> <span class="token assign-left variable">user.password</span><span class="token operator">=</span><span class="token string">'password'</span>  
-<span class="token operator">></span> user.save<span class="token operator">!</span>  
-<span class="token operator">></span> <span class="token builtin class-name">exit</span>  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="自定义配置"><a class="markdownIt-Anchor" href="#自定义配置"></a> 自定义配置</h2>
-<h3 id="启用自定义nginx"><a class="markdownIt-Anchor" href="#启用自定义nginx"></a> 启用自定义Nginx</h3>
-<p>GitLab 自带了Nginx 服务，但是我们可以选择禁用，然后利用系统上的Nginx 配置代理服务。</p>
-<ol>
-<li>首先编辑配置文件</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">vim</span> /etc/gitlab/gitlab.rb<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<ol start="2">
-<li>修改相关配置如下：</li>
-</ol>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml">external_url 'http<span class="token punctuation">:</span>//localhost<span class="token punctuation">:</span>8081'  <span class="token comment"># 在克隆项目时显示的域名</span>
+<link rel="stylesheet" href="/css/main.css">
 
-nginx<span class="token punctuation">[</span><span class="token string">'enable'</span><span class="token punctuation">]</span> = false  <span class="token comment"># 禁用默认Nginx</span>
-web_server<span class="token punctuation">[</span><span class="token string">'external_users'</span><span class="token punctuation">]</span> = <span class="token punctuation">[</span><span class="token string">'www-data'</span><span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>Nginx 在Ubuntu 上的默认用户是<code>www-data</code>，但是不清楚是否需要将用户添加到<code>gitlab-www</code> 用户组（应该是不用）。</p>
-<ol start="3">
-<li>更新配置</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> gitlab-ctl reconfigure
-<span class="token comment"># 手动更新用户组</span>
-<span class="token function">sudo</span> <span class="token function">usermod</span> <span class="token parameter variable">-a</span> <span class="token parameter variable">-G</span> gitlab-www www-data
-<span class="token function">sudo</span> <span class="token function">chmod</span> g+rx /home/git/<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<h4 id="配置nginx"><a class="markdownIt-Anchor" href="#配置nginx"></a> 配置Nginx</h4>
-<p>修改配置文件内容如下：</p>
-<pre class="line-numbers language-nginx" data-language="nginx"><code class="language-nginx"><span class="token comment"># sudo vim /etc/nginx/sites-enabled/gitlab.xxxx.com  </span>
 
-<span class="token directive"><span class="token keyword">upstream</span> gitlab-workhorse</span> <span class="token punctuation">&#123;</span>
-        <span class="token comment"># 连接到Socket（参考资料里面的配置已经过期）</span>
-        <span class="token directive"><span class="token keyword">server</span> unix:/var/opt/gitlab/gitlab-workhorse/sockets/socket</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
 
-<span class="token directive"><span class="token keyword">map</span> <span class="token variable">$http_upgrade</span> <span class="token variable">$connection_upgrade_gitlab</span></span> <span class="token punctuation">&#123;</span>
-    <span class="token directive"><span class="token keyword">default</span> upgrade</span><span class="token punctuation">;</span>
-    ''      <span class="token directive"><span class="token keyword">close</span></span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
+<link rel="stylesheet" href="/lib/@fortawesome/fontawesome-free/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/animate.css/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<span class="token directive"><span class="token keyword">log_format</span> gitlab_access <span class="token string">'<span class="token variable">$remote_addr</span> - <span class="token variable">$remote_user</span> [<span class="token variable">$time_local]</span> "<span class="token variable">$request_method</span> <span class="token variable">$gitlab_filtered_request_uri</span> <span class="token variable">$server_protocol</span>" <span class="token variable">$status</span> <span class="token variable">$body_bytes_sent</span> "<span class="token variable">$gitlab_filtered_http_referer</span>" "<span class="token variable">$http_user_agent</span>"'</span></span><span class="token punctuation">;</span>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.githb.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":true,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":{"gitalk":{"order":-2}}},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-<span class="token directive"><span class="token keyword">map</span> <span class="token variable">$request_uri</span> <span class="token variable">$gitlab_temp_request_uri_1</span></span> <span class="token punctuation">&#123;</span>
-  <span class="token directive"><span class="token keyword">default</span> <span class="token variable">$request_uri</span></span><span class="token punctuation">;</span>
-  ~(?i)^(?&lt;start>.*)(?&lt;temp>[\?&amp;]private[\-_]token)=[^&amp;]*(?&lt;rest>.*)$ "$start$temp=[FILTERED]$rest"<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
+    <meta name="description" content="Qt 似乎读作&#x2F;ˈkjuːt&#x2F;。如果不用QML 的话，在适当调整导入包后，PySide6 打包出的文件体积并不大。个人在只用到了最基础的功能，本文仅作Cheatsheet 使用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PySide6 小记">
+<meta property="og:url" content="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="Qt 似乎读作&#x2F;ˈkjuːt&#x2F;。如果不用QML 的话，在适当调整导入包后，PySide6 打包出的文件体积并不大。个人在只用到了最基础的功能，本文仅作Cheatsheet 使用。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/widgets/01_demo_click_me.png">
+<meta property="og:image" content="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/widgets/02_demo_new_click_me.png">
+<meta property="og:image" content="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/widgets/03_layout_horizon.png">
+<meta property="og:image" content="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/widgets/04_layout_grid.png">
+<meta property="og:image" content="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/widgets/05_data_binding.png">
+<meta property="og:image" content="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/widgets/06_widget_tab.png">
+<meta property="article:published_time" content="2024-05-17T05:38:41.000Z">
+<meta property="article:modified_time" content="2024-05-21T23:58:09.391Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="qt">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/widgets/01_demo_click_me.png">
 
-<span class="token directive"><span class="token keyword">map</span> <span class="token variable">$gitlab_temp_request_uri_1</span> <span class="token variable">$gitlab_temp_request_uri_2</span></span> <span class="token punctuation">&#123;</span>
-  <span class="token directive"><span class="token keyword">default</span> <span class="token variable">$gitlab_temp_request_uri_1</span></span><span class="token punctuation">;</span>
-  ~(?i)^(?&lt;start>.*)(?&lt;temp>[\?&amp;]authenticity[\-_]token)=[^&amp;]*(?&lt;rest>.*)$ "$start$temp=[FILTERED]$rest"<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
 
-<span class="token directive"><span class="token keyword">map</span> <span class="token variable">$gitlab_temp_request_uri_2</span> <span class="token variable">$gitlab_filtered_request_uri</span></span> <span class="token punctuation">&#123;</span>
-  <span class="token directive"><span class="token keyword">default</span> <span class="token variable">$gitlab_temp_request_uri_2</span></span><span class="token punctuation">;</span>
-  ~(?i)^(?&lt;start>.*)(?&lt;temp>[\?&amp;]feed[\-_]token)=[^&amp;]*(?&lt;rest>.*)$ "$start$temp=[FILTERED]$rest"<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
+<link rel="canonical" href="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/">
 
-<span class="token directive"><span class="token keyword">map</span> <span class="token variable">$http_referer</span> <span class="token variable">$gitlab_filtered_http_referer</span></span> <span class="token punctuation">&#123;</span>
-  <span class="token directive"><span class="token keyword">default</span> <span class="token variable">$http_referer</span></span><span class="token punctuation">;</span>
-  ~^(?&lt;temp>.*)\? $temp<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
 
-<span class="token directive"><span class="token keyword">server</span></span> <span class="token punctuation">&#123;</span>
-  <span class="token directive"><span class="token keyword">listen</span> <span class="token number">80</span></span> <span class="token punctuation">;</span>
-  <span class="token directive"><span class="token keyword">server_name</span> gitlab.xxxxx.com</span><span class="token punctuation">;</span> 
-  <span class="token directive"><span class="token keyword">server_tokens</span> <span class="token boolean">off</span></span><span class="token punctuation">;</span> 
 
-  <span class="token directive"><span class="token keyword">real_ip_header</span> X-Real-IP</span><span class="token punctuation">;</span> 
-  <span class="token directive"><span class="token keyword">real_ip_recursive</span> <span class="token boolean">off</span></span><span class="token punctuation">;</span>    
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/","path":"2024/05/17/gui/pyside6/pyside6/","title":"PySide6 小记"}</script>
 
-  <span class="token directive"><span class="token keyword">access_log</span>  /var/log/nginx/gitlab_access.log gitlab_access</span><span class="token punctuation">;</span>
-  <span class="token directive"><span class="token keyword">error_log</span>   /var/log/nginx/gitlab_error.log</span><span class="token punctuation">;</span>
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>PySide6 小记 | 12Tall</title>
+  
 
-  <span class="token directive"><span class="token keyword">location</span> /</span> <span class="token punctuation">&#123;</span>
-    <span class="token directive"><span class="token keyword">client_max_body_size</span> <span class="token number">0</span></span><span class="token punctuation">;</span>
-    <span class="token directive"><span class="token keyword">gzip</span> <span class="token boolean">off</span></span><span class="token punctuation">;</span>
 
-    <span class="token directive"><span class="token keyword">proxy_read_timeout</span>      <span class="token number">300</span></span><span class="token punctuation">;</span>
-    <span class="token directive"><span class="token keyword">proxy_connect_timeout</span>   <span class="token number">300</span></span><span class="token punctuation">;</span>
-    <span class="token directive"><span class="token keyword">proxy_redirect</span>          <span class="token boolean">off</span></span><span class="token punctuation">;</span>
 
-    <span class="token directive"><span class="token keyword">proxy_http_version</span> 1.1</span><span class="token punctuation">;</span>
 
-    <span class="token directive"><span class="token keyword">proxy_set_header</span>    Host                <span class="token variable">$http_host</span></span><span class="token punctuation">;</span>
-    <span class="token directive"><span class="token keyword">proxy_set_header</span>    X-Real-IP           <span class="token variable">$remote_addr</span></span><span class="token punctuation">;</span>
-    <span class="token directive"><span class="token keyword">proxy_set_header</span>    X-Forwarded-For     <span class="token variable">$proxy_add_x_forwarded_for</span></span><span class="token punctuation">;</span>
-    <span class="token directive"><span class="token keyword">proxy_set_header</span>    X-Forwarded-Proto   <span class="token variable">$scheme</span></span><span class="token punctuation">;</span>
-    <span class="token directive"><span class="token keyword">proxy_set_header</span>    Upgrade             <span class="token variable">$http_upgrade</span></span><span class="token punctuation">;</span>
-    <span class="token directive"><span class="token keyword">proxy_set_header</span>    Connection          <span class="token variable">$connection_upgrade_gitlab</span></span><span class="token punctuation">;</span>
 
-    <span class="token directive"><span class="token keyword">proxy_pass</span> http://gitlab-workhorse</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
 
-  <span class="token directive"><span class="token keyword">error_page</span> <span class="token number">404</span> /404.html</span><span class="token punctuation">;</span>
-  <span class="token directive"><span class="token keyword">error_page</span> <span class="token number">422</span> /422.html</span><span class="token punctuation">;</span>
-  <span class="token directive"><span class="token keyword">error_page</span> <span class="token number">500</span> /500.html</span><span class="token punctuation">;</span>
-  <span class="token directive"><span class="token keyword">error_page</span> <span class="token number">502</span> /502.html</span><span class="token punctuation">;</span>
-  <span class="token directive"><span class="token keyword">error_page</span> <span class="token number">503</span> /503.html</span><span class="token punctuation">;</span>
-  <span class="token directive"><span class="token keyword">location</span> ~ ^/(404|422|500|502|503)\.html$</span> <span class="token punctuation">&#123;</span>
-    <span class="token directive"><span class="token keyword">root</span> /home/git/gitlab/public</span><span class="token punctuation">;</span>
-    <span class="token directive"><span class="token keyword">internal</span></span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
 
-<span class="token punctuation">&#125;</span>
 
-<span class="token comment"># sudo systemctl restart nginx.service</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><strong>需要注意的是，在修改代理之后需要重启浏览器登录，或者刷新缓存，否则会导致用户登录异常，例如无法跳转、资源错误等。</strong></p>
-<h3 id="启用ldap-登录"><a class="markdownIt-Anchor" href="#启用ldap-登录"></a> 启用LDAP 登录</h3>
-<p>下面是配合群晖<code>Active Directory Server</code> 的示例：</p>
-<ol>
-<li>首先编辑配置文件</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">vim</span> /etc/gitlab/gitlab.rb<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<ol start="2">
-<li>修改<code>LDAP</code> 相关配置如下：</li>
-</ol>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml">gitlab_rails<span class="token punctuation">[</span><span class="token string">'ldap_enabled'</span><span class="token punctuation">]</span> = true
-gitlab_rails<span class="token punctuation">[</span><span class="token string">'prevent_ldap_sign_in'</span><span class="token punctuation">]</span> = false
-gitlab_rails<span class="token punctuation">[</span><span class="token string">'ldap_servers'</span><span class="token punctuation">]</span> = YAML.load &lt;&lt;<span class="token punctuation">-</span><span class="token string">'EOS'</span>
-  <span class="token key atrule">main</span><span class="token punctuation">:</span> <span class="token comment"># 'main' is the GitLab 'provider ID' of this LDAP server</span>
-    <span class="token key atrule">label</span><span class="token punctuation">:</span> <span class="token string">'Synology'</span>
-    <span class="token key atrule">host</span><span class="token punctuation">:</span> <span class="token string">'IP'</span>
-    <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">389</span>
-    <span class="token key atrule">uid</span><span class="token punctuation">:</span> <span class="token string">'sAMAccountName'</span>
-    <span class="token comment"># 管理员的DN（必须</span>
-    <span class="token key atrule">bind_dn</span><span class="token punctuation">:</span> <span class="token string">'CN=xxxx,CN=Users,DC=your_domain,DC=com'</span>
-    <span class="token comment"># 管理员的密码（必须</span>
-    <span class="token key atrule">password</span><span class="token punctuation">:</span> <span class="token string">'password'</span>
-    <span class="token key atrule">encryption</span><span class="token punctuation">:</span> <span class="token string">'start_tls'</span>  <span class="token comment"># 与389 端口匹配</span>
-    <span class="token key atrule">verify_certificates</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>  <span class="token comment"># 不验证用户</span>
-    <span class="token key atrule">active_directory</span><span class="token punctuation">:</span> <span class="token boolean important">true</span> 
-    <span class="token comment"># 用户过滤</span>
-    <span class="token key atrule">user_filter</span><span class="token punctuation">:</span> <span class="token string">'(&amp;(objectClass=user)(memberOf=CN=GitLab_Users,CN=Users,DC=your_domain,DC=com))'</span>
-    <span class="token key atrule">lowercase_usernames</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
-    <span class="token key atrule">base</span><span class="token punctuation">:</span> <span class="token string">'CN=Users,DC=your_domain,DC=com'</span>
-EOS<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<ol start="3">
-<li>更新配置</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> gitlab-ctl reconfigure<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<ol start="4">
-<li>检查</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> gitlab-rake gitlab:ldap:check<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h3 id="smtp-邮件服务器"><a class="markdownIt-Anchor" href="#smtp-邮件服务器"></a> SMTP 邮件服务器</h3>
-<p>下面是SMTP 服务器（SSL/TLS）配置的示例：</p>
-<ol>
-<li>首先编辑配置文件</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">vim</span> /etc/gitlab/gitlab.rb<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<ol start="2">
-<li>修改<code>SMTP</code> 相关配置如下：</li>
-</ol>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml">gitlab_rails<span class="token punctuation">[</span><span class="token string">'smtp_enable'</span><span class="token punctuation">]</span> = true
-gitlab_rails<span class="token punctuation">[</span><span class="token string">'smtp_address'</span><span class="token punctuation">]</span> = "smtp.domain.com"
-gitlab_rails<span class="token punctuation">[</span><span class="token string">'smtp_port'</span><span class="token punctuation">]</span> = 465
-gitlab_rails<span class="token punctuation">[</span><span class="token string">'smtp_user_name'</span><span class="token punctuation">]</span> = "xxx@domain.com"
-gitlab_rails<span class="token punctuation">[</span><span class="token string">'smtp_password'</span><span class="token punctuation">]</span> = "password"
-gitlab_rails<span class="token punctuation">[</span><span class="token string">'smtp_domain'</span><span class="token punctuation">]</span> = "smtp.domain.com"
-gitlab_rails<span class="token punctuation">[</span><span class="token string">'smtp_authentication'</span><span class="token punctuation">]</span> = "login"
+<link rel="stylesheet" href="/css/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
 
-<span class="token comment"># 下面两种加密方式只能二选一：start_tls 或SSL/TLS</span>
-gitlab_rails<span class="token punctuation">[</span><span class="token string">'smtp_enable_starttls_auto'</span><span class="token punctuation">]</span> = false
-gitlab_rails<span class="token punctuation">[</span><span class="token string">'smtp_tls'</span><span class="token punctuation">]</span> = true
+<!--
+<script defer src="https://vercount.one/js"></script>
+<script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>
+-->
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
 
-gitlab_rails<span class="token punctuation">[</span><span class="token string">'smtp_pool'</span><span class="token punctuation">]</span> = false
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
 
-<span class="token comment"># gitlab_rails['gitlab_email_enabled'] = true</span>
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
 
-gitlab_rails<span class="token punctuation">[</span><span class="token string">'gitlab_email_from'</span><span class="token punctuation">]</span> = 'xxx@domain.com'
-gitlab_rails<span class="token punctuation">[</span><span class="token string">'gitlab_email_display_name'</span><span class="token punctuation">]</span> = 'GitLab'<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<ol start="3">
-<li>更新配置</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> gitlab-ctl reconfigure<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<ol start="4">
-<li>检查</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> gitlab-rails console
-irb<span class="token punctuation">(</span>main<span class="token punctuation">)</span>:001:<span class="token operator"><span class="token file-descriptor important">0</span>></span> Notify.test_email<span class="token punctuation">(</span><span class="token string">'XXXXXX@gmail.com'</span>,<span class="token string">'test Gitlab Email'</span>,<span class="token string">'Test'</span><span class="token punctuation">)</span>.deliver_now<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<h3 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h3>
-<ol>
-<li><a href="https://qiita.com/inakadegaebal/items/3cc0603141a334fcc8af">CentOS7にGitLabをインストールする(既存nginxを使用)</a></li>
-<li><a href="https://docs.gitlab.com/omnibus/settings/nginx.html#using-a-non-bundled-web-server">NGINX:Using a non-bundled web-server</a></li>
-<li><a href="https://gitlab.com/gitlab-org/gitlab/-/tree/master/lib/support/nginx">gitlab/lib/support/nginx</a></li>
-<li><a href="https://juejin.cn/post/6991924908242501669">Gitlab服务器邮箱配置，实现自动为用户发送邮件</a></li>
-</ol>
-]]></content>
-      <categories>
-        <category>运维</category>
-      </categories>
-      <tags>
-        <tag>Gitlab</tag>
-        <tag>Ubuntu</tag>
-        <tag>ldap</tag>
-        <tag>synology</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PySide6 小记</title>
-    <url>/2024/05/17/gui/pyside6/pyside6/</url>
-    <content><![CDATA[<p>Qt 似乎读作<code>/ˈkjuːt/</code>。如果不用QML 的话，在适当调整导入包后，PySide6 打包出的文件体积并不大。个人在只用到了最基础的功能，本文仅作Cheatsheet 使用。</p>
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">蝉噪林逾静 鸟鸣山更幽</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#demo"><span class="nav-number">1.</span> <span class="nav-text"> Demo</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.1.</span> <span class="nav-text"> 面向对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#layout-%E5%B8%83%E5%B1%80"><span class="nav-number">2.</span> <span class="nav-text"> Layout 布局</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#qhvboxlayout"><span class="nav-number">2.1.</span> <span class="nav-text"> QH(V)BoxLayout</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#qgridlayout"><span class="nav-number">2.2.</span> <span class="nav-text"> QGridLayout</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A"><span class="nav-number">3.</span> <span class="nav-text"> 数据绑定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text"> 组件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tabwidget"><span class="nav-number">4.1.</span> <span class="nav-text"> TabWidget</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nuitka-%E6%89%93%E5%8C%85"><span class="nav-number">5.</span> <span class="nav-text"> Nuitka 打包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nuitka-%E6%8F%92%E4%BB%B6"><span class="nav-number">5.1.</span> <span class="nav-text"> Nuitka 插件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">6.</span> <span class="nav-text"> 参考链接</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/img/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/img/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="PySide6 小记 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PySide6 小记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-05-17 13:38:41" itemprop="dateCreated datePublished" datetime="2024-05-17T13:38:41+08:00">2024-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-05-22 07:58:09" itemprop="dateModified" datetime="2024-05-22T07:58:09+08:00">2024-05-22</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>Qt 似乎读作<code>/ˈkjuːt/</code>。如果不用QML 的话，在适当调整导入包后，PySide6 打包出的文件体积并不大。个人在只用到了最基础的功能，本文仅作Cheatsheet 使用。</p>
 <span id="more"></span>  
 <h2 id="demo"><a class="markdownIt-Anchor" href="#demo"></a> Demo</h2>
 <p>通过示例程序可以看一下PySide6 程序的代码结构：</p>
@@ -565,248 +591,191 @@ sys<span class="token punctuation">.</span>exit<span class="token punctuation">(
  pyside6           启用PySide6 支持
  upx               通过UPX 压缩二进制文件，非必须，且需要指定upx.exe 的路径</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="参考链接"><a class="markdownIt-Anchor" href="#参考链接"></a> 参考链接</h2>
-<p><a href="https://www.cnblogs.com/linuxAndMcu">fengMisaka</a> 大佬的教程很全。</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/linuxAndMcu">fengMisaka</a> 大佬的教程很全。</p>
 <ol>
-<li><a href="https://www.cnblogs.com/linuxAndMcu/p/11600451.html">Qt 布局之一：布局初探</a></li>
-<li><a href="https://www.cnblogs.com/linuxAndMcu/p/11600506.html">Qt 布局之二：水平、垂直布局的使用详解</a></li>
-<li><a href="https://www.cnblogs.com/linuxAndMcu/p/11600521.html">Qt 布局之三：栅格布局的使用详解</a></li>
-<li><a href="https://blog.csdn.net/weixin_38516302/article/details/107243292">Qt中ItemDataRole内部角色说明</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/linuxAndMcu/p/11600451.html">Qt 布局之一：布局初探</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/linuxAndMcu/p/11600506.html">Qt 布局之二：水平、垂直布局的使用详解</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/linuxAndMcu/p/11600521.html">Qt 布局之三：栅格布局的使用详解</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_38516302/article/details/107243292">Qt中ItemDataRole内部角色说明</a></li>
 </ol>
-]]></content>
-      <tags>
-        <tag>python</tag>
-        <tag>qt</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pm2 简单教程</title>
-    <url>/2024/03/22/notation/pm2/pm2%20%E7%AE%80%E5%8D%95%E6%95%99%E7%A8%8B/</url>
-    <content><![CDATA[<blockquote>
-<p>以前简单了解过<code>PM2</code>，但是没有太多的实战经验，仅用于托管单个站点。现在因为手头上要部署二进制服务和Python 自动化脚本，故而记一下常用的指令，尤其是开机自启动与定时任务部分。</p>
-</blockquote>
-<p>PM2 就是一个管理进程的进程，可以用于部署web 服务，自动化脚本。它能够实现基本的定时任务、故障重启、均衡负载。相较于systemd 或者是windows 服务，使用起来更加简单。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">npm</span> i <span class="token parameter variable">-g</span> pm2<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="命令行参数"><a class="markdownIt-Anchor" href="#命令行参数"></a> 命令行参数</h2>
-<p>添加并启动一个实例：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 启动脚本</span>
-pm2 start app.js  
-<span class="token comment"># 给脚本传入参数，要用 -- 隔开  </span>
-pm2 start app.exe -- <span class="token parameter variable">--port</span> <span class="token number">2333</span>
-<span class="token comment"># 常用参数  </span>
-<span class="token parameter variable">--name</span> <span class="token operator">&lt;</span>pm2 实例名<span class="token operator">></span>  
-<span class="token comment"># 监控当前文件夹（含子文件夹）变化，指定排除项  </span>
-<span class="token parameter variable">--watch</span> --ignore-watch<span class="token operator">=</span><span class="token string">"node_modules"</span>
-<span class="token comment"># 超过内存自动重启</span>
---max-momory-restart <span class="token operator">&lt;</span>200MB<span class="token operator">></span>  
-<span class="token comment"># &lt;日志文件路径></span>
-<span class="token parameter variable">--log</span>  
-<span class="token comment"># 日志添加时间前缀</span>
-<span class="token parameter variable">--time</span>
 
-<span class="token comment"># 重启延迟</span>
---restart-delay <span class="token operator">&lt;</span>毫秒数<span class="token operator">></span>  
-<span class="token comment"># 不自动重启  </span>
---no-autorestart
-<span class="token comment"># 定时重启任务  </span>
-<span class="token parameter variable">--cron</span> <span class="token operator">&lt;</span>规则<span class="token operator">></span>  
-<span class="token comment"># 不作为后台进程运行（不常用）</span>
---no-daemon
+    </div>
 
-<span class="token comment">##  集群  ##</span>
-<span class="token comment"># 对于NodeJS 的应用，可以自动启动多个实例并且均衡负载  </span>
-pm2 start app.js <span class="token parameter variable">-i</span> number  
+    
+    
+    
 
-<span class="token comment"># 对于计划任务，可以采用下面的方式（对于单次任务脚本，要禁用掉自动重启）：  </span>
-pm2 start app.js --cron-restart<span class="token operator">=</span><span class="token string">"0/10 10,14 9-17 * * *"</span> --no-autorestart
-<span class="token comment"># cron 的模式为</span>
-<span class="token comment"># 1. 秒（0 - 59）</span>
-<span class="token comment"># 2. 分钟（0 - 59）</span>
-<span class="token comment"># 3. 小时（0 - 23）</span>
-<span class="token comment"># 4. 日（1 - 31）</span>
-<span class="token comment"># 5. 月份（1 - 12）</span>
-<span class="token comment"># 6. 星期（0 - 7，其中0和7代表星期日）</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="管理实例"><a class="markdownIt-Anchor" href="#管理实例"></a> 管理实例</h2>
-<p>管理服务：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pm2 <span class="token punctuation">[</span>list<span class="token operator">|</span><span class="token function">ls</span><span class="token operator">|</span>status<span class="token punctuation">]</span>
-pm2 delete name
-<span class="token comment"># 查看日志  </span>
-pm2 logs <span class="token punctuation">[</span>--lines <span class="token number">200</span><span class="token punctuation">]</span> <span class="token comment"># 限制行数</span>
-<span class="token comment"># 简单的仪表盘  </span>
-pm2 monit 
-pm2 plus <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="通过配置文件启动"><a class="markdownIt-Anchor" href="#通过配置文件启动"></a> 通过配置文件启动</h2>
-<p>通过配置文件可以方便地管理许多实例，并且对于任务的修改也比较友好：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pm2 ecosystem 
-pm2 start ecosystem.config.js
-pm2 reload ecosystem.config.js
-pm2 <span class="token punctuation">[</span>start<span class="token operator">|</span>reload<span class="token punctuation">]</span> ecosystem.config.js <span class="token parameter variable">--only</span> name  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="配置文件"><a class="markdownIt-Anchor" href="#配置文件"></a> 配置文件</h2>
-<p>下面是<code>ecosystem.config.js</code> 文件的结构：</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-	<span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">"app"</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">script</span><span class="token operator">:</span> <span class="token string">"./app.js"</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">env</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"development"</span><span class="token punctuation">,</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">env_production</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"production"</span><span class="token punctuation">,</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
+    <footer class="post-footer">
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
 
-<span class="token comment">// app2 更为常用，并且可以用于设置非NodeJS 的应用</span>
-<span class="token keyword">const</span> app2 <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-     <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'实例名，默认是脚本文件名'</span><span class="token punctuation">,</span>
-     <span class="token literal-property property">script</span><span class="token operator">:</span> <span class="token string">'脚本的路径'</span><span class="token punctuation">,</span>
-     <span class="token literal-property property">cwd</span><span class="token operator">:</span> <span class="token string">'指定工作目录'</span><span class="token punctuation">,</span>  
-     <span class="token literal-property property">args</span><span class="token operator">:</span> <span class="token string">'指定参数'</span><span class="token punctuation">,</span>  
-     <span class="token literal-property property">interpreter</span><span class="token operator">:</span> <span class="token string">'解释器路径，默认为Node， 但其实也可用于Poetry'</span><span class="token punctuation">,</span>
-     <span class="token literal-property property">interpreter_args</span><span class="token operator">:</span> <span class="token string">'解释器参数'</span><span class="token punctuation">,</span>  
-     <span class="token literal-property property">node_args</span><span class="token operator">:</span> <span class="token string">'解释器参数的别名'</span><span class="token punctuation">,</span>  
+  <div class="social-list">
 
-	 <span class="token comment">// 高级参数  </span>
-	 <span class="token literal-property property">instance</span><span class="token operator">:</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span>  <span class="token comment">// 实例数量，为0 的话，自动创建CPU 核心数  </span>
-	 <span class="token literal-property property">exec_mode</span><span class="token operator">:</span> <span class="token string">'fork'</span><span class="token punctuation">,</span> <span class="token comment">// 也可以选择集群模式`cluster`</span>
-	 <span class="token literal-property property">watch</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>  <span class="token comment">// 监控文件变化  </span>
-	 <span class="token literal-property property">ignore_watch</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'[\/\\]\./'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>  <span class="token comment">// 忽略项  </span>
-	 <span class="token literal-property property">env</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-       <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"development"</span><span class="token punctuation">,</span>
-     <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-	 <span class="token literal-property property">env_production</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-	   <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"production"</span><span class="token punctuation">,</span>
-	 <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>  
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://github.com/12Tall">
+            <span class="icon">
+              <i class="fa-brands fa-github"></i>
+            </span>
 
-	 <span class="token comment">// 控制流</span>
-     <span class="token literal-property property">cron_restart</span><span class="token operator">:</span> <span class="token string">'0 0 * * *'</span><span class="token punctuation">,</span>  <span class="token comment">//定时重启</span>
-     <span class="token literal-property property">autorestart</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>  <span class="token comment">// 自动重启  </span>
-     <span class="token literal-property property">restart_delay</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>  <span class="token comment">// 重启延时，微秒</span>
+            <span class="label">Github</span>
+          </a>
+      </div>
 
-  <span class="token punctuation">&#125;</span>
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://space.bilibili.com/66003054">
+            <span class="icon">
+              <i class="fa-brands fa-bilibili"></i>
+            </span>
 
-module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">apps</span> <span class="token operator">:</span> <span class="token punctuation">[</span>app<span class="token punctuation">,</span> app2<span class="token punctuation">]</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="设置开机启动"><a class="markdownIt-Anchor" href="#设置开机启动"></a> 设置开机启动</h2>
-<p>注意，下面命令生成的启动项文件会在当前用户工作区间内，也可以以管理员用户运行，这样就可以访问所有资源了。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 生成一个开机启动项</span>
-pm2 startup  
+            <span class="label">BiliBili</span>
+          </a>
+      </div>
 
-<span class="token comment"># 保存当前运行的实例为开机启动项</span>
-pm2 save <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="使用实例"><a class="markdownIt-Anchor" href="#使用实例"></a> 使用实例</h2>
-<p>以安装<code>Gogs</code> 为例，因为通过包安装不比通过二进制文件配合PM2 简单</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 1. 创建git 用户，禁止交互式（如ssh）登录  </span>
-<span class="token function">sudo</span> adduser --disabled-login <span class="token parameter variable">--gecos</span> <span class="token string">'Gogs'</span> <span class="token function">git</span> <span class="token comment"># --gecos 'Gogs' 信息不重要  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>安装配置好数据库的信息，之后切换到git 用户</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token parameter variable">-i</span> <span class="token parameter variable">-u</span> <span class="token function">git</span>  
-<span class="token function">curl</span> https://dl.gogs.io/0.13.0/gogs_0.13.0_linux_amd64.zip <span class="token parameter variable">--output</span> gogs.zip  
-<span class="token function">unzip</span> gogs.zip 
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
 
-<span class="token comment"># 其实这里就已经可以通过pm2 启动了  </span>
-pm2 start ./gogs web  
+            <span class="label">RSS</span>
+          </a>
+      </div>
+  </div>
+</div>
 
-<span class="token comment"># 但是还有更好的方案  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>因为要设置为开机启动，所以最好通过<code>su</code> 账户统一启动，但同时又考虑到服务的权限问题，因此需要设置一个启动脚本：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 配置pm2 开机自启动  </span>
-<span class="token function">sudo</span> pm2 startup  
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"># python</a>
+              <a href="/tags/qt/" rel="tag"># qt</a>
+          </div>
 
-<span class="token comment"># 创建一个从其他用户启动gogs 实例的脚本</span>
-<span class="token function">sudo</span> <span class="token function">vim</span> /home/git/gogs/gogs.sh  
+        
 
-<span class="token comment"># 以下为脚本内容， &lt;&lt;EOF 表示创建一个文本块，并传递给脚本命令。EOF 可以自己定义  </span>
-<span class="token function">sudo</span> <span class="token function">su</span> - <span class="token function">git</span> <span class="token operator">&lt;&lt;</span><span class="token string">EOF
-    # 进入 git 用户的主目录
-    cd ~
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/05/16/notation/Gitlab%E7%AE%80%E5%8D%95%E5%AE%89%E8%A3%85/" rel="prev" title="Gitlab简单安装">
+                  <i class="fa fa-angle-left"></i> Gitlab简单安装
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
 
-    # 进入 gogs 目录
-    cd gogs
 
-    # 启动 gogs
-    ./gogs web
-EOF</span>
-<span class="token comment"># 结束</span>
 
-<span class="token comment"># 将上述脚本设置内可执行  </span>
-<span class="token function">sudo</span> <span class="token function">chmod</span> +x /home/git/gogs/gogs.sh
 
-<span class="token comment"># 启动服务  </span>
-<span class="token function">sudo</span> pm2 start /home/git/gogs/gogs.sh  
 
-<span class="token comment"># 保存  </span>
-<span class="token function">sudo</span> pm2 save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>比较重要的就是上面创建用户，和用户脚本的编写了。🎂</p>
-]]></content>
-      <categories>
-        <category>运维</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>pm2</tag>
-        <tag>node</tag>
-        <tag>server</tag>
-        <tag>cron</tag>
-        <tag>gogs</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PnetLab v6 的安装</title>
-    <url>/2024/04/05/notation/pnetlab/00_%E5%AE%89%E8%A3%85/</url>
-    <content><![CDATA[<p><code>PnetLab</code> 是一个非常有用的网工实验环境，包含有非常丰富的硬件资源。但是官网提供的安装教程过于陈旧，于是这里将电报群中最新的安装方法记录下。</p>
-<span id="more"></span>  
-<h2 id="安装pnetlab-v6"><a class="markdownIt-Anchor" href="#安装pnetlab-v6"></a> 安装PnetLab v6</h2>
-<blockquote>
-<p>推荐在VMware 或者VirtualBox 虚拟机中安装，虽然直接在裸机上安装也可以，但是在虚拟机中可以快速地做快照和恢复。<br />
-在VMware 中运行虚拟机时，要注意勾选<a href="https://www.pnetlab.com/pages/documentation?slug=install-PNETlab">VT-x 虚拟化支持</a>。否则基于QEMU 的镜像在启动后会闪退。</p>
-</blockquote>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 首先安装`Ubuntu 20.04`,启用`root` 账户密码：</span>
-<span class="token function">sudo</span> <span class="token function">passwd</span> root  
 
-<span class="token comment"># 切换到root 账户  </span>
-<span class="token function">su</span>  
-<span class="token comment"># 安装Pnetlab  </span>
-<span class="token function">curl</span> <span class="token parameter variable">-sL</span> https://labhub.eu.org/api/raw/?path<span class="token operator">=</span>/UNETLAB%20I/upgrades_pnetlab/Focal/install_pnetlab_v6.sh <span class="token operator">|</span> <span class="token function">bash</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>安装后重启电脑，重启后进入<code>root</code> 默认密码是<code>pnet</code>，进入后可以保持默认配置。可以通过<code>http://ip</code> 访问服务，选择离线模式，账号<code>admin</code>，密码<code>pnet</code>。</p>
-<h2 id="安装ishare2"><a class="markdownIt-Anchor" href="#安装ishare2"></a> 安装IShare2</h2>
-<blockquote>
-<p>安装ishare2-cli, webgui 需要安装python3.11</p>
-</blockquote>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 切换到root 账户  </span>
-<span class="token function">su</span>  
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
 
-<span class="token comment"># 移除以前（可能）存在的安装：</span>
-<span class="token function">rm</span> <span class="token parameter variable">-rf</span> /opt/ishare2/ <span class="token operator">&amp;&amp;</span> <span class="token function">rm</span> <span class="token parameter variable">-rf</span> /usr/sbin/ishare2
-<span class="token comment"># 安装IShare2    </span>
-<span class="token function">wget</span> <span class="token parameter variable">-O</span> /usr/sbin/ishare2 https://raw.githubusercontent.com/ishare2-org/ishare2-cli/main/ishare2 <span class="token operator">&amp;&amp;</span> <span class="token function">chmod</span> +x /usr/sbin/ishare2 <span class="token operator">&amp;&amp;</span> ishare2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="使用ishare2-cli"><a class="markdownIt-Anchor" href="#使用ishare2-cli"></a> 使用ishare2-cli</h3>
-<blockquote>
-<p>以下命令在root 用户下运行：</p>
-</blockquote>
-<p>一般安装后会自动修复权限，如果没有的话需要在PNetlab 的Web 界面（系统设置），手动修复。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ishare2 search forti  <span class="token comment"># 搜索镜像  </span>
+  <footer class="footer">
+    <div class="footer-inner">
 
-ishare2 pull qemu <span class="token number">384</span>  <span class="token comment"># 根据类型，id 拉取镜像</span>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
 
-ishre2 upgrade <span class="token comment"># 此命令可以用来升级pnetlab、ishare2 和ishare2 gui  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="安装inshare2-gui"><a class="markdownIt-Anchor" href="#安装inshare2-gui"></a> 安装inshare2-gui</h3>
-<p>Ubuntu 官方并没有提供Python 3.11 的安装包，需要通过第三方库安装。但是最好还是通过cli 安装，因为能够看到进度。通过Web 页面安装看不到进度条。</p>
-<pre class="highlight"><code class="bash">add-apt-repository ppa:deadsnakes/ppa -y  <span class="hljs-comment"># 添加三方库  </span>
+    </div>
+  </footer>
 
-apt update  
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
 
-apt install python3.11  
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
 
-ishare2 gui install <span class="hljs-comment"># 但是不好用</span>
-</code></pre>
-<p>还是通过源码安装比较好一些：<a href="https://github.com/ishare2-org/ishare2-web-gui">https://github.com/ishare2-org/ishare2-web-gui</a></p>
-]]></content>
-      <categories>
-        <category>运维</category>
-      </categories>
-      <tags>
-        <tag>pnetlab</tag>
-        <tag>ubuntu</tag>
-        <tag>switch</tag>
-        <tag>router</tag>
-        <tag>firewall</tag>
-      </tags>
-  </entry>
-</search>
+
+  
+  <script src="/lib/animejs/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="/lib/hexo-generator-searchdb/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"/lib/mermaid/dist/mermaid.min.js","integrity":"sha256-TtLOdUA8mstPoO6sGvHIGx2ceXrrX4KgIItO06XOn8A="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"zh-CN","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+
+</body>
+</html>
