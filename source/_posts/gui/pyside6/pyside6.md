@@ -2,6 +2,7 @@
 title: PySide6 小记
 date: 2024-05-17 13:38:41
 tags: [python, qt]
+categories: [开发]  
 ---
 
 Qt 似乎读作`/ˈkjuːt/`。如果不用QML 的话，在适当调整导入包后，PySide6 打包出的文件体积并不大。个人在只用到了最基础的功能，本文仅作Cheatsheet 使用。     
@@ -38,7 +39,7 @@ app.exec()
 ```
 
 运行脚本结果如下：  
-![01_demo_click_me.png](widgets/01_demo_click_me.png)
+![01_demo_click_me.png](01_demo_click_me.png)
 
 ### 面向对象   
 鉴于上面的代码不够优雅，于是可以采用面向对象的方法进行封装：  
@@ -78,7 +79,7 @@ win.show()  # 展示窗口（默认隐藏
 app.exec()
 ```
 运行脚本结果如下：  
-![02_demo_new_click_me.png](widgets/02_demo_new_click_me.png)    
+![02_demo_new_click_me.png](02_demo_new_click_me.png)    
 
 ## Layout 布局   
 
@@ -112,7 +113,7 @@ class MyWindow(QMainWindow):
 ```
 
 效果如下：  
-![03_layout_horizon.png](widgets/03_layout_horizon.png)
+![03_layout_horizon.png](03_layout_horizon.png)
 
 ### QGridLayout 
 在界面比较复杂的情况下，优先选择栅格布局：  
@@ -154,7 +155,7 @@ class MyWindow(QMainWindow):
 ```
 
 效果如下：  
-![widgets/04_layout_grid.png](widgets/04_layout_grid.png)
+![04_layout_grid.png](04_layout_grid.png)
 
 ## 数据绑定  
 可以通过`QAbstractItemModel` 结合视图进行数据的绑定，
@@ -272,7 +273,7 @@ sys.exit(app.exec())
 ```
 
 效果如下：  
-![05_data_binding.png](widgets/05_data_binding.png)
+![05_data_binding.png](05_data_binding.png)
 
 
 ## 组件  
@@ -322,7 +323,7 @@ class MainWindow(QWidget):
 ``` 
 
 效果如下：  
-![06_widget_tab.png](widgets/06_widget_tab.png)
+![06_widget_tab.png](06_widget_tab.png)
 
 ## Nuitka 打包  
 下面是必选参数，最简单的配置：  
