@@ -243,322 +243,6 @@ irb<span class="token punctuation">(</span>main<span class="token punctuation">)
       </tags>
   </entry>
   <entry>
-    <title>pm2 简单教程</title>
-    <url>/2024/03/22/notation/pm2/pm2%20%E7%AE%80%E5%8D%95%E6%95%99%E7%A8%8B/</url>
-    <content><![CDATA[<blockquote>
-<p>以前简单了解过<code>PM2</code>，但是没有太多的实战经验，仅用于托管单个站点。现在因为手头上要部署二进制服务和Python 自动化脚本，故而记一下常用的指令，尤其是开机自启动与定时任务部分。</p>
-</blockquote>
-<p>PM2 就是一个管理进程的进程，可以用于部署web 服务，自动化脚本。它能够实现基本的定时任务、故障重启、均衡负载。相较于systemd 或者是windows 服务，使用起来更加简单。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">npm</span> i <span class="token parameter variable">-g</span> pm2<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="命令行参数"><a class="markdownIt-Anchor" href="#命令行参数"></a> 命令行参数</h2>
-<p>添加并启动一个实例：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 启动脚本</span>
-pm2 start app.js  
-<span class="token comment"># 给脚本传入参数，要用 -- 隔开  </span>
-pm2 start app.exe -- <span class="token parameter variable">--port</span> <span class="token number">2333</span>
-<span class="token comment"># 常用参数  </span>
-<span class="token parameter variable">--name</span> <span class="token operator">&lt;</span>pm2 实例名<span class="token operator">></span>  
-<span class="token comment"># 监控当前文件夹（含子文件夹）变化，指定排除项  </span>
-<span class="token parameter variable">--watch</span> --ignore-watch<span class="token operator">=</span><span class="token string">"node_modules"</span>
-<span class="token comment"># 超过内存自动重启</span>
---max-momory-restart <span class="token operator">&lt;</span>200MB<span class="token operator">></span>  
-<span class="token comment"># &lt;日志文件路径></span>
-<span class="token parameter variable">--log</span>  
-<span class="token comment"># 日志添加时间前缀</span>
-<span class="token parameter variable">--time</span>
-
-<span class="token comment"># 重启延迟</span>
---restart-delay <span class="token operator">&lt;</span>毫秒数<span class="token operator">></span>  
-<span class="token comment"># 不自动重启  </span>
---no-autorestart
-<span class="token comment"># 定时重启任务  </span>
-<span class="token parameter variable">--cron</span> <span class="token operator">&lt;</span>规则<span class="token operator">></span>  
-<span class="token comment"># 不作为后台进程运行（不常用）</span>
---no-daemon
-
-<span class="token comment">##  集群  ##</span>
-<span class="token comment"># 对于NodeJS 的应用，可以自动启动多个实例并且均衡负载  </span>
-pm2 start app.js <span class="token parameter variable">-i</span> number  
-
-<span class="token comment"># 对于计划任务，可以采用下面的方式（对于单次任务脚本，要禁用掉自动重启）：  </span>
-pm2 start app.js --cron-restart<span class="token operator">=</span><span class="token string">"0/10 10,14 9-17 * * *"</span> --no-autorestart
-<span class="token comment"># cron 的模式为</span>
-<span class="token comment"># 1. 秒（0 - 59）</span>
-<span class="token comment"># 2. 分钟（0 - 59）</span>
-<span class="token comment"># 3. 小时（0 - 23）</span>
-<span class="token comment"># 4. 日（1 - 31）</span>
-<span class="token comment"># 5. 月份（1 - 12）</span>
-<span class="token comment"># 6. 星期（0 - 7，其中0和7代表星期日）</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="管理实例"><a class="markdownIt-Anchor" href="#管理实例"></a> 管理实例</h2>
-<p>管理服务：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pm2 <span class="token punctuation">[</span>list<span class="token operator">|</span><span class="token function">ls</span><span class="token operator">|</span>status<span class="token punctuation">]</span>
-pm2 delete name
-<span class="token comment"># 查看日志  </span>
-pm2 logs <span class="token punctuation">[</span>--lines <span class="token number">200</span><span class="token punctuation">]</span> <span class="token comment"># 限制行数</span>
-<span class="token comment"># 简单的仪表盘  </span>
-pm2 monit 
-pm2 plus <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="通过配置文件启动"><a class="markdownIt-Anchor" href="#通过配置文件启动"></a> 通过配置文件启动</h2>
-<p>通过配置文件可以方便地管理许多实例，并且对于任务的修改也比较友好：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pm2 ecosystem 
-pm2 start ecosystem.config.js
-pm2 reload ecosystem.config.js
-pm2 <span class="token punctuation">[</span>start<span class="token operator">|</span>reload<span class="token punctuation">]</span> ecosystem.config.js <span class="token parameter variable">--only</span> name  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="配置文件"><a class="markdownIt-Anchor" href="#配置文件"></a> 配置文件</h2>
-<p>下面是<code>ecosystem.config.js</code> 文件的结构：</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-	<span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">"app"</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">script</span><span class="token operator">:</span> <span class="token string">"./app.js"</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">env</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"development"</span><span class="token punctuation">,</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">env_production</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"production"</span><span class="token punctuation">,</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token comment">// app2 更为常用，并且可以用于设置非NodeJS 的应用</span>
-<span class="token keyword">const</span> app2 <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-     <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'实例名，默认是脚本文件名'</span><span class="token punctuation">,</span>
-     <span class="token literal-property property">script</span><span class="token operator">:</span> <span class="token string">'脚本的路径'</span><span class="token punctuation">,</span>
-     <span class="token literal-property property">cwd</span><span class="token operator">:</span> <span class="token string">'指定工作目录'</span><span class="token punctuation">,</span>  
-     <span class="token literal-property property">args</span><span class="token operator">:</span> <span class="token string">'指定参数'</span><span class="token punctuation">,</span>  
-     <span class="token literal-property property">interpreter</span><span class="token operator">:</span> <span class="token string">'解释器路径，默认为Node， 但其实也可用于Poetry'</span><span class="token punctuation">,</span>
-     <span class="token literal-property property">interpreter_args</span><span class="token operator">:</span> <span class="token string">'解释器参数'</span><span class="token punctuation">,</span>  
-     <span class="token literal-property property">node_args</span><span class="token operator">:</span> <span class="token string">'解释器参数的别名'</span><span class="token punctuation">,</span>  
-
-	 <span class="token comment">// 高级参数  </span>
-	 <span class="token literal-property property">instance</span><span class="token operator">:</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span>  <span class="token comment">// 实例数量，为0 的话，自动创建CPU 核心数  </span>
-	 <span class="token literal-property property">exec_mode</span><span class="token operator">:</span> <span class="token string">'fork'</span><span class="token punctuation">,</span> <span class="token comment">// 也可以选择集群模式`cluster`</span>
-	 <span class="token literal-property property">watch</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>  <span class="token comment">// 监控文件变化  </span>
-	 <span class="token literal-property property">ignore_watch</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'[\/\\]\./'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>  <span class="token comment">// 忽略项  </span>
-	 <span class="token literal-property property">env</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-       <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"development"</span><span class="token punctuation">,</span>
-     <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-	 <span class="token literal-property property">env_production</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-	   <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"production"</span><span class="token punctuation">,</span>
-	 <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>  
-
-	 <span class="token comment">// 控制流</span>
-     <span class="token literal-property property">cron_restart</span><span class="token operator">:</span> <span class="token string">'0 0 * * *'</span><span class="token punctuation">,</span>  <span class="token comment">//定时重启</span>
-     <span class="token literal-property property">autorestart</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>  <span class="token comment">// 自动重启  </span>
-     <span class="token literal-property property">restart_delay</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>  <span class="token comment">// 重启延时，微秒</span>
-
-  <span class="token punctuation">&#125;</span>
-
-module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">apps</span> <span class="token operator">:</span> <span class="token punctuation">[</span>app<span class="token punctuation">,</span> app2<span class="token punctuation">]</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="设置开机启动"><a class="markdownIt-Anchor" href="#设置开机启动"></a> 设置开机启动</h2>
-<p>注意，下面命令生成的启动项文件会在当前用户工作区间内，也可以以管理员用户运行，这样就可以访问所有资源了。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 生成一个开机启动项</span>
-pm2 startup  
-
-<span class="token comment"># 保存当前运行的实例为开机启动项</span>
-pm2 save <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="使用实例"><a class="markdownIt-Anchor" href="#使用实例"></a> 使用实例</h2>
-<p>以安装<code>Gogs</code> 为例，因为通过包安装不比通过二进制文件配合PM2 简单</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 1. 创建git 用户，禁止交互式（如ssh）登录  </span>
-<span class="token function">sudo</span> adduser --disabled-login <span class="token parameter variable">--gecos</span> <span class="token string">'Gogs'</span> <span class="token function">git</span> <span class="token comment"># --gecos 'Gogs' 信息不重要  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>安装配置好数据库的信息，之后切换到git 用户</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token parameter variable">-i</span> <span class="token parameter variable">-u</span> <span class="token function">git</span>  
-<span class="token function">curl</span> https://dl.gogs.io/0.13.0/gogs_0.13.0_linux_amd64.zip <span class="token parameter variable">--output</span> gogs.zip  
-<span class="token function">unzip</span> gogs.zip 
-
-<span class="token comment"># 其实这里就已经可以通过pm2 启动了  </span>
-pm2 start ./gogs web  
-
-<span class="token comment"># 但是还有更好的方案  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>因为要设置为开机启动，所以最好通过<code>su</code> 账户统一启动，但同时又考虑到服务的权限问题，因此需要设置一个启动脚本：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 配置pm2 开机自启动  </span>
-<span class="token function">sudo</span> pm2 startup  
-
-<span class="token comment"># 创建一个从其他用户启动gogs 实例的脚本</span>
-<span class="token function">sudo</span> <span class="token function">vim</span> /home/git/gogs/gogs.sh  
-
-<span class="token comment"># 以下为脚本内容， &lt;&lt;EOF 表示创建一个文本块，并传递给脚本命令。EOF 可以自己定义  </span>
-<span class="token function">sudo</span> <span class="token function">su</span> - <span class="token function">git</span> <span class="token operator">&lt;&lt;</span><span class="token string">EOF
-    # 进入 git 用户的主目录
-    cd ~
-
-    # 进入 gogs 目录
-    cd gogs
-
-    # 启动 gogs
-    ./gogs web
-EOF</span>
-<span class="token comment"># 结束</span>
-
-<span class="token comment"># 将上述脚本设置内可执行  </span>
-<span class="token function">sudo</span> <span class="token function">chmod</span> +x /home/git/gogs/gogs.sh
-
-<span class="token comment"># 启动服务  </span>
-<span class="token function">sudo</span> pm2 start /home/git/gogs/gogs.sh  
-
-<span class="token comment"># 保存  </span>
-<span class="token function">sudo</span> pm2 save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>比较重要的就是上面创建用户，和用户脚本的编写了。🎂</p>
-]]></content>
-      <categories>
-        <category>运维</category>
-      </categories>
-      <tags>
-        <tag>pm2</tag>
-        <tag>node</tag>
-        <tag>python</tag>
-        <tag>server</tag>
-        <tag>cron</tag>
-        <tag>gogs</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PnetLab v6 的安装</title>
-    <url>/2024/04/05/notation/pnetlab/00_%E5%AE%89%E8%A3%85/</url>
-    <content><![CDATA[<p><code>PnetLab</code> 是一个非常有用的网工实验环境，包含有非常丰富的硬件资源。但是官网提供的安装教程过于陈旧，于是这里将电报群中最新的安装方法记录下。</p>
-<span id="more"></span>  
-<h2 id="安装pnetlab-v6"><a class="markdownIt-Anchor" href="#安装pnetlab-v6"></a> 安装PnetLab v6</h2>
-<blockquote>
-<p>推荐在VMware 或者VirtualBox 虚拟机中安装，虽然直接在裸机上安装也可以，但是在虚拟机中可以快速地做快照和恢复。<br />
-在VMware 中运行虚拟机时，要注意勾选<a href="https://www.pnetlab.com/pages/documentation?slug=install-PNETlab">VT-x 虚拟化支持</a>。否则基于QEMU 的镜像在启动后会闪退。</p>
-</blockquote>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 首先安装`Ubuntu 20.04`,启用`root` 账户密码：</span>
-<span class="token function">sudo</span> <span class="token function">passwd</span> root  
-
-<span class="token comment"># 切换到root 账户  </span>
-<span class="token function">su</span>  
-<span class="token comment"># 安装Pnetlab  </span>
-<span class="token function">curl</span> <span class="token parameter variable">-sL</span> https://labhub.eu.org/api/raw/?path<span class="token operator">=</span>/UNETLAB%20I/upgrades_pnetlab/Focal/install_pnetlab_v6.sh <span class="token operator">|</span> <span class="token function">bash</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>安装后重启电脑，重启后进入<code>root</code> 默认密码是<code>pnet</code>，进入后可以保持默认配置。可以通过<code>http://ip</code> 访问服务，选择离线模式，账号<code>admin</code>，密码<code>pnet</code>。</p>
-<h2 id="安装ishare2"><a class="markdownIt-Anchor" href="#安装ishare2"></a> 安装IShare2</h2>
-<blockquote>
-<p>安装ishare2-cli, webgui 需要安装python3.11</p>
-</blockquote>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 切换到root 账户  </span>
-<span class="token function">su</span>  
-
-<span class="token comment"># 移除以前（可能）存在的安装：</span>
-<span class="token function">rm</span> <span class="token parameter variable">-rf</span> /opt/ishare2/ <span class="token operator">&amp;&amp;</span> <span class="token function">rm</span> <span class="token parameter variable">-rf</span> /usr/sbin/ishare2
-<span class="token comment"># 安装IShare2    </span>
-<span class="token function">wget</span> <span class="token parameter variable">-O</span> /usr/sbin/ishare2 https://raw.githubusercontent.com/ishare2-org/ishare2-cli/main/ishare2 <span class="token operator">&amp;&amp;</span> <span class="token function">chmod</span> +x /usr/sbin/ishare2 <span class="token operator">&amp;&amp;</span> ishare2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="使用ishare2-cli"><a class="markdownIt-Anchor" href="#使用ishare2-cli"></a> 使用ishare2-cli</h3>
-<blockquote>
-<p>以下命令在root 用户下运行：</p>
-</blockquote>
-<p>一般安装后会自动修复权限，如果没有的话需要在PNetlab 的Web 界面（系统设置），手动修复。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ishare2 search forti  <span class="token comment"># 搜索镜像  </span>
-
-ishare2 pull qemu <span class="token number">384</span>  <span class="token comment"># 根据类型，id 拉取镜像</span>
-
-ishre2 upgrade <span class="token comment"># 此命令可以用来升级pnetlab、ishare2 和ishare2 gui  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="安装inshare2-gui"><a class="markdownIt-Anchor" href="#安装inshare2-gui"></a> 安装inshare2-gui</h3>
-<p>Ubuntu 官方并没有提供Python 3.11 的安装包，需要通过第三方库安装。但是最好还是通过cli 安装，因为能够看到进度。通过Web 页面安装看不到进度条。</p>
-<pre class="highlight"><code class="bash">add-apt-repository ppa:deadsnakes/ppa -y  <span class="hljs-comment"># 添加三方库  </span>
-
-apt update  
-
-apt install python3.11  
-
-ishare2 gui install <span class="hljs-comment"># 但是不好用</span>
-</code></pre>
-<p>还是通过源码安装比较好一些：<a href="https://github.com/ishare2-org/ishare2-web-gui">https://github.com/ishare2-org/ishare2-web-gui</a></p>
-]]></content>
-      <categories>
-        <category>运维</category>
-      </categories>
-      <tags>
-        <tag>pnetlab</tag>
-        <tag>ubuntu</tag>
-        <tag>switch</tag>
-        <tag>router</tag>
-        <tag>firewall</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Ubuntu 安装zfs</title>
-    <url>/2024/05/24/notation/zfs/zfs/</url>
-    <content><![CDATA[<p>关于<code>zfs</code> 文件系统的介绍，可以参考：<a href="https://zhuanlan.zhihu.com/p/45137745">初学者指南：ZFS 是什么，为什么要使用 ZFS？</a></p>
-<h2 id="raidz-的存储效率"><a class="markdownIt-Anchor" href="#raidz-的存储效率"></a> RAIDZ 的存储效率</h2>
-<p>存储效率应理解为存储空间利用率，可以用以下表格表示：</p>
-<table>
-<thead>
-<tr>
-<th>RAID 类型</th>
-<th>存储效率</th>
-<th>校验设备数量</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>RAID0</td>
-<td>100%</td>
-<td>0</td>
-</tr>
-<tr>
-<td>RAID1</td>
-<td><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>1</mn><mi>n</mi></mfrac></mrow><annotation encoding="application/x-tex">\frac{1}{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></td>
-<td>0</td>
-</tr>
-<tr>
-<td>RAIDZ-1</td>
-<td><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow><mi>n</mi></mfrac></mrow><annotation encoding="application/x-tex">\frac{n-1}{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></td>
-<td>1</td>
-</tr>
-<tr>
-<td>RAIDZ-2</td>
-<td><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>n</mi><mo>−</mo><mn>2</mn></mrow><mi>n</mi></mfrac></mrow><annotation encoding="application/x-tex">\frac{n-2}{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></td>
-<td>2</td>
-</tr>
-<tr>
-<td>RAIDZ-3</td>
-<td><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>n</mi><mo>−</mo><mn>3</mn></mrow><mi>n</mi></mfrac></mrow><annotation encoding="application/x-tex">\frac{n-3}{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">3</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></td>
-<td>3</td>
-</tr>
-</tbody>
-</table>
-<p>按照<a href="https://jrs-s.net/2015/02/06/zfs-you-should-use-mirror-vdevs-not-raidz/">ZFS: You should use mirror vdevs, not RAIDZ.</a> 文章介绍，更推荐使用<code>RAID1</code> 而不是<code>RAID5</code>，因为硬盘损坏时会导致文件系统的效率大幅降低。并且一个存储池里面最好不要超过8 块硬盘。</p>
-<h2 id="安装配置zfs"><a class="markdownIt-Anchor" href="#安装配置zfs"></a> 安装配置zfs</h2>
-<p>Ubuntu 系统并没有自带zfs 工具，需要自己安装<code>sudo apt-get install zfsutils-linux</code>，之后可以通过<code>sudo zpool</code> 命令使用。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 查看硬盘以及分区信息  </span>
-<span class="token function">sudo</span> <span class="token function">fdisk</span> <span class="token parameter variable">-l</span>    
-
-<span class="token comment"># zfs 组RAID1 可以是硬盘与硬盘、硬盘与分区  </span>
-<span class="token function">sudo</span> zpool create pool_name mirror /dev/sdb /dev/sdc<span class="token punctuation">[</span><span class="token number">1</span><span class="token operator">|</span><span class="token number">2</span><span class="token operator">|</span><span class="token number">3</span><span class="token punctuation">]</span>  
-<span class="token comment"># 查看zpool 状态  </span>
-<span class="token function">sudo</span> zpool status <span class="token punctuation">[</span>pool_name<span class="token punctuation">]</span>
-<span class="token comment"># DEGRADED 降级：有问题  </span>
-<span class="token comment"># ONLINE 正常  </span>
-<span class="token comment"># OFFLINE 离线       </span>
-<span class="token comment"># OFFLINE 离线       </span>
-<span class="token comment"># 查看详细信息</span>
-<span class="token function">sudo</span> zpool list <span class="token punctuation">[</span>pool_name<span class="token punctuation">]</span>
-
-<span class="token comment"># 建立测试文件  </span>
-<span class="token function">sudo</span> <span class="token function">dd</span> <span class="token assign-left variable">if</span><span class="token operator">=</span>/dev/zero <span class="token assign-left variable">of</span><span class="token operator">=</span>/pool_name/test.data <span class="token assign-left variable">bs</span><span class="token operator">=</span>1M <span class="token assign-left variable">count</span><span class="token operator">=</span><span class="token number">512</span>
-<span class="token comment"># 检查md5  </span>
-md5sum /pool_name/test.data  
-<span class="token comment"># 强行移除一块硬盘后，查看文件md5 并没有变化（证明没有损坏）</span>
-
-<span class="token comment"># 添加新硬盘后，可以替换损坏的硬盘</span>
-<span class="token function">sudo</span> zpool replace pool_name sdc1 sdd  <span class="token comment"># 可以省略/dev/sdd 这种写法  </span>
-<span class="token comment"># 更换新硬盘后注意观察数据同步的状态，在name 列有`replacing` 字样</span>
-
-<span class="token comment"># 如果需要对存储设备扩容，则需要在更新所有设备后执行</span>
-<span class="token function">sudo</span> zpool <span class="token builtin class-name">set</span> <span class="token assign-left variable">autoexpand</span><span class="token operator">=</span>on <span class="token punctuation">[</span>pool_name<span class="token punctuation">]</span>
-<span class="token function">sudo</span> zpool online <span class="token parameter variable">-e</span> pool_name sdb
-<span class="token function">sudo</span> zpool online <span class="token parameter variable">-e</span> pool_name sdd<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>文中的命令摘自<a href="https://www.pocketdigi.com/article/linux_zfs_raid1_mirror_replace.html">Ubuntu 22.04 环境 zfs raid1 mirror配置，在线无损替换故障硬盘</a>，另外<code>mdadm</code> 工具也可以配置软RAID。但即使配置了RAID 也需要设置数据的定期备份，这一点也是很重要的。</p>
-]]></content>
-      <categories>
-        <category>运维</category>
-      </categories>
-      <tags>
-        <tag>Ubuntu</tag>
-        <tag>zfs</tag>
-        <tag>raid</tag>
-        <tag>backup</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>pyside6-tabel-delegate</title>
     <url>/2024/05/23/gui/pyside6/pyside6-tabel-delegate/</url>
     <content><![CDATA[<p>在Qt 的TableView 中添加其他<code>Widget</code>。</p>
@@ -1005,6 +689,334 @@ sys<span class="token punctuation">.</span>exit<span class="token punctuation">(
       <tags>
         <tag>python</tag>
         <tag>qt</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pm2 简单教程</title>
+    <url>/2024/03/22/notation/pm2/pm2%20%E7%AE%80%E5%8D%95%E6%95%99%E7%A8%8B/</url>
+    <content><![CDATA[<blockquote>
+<p>以前简单了解过<code>PM2</code>，但是没有太多的实战经验，仅用于托管单个站点。现在因为手头上要部署二进制服务和Python 自动化脚本，故而记一下常用的指令，尤其是开机自启动与定时任务部分。</p>
+</blockquote>
+<p>PM2 就是一个管理进程的进程，可以用于部署web 服务，自动化脚本。它能够实现基本的定时任务、故障重启、均衡负载。相较于systemd 或者是windows 服务，使用起来更加简单。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">npm</span> i <span class="token parameter variable">-g</span> pm2<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="命令行参数"><a class="markdownIt-Anchor" href="#命令行参数"></a> 命令行参数</h2>
+<p>添加并启动一个实例：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 启动脚本</span>
+pm2 start app.js  
+<span class="token comment"># 给脚本传入参数，要用 -- 隔开  </span>
+pm2 start app.exe -- <span class="token parameter variable">--port</span> <span class="token number">2333</span>
+<span class="token comment"># 常用参数  </span>
+<span class="token parameter variable">--name</span> <span class="token operator">&lt;</span>pm2 实例名<span class="token operator">></span>  
+<span class="token comment"># 监控当前文件夹（含子文件夹）变化，指定排除项  </span>
+<span class="token parameter variable">--watch</span> --ignore-watch<span class="token operator">=</span><span class="token string">"node_modules"</span>
+<span class="token comment"># 超过内存自动重启</span>
+--max-momory-restart <span class="token operator">&lt;</span>200MB<span class="token operator">></span>  
+<span class="token comment"># &lt;日志文件路径></span>
+<span class="token parameter variable">--log</span>  
+<span class="token comment"># 日志添加时间前缀</span>
+<span class="token parameter variable">--time</span>
+
+<span class="token comment"># 重启延迟</span>
+--restart-delay <span class="token operator">&lt;</span>毫秒数<span class="token operator">></span>  
+<span class="token comment"># 不自动重启  </span>
+--no-autorestart
+<span class="token comment"># 定时重启任务  </span>
+<span class="token parameter variable">--cron</span> <span class="token operator">&lt;</span>规则<span class="token operator">></span>  
+<span class="token comment"># 不作为后台进程运行（不常用）</span>
+--no-daemon
+
+<span class="token comment">##  集群  ##</span>
+<span class="token comment"># 对于NodeJS 的应用，可以自动启动多个实例并且均衡负载  </span>
+pm2 start app.js <span class="token parameter variable">-i</span> number  
+
+<span class="token comment"># 对于计划任务，可以采用下面的方式（对于单次任务脚本，要禁用掉自动重启）：  </span>
+pm2 start app.js --cron-restart<span class="token operator">=</span><span class="token string">"0/10 10,14 9-17 * * *"</span> --no-autorestart
+<span class="token comment"># cron 的模式为</span>
+<span class="token comment"># 1. 秒（0 - 59）</span>
+<span class="token comment"># 2. 分钟（0 - 59）</span>
+<span class="token comment"># 3. 小时（0 - 23）</span>
+<span class="token comment"># 4. 日（1 - 31）</span>
+<span class="token comment"># 5. 月份（1 - 12）</span>
+<span class="token comment"># 6. 星期（0 - 7，其中0和7代表星期日）</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="管理实例"><a class="markdownIt-Anchor" href="#管理实例"></a> 管理实例</h2>
+<p>管理服务：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pm2 <span class="token punctuation">[</span>list<span class="token operator">|</span><span class="token function">ls</span><span class="token operator">|</span>status<span class="token punctuation">]</span>
+pm2 delete name
+<span class="token comment"># 查看日志  </span>
+pm2 logs <span class="token punctuation">[</span>--lines <span class="token number">200</span><span class="token punctuation">]</span> <span class="token comment"># 限制行数</span>
+<span class="token comment"># 简单的仪表盘  </span>
+pm2 monit 
+pm2 plus <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="通过配置文件启动"><a class="markdownIt-Anchor" href="#通过配置文件启动"></a> 通过配置文件启动</h2>
+<p>通过配置文件可以方便地管理许多实例，并且对于任务的修改也比较友好：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pm2 ecosystem 
+pm2 start ecosystem.config.js
+pm2 reload ecosystem.config.js
+pm2 <span class="token punctuation">[</span>start<span class="token operator">|</span>reload<span class="token punctuation">]</span> ecosystem.config.js <span class="token parameter variable">--only</span> name  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="配置文件"><a class="markdownIt-Anchor" href="#配置文件"></a> 配置文件</h2>
+<p>下面是<code>ecosystem.config.js</code> 文件的结构：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+	<span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">"app"</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">script</span><span class="token operator">:</span> <span class="token string">"./app.js"</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">env</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"development"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">env_production</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"production"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// app2 更为常用，并且可以用于设置非NodeJS 的应用</span>
+<span class="token keyword">const</span> app2 <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+     <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'实例名，默认是脚本文件名'</span><span class="token punctuation">,</span>
+     <span class="token literal-property property">script</span><span class="token operator">:</span> <span class="token string">'脚本的路径'</span><span class="token punctuation">,</span>
+     <span class="token literal-property property">cwd</span><span class="token operator">:</span> <span class="token string">'指定工作目录'</span><span class="token punctuation">,</span>  
+     <span class="token literal-property property">args</span><span class="token operator">:</span> <span class="token string">'指定参数'</span><span class="token punctuation">,</span>  
+     <span class="token literal-property property">interpreter</span><span class="token operator">:</span> <span class="token string">'解释器路径，默认为Node， 但其实也可用于Poetry'</span><span class="token punctuation">,</span>
+     <span class="token literal-property property">interpreter_args</span><span class="token operator">:</span> <span class="token string">'解释器参数'</span><span class="token punctuation">,</span>  
+     <span class="token literal-property property">node_args</span><span class="token operator">:</span> <span class="token string">'解释器参数的别名'</span><span class="token punctuation">,</span>  
+
+	 <span class="token comment">// 高级参数  </span>
+	 <span class="token literal-property property">instance</span><span class="token operator">:</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span>  <span class="token comment">// 实例数量，为0 的话，自动创建CPU 核心数  </span>
+	 <span class="token literal-property property">exec_mode</span><span class="token operator">:</span> <span class="token string">'fork'</span><span class="token punctuation">,</span> <span class="token comment">// 也可以选择集群模式`cluster`</span>
+	 <span class="token literal-property property">watch</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>  <span class="token comment">// 监控文件变化  </span>
+	 <span class="token literal-property property">ignore_watch</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'[\/\\]\./'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>  <span class="token comment">// 忽略项  </span>
+	 <span class="token literal-property property">env</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+       <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"development"</span><span class="token punctuation">,</span>
+     <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+	 <span class="token literal-property property">env_production</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+	   <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"production"</span><span class="token punctuation">,</span>
+	 <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>  
+
+	 <span class="token comment">// 控制流</span>
+     <span class="token literal-property property">cron_restart</span><span class="token operator">:</span> <span class="token string">'0 0 * * *'</span><span class="token punctuation">,</span>  <span class="token comment">//定时重启</span>
+     <span class="token literal-property property">autorestart</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>  <span class="token comment">// 自动重启  </span>
+     <span class="token literal-property property">restart_delay</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>  <span class="token comment">// 重启延时，微秒</span>
+
+  <span class="token punctuation">&#125;</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  <span class="token literal-property property">apps</span> <span class="token operator">:</span> <span class="token punctuation">[</span>app<span class="token punctuation">,</span> app2<span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="设置开机启动"><a class="markdownIt-Anchor" href="#设置开机启动"></a> 设置开机启动</h2>
+<p>注意，下面命令生成的启动项文件会在当前用户工作区间内，也可以以管理员用户运行，这样就可以访问所有资源了。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 生成一个开机启动项</span>
+pm2 startup  
+
+<span class="token comment"># 保存当前运行的实例为开机启动项</span>
+pm2 save <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="使用实例"><a class="markdownIt-Anchor" href="#使用实例"></a> 使用实例</h2>
+<p>以安装<code>Gogs</code> 为例，因为通过包安装不比通过二进制文件配合PM2 简单</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 1. 创建git 用户，禁止交互式（如ssh）登录  </span>
+<span class="token function">sudo</span> adduser --disabled-login <span class="token parameter variable">--gecos</span> <span class="token string">'Gogs'</span> <span class="token function">git</span> <span class="token comment"># --gecos 'Gogs' 信息不重要  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>安装配置好数据库的信息，之后切换到git 用户</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token parameter variable">-i</span> <span class="token parameter variable">-u</span> <span class="token function">git</span>  
+<span class="token function">curl</span> https://dl.gogs.io/0.13.0/gogs_0.13.0_linux_amd64.zip <span class="token parameter variable">--output</span> gogs.zip  
+<span class="token function">unzip</span> gogs.zip 
+
+<span class="token comment"># 其实这里就已经可以通过pm2 启动了  </span>
+pm2 start ./gogs web  
+
+<span class="token comment"># 但是还有更好的方案  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>因为要设置为开机启动，所以最好通过<code>su</code> 账户统一启动，但同时又考虑到服务的权限问题，因此需要设置一个启动脚本：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 配置pm2 开机自启动  </span>
+<span class="token function">sudo</span> pm2 startup  
+
+<span class="token comment"># 创建一个从其他用户启动gogs 实例的脚本</span>
+<span class="token function">sudo</span> <span class="token function">vim</span> /home/git/gogs/gogs.sh  
+
+<span class="token comment"># 以下为脚本内容， &lt;&lt;EOF 表示创建一个文本块，并传递给脚本命令。EOF 可以自己定义  </span>
+<span class="token function">sudo</span> <span class="token function">su</span> - <span class="token function">git</span> <span class="token operator">&lt;&lt;</span><span class="token string">EOF
+    # 进入 git 用户的主目录
+    cd ~
+
+    # 进入 gogs 目录
+    cd gogs
+
+    # 启动 gogs
+    ./gogs web
+EOF</span>
+<span class="token comment"># 结束</span>
+
+<span class="token comment"># 将上述脚本设置内可执行  </span>
+<span class="token function">sudo</span> <span class="token function">chmod</span> +x /home/git/gogs/gogs.sh
+
+<span class="token comment"># 启动服务  </span>
+<span class="token function">sudo</span> pm2 start /home/git/gogs/gogs.sh  
+
+<span class="token comment"># 保存  </span>
+<span class="token function">sudo</span> pm2 save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>比较重要的就是上面创建用户，和用户脚本的编写了。🎂</p>
+]]></content>
+      <categories>
+        <category>运维</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>pm2</tag>
+        <tag>node</tag>
+        <tag>server</tag>
+        <tag>cron</tag>
+        <tag>gogs</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PnetLab v6 的安装</title>
+    <url>/2024/04/05/notation/pnetlab/00_%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<p><code>PnetLab</code> 是一个非常有用的网工实验环境，包含有非常丰富的硬件资源。但是官网提供的安装教程过于陈旧，于是这里将电报群中最新的安装方法记录下。</p>
+<span id="more"></span>  
+<h2 id="安装pnetlab-v6"><a class="markdownIt-Anchor" href="#安装pnetlab-v6"></a> 安装PnetLab v6</h2>
+<blockquote>
+<p>推荐在VMware 或者VirtualBox 虚拟机中安装，虽然直接在裸机上安装也可以，但是在虚拟机中可以快速地做快照和恢复。<br />
+在VMware 中运行虚拟机时，要注意勾选<a href="https://www.pnetlab.com/pages/documentation?slug=install-PNETlab">VT-x 虚拟化支持</a>。否则基于QEMU 的镜像在启动后会闪退。</p>
+</blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 首先安装`Ubuntu 20.04`,启用`root` 账户密码：</span>
+<span class="token function">sudo</span> <span class="token function">passwd</span> root  
+
+<span class="token comment"># 切换到root 账户  </span>
+<span class="token function">su</span>  
+<span class="token comment"># 安装Pnetlab  </span>
+<span class="token function">curl</span> <span class="token parameter variable">-sL</span> https://labhub.eu.org/api/raw/?path<span class="token operator">=</span>/UNETLAB%20I/upgrades_pnetlab/Focal/install_pnetlab_v6.sh <span class="token operator">|</span> <span class="token function">bash</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>安装后重启电脑，重启后进入<code>root</code> 默认密码是<code>pnet</code>，进入后可以保持默认配置。可以通过<code>http://ip</code> 访问服务，选择离线模式，账号<code>admin</code>，密码<code>pnet</code>。</p>
+<h2 id="安装ishare2"><a class="markdownIt-Anchor" href="#安装ishare2"></a> 安装IShare2</h2>
+<blockquote>
+<p>安装ishare2-cli, webgui 需要安装python3.11</p>
+</blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 切换到root 账户  </span>
+<span class="token function">su</span>  
+
+<span class="token comment"># 移除以前（可能）存在的安装：</span>
+<span class="token function">rm</span> <span class="token parameter variable">-rf</span> /opt/ishare2/ <span class="token operator">&amp;&amp;</span> <span class="token function">rm</span> <span class="token parameter variable">-rf</span> /usr/sbin/ishare2
+<span class="token comment"># 安装IShare2    </span>
+<span class="token function">wget</span> <span class="token parameter variable">-O</span> /usr/sbin/ishare2 https://raw.githubusercontent.com/ishare2-org/ishare2-cli/main/ishare2 <span class="token operator">&amp;&amp;</span> <span class="token function">chmod</span> +x /usr/sbin/ishare2 <span class="token operator">&amp;&amp;</span> ishare2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="使用ishare2-cli"><a class="markdownIt-Anchor" href="#使用ishare2-cli"></a> 使用ishare2-cli</h3>
+<blockquote>
+<p>以下命令在root 用户下运行：</p>
+</blockquote>
+<p>一般安装后会自动修复权限，如果没有的话需要在PNetlab 的Web 界面（系统设置），手动修复。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ishare2 search forti  <span class="token comment"># 搜索镜像  </span>
+
+ishare2 pull qemu <span class="token number">384</span>  <span class="token comment"># 根据类型，id 拉取镜像</span>
+
+ishre2 upgrade <span class="token comment"># 此命令可以用来升级pnetlab、ishare2 和ishare2 gui  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="安装inshare2-gui"><a class="markdownIt-Anchor" href="#安装inshare2-gui"></a> 安装inshare2-gui</h3>
+<p>Ubuntu 官方并没有提供Python 3.11 的安装包，需要通过第三方库安装。但是最好还是通过cli 安装，因为能够看到进度。通过Web 页面安装看不到进度条。</p>
+<pre class="highlight"><code class="bash">add-apt-repository ppa:deadsnakes/ppa -y  <span class="hljs-comment"># 添加三方库  </span>
+
+apt update  
+
+apt install python3.11  
+
+ishare2 gui install <span class="hljs-comment"># 但是不好用</span>
+</code></pre>
+<p>还是通过源码安装比较好一些：<a href="https://github.com/ishare2-org/ishare2-web-gui">https://github.com/ishare2-org/ishare2-web-gui</a></p>
+]]></content>
+      <categories>
+        <category>运维</category>
+      </categories>
+      <tags>
+        <tag>pnetlab</tag>
+        <tag>ubuntu</tag>
+        <tag>switch</tag>
+        <tag>router</tag>
+        <tag>firewall</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Ubuntu 安装zfs</title>
+    <url>/2024/05/24/notation/zfs/zfs/</url>
+    <content><![CDATA[<p>关于<code>zfs</code> 文件系统的介绍，可以参考：<a href="https://zhuanlan.zhihu.com/p/45137745">初学者指南：ZFS 是什么，为什么要使用 ZFS？</a></p>
+<h2 id="raidz-的存储效率"><a class="markdownIt-Anchor" href="#raidz-的存储效率"></a> RAIDZ 的存储效率</h2>
+<p>存储效率应理解为存储空间利用率，可以用以下表格表示：</p>
+<table>
+<thead>
+<tr>
+<th>RAID 类型</th>
+<th>存储效率</th>
+<th>校验设备数量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RAID0</td>
+<td>100%</td>
+<td>0</td>
+</tr>
+<tr>
+<td>RAID1</td>
+<td><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>1</mn><mi>n</mi></mfrac></mrow><annotation encoding="application/x-tex">\frac{1}{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></td>
+<td>0</td>
+</tr>
+<tr>
+<td>RAIDZ-1</td>
+<td><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow><mi>n</mi></mfrac></mrow><annotation encoding="application/x-tex">\frac{n-1}{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></td>
+<td>1</td>
+</tr>
+<tr>
+<td>RAIDZ-2</td>
+<td><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>n</mi><mo>−</mo><mn>2</mn></mrow><mi>n</mi></mfrac></mrow><annotation encoding="application/x-tex">\frac{n-2}{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></td>
+<td>2</td>
+</tr>
+<tr>
+<td>RAIDZ-3</td>
+<td><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>n</mi><mo>−</mo><mn>3</mn></mrow><mi>n</mi></mfrac></mrow><annotation encoding="application/x-tex">\frac{n-3}{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">3</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p>按照<a href="https://jrs-s.net/2015/02/06/zfs-you-should-use-mirror-vdevs-not-raidz/">ZFS: You should use mirror vdevs, not RAIDZ.</a> 文章介绍，更推荐使用<code>RAID1</code> 而不是<code>RAID5</code>，因为硬盘损坏时会导致文件系统的效率大幅降低。并且一个存储池里面最好不要超过8 块硬盘。</p>
+<h2 id="安装配置zfs"><a class="markdownIt-Anchor" href="#安装配置zfs"></a> 安装配置zfs</h2>
+<p>Ubuntu 系统并没有自带zfs 工具，需要自己安装<code>sudo apt-get install zfsutils-linux</code>，之后可以通过<code>sudo zpool</code> 命令使用。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 查看硬盘以及分区信息  </span>
+<span class="token function">sudo</span> <span class="token function">fdisk</span> <span class="token parameter variable">-l</span>    
+
+<span class="token comment"># zfs 组RAID1 可以是硬盘与硬盘、硬盘与分区  </span>
+<span class="token function">sudo</span> zpool create pool_name mirror /dev/sdb /dev/sdc<span class="token punctuation">[</span><span class="token number">1</span><span class="token operator">|</span><span class="token number">2</span><span class="token operator">|</span><span class="token number">3</span><span class="token punctuation">]</span>  
+<span class="token comment"># 查看zpool 状态  </span>
+<span class="token function">sudo</span> zpool status <span class="token punctuation">[</span>pool_name<span class="token punctuation">]</span>
+<span class="token comment"># DEGRADED 降级：有问题  </span>
+<span class="token comment"># ONLINE 正常  </span>
+<span class="token comment"># OFFLINE 离线       </span>
+<span class="token comment"># OFFLINE 离线       </span>
+<span class="token comment"># 查看详细信息</span>
+<span class="token function">sudo</span> zpool list <span class="token punctuation">[</span>pool_name<span class="token punctuation">]</span>
+
+<span class="token comment"># 建立测试文件  </span>
+<span class="token function">sudo</span> <span class="token function">dd</span> <span class="token assign-left variable">if</span><span class="token operator">=</span>/dev/zero <span class="token assign-left variable">of</span><span class="token operator">=</span>/pool_name/test.data <span class="token assign-left variable">bs</span><span class="token operator">=</span>1M <span class="token assign-left variable">count</span><span class="token operator">=</span><span class="token number">512</span>
+<span class="token comment"># 检查md5  </span>
+md5sum /pool_name/test.data  
+<span class="token comment"># 强行移除一块硬盘后，查看文件md5 并没有变化（证明没有损坏）</span>
+
+<span class="token comment"># 添加新硬盘后，可以替换损坏的硬盘</span>
+<span class="token function">sudo</span> zpool replace pool_name sdc1 sdd  <span class="token comment"># 可以省略/dev/sdd 这种写法  </span>
+<span class="token comment"># 更换新硬盘后注意观察数据同步的状态，在name 列有`replacing` 字样</span>
+
+<span class="token comment"># 如果需要对存储设备扩容，则需要在更新所有设备后执行</span>
+<span class="token function">sudo</span> zpool <span class="token builtin class-name">set</span> <span class="token assign-left variable">autoexpand</span><span class="token operator">=</span>on <span class="token punctuation">[</span>pool_name<span class="token punctuation">]</span>
+<span class="token function">sudo</span> zpool online <span class="token parameter variable">-e</span> pool_name sdb
+<span class="token function">sudo</span> zpool online <span class="token parameter variable">-e</span> pool_name sdd
+``<span class="token variable"><span class="token variable">`</span>  
+
+<span class="token comment">## 重装系统后恢复   </span>
+
+即使重装系统后，也可以通过以下命令恢复数据。  
+<span class="token variable">`</span></span>``bash  
+<span class="token comment"># 导入阵列，必须加-f 参数</span>
+<span class="token function">sudo</span> zpool <span class="token function">import</span> <span class="token parameter variable">-f</span> pool_name   
+<span class="token comment"># 上线阵列</span>
+<span class="token function">sudo</span> online <span class="token punctuation">[</span>-e<span class="token punctuation">]</span> pool_name /dev/sdX  
+<span class="token comment"># 清除错误状态   </span>
+<span class="token function">sudo</span> zpool <span class="token function">clear</span> pool_name  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>文中的命令摘自<a href="https://www.pocketdigi.com/article/linux_zfs_raid1_mirror_replace.html">Ubuntu 22.04 环境 zfs raid1 mirror配置，在线无损替换故障硬盘</a>，另外<code>mdadm</code> 工具也可以配置软RAID。但即使配置了RAID 也需要设置数据的定期备份，这一点也是很重要的。</p>
+]]></content>
+      <categories>
+        <category>运维</category>
+      </categories>
+      <tags>
+        <tag>Ubuntu</tag>
+        <tag>zfs</tag>
+        <tag>raid</tag>
+        <tag>backup</tag>
       </tags>
   </entry>
 </search>
