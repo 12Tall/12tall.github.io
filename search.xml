@@ -994,19 +994,15 @@ md5sum /pool_name/test.data
 <span class="token comment"># 如果需要对存储设备扩容，则需要在更新所有设备后执行</span>
 <span class="token function">sudo</span> zpool <span class="token builtin class-name">set</span> <span class="token assign-left variable">autoexpand</span><span class="token operator">=</span>on <span class="token punctuation">[</span>pool_name<span class="token punctuation">]</span>
 <span class="token function">sudo</span> zpool online <span class="token parameter variable">-e</span> pool_name sdb
-<span class="token function">sudo</span> zpool online <span class="token parameter variable">-e</span> pool_name sdd
-``<span class="token variable"><span class="token variable">`</span>  
-
-<span class="token comment">## 重装系统后恢复   </span>
-
-即使重装系统后，也可以通过以下命令恢复数据。  
-<span class="token variable">`</span></span>``bash  
-<span class="token comment"># 导入阵列，必须加-f 参数</span>
+<span class="token function">sudo</span> zpool online <span class="token parameter variable">-e</span> pool_name sdd<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="重装系统后恢复"><a class="markdownIt-Anchor" href="#重装系统后恢复"></a> 重装系统后恢复</h2>
+<p>即使重装系统后，也可以通过以下命令恢复数据。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 导入阵列，必须加-f 参数</span>
 <span class="token function">sudo</span> zpool <span class="token function">import</span> <span class="token parameter variable">-f</span> pool_name   
 <span class="token comment"># 上线阵列</span>
 <span class="token function">sudo</span> online <span class="token punctuation">[</span>-e<span class="token punctuation">]</span> pool_name /dev/sdX  
 <span class="token comment"># 清除错误状态   </span>
-<span class="token function">sudo</span> zpool <span class="token function">clear</span> pool_name  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token function">sudo</span> zpool <span class="token function">clear</span> pool_name  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>文中的命令摘自<a href="https://www.pocketdigi.com/article/linux_zfs_raid1_mirror_replace.html">Ubuntu 22.04 环境 zfs raid1 mirror配置，在线无损替换故障硬盘</a>，另外<code>mdadm</code> 工具也可以配置软RAID。但即使配置了RAID 也需要设置数据的定期备份，这一点也是很重要的。</p>
 ]]></content>
       <categories>
