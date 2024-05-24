@@ -26,19 +26,19 @@
 <meta property="og:site_name" content="12Tall">
 <meta property="og:description" content="Qt 似乎读作&#x2F;ˈkjuːt&#x2F;。如果不用QML 的话，在适当调整导入包后，PySide6 打包出的文件体积并不大。个人在只用到了最基础的功能，本文仅作Cheatsheet 使用。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/widgets/01_demo_click_me.png">
-<meta property="og:image" content="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/widgets/02_demo_new_click_me.png">
-<meta property="og:image" content="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/widgets/03_layout_horizon.png">
-<meta property="og:image" content="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/widgets/04_layout_grid.png">
-<meta property="og:image" content="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/widgets/05_data_binding.png">
-<meta property="og:image" content="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/widgets/06_widget_tab.png">
+<meta property="og:image" content="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/01_demo_click_me.png">
+<meta property="og:image" content="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/02_demo_new_click_me.png">
+<meta property="og:image" content="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/03_layout_horizon.png">
+<meta property="og:image" content="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/04_layout_grid.png">
+<meta property="og:image" content="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/05_data_binding.png">
+<meta property="og:image" content="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/06_widget_tab.png">
 <meta property="article:published_time" content="2024-05-17T05:38:41.000Z">
-<meta property="article:modified_time" content="2024-05-21T23:58:09.391Z">
+<meta property="article:modified_time" content="2024-05-23T07:25:38.055Z">
 <meta property="article:author" content="12Tall">
 <meta property="article:tag" content="python">
 <meta property="article:tag" content="qt">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/widgets/01_demo_click_me.png">
+<meta name="twitter:image" content="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/01_demo_click_me.png">
 
 
 <link rel="canonical" href="https://12tall.githb.io/2024/05/17/gui/pyside6/pyside6/">
@@ -170,18 +170,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">20</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -252,7 +252,16 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-05-22 07:58:09" itemprop="dateModified" datetime="2024-05-22T07:58:09+08:00">2024-05-22</time>
+      <time title="修改时间：2024-05-23 15:25:38" itemprop="dateModified" datetime="2024-05-23T15:25:38+08:00">2024-05-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
     </span>
 
   
@@ -299,7 +308,7 @@ win<span class="token punctuation">.</span>show<span class="token punctuation">(
 <span class="token comment"># 消息循环</span>
 app<span class="token punctuation">.</span><span class="token keyword">exec</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>运行脚本结果如下：<br />
-<img src="widgets/01_demo_click_me.png" alt="01_demo_click_me.png" /></p>
+<img src="01_demo_click_me.png" alt="01_demo_click_me.png" /></p>
 <h3 id="面向对象"><a class="markdownIt-Anchor" href="#面向对象"></a> 面向对象</h3>
 <p>鉴于上面的代码不够优雅，于是可以采用面向对象的方法进行封装：</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> sys
@@ -336,7 +345,7 @@ win<span class="token punctuation">.</span>show<span class="token punctuation">(
 <span class="token comment"># 消息循环</span>
 app<span class="token punctuation">.</span><span class="token keyword">exec</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>运行脚本结果如下：<br />
-<img src="widgets/02_demo_new_click_me.png" alt="02_demo_new_click_me.png" /></p>
+<img src="02_demo_new_click_me.png" alt="02_demo_new_click_me.png" /></p>
 <h2 id="layout-布局"><a class="markdownIt-Anchor" href="#layout-布局"></a> Layout 布局</h2>
 <h3 id="qhvboxlayout"><a class="markdownIt-Anchor" href="#qhvboxlayout"></a> QH(V)BoxLayout</h3>
 <p>以<code>QHBoxLayout</code> 横向布局为例，下面代码仅包含窗口布局的的实现：</p>
@@ -365,7 +374,7 @@ app<span class="token punctuation">.</span><span class="token keyword">exec</spa
         layout<span class="token punctuation">.</span>addWidget<span class="token punctuation">(</span>QPushButton<span class="token punctuation">(</span><span class="token string">"Click Me3"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> stretch<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token comment"># 随父窗口拉伸，整数是拉伸量占比</span>
         <span class="token comment"># 组件只要提前声明就好，何时使用影响不大</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>效果如下：<br />
-<img src="widgets/03_layout_horizon.png" alt="03_layout_horizon.png" /></p>
+<img src="03_layout_horizon.png" alt="03_layout_horizon.png" /></p>
 <h3 id="qgridlayout"><a class="markdownIt-Anchor" href="#qgridlayout"></a> QGridLayout</h3>
 <p>在界面比较复杂的情况下，优先选择栅格布局：</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">MyWindow</span><span class="token punctuation">(</span>QMainWindow<span class="token punctuation">)</span><span class="token punctuation">:</span>
@@ -403,7 +412,7 @@ app<span class="token punctuation">.</span><span class="token keyword">exec</spa
 
         self<span class="token punctuation">.</span>_widget<span class="token punctuation">.</span>setLayout<span class="token punctuation">(</span>layout<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>效果如下：<br />
-<img src="widgets/04_layout_grid.png" alt="widgets/04_layout_grid.png" /></p>
+<img src="04_layout_grid.png" alt="04_layout_grid.png" /></p>
 <h2 id="数据绑定"><a class="markdownIt-Anchor" href="#数据绑定"></a> 数据绑定</h2>
 <p>可以通过<code>QAbstractItemModel</code> 结合视图进行数据的绑定，</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> sys
@@ -516,7 +525,7 @@ window <span class="token operator">=</span> MainWindow<span class="token punctu
 window<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
 sys<span class="token punctuation">.</span>exit<span class="token punctuation">(</span>app<span class="token punctuation">.</span><span class="token keyword">exec</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>效果如下：<br />
-<img src="widgets/05_data_binding.png" alt="05_data_binding.png" /></p>
+<img src="05_data_binding.png" alt="05_data_binding.png" /></p>
 <h2 id="组件"><a class="markdownIt-Anchor" href="#组件"></a> 组件</h2>
 <h3 id="tabwidget"><a class="markdownIt-Anchor" href="#tabwidget"></a> TabWidget</h3>
 <p>可以把<code>TabWidget</code> 看作是一个<code>widgets</code> 的集合，根据插入的顺序和标题自动生成标签和内容：</p>
@@ -560,7 +569,7 @@ sys<span class="token punctuation">.</span>exit<span class="token punctuation">(
     <span class="token keyword">def</span> <span class="token function">on_button_click</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
         <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"按钮被点击了"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>效果如下：<br />
-<img src="widgets/06_widget_tab.png" alt="06_widget_tab.png" /></p>
+<img src="06_widget_tab.png" alt="06_widget_tab.png" /></p>
 <h2 id="nuitka-打包"><a class="markdownIt-Anchor" href="#nuitka-打包"></a> Nuitka 打包</h2>
 <p>下面是必选参数，最简单的配置：</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">nuitka app.py 
@@ -657,6 +666,9 @@ sys<span class="token punctuation">.</span>exit<span class="token punctuation">(
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2024/05/23/gui/pyside6/pyside6-tabel-delegate/" rel="next" title="pyside6-tabel-delegate">
+                  pyside6-tabel-delegate <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>
