@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="/lib/@fortawesome/fontawesome-free/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/animate.css/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.githb.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":true,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":{"gitalk":{"order":-2}}},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Python+Scapy打造网络流量分析监控工具的源码阅读">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scapy 抓包分析代码阅读">
+<meta property="og:url" content="https://12tall.githb.io/2024/05/26/notation/scapy/traffic_analyzer/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="Python+Scapy打造网络流量分析监控工具的源码阅读">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-05-26T07:33:23.000Z">
+<meta property="article:modified_time" content="2024-05-26T09:15:39.593Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="scapy">
+<meta property="article:tag" content="sniff">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://12tall.githb.io/2024/05/26/notation/scapy/traffic_analyzer/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.githb.io/2024/05/26/notation/scapy/traffic_analyzer/","path":"2024/05/26/notation/scapy/traffic_analyzer/","title":"Scapy 抓包分析代码阅读"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Scapy 抓包分析代码阅读 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+
+<!--
+<script defer src="https://vercount.one/js"></script>
+<script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>
+-->
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">蝉噪林逾静 鸟鸣山更幽</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#mainpy"><span class="nav-number">1.</span> <span class="nav-text"> Main.py</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#configpy"><span class="nav-number">1.1.</span> <span class="nav-text"> config.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#utilpy"><span class="nav-number">1.2.</span> <span class="nav-text"> util.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dbpy"><span class="nav-number">1.3.</span> <span class="nav-text"> db.py</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#protocolpy"><span class="nav-number">2.</span> <span class="nav-text"> protocol.py</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dnspy"><span class="nav-number">2.1.</span> <span class="nav-text"> dns.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tcppy"><span class="nav-number">2.2.</span> <span class="nav-text"> tcp.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#udppy"><span class="nav-number">2.3.</span> <span class="nav-text"> udp.py</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/img/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.githb.io/2024/05/26/notation/scapy/traffic_analyzer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/img/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Scapy 抓包分析代码阅读 | 12Tall">
+      <meta itemprop="description" content="Python+Scapy打造网络流量分析监控工具的源码阅读">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Scapy 抓包分析代码阅读
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-05-26 15:33:23 / 修改时间：17:15:39" itemprop="dateCreated datePublished" datetime="2024-05-26T15:33:23+08:00">2024-05-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">安全</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%AE%89%E5%85%A8/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+            <div class="post-description">Python+Scapy打造网络流量分析监控工具的源码阅读</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><span id="more"></span>  
+<p>通过阅读<a target="_blank" rel="noopener" href="https://github.com/kidultff/TrafficAnalyzer">源码</a>，可以学到以下有意思的知识点：</p>
+<ol>
+<li>可以通过<code>queue</code> 和<code>thread</code> 库来进行数据处理（生产者-消费者模式）</li>
+<li><code>@functools.lru_cache(n)</code> 装饰器缓存函数执行结果，在某些场景下比较比较有用（科学计算时是否也可以用？）</li>
+<li><code>scapy</code> 抓包以及数据的处理（内置数据结构）</li>
+<li>根据数据报文特征判断<code>Application</code> 信息（能否添加从<code>session</code> 提取）</li>
+<li><a target="_blank" rel="noopener" href="https://www.openappfilter.com/#/">Open App Filter</a> 特征库</li>
+</ol>
+<h2 id="mainpy"><a class="markdownIt-Anchor" href="#mainpy"></a> <a target="_blank" rel="noopener" href="http://Main.py">Main.py</a></h2>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> scapy<span class="token punctuation">.</span><span class="token builtin">all</span> <span class="token keyword">import</span> <span class="token operator">*</span>
+<span class="token keyword">import</span> config
+<span class="token keyword">import</span> db
+<span class="token keyword">import</span> util
+
+<span class="token comment"># 创建数据队列</span>
+<span class="token keyword">import</span> queue
+pkt_queue <span class="token operator">=</span> queue<span class="token punctuation">.</span>Queue<span class="token punctuation">(</span><span class="token punctuation">)</span>  
+
+<span class="token keyword">def</span> <span class="token function">_sniff</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
+    _sniff 抓取数据表，打上时间戳并存储到数据包的队列
+    """</span>
+    <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+        sniff<span class="token punctuation">(</span>iface<span class="token operator">=</span>config<span class="token punctuation">.</span>interface<span class="token punctuation">,</span> prn<span class="token operator">=</span><span class="token keyword">lambda</span> pkt<span class="token punctuation">:</span> pkt_queue<span class="token punctuation">.</span>put<span class="token punctuation">(</span><span class="token punctuation">(</span>pkt<span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span>time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> count<span class="token operator">=</span><span class="token number">100</span><span class="token punctuation">)</span>
+        <span class="token comment"># 监听端口</span>
+
+
+<span class="token keyword">def</span> <span class="token function">deal_pkt</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
+    deal_pkt 分析数据包
+    """</span>
+    <span class="token keyword">from</span> protocol <span class="token keyword">import</span> dns<span class="token punctuation">,</span> tcp<span class="token punctuation">,</span> udp<span class="token punctuation">,</span> app
+
+    cnt <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+        <span class="token keyword">try</span><span class="token punctuation">:</span>
+            pkt<span class="token punctuation">,</span> timestamp <span class="token operator">=</span> pkt_queue<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token keyword">if</span> <span class="token keyword">not</span> dns<span class="token punctuation">.</span>read<span class="token punctuation">(</span>pkt<span class="token punctuation">,</span> timestamp<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                udp<span class="token punctuation">.</span>read<span class="token punctuation">(</span>pkt<span class="token punctuation">,</span> timestamp<span class="token punctuation">)</span>
+                tcp<span class="token punctuation">.</span>read<span class="token punctuation">(</span>pkt<span class="token punctuation">,</span> timestamp<span class="token punctuation">)</span>
+        <span class="token keyword">except</span> Exception <span class="token keyword">as</span> e<span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"[deal_pkt] "</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    util<span class="token punctuation">.</span>add_thread<span class="token punctuation">(</span>deal_pkt<span class="token punctuation">)</span>
+    util<span class="token punctuation">.</span>add_thread<span class="token punctuation">(</span>_sniff<span class="token punctuation">)</span>
+    util<span class="token punctuation">.</span>start_all_thread<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">try</span><span class="token punctuation">:</span>
+    <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+        time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"queue size: &#123;&#125; , TCP sess: &#123;&#125;, UDP sess: &#123;&#125;, APP sess: &#123;&#125;"</span>
+              <span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>pkt_queue<span class="token punctuation">.</span>qsize<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>tcp<span class="token punctuation">.</span>sessions<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>udp<span class="token punctuation">.</span>sessions<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>app<span class="token punctuation">.</span>sessions<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">except</span> KeyboardInterrupt<span class="token punctuation">:</span>
+    db<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Bye"</span><span class="token punctuation">)</span>
+    exit<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="configpy"><a class="markdownIt-Anchor" href="#configpy"></a> <a target="_blank" rel="noopener" href="http://config.py">config.py</a></h3>
+<p><a target="_blank" rel="noopener" href="http://config.py">config.py</a> 主要包含一些配置信息：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">mysql_settings <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+    <span class="token string">"host"</span><span class="token punctuation">:</span> <span class="token string">"127.0.0.1"</span><span class="token punctuation">,</span>
+    <span class="token string">"user"</span><span class="token punctuation">:</span> <span class="token string">"root"</span><span class="token punctuation">,</span>
+    <span class="token string">"password"</span><span class="token punctuation">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+    <span class="token string">"database"</span><span class="token punctuation">:</span> <span class="token string">""</span>
+<span class="token punctuation">&#125;</span>
+
+interface <span class="token operator">=</span> <span class="token string">"eth0"</span>
+tcp_timeout <span class="token operator">=</span> <span class="token number">600</span>
+udp_timeout <span class="token operator">=</span> <span class="token number">600</span>
+app_timeout <span class="token operator">=</span> <span class="token number">500</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="utilpy"><a class="markdownIt-Anchor" href="#utilpy"></a> <a target="_blank" rel="noopener" href="http://util.py">util.py</a></h3>
+<p>因为抓包和处理包都需要在独立的线程中执行，<a target="_blank" rel="noopener" href="http://util.py">util.py</a> 主要包含线程相关的方法：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> time
+<span class="token keyword">from</span> threading <span class="token keyword">import</span> Thread
+
+threads <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>  <span class="token comment"># 线程函数容器</span>
+threads_status <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token comment"># 线程容器</span>
+crontab <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+
+
+<span class="token keyword">def</span> <span class="token function">add_thread</span><span class="token punctuation">(</span>func<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
+    add_thread 添加线程函数
+    """</span>
+    <span class="token keyword">global</span> threads
+    threads<span class="token punctuation">.</span>append<span class="token punctuation">(</span>func<span class="token punctuation">)</span>
+
+
+<span class="token keyword">def</span> <span class="token function">start_all_thread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
+    start_all_thread 将函数组装为线程，并执行
+    """</span>
+    <span class="token keyword">for</span> thread_func <span class="token keyword">in</span> threads<span class="token punctuation">:</span>
+        <span class="token comment"># 组装线程</span>
+        threads_status<span class="token punctuation">.</span>append<span class="token punctuation">(</span>Thread<span class="token punctuation">(</span>target<span class="token operator">=</span>thread_func<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">for</span> thread <span class="token keyword">in</span> threads_status<span class="token punctuation">:</span>
+        <span class="token comment"># 执行线程</span>
+        thread<span class="token punctuation">.</span>start<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">def</span> <span class="token function">add_cron</span><span class="token punctuation">(</span>func<span class="token punctuation">,</span> intval<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
+    add_cron 添加定时任务：方法、周期
+    """</span>
+    crontab<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+        <span class="token string">"func"</span><span class="token punctuation">:</span> func<span class="token punctuation">,</span>
+        <span class="token string">"intval"</span><span class="token punctuation">:</span> intval<span class="token punctuation">,</span>
+        <span class="token string">"_"</span><span class="token punctuation">:</span> <span class="token number">0</span>  <span class="token comment"># 计时器，用于判断是否到达执行周期</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">def</span> <span class="token function">crond</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
+    周期性执行定时任务，每秒轮询一次
+    """</span>
+    <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+        time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+        <span class="token comment"># ...</span>
+
+add_thread<span class="token punctuation">(</span>crond<span class="token punctuation">)</span>  <span class="token comment"># 程序初始化时就添加定时任务的执行器</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="dbpy"><a class="markdownIt-Anchor" href="#dbpy"></a> <a target="_blank" rel="noopener" href="http://db.py">db.py</a></h3>
+<p>因为抓包的数据要存储在数据库中，<a target="_blank" rel="noopener" href="http://db.py">db.py</a> 主要是封装的数据库操作</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">query</span><span class="token punctuation">(</span>sql<span class="token punctuation">,</span> callback<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
+    query 并不会立即查询数据库，而是先暂存在一个全局变量
+    """</span>
+    <span class="token keyword">global</span> sqls
+    lock<span class="token punctuation">.</span>acquire<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    sqls<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token punctuation">(</span>sql<span class="token punctuation">,</span> callback<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    lock<span class="token punctuation">.</span>release<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">def</span> <span class="token function">autocommit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
+    autocommit 每秒自动提交一次查询
+    """</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="protocolpy"><a class="markdownIt-Anchor" href="#protocolpy"></a> <a target="_blank" rel="noopener" href="http://protocol.py">protocol.py</a></h2>
+<p><a target="_blank" rel="noopener" href="http://protocol.py">protocol.py</a> 预先定义了流量的解析规则，包含DNS、TCP、UDP 和APP 分析等。<a target="_blank" rel="noopener" href="http://xn--main-ft4g.py">在main.py</a> 中可以发现<code>read(pkt, timestamp)</code> 方法是关键入口：</p>
+<h3 id="dnspy"><a class="markdownIt-Anchor" href="#dnspy"></a> <a target="_blank" rel="noopener" href="http://dns.py">dns.py</a></h3>
+<p>scapy 中预设了DNS 相关的数据结构：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> functools
+
+<span class="token keyword">import</span> db
+<span class="token keyword">from</span> scapy<span class="token punctuation">.</span>layers<span class="token punctuation">.</span>dns <span class="token keyword">import</span> DNSRR<span class="token punctuation">,</span> DNSQR<span class="token punctuation">,</span> DNS
+<span class="token keyword">from</span> scapy<span class="token punctuation">.</span>layers<span class="token punctuation">.</span>l2 <span class="token keyword">import</span> Ether  
+
+<span class="token keyword">def</span> <span class="token function">byte2str</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""字节转字符串"""</span>
+    <span class="token keyword">return</span> s <span class="token keyword">if</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>s<span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">)</span> <span class="token keyword">else</span> s<span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">deal_dns_query</span><span class="token punctuation">(</span>pkt<span class="token punctuation">,</span> timestamp<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># clean_dns 函数的作用是去掉域名最后的`.`</span>
+    qname <span class="token operator">=</span> clean_dns<span class="token punctuation">(</span>byte2str<span class="token punctuation">(</span>pkt<span class="token punctuation">[</span>DNSQR<span class="token punctuation">]</span><span class="token punctuation">.</span>qname<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 数据包的DNS 信息</span>
+    reg_dns_rev_cache<span class="token punctuation">(</span>qname<span class="token punctuation">,</span> <span class="token boolean">None</span><span class="token punctuation">)</span>
+    res <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+        <span class="token string">"client_mac"</span><span class="token punctuation">:</span> pkt<span class="token punctuation">[</span>Ether<span class="token punctuation">]</span><span class="token punctuation">.</span>src<span class="token punctuation">,</span> <span class="token comment"># 数据包的以太网信息</span>
+        <span class="token string">"domain"</span><span class="token punctuation">:</span> qname<span class="token punctuation">,</span>
+        <span class="token string">"time"</span><span class="token punctuation">:</span> timestamp
+    <span class="token punctuation">&#125;</span>
+    sql <span class="token operator">=</span> dns_query_sql<span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span><span class="token operator">**</span>res<span class="token punctuation">)</span>
+    db<span class="token punctuation">.</span>query<span class="token punctuation">(</span>sql<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token boolean">True</span>
+
+
+<span class="token keyword">def</span> <span class="token function">deal_dns_response</span><span class="token punctuation">(</span>pkt<span class="token punctuation">,</span> timestamp<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>pkt<span class="token punctuation">[</span>DNS<span class="token punctuation">]</span><span class="token punctuation">.</span>ancount<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""        
+        ancount 是 DNS 数据包中的一个字段，用于指示 DNS 响应中包含的资源记录（Answer Records）的数量。
+        """</span>
+        dnsrr <span class="token operator">=</span> pkt<span class="token punctuation">[</span>DNS<span class="token punctuation">]</span><span class="token punctuation">.</span>an<span class="token punctuation">[</span>i<span class="token punctuation">]</span>
+        rdata <span class="token operator">=</span> clean_dns<span class="token punctuation">(</span>byte2str<span class="token punctuation">(</span>dnsrr<span class="token punctuation">.</span>rdata<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        rrname <span class="token operator">=</span> clean_dns<span class="token punctuation">(</span>byte2str<span class="token punctuation">(</span>dnsrr<span class="token punctuation">.</span>rrname<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        reg_dns_rev_cache<span class="token punctuation">(</span>rdata<span class="token punctuation">,</span> rrname<span class="token punctuation">)</span>
+        res <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+            <span class="token string">"type"</span><span class="token punctuation">:</span> pkt<span class="token punctuation">[</span>DNS<span class="token punctuation">]</span><span class="token punctuation">.</span>an<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token builtin">type</span><span class="token punctuation">,</span>
+            <span class="token string">"client_mac"</span><span class="token punctuation">:</span> pkt<span class="token punctuation">[</span>Ether<span class="token punctuation">]</span><span class="token punctuation">.</span>dst<span class="token punctuation">,</span>
+            <span class="token string">"domain"</span><span class="token punctuation">:</span> rrname<span class="token punctuation">,</span>
+            <span class="token string">"rdata"</span><span class="token punctuation">:</span> rdata<span class="token punctuation">,</span>
+            <span class="token string">"time"</span><span class="token punctuation">:</span> timestamp
+        <span class="token punctuation">&#125;</span>
+        sql <span class="token operator">=</span> dns_response_sql<span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span><span class="token operator">**</span>res<span class="token punctuation">)</span>
+        db<span class="token punctuation">.</span>query<span class="token punctuation">(</span>sql<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token boolean">True</span>
+
+<span class="token keyword">def</span> <span class="token function">read</span><span class="token punctuation">(</span>pkt<span class="token punctuation">,</span> timestamp<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
+    read 判断是否为DNS 包，如果不是则返回False，继续判断是否为TCP 或UDP  
+    """</span>
+    <span class="token keyword">try</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> pkt<span class="token punctuation">.</span>haslayer<span class="token punctuation">(</span>DNS<span class="token punctuation">)</span><span class="token punctuation">:</span> 
+            <span class="token keyword">return</span> <span class="token boolean">False</span>
+        <span class="token keyword">if</span> DNSQR <span class="token keyword">in</span> pkt <span class="token keyword">and</span> pkt<span class="token punctuation">.</span>dport <span class="token operator">==</span> <span class="token number">53</span><span class="token punctuation">:</span>
+            <span class="token comment"># 如果是包含查询的DNS 包</span>
+            <span class="token keyword">return</span> deal_dns_query<span class="token punctuation">(</span>pkt<span class="token punctuation">,</span> timestamp<span class="token punctuation">)</span>
+        <span class="token keyword">elif</span> DNSRR <span class="token keyword">in</span> pkt <span class="token keyword">and</span> pkt<span class="token punctuation">.</span>sport <span class="token operator">==</span> <span class="token number">53</span><span class="token punctuation">:</span>
+            <span class="token comment"># 如果是包含响应的DNS 包</span>
+            <span class="token keyword">return</span> deal_dns_response<span class="token punctuation">(</span>pkt<span class="token punctuation">,</span> timestamp<span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+    <span class="token keyword">except</span> Exception <span class="token keyword">as</span> e<span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"[DNS] "</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里有一个很有意思的装饰器<code>@functools.lru_cache(n)</code>，用于缓存函数的执行结果。如果传入的参数相同，则直接返回结果，从而加速程序执行。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token decorator annotation punctuation">@functools<span class="token punctuation">.</span>lru_cache</span><span class="token punctuation">(</span><span class="token number">10000</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">_dns_reverse</span><span class="token punctuation">(</span>rdata<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> rdata <span class="token operator">==</span> g_rdata<span class="token punctuation">:</span>
+        <span class="token keyword">return</span> g_qdata
+    sql <span class="token operator">=</span> <span class="token string">"SELECT `domain` FROM `log_dns` WHERE `rdata`='&#123;&#125;' ORDER BY `id` DESC LIMIT 1"</span>
+    <span class="token keyword">if</span> g_dns_reverse_db_cur<span class="token punctuation">.</span>execute<span class="token punctuation">(</span>sql<span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>rdata<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> g_dns_reverse_db_cur<span class="token punctuation">.</span>fetchall<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    <span class="token keyword">return</span> <span class="token boolean">None</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="tcppy"><a class="markdownIt-Anchor" href="#tcppy"></a> <a target="_blank" rel="noopener" href="http://tcp.py">tcp.py</a></h3>
+<p>在处理tcp 报文时需要注意到session 的概念：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">deal_tcp</span><span class="token punctuation">(</span>pkt<span class="token punctuation">,</span> timestamp<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># 基本的tcp 信息</span>
+    client_mac <span class="token operator">=</span> pkt<span class="token punctuation">[</span>Ether<span class="token punctuation">]</span><span class="token punctuation">.</span>src
+    <span class="token comment"># ...</span>
+    sequin_str <span class="token operator">=</span> <span class="token string">','</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token punctuation">[</span>ip_src<span class="token punctuation">,</span> port_src<span class="token punctuation">,</span> ip_dst<span class="token punctuation">,</span> port_dst<span class="token punctuation">]</span><span class="token punctuation">)</span>  
+    rev_sequin_str <span class="token operator">=</span> <span class="token string">','</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token punctuation">[</span>ip_dst<span class="token punctuation">,</span> port_dst<span class="token punctuation">,</span> ip_src<span class="token punctuation">,</span> port_src<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    seq_now <span class="token operator">=</span> pkt<span class="token punctuation">[</span><span class="token string">"TCP"</span><span class="token punctuation">]</span><span class="token punctuation">.</span>seq
+
+    <span class="token comment"># 会话已存在（只要源、目的端口一致即可）</span>
+    <span class="token keyword">if</span> sequin_str <span class="token keyword">in</span> sessions<span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""请求会话包"""</span>
+        pkt_dir <span class="token operator">=</span> <span class="token number">1</span>
+        <span class="token keyword">if</span> pkt<span class="token punctuation">[</span><span class="token string">'TCP'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>flags <span class="token operator">==</span> <span class="token string">'S'</span><span class="token punctuation">:</span>
+            <span class="token comment"># pkt['TCP'].flags == 'S' 用于检查数据包中的 TCP 标志是否为 SYN </span>
+            <span class="token comment"># 如果是的话表示上一次的会话已经断开，应当中心建立新的会话</span>
+            write_db<span class="token punctuation">(</span>sessions<span class="token punctuation">[</span>sequin_str<span class="token punctuation">]</span><span class="token punctuation">)</span>
+            <span class="token keyword">del</span> sessions<span class="token punctuation">[</span>sequin_str<span class="token punctuation">]</span>
+            <span class="token keyword">return</span> deal_tcp<span class="token punctuation">(</span>pkt<span class="token punctuation">,</span> timestamp<span class="token punctuation">)</span>
+    <span class="token keyword">elif</span> rev_sequin_str <span class="token keyword">in</span> sessions<span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""响应会话包"""</span>
+        sequin_str <span class="token operator">=</span> rev_sequin_str
+        pkt_dir <span class="token operator">=</span> <span class="token number">2</span>
+        <span class="token keyword">if</span> pkt<span class="token punctuation">[</span><span class="token string">'TCP'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>flags <span class="token operator">==</span> <span class="token string">'S'</span><span class="token punctuation">:</span>
+            write_db<span class="token punctuation">(</span>sessions<span class="token punctuation">[</span>sequin_str<span class="token punctuation">]</span><span class="token punctuation">)</span>
+            <span class="token keyword">del</span> sessions<span class="token punctuation">[</span>sequin_str<span class="token punctuation">]</span>
+            <span class="token keyword">return</span> deal_tcp<span class="token punctuation">(</span>pkt<span class="token punctuation">,</span> timestamp<span class="token punctuation">)</span>
+
+    <span class="token comment"># 创建新的会话记录</span>
+    <span class="token keyword">elif</span> pkt<span class="token punctuation">[</span><span class="token string">'TCP'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>flags <span class="token operator">==</span> <span class="token string">'S'</span><span class="token punctuation">:</span>
+        pkt_dir <span class="token operator">=</span> <span class="token number">1</span>
+        <span class="token comment"># item 是预设的数据结构，包含tcp 报文信息</span>
+        sessions<span class="token punctuation">[</span>sequin_str<span class="token punctuation">]</span> <span class="token operator">=</span> copy<span class="token punctuation">.</span>deepcopy<span class="token punctuation">(</span>item<span class="token punctuation">)</span>
+        sessions<span class="token punctuation">[</span>sequin_str<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"client_mac"</span><span class="token punctuation">]</span> <span class="token operator">=</span> client_mac
+        <span class="token comment"># ... 报文信息</span>
+        sessions<span class="token punctuation">[</span>sequin_str<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"time_start"</span><span class="token punctuation">]</span> <span class="token operator">=</span> timestamp
+        host <span class="token operator">=</span> dns<span class="token punctuation">.</span>dns_reverse<span class="token punctuation">(</span>ip_dst<span class="token punctuation">)</span>  <span class="token comment"># 根据IP 反查域名</span>
+        <span class="token keyword">if</span> host <span class="token operator">!=</span> ip_dst<span class="token punctuation">:</span>  <span class="token comment"># 并不一定准确</span>
+            sessions<span class="token punctuation">[</span>sequin_str<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"host"</span><span class="token punctuation">]</span> <span class="token operator">=</span> host
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""
+        在程序启动前就建立的tcp 链接不做处理
+        """</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+
+    session <span class="token operator">=</span> sessions<span class="token punctuation">[</span>sequin_str<span class="token punctuation">]</span>
+
+    <span class="token comment"># 检查应用类型，是根据报文判断的，而不是根据session 的内容判断</span>
+    <span class="token keyword">if</span> pkt_dir <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">:</span>
+        tcp_features <span class="token operator">=</span> app<span class="token punctuation">.</span>get_features<span class="token punctuation">(</span><span class="token string">"TCP"</span><span class="token punctuation">)</span>  <span class="token comment"># 获取app 的特征信息</span>
+        <span class="token keyword">for</span> feature <span class="token keyword">in</span> tcp_features<span class="token punctuation">:</span>
+            app_name<span class="token punctuation">,</span> sport<span class="token punctuation">,</span> dport<span class="token punctuation">,</span> host<span class="token punctuation">,</span> dic <span class="token operator">=</span> feature
+            <span class="token triple-quoted-string string">"""
+            # app_name:[proto;sport;dport;host;dict]
+            # dict，以00:02 为例，表示tcp 载荷的int(00) 位置的数据为int(02, 16) 
+            # -1:03 表示以0x03 结尾
+            QQ:       [udp;  ;    ;     ;    00:02|-1:03,
+                       tcp;  ;    ;     ;    02:02|-1:03,
+                       tcp;  ;14000;    ;               ,
+                       tcp;  ;8080;     ;    00:ca|01:3c,
+                       tcp;  ;    ;     ;    00:00|01:00|02:00|03:15]
+            """</span>
+            flag <span class="token operator">=</span> <span class="token boolean">True</span>
+            <span class="token keyword">if</span> sport <span class="token operator">!=</span> <span class="token string">''</span> <span class="token keyword">and</span> sport <span class="token operator">!=</span> <span class="token builtin">str</span><span class="token punctuation">(</span>session<span class="token punctuation">[</span><span class="token string">'port_src'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token keyword">continue</span>
+            <span class="token keyword">if</span> dport <span class="token operator">!=</span> <span class="token string">''</span> <span class="token keyword">and</span> dport <span class="token operator">!=</span> <span class="token builtin">str</span><span class="token punctuation">(</span>session<span class="token punctuation">[</span><span class="token string">'port_dst'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token keyword">continue</span>
+            <span class="token keyword">if</span> host <span class="token operator">!=</span> <span class="token string">''</span> <span class="token keyword">and</span> host <span class="token keyword">not</span> <span class="token keyword">in</span> session<span class="token punctuation">[</span><span class="token string">'host'</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+                <span class="token keyword">continue</span>
+            flag <span class="token operator">=</span> <span class="token boolean">True</span>
+            <span class="token keyword">try</span><span class="token punctuation">:</span>
+                <span class="token keyword">for</span> d <span class="token keyword">in</span> dic<span class="token punctuation">:</span>
+                    <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>d<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">2</span> <span class="token keyword">and</span> pkt<span class="token punctuation">[</span><span class="token string">'TCP'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>payload<span class="token punctuation">.</span>load<span class="token punctuation">[</span><span class="token builtin">int</span><span class="token punctuation">(</span>d<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">]</span> <span class="token operator">!=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>d<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                        flag <span class="token operator">=</span> <span class="token boolean">False</span>
+                        <span class="token keyword">break</span>
+            <span class="token keyword">except</span><span class="token punctuation">:</span>
+                flag <span class="token operator">=</span> <span class="token boolean">False</span>
+            <span class="token keyword">if</span> flag<span class="token punctuation">:</span>
+                app<span class="token punctuation">.</span>add<span class="token punctuation">(</span>client_mac<span class="token punctuation">,</span> app_name<span class="token punctuation">,</span> timestamp<span class="token punctuation">,</span> session<span class="token punctuation">[</span><span class="token string">"host"</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+                <span class="token keyword">break</span>
+
+    <span class="token comment"># 检查DUP，检查是否为Duplicated 报文  </span>
+    <span class="token keyword">if</span> seq_now <span class="token keyword">in</span> session<span class="token punctuation">[</span><span class="token string">'seq'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>pkt_dir<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+
+    <span class="token comment"># 写入session 信息（每隔一秒自动更新，而不是每次函数执行时再更新）</span>
+    session<span class="token punctuation">[</span><span class="token string">'len'</span><span class="token punctuation">]</span> <span class="token operator">+=</span> payload_len
+    session<span class="token punctuation">[</span><span class="token string">'seq'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>pkt_dir<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">.</span>append<span class="token punctuation">(</span>seq_now<span class="token punctuation">)</span>
+    session<span class="token punctuation">[</span><span class="token string">'time_end'</span><span class="token punctuation">]</span> <span class="token operator">=</span> timestamp
+    session<span class="token punctuation">[</span><span class="token string">'pkt_list'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+        <span class="token string">"d"</span><span class="token punctuation">:</span> pkt_dir<span class="token punctuation">,</span>
+        <span class="token string">"l"</span><span class="token punctuation">:</span> payload_len<span class="token punctuation">,</span>
+        <span class="token string">"f"</span><span class="token punctuation">:</span> tcp_flag<span class="token punctuation">,</span>
+        <span class="token string">"t"</span><span class="token punctuation">:</span> timestamp <span class="token operator">-</span> session<span class="token punctuation">[</span><span class="token string">'time_start'</span><span class="token punctuation">]</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># check RST</span>
+    <span class="token keyword">if</span> <span class="token string">'R'</span> <span class="token keyword">in</span> tcp_flag<span class="token punctuation">:</span>
+        result <span class="token operator">=</span> write_db<span class="token punctuation">(</span>session<span class="token punctuation">)</span>
+        <span class="token keyword">del</span> sessions<span class="token punctuation">[</span>sequin_str<span class="token punctuation">]</span>
+        <span class="token keyword">return</span> result
+
+    <span class="token comment"># check FIN</span>
+    <span class="token keyword">if</span> session<span class="token punctuation">[</span><span class="token string">'fin'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>pkt_dir<span class="token punctuation">)</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">:</span>
+        session<span class="token punctuation">[</span><span class="token string">'fin'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>pkt_dir<span class="token punctuation">)</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">2</span>
+    <span class="token keyword">if</span> <span class="token string">'F'</span> <span class="token keyword">in</span> tcp_flag<span class="token punctuation">:</span>
+        session<span class="token punctuation">[</span><span class="token string">'fin'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>pkt_dir<span class="token punctuation">)</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span>
+
+    <span class="token keyword">if</span> session<span class="token punctuation">[</span><span class="token string">'fin1'</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">2</span> <span class="token keyword">and</span> session<span class="token punctuation">[</span><span class="token string">'fin2'</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">2</span><span class="token punctuation">:</span>
+        result <span class="token operator">=</span> write_db<span class="token punctuation">(</span>session<span class="token punctuation">)</span>
+        <span class="token keyword">del</span> sessions<span class="token punctuation">[</span>sequin_str<span class="token punctuation">]</span>
+        <span class="token keyword">return</span> result
+
+    <span class="token keyword">return</span> <span class="token boolean">True</span>
+
+
+<span class="token keyword">def</span> <span class="token function">tcp_timeout</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
+    检查TCP 连接的超时信息
+    """</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"[TCP] check tcp timeout"</span><span class="token punctuation">)</span>
+    _del <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> session <span class="token keyword">in</span> sessions<span class="token punctuation">:</span>
+        <span class="token keyword">if</span> sessions<span class="token punctuation">[</span>session<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"fin1"</span><span class="token punctuation">]</span> <span class="token operator">+</span> sessions<span class="token punctuation">[</span>session<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"fin2"</span><span class="token punctuation">]</span> <span class="token operator">>=</span> <span class="token number">2</span> <span class="token keyword">and</span> \
+                <span class="token builtin">int</span><span class="token punctuation">(</span>time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">-</span> sessions<span class="token punctuation">[</span>session<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'time_end'</span><span class="token punctuation">]</span> <span class="token operator">>=</span> <span class="token number">60</span><span class="token punctuation">:</span>
+            write_db<span class="token punctuation">(</span>sessions<span class="token punctuation">[</span>session<span class="token punctuation">]</span><span class="token punctuation">)</span>
+            _del<span class="token punctuation">.</span>append<span class="token punctuation">(</span>session<span class="token punctuation">)</span>
+        <span class="token keyword">elif</span> <span class="token builtin">int</span><span class="token punctuation">(</span>time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">-</span> sessions<span class="token punctuation">[</span>session<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"time_end"</span><span class="token punctuation">]</span> <span class="token operator">>=</span> config<span class="token punctuation">.</span>tcp_timeout<span class="token punctuation">:</span>
+            write_db<span class="token punctuation">(</span>sessions<span class="token punctuation">[</span>session<span class="token punctuation">]</span><span class="token punctuation">)</span>
+            _del<span class="token punctuation">.</span>append<span class="token punctuation">(</span>session<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> _del<span class="token punctuation">:</span>
+        <span class="token keyword">del</span> sessions<span class="token punctuation">[</span>i<span class="token punctuation">]</span>
+
+
+util<span class="token punctuation">.</span>add_cron<span class="token punctuation">(</span>tcp_timeout<span class="token punctuation">,</span> <span class="token number">60</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">read</span><span class="token punctuation">(</span>pkt<span class="token punctuation">,</span> timestamp<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">try</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> <span class="token punctuation">(</span>pkt<span class="token punctuation">.</span>haslayer<span class="token punctuation">(</span>IP<span class="token punctuation">)</span> <span class="token keyword">and</span> pkt<span class="token punctuation">.</span>haslayer<span class="token punctuation">(</span>TCP<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">return</span> <span class="token boolean">False</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            <span class="token keyword">return</span> deal_tcp<span class="token punctuation">(</span>pkt<span class="token punctuation">,</span> timestamp<span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+    <span class="token keyword">except</span> Exception <span class="token keyword">as</span> e<span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"[TCP] "</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="udppy"><a class="markdownIt-Anchor" href="#udppy"></a> <a target="_blank" rel="noopener" href="http://udp.py">udp.py</a></h3>
+<p>处理UDP 报文的方法与TCP 大同小异。</p>
+<p>源码的Web 界面是通过PHP 制作的，超出知识范围了~~~</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://github.com/12Tall">
+            <span class="icon">
+              <i class="fa-brands fa-github"></i>
+            </span>
+
+            <span class="label">Github</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://space.bilibili.com/66003054">
+            <span class="icon">
+              <i class="fa-brands fa-bilibili"></i>
+            </span>
+
+            <span class="label">BiliBili</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"># python</a>
+              <a href="/tags/scapy/" rel="tag"># scapy</a>
+              <a href="/tags/sniff/" rel="tag"># sniff</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/05/26/notation/dot/dot/" rel="prev" title="DOT 语言">
+                  <i class="fa fa-angle-left"></i> DOT 语言
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="/lib/animejs/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="/lib/hexo-generator-searchdb/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"/lib/mermaid/dist/mermaid.min.js","integrity":"sha256-TtLOdUA8mstPoO6sGvHIGx2ceXrrX4KgIItO06XOn8A="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"zh-CN","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+
+</body>
+</html>
