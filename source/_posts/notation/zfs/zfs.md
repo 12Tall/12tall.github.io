@@ -58,4 +58,16 @@ sudo zpool online -e pool_name sdb
 sudo zpool online -e pool_name sdd
 ```
 
+## 重装系统后恢复   
+
+即使重装系统后，也可以通过以下命令恢复数据。  
+```bash  
+# 导入阵列，必须加-f 参数
+sudo zpool import -f pool_name   
+# 上线阵列
+sudo online [-e] pool_name /dev/sdX  
+# 清除错误状态   
+sudo zpool clear pool_name  
+```
+
 文中的命令摘自[Ubuntu 22.04 环境 zfs raid1 mirror配置，在线无损替换故障硬盘](https://www.pocketdigi.com/article/linux_zfs_raid1_mirror_replace.html)，另外`mdadm` 工具也可以配置软RAID。但即使配置了RAID 也需要设置数据的定期备份，这一点也是很重要的。
