@@ -1096,12 +1096,9 @@ md5sum /pool_name/test.data
     <span class="token node">make_string</span> <span class="token punctuation">[</span><span class="token attr-name">label</span> <span class="token operator">=</span> <span class="token attr-value">"make a\nstring"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
     <span class="token keyword">node</span> <span class="token punctuation">[</span><span class="token attr-name">shape</span><span class="token operator">=</span><span class="token attr-value">box</span><span class="token punctuation">,</span> <span class="token attr-name">style</span><span class="token operator">=</span><span class="token attr-value">filled</span><span class="token punctuation">,</span><span class="token attr-name">color</span><span class="token operator">=</span><span class="token attr-value">".7, .3, 1.0"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>  <span class="token comment">// node 属性</span>
     <span class="token node">execute</span> <span class="token operator">-></span> <span class="token node">compare</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-```  
-
-<span class="token comment">### 子图绘制  </span>
-```<span class="token node">dot</span>  
-<span class="token keyword">digraph</span> <span class="token graph-name class-name">abc</span><span class="token punctuation">&#123;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="子图绘制"><a class="markdownIt-Anchor" href="#子图绘制"></a> 子图绘制</h3>
+<pre class="line-numbers language-dot" data-language="dot"><code class="language-dot"><span class="token keyword">digraph</span> <span class="token graph-name class-name">abc</span><span class="token punctuation">&#123;</span>
 
 	<span class="token keyword">node</span> <span class="token punctuation">[</span><span class="token attr-name">shape</span><span class="token operator">=</span><span class="token attr-value">"record"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
 	<span class="token keyword">edge</span> <span class="token punctuation">[</span><span class="token attr-name">style</span><span class="token operator">=</span><span class="token attr-value">"dashed"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
@@ -1120,7 +1117,7 @@ md5sum /pool_name/test.data
 	<span class="token node">a</span> <span class="token operator">-></span> <span class="token node">b</span><span class="token punctuation">;</span>
 	<span class="token node">b</span> <span class="token operator">-></span> <span class="token node">d</span><span class="token punctuation">;</span>
 	<span class="token node">c</span> <span class="token operator">-></span> <span class="token node">d</span> <span class="token punctuation">[</span><span class="token attr-name">color</span><span class="token operator">=</span><span class="token attr-value">"red"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="数据结构图"><a class="markdownIt-Anchor" href="#数据结构图"></a> 数据结构图</h3>
 <p><code>record</code> 类型的节点，可以通过<code>label</code> 属性中的<code>&lt;port&gt;</code> 标签设置连接端口。</p>
 <pre class="line-numbers language-dot" data-language="dot"><code class="language-dot"><span class="token keyword">digraph</span> <span class="token graph-name class-name">st2</span><span class="token punctuation">&#123;</span>
