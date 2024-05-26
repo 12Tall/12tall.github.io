@@ -1,30 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World</title>
-    <url>/2024/03/24/hello-world/</url>
-    <content><![CDATA[<p><code>Hexo Next</code> 在使用中遇到的问题与结局办法汇总。</p>
-<span id="more"></span>
-<pre class="highlight"><code class="bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span>  
-$ hexo new -p  notation/pm2/pm2-简单教程
-$ hexo clean  
-$ hexo generate
-$ hexo server  
-$ hexo deploy
-</code></pre>
-<ul>
-<li>代码块显示异常：代码块结束符``` 后不要跟空格</li>
-<li>轻易使用<code>markdown-it</code> 会导致<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>L</mi><mi>A</mi></msup><msub><mi>T</mi><mi>E</mi></msub><mi>X</mi></mrow><annotation encoding="application/x-tex">L^AT_EX</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.991331em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">A</span></span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05764em;">E</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span></span></span></span> 显示异常</li>
-</ul>
-<h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
-<ol>
-<li><a href="https://github.com/next-theme/hexo-next-giscus">启用Hexo Next Giscus 评论系统</a></li>
-<li><a href="https://giscus.app/">Giscus</a> 在这个界面上可以得到Giscus 所需的所有参数</li>
-<li><a href="https://yueyue200830.github.io/2020/02/23/%E8%AE%BE%E7%BD%AEhexo%E9%A6%96%E9%A1%B5%E5%8F%AA%E6%98%BE%E7%A4%BA%E9%83%A8%E5%88%86%E6%91%98%E8%A6%81%EF%BC%88%E4%B8%8D%E6%98%BE%E7%A4%BA%E5%85%A8%E6%96%87%EF%BC%89/">显示摘要</a></li>
-</ol>
-]]></content>
-  </entry>
-  <entry>
     <title>Gitlab简单安装</title>
     <url>/2024/05/16/notation/Gitlab%E7%AE%80%E5%8D%95%E5%AE%89%E8%A3%85/</url>
     <content><![CDATA[<p>以前一直在用Gogs，但是Gitlab 提供了CI/CD 的功能，故而尝试部署下。</p>
@@ -241,6 +217,30 @@ irb<span class="token punctuation">(</span>main<span class="token punctuation">)
         <tag>ldap</tag>
         <tag>synology</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2024/03/24/hello-world/</url>
+    <content><![CDATA[<p><code>Hexo Next</code> 在使用中遇到的问题与结局办法汇总。</p>
+<span id="more"></span>
+<pre class="highlight"><code class="bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span>  
+$ hexo new -p  notation/pm2/pm2-简单教程
+$ hexo clean  
+$ hexo generate
+$ hexo server  
+$ hexo deploy
+</code></pre>
+<ul>
+<li>代码块显示异常：代码块结束符``` 后不要跟空格</li>
+<li>轻易使用<code>markdown-it</code> 会导致<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>L</mi><mi>A</mi></msup><msub><mi>T</mi><mi>E</mi></msub><mi>X</mi></mrow><annotation encoding="application/x-tex">L^AT_EX</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.991331em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">A</span></span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05764em;">E</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span></span></span></span> 显示异常</li>
+</ul>
+<h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
+<ol>
+<li><a href="https://github.com/next-theme/hexo-next-giscus">启用Hexo Next Giscus 评论系统</a></li>
+<li><a href="https://giscus.app/">Giscus</a> 在这个界面上可以得到Giscus 所需的所有参数</li>
+<li><a href="https://yueyue200830.github.io/2020/02/23/%E8%AE%BE%E7%BD%AEhexo%E9%A6%96%E9%A1%B5%E5%8F%AA%E6%98%BE%E7%A4%BA%E9%83%A8%E5%88%86%E6%91%98%E8%A6%81%EF%BC%88%E4%B8%8D%E6%98%BE%E7%A4%BA%E5%85%A8%E6%96%87%EF%BC%89/">显示摘要</a></li>
+</ol>
+]]></content>
   </entry>
   <entry>
     <title>pyside6-tabel-delegate</title>
@@ -861,161 +861,6 @@ EOF</span>
       </tags>
   </entry>
   <entry>
-    <title>PnetLab v6 的安装</title>
-    <url>/2024/04/05/notation/pnetlab/00_%E5%AE%89%E8%A3%85/</url>
-    <content><![CDATA[<p><code>PnetLab</code> 是一个非常有用的网工实验环境，包含有非常丰富的硬件资源。但是官网提供的安装教程过于陈旧，于是这里将电报群中最新的安装方法记录下。</p>
-<span id="more"></span>  
-<h2 id="安装pnetlab-v6"><a class="markdownIt-Anchor" href="#安装pnetlab-v6"></a> 安装PnetLab v6</h2>
-<blockquote>
-<p>推荐在VMware 或者VirtualBox 虚拟机中安装，虽然直接在裸机上安装也可以，但是在虚拟机中可以快速地做快照和恢复。<br />
-在VMware 中运行虚拟机时，要注意勾选<a href="https://www.pnetlab.com/pages/documentation?slug=install-PNETlab">VT-x 虚拟化支持</a>。否则基于QEMU 的镜像在启动后会闪退。</p>
-</blockquote>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 首先安装`Ubuntu 20.04`,启用`root` 账户密码：</span>
-<span class="token function">sudo</span> <span class="token function">passwd</span> root  
-
-<span class="token comment"># 切换到root 账户  </span>
-<span class="token function">su</span>  
-<span class="token comment"># 安装Pnetlab  </span>
-<span class="token function">curl</span> <span class="token parameter variable">-sL</span> https://labhub.eu.org/api/raw/?path<span class="token operator">=</span>/UNETLAB%20I/upgrades_pnetlab/Focal/install_pnetlab_v6.sh <span class="token operator">|</span> <span class="token function">bash</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>安装后重启电脑，重启后进入<code>root</code> 默认密码是<code>pnet</code>，进入后可以保持默认配置。可以通过<code>http://ip</code> 访问服务，选择离线模式，账号<code>admin</code>，密码<code>pnet</code>。</p>
-<h2 id="安装ishare2"><a class="markdownIt-Anchor" href="#安装ishare2"></a> 安装IShare2</h2>
-<blockquote>
-<p>安装ishare2-cli, webgui 需要安装python3.11</p>
-</blockquote>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 切换到root 账户  </span>
-<span class="token function">su</span>  
-
-<span class="token comment"># 移除以前（可能）存在的安装：</span>
-<span class="token function">rm</span> <span class="token parameter variable">-rf</span> /opt/ishare2/ <span class="token operator">&amp;&amp;</span> <span class="token function">rm</span> <span class="token parameter variable">-rf</span> /usr/sbin/ishare2
-<span class="token comment"># 安装IShare2    </span>
-<span class="token function">wget</span> <span class="token parameter variable">-O</span> /usr/sbin/ishare2 https://raw.githubusercontent.com/ishare2-org/ishare2-cli/main/ishare2 <span class="token operator">&amp;&amp;</span> <span class="token function">chmod</span> +x /usr/sbin/ishare2 <span class="token operator">&amp;&amp;</span> ishare2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="使用ishare2-cli"><a class="markdownIt-Anchor" href="#使用ishare2-cli"></a> 使用ishare2-cli</h3>
-<blockquote>
-<p>以下命令在root 用户下运行：</p>
-</blockquote>
-<p>一般安装后会自动修复权限，如果没有的话需要在PNetlab 的Web 界面（系统设置），手动修复。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ishare2 search forti  <span class="token comment"># 搜索镜像  </span>
-
-ishare2 pull qemu <span class="token number">384</span>  <span class="token comment"># 根据类型，id 拉取镜像</span>
-
-ishre2 upgrade <span class="token comment"># 此命令可以用来升级pnetlab、ishare2 和ishare2 gui  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="安装inshare2-gui"><a class="markdownIt-Anchor" href="#安装inshare2-gui"></a> 安装inshare2-gui</h3>
-<p>Ubuntu 官方并没有提供Python 3.11 的安装包，需要通过第三方库安装。但是最好还是通过cli 安装，因为能够看到进度。通过Web 页面安装看不到进度条。</p>
-<pre class="highlight"><code class="bash">add-apt-repository ppa:deadsnakes/ppa -y  <span class="hljs-comment"># 添加三方库  </span>
-
-apt update  
-
-apt install python3.11  
-
-ishare2 gui install <span class="hljs-comment"># 但是不好用</span>
-</code></pre>
-<p>还是通过源码安装比较好一些：<a href="https://github.com/ishare2-org/ishare2-web-gui">https://github.com/ishare2-org/ishare2-web-gui</a></p>
-]]></content>
-      <categories>
-        <category>运维</category>
-      </categories>
-      <tags>
-        <tag>pnetlab</tag>
-        <tag>ubuntu</tag>
-        <tag>switch</tag>
-        <tag>router</tag>
-        <tag>firewall</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Ubuntu 安装zfs</title>
-    <url>/2024/05/24/notation/zfs/zfs/</url>
-    <content><![CDATA[<p>关于<code>zfs</code> 文件系统的介绍，可以参考：<a href="https://zhuanlan.zhihu.com/p/45137745">初学者指南：ZFS 是什么，为什么要使用 ZFS？</a></p>
-<h2 id="raidz-的存储效率"><a class="markdownIt-Anchor" href="#raidz-的存储效率"></a> RAIDZ 的存储效率</h2>
-<p>存储效率应理解为存储空间利用率，可以用以下表格表示：</p>
-<table>
-<thead>
-<tr>
-<th>RAID 类型</th>
-<th>存储效率</th>
-<th>校验设备数量</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>RAID0</td>
-<td>100%</td>
-<td>0</td>
-</tr>
-<tr>
-<td>RAID1</td>
-<td><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>1</mn><mi>n</mi></mfrac></mrow><annotation encoding="application/x-tex">\frac{1}{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></td>
-<td>0</td>
-</tr>
-<tr>
-<td>RAIDZ-1</td>
-<td><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow><mi>n</mi></mfrac></mrow><annotation encoding="application/x-tex">\frac{n-1}{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></td>
-<td>1</td>
-</tr>
-<tr>
-<td>RAIDZ-2</td>
-<td><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>n</mi><mo>−</mo><mn>2</mn></mrow><mi>n</mi></mfrac></mrow><annotation encoding="application/x-tex">\frac{n-2}{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></td>
-<td>2</td>
-</tr>
-<tr>
-<td>RAIDZ-3</td>
-<td><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>n</mi><mo>−</mo><mn>3</mn></mrow><mi>n</mi></mfrac></mrow><annotation encoding="application/x-tex">\frac{n-3}{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">3</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></td>
-<td>3</td>
-</tr>
-</tbody>
-</table>
-<p>按照<a href="https://jrs-s.net/2015/02/06/zfs-you-should-use-mirror-vdevs-not-raidz/">ZFS: You should use mirror vdevs, not RAIDZ.</a> 文章介绍，更推荐使用<code>RAID1</code> 而不是<code>RAID5</code>，因为硬盘损坏时会导致文件系统的效率大幅降低。并且一个存储池里面最好不要超过8 块硬盘。</p>
-<h2 id="安装配置zfs"><a class="markdownIt-Anchor" href="#安装配置zfs"></a> 安装配置zfs</h2>
-<p>Ubuntu 系统并没有自带zfs 工具，需要自己安装<code>sudo apt-get install zfsutils-linux</code>，之后可以通过<code>sudo zpool</code> 命令使用。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 查看硬盘以及分区信息  </span>
-<span class="token function">sudo</span> <span class="token function">fdisk</span> <span class="token parameter variable">-l</span>    
-
-<span class="token comment"># zfs 组RAID1 可以是硬盘与硬盘、硬盘与分区  </span>
-<span class="token function">sudo</span> zpool create pool_name mirror /dev/sdb /dev/sdc<span class="token punctuation">[</span><span class="token number">1</span><span class="token operator">|</span><span class="token number">2</span><span class="token operator">|</span><span class="token number">3</span><span class="token punctuation">]</span>  
-<span class="token comment"># 查看zpool 状态  </span>
-<span class="token function">sudo</span> zpool status <span class="token punctuation">[</span>pool_name<span class="token punctuation">]</span>
-<span class="token comment"># DEGRADED 降级：有问题  </span>
-<span class="token comment"># ONLINE 正常  </span>
-<span class="token comment"># OFFLINE 离线       </span>
-<span class="token comment"># OFFLINE 离线       </span>
-<span class="token comment"># 查看详细信息</span>
-<span class="token function">sudo</span> zpool list <span class="token punctuation">[</span>pool_name<span class="token punctuation">]</span>
-
-<span class="token comment"># 建立测试文件  </span>
-<span class="token function">sudo</span> <span class="token function">dd</span> <span class="token assign-left variable">if</span><span class="token operator">=</span>/dev/zero <span class="token assign-left variable">of</span><span class="token operator">=</span>/pool_name/test.data <span class="token assign-left variable">bs</span><span class="token operator">=</span>1M <span class="token assign-left variable">count</span><span class="token operator">=</span><span class="token number">512</span>
-<span class="token comment"># 检查md5  </span>
-md5sum /pool_name/test.data  
-<span class="token comment"># 强行移除一块硬盘后，查看文件md5 并没有变化（证明没有损坏）</span>
-
-<span class="token comment"># 添加新硬盘后，可以替换损坏的硬盘</span>
-<span class="token function">sudo</span> zpool replace pool_name sdc1 sdd  <span class="token comment"># 可以省略/dev/sdd 这种写法  </span>
-<span class="token comment"># 更换新硬盘后注意观察数据同步的状态，在name 列有`replacing` 字样</span>
-
-<span class="token comment"># 如果需要对存储设备扩容，则需要在更新所有设备后执行</span>
-<span class="token function">sudo</span> zpool <span class="token builtin class-name">set</span> <span class="token assign-left variable">autoexpand</span><span class="token operator">=</span>on <span class="token punctuation">[</span>pool_name<span class="token punctuation">]</span>
-<span class="token function">sudo</span> zpool online <span class="token parameter variable">-e</span> pool_name sdb
-<span class="token function">sudo</span> zpool online <span class="token parameter variable">-e</span> pool_name sdd<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="重装系统后恢复"><a class="markdownIt-Anchor" href="#重装系统后恢复"></a> 重装系统后恢复</h2>
-<p>即使重装系统后，也可以通过以下命令恢复数据。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 导入阵列，必须加-f 参数</span>
-<span class="token function">sudo</span> zpool <span class="token function">import</span> <span class="token parameter variable">-f</span> pool_name   
-<span class="token comment"># 上线阵列</span>
-<span class="token function">sudo</span> online <span class="token punctuation">[</span>-e<span class="token punctuation">]</span> pool_name /dev/sdX  
-<span class="token comment"># 清除错误状态   </span>
-<span class="token function">sudo</span> zpool <span class="token function">clear</span> pool_name  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>文中的命令摘自<a href="https://www.pocketdigi.com/article/linux_zfs_raid1_mirror_replace.html">Ubuntu 22.04 环境 zfs raid1 mirror配置，在线无损替换故障硬盘</a>，另外<code>mdadm</code> 工具也可以配置软RAID。但即使配置了RAID 也需要设置数据的定期备份，这一点也是很重要的。</p>
-]]></content>
-      <categories>
-        <category>运维</category>
-      </categories>
-      <tags>
-        <tag>Ubuntu</tag>
-        <tag>zfs</tag>
-        <tag>raid</tag>
-        <tag>backup</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>DOT 语言</title>
     <url>/2024/05/26/notation/dot/dot/</url>
     <content><![CDATA[<p>比较有意思的是，Graphviz 直接将<a href="https://www.graphviz.org/doc/info/lang.html">DOT 语法定义</a> 给贴出来了。可以通过<a href="https://dreampuf.github.io/GraphvizOnline/#">在线Graphviz 绘图</a> 学习，但是任何工具都是熟能生巧，要经常用才好。</p>
@@ -1241,6 +1086,68 @@ st_table [label=&lt;
         <tag>dot</tag>
         <tag>language</tag>
         <tag>graphviz</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PnetLab v6 的安装</title>
+    <url>/2024/04/05/notation/pnetlab/00_%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<p><code>PnetLab</code> 是一个非常有用的网工实验环境，包含有非常丰富的硬件资源。但是官网提供的安装教程过于陈旧，于是这里将电报群中最新的安装方法记录下。</p>
+<span id="more"></span>  
+<h2 id="安装pnetlab-v6"><a class="markdownIt-Anchor" href="#安装pnetlab-v6"></a> 安装PnetLab v6</h2>
+<blockquote>
+<p>推荐在VMware 或者VirtualBox 虚拟机中安装，虽然直接在裸机上安装也可以，但是在虚拟机中可以快速地做快照和恢复。<br />
+在VMware 中运行虚拟机时，要注意勾选<a href="https://www.pnetlab.com/pages/documentation?slug=install-PNETlab">VT-x 虚拟化支持</a>。否则基于QEMU 的镜像在启动后会闪退。</p>
+</blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 首先安装`Ubuntu 20.04`,启用`root` 账户密码：</span>
+<span class="token function">sudo</span> <span class="token function">passwd</span> root  
+
+<span class="token comment"># 切换到root 账户  </span>
+<span class="token function">su</span>  
+<span class="token comment"># 安装Pnetlab  </span>
+<span class="token function">curl</span> <span class="token parameter variable">-sL</span> https://labhub.eu.org/api/raw/?path<span class="token operator">=</span>/UNETLAB%20I/upgrades_pnetlab/Focal/install_pnetlab_v6.sh <span class="token operator">|</span> <span class="token function">bash</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>安装后重启电脑，重启后进入<code>root</code> 默认密码是<code>pnet</code>，进入后可以保持默认配置。可以通过<code>http://ip</code> 访问服务，选择离线模式，账号<code>admin</code>，密码<code>pnet</code>。</p>
+<h2 id="安装ishare2"><a class="markdownIt-Anchor" href="#安装ishare2"></a> 安装IShare2</h2>
+<blockquote>
+<p>安装ishare2-cli, webgui 需要安装python3.11</p>
+</blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 切换到root 账户  </span>
+<span class="token function">su</span>  
+
+<span class="token comment"># 移除以前（可能）存在的安装：</span>
+<span class="token function">rm</span> <span class="token parameter variable">-rf</span> /opt/ishare2/ <span class="token operator">&amp;&amp;</span> <span class="token function">rm</span> <span class="token parameter variable">-rf</span> /usr/sbin/ishare2
+<span class="token comment"># 安装IShare2    </span>
+<span class="token function">wget</span> <span class="token parameter variable">-O</span> /usr/sbin/ishare2 https://raw.githubusercontent.com/ishare2-org/ishare2-cli/main/ishare2 <span class="token operator">&amp;&amp;</span> <span class="token function">chmod</span> +x /usr/sbin/ishare2 <span class="token operator">&amp;&amp;</span> ishare2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="使用ishare2-cli"><a class="markdownIt-Anchor" href="#使用ishare2-cli"></a> 使用ishare2-cli</h3>
+<blockquote>
+<p>以下命令在root 用户下运行：</p>
+</blockquote>
+<p>一般安装后会自动修复权限，如果没有的话需要在PNetlab 的Web 界面（系统设置），手动修复。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ishare2 search forti  <span class="token comment"># 搜索镜像  </span>
+
+ishare2 pull qemu <span class="token number">384</span>  <span class="token comment"># 根据类型，id 拉取镜像</span>
+
+ishre2 upgrade <span class="token comment"># 此命令可以用来升级pnetlab、ishare2 和ishare2 gui  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="安装inshare2-gui"><a class="markdownIt-Anchor" href="#安装inshare2-gui"></a> 安装inshare2-gui</h3>
+<p>Ubuntu 官方并没有提供Python 3.11 的安装包，需要通过第三方库安装。但是最好还是通过cli 安装，因为能够看到进度。通过Web 页面安装看不到进度条。</p>
+<pre class="highlight"><code class="bash">add-apt-repository ppa:deadsnakes/ppa -y  <span class="hljs-comment"># 添加三方库  </span>
+
+apt update  
+
+apt install python3.11  
+
+ishare2 gui install <span class="hljs-comment"># 但是不好用</span>
+</code></pre>
+<p>还是通过源码安装比较好一些：<a href="https://github.com/ishare2-org/ishare2-web-gui">https://github.com/ishare2-org/ishare2-web-gui</a></p>
+]]></content>
+      <categories>
+        <category>运维</category>
+      </categories>
+      <tags>
+        <tag>pnetlab</tag>
+        <tag>ubuntu</tag>
+        <tag>switch</tag>
+        <tag>router</tag>
+        <tag>firewall</tag>
       </tags>
   </entry>
   <entry>
@@ -1617,6 +1524,99 @@ util<span class="token punctuation">.</span>add_cron<span class="token punctuati
         <tag>python</tag>
         <tag>scapy</tag>
         <tag>sniff</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Ubuntu 安装zfs</title>
+    <url>/2024/05/24/notation/zfs/zfs/</url>
+    <content><![CDATA[<p>关于<code>zfs</code> 文件系统的介绍，可以参考：<a href="https://zhuanlan.zhihu.com/p/45137745">初学者指南：ZFS 是什么，为什么要使用 ZFS？</a></p>
+<h2 id="raidz-的存储效率"><a class="markdownIt-Anchor" href="#raidz-的存储效率"></a> RAIDZ 的存储效率</h2>
+<p>存储效率应理解为存储空间利用率，可以用以下表格表示：</p>
+<table>
+<thead>
+<tr>
+<th>RAID 类型</th>
+<th>存储效率</th>
+<th>校验设备数量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RAID0</td>
+<td>100%</td>
+<td>0</td>
+</tr>
+<tr>
+<td>RAID1</td>
+<td><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>1</mn><mi>n</mi></mfrac></mrow><annotation encoding="application/x-tex">\frac{1}{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></td>
+<td>0</td>
+</tr>
+<tr>
+<td>RAIDZ-1</td>
+<td><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow><mi>n</mi></mfrac></mrow><annotation encoding="application/x-tex">\frac{n-1}{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></td>
+<td>1</td>
+</tr>
+<tr>
+<td>RAIDZ-2</td>
+<td><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>n</mi><mo>−</mo><mn>2</mn></mrow><mi>n</mi></mfrac></mrow><annotation encoding="application/x-tex">\frac{n-2}{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></td>
+<td>2</td>
+</tr>
+<tr>
+<td>RAIDZ-3</td>
+<td><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>n</mi><mo>−</mo><mn>3</mn></mrow><mi>n</mi></mfrac></mrow><annotation encoding="application/x-tex">\frac{n-3}{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">3</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p>按照<a href="https://jrs-s.net/2015/02/06/zfs-you-should-use-mirror-vdevs-not-raidz/">ZFS: You should use mirror vdevs, not RAIDZ.</a> 文章介绍，更推荐使用<code>RAID1</code> 而不是<code>RAID5</code>，因为硬盘损坏时会导致文件系统的效率大幅降低。并且一个存储池里面最好不要超过8 块硬盘。</p>
+<h2 id="安装配置zfs"><a class="markdownIt-Anchor" href="#安装配置zfs"></a> 安装配置zfs</h2>
+<p>Ubuntu 系统并没有自带zfs 工具，需要自己安装<code>sudo apt-get install zfsutils-linux</code>，之后可以通过<code>sudo zpool</code> 命令使用。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 查看硬盘以及分区信息  </span>
+<span class="token function">sudo</span> <span class="token function">fdisk</span> <span class="token parameter variable">-l</span>    
+
+<span class="token comment"># zfs 组RAID1 可以是硬盘与硬盘、硬盘与分区  </span>
+<span class="token function">sudo</span> zpool create pool_name mirror /dev/sdb /dev/sdc<span class="token punctuation">[</span><span class="token number">1</span><span class="token operator">|</span><span class="token number">2</span><span class="token operator">|</span><span class="token number">3</span><span class="token punctuation">]</span>  
+<span class="token comment"># 查看zpool 状态  </span>
+<span class="token function">sudo</span> zpool status <span class="token punctuation">[</span>pool_name<span class="token punctuation">]</span>
+<span class="token comment"># DEGRADED 降级：有问题  </span>
+<span class="token comment"># ONLINE 正常  </span>
+<span class="token comment"># OFFLINE 离线       </span>
+<span class="token comment"># OFFLINE 离线       </span>
+<span class="token comment"># 查看详细信息</span>
+<span class="token function">sudo</span> zpool list <span class="token punctuation">[</span>pool_name<span class="token punctuation">]</span>
+
+<span class="token comment"># 建立测试文件  </span>
+<span class="token function">sudo</span> <span class="token function">dd</span> <span class="token assign-left variable">if</span><span class="token operator">=</span>/dev/zero <span class="token assign-left variable">of</span><span class="token operator">=</span>/pool_name/test.data <span class="token assign-left variable">bs</span><span class="token operator">=</span>1M <span class="token assign-left variable">count</span><span class="token operator">=</span><span class="token number">512</span>
+<span class="token comment"># 检查md5  </span>
+md5sum /pool_name/test.data  
+<span class="token comment"># 强行移除一块硬盘后，查看文件md5 并没有变化（证明没有损坏）</span>
+
+<span class="token comment"># 添加新硬盘后，可以替换损坏的硬盘</span>
+<span class="token function">sudo</span> zpool replace pool_name sdc1 sdd  <span class="token comment"># 可以省略/dev/sdd 这种写法  </span>
+<span class="token comment"># 更换新硬盘后注意观察数据同步的状态，在name 列有`replacing` 字样</span>
+
+<span class="token comment"># 如果需要对存储设备扩容，则需要在更新所有设备后执行</span>
+<span class="token function">sudo</span> zpool <span class="token builtin class-name">set</span> <span class="token assign-left variable">autoexpand</span><span class="token operator">=</span>on <span class="token punctuation">[</span>pool_name<span class="token punctuation">]</span>
+<span class="token function">sudo</span> zpool online <span class="token parameter variable">-e</span> pool_name sdb
+<span class="token function">sudo</span> zpool online <span class="token parameter variable">-e</span> pool_name sdd<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="重装系统后恢复"><a class="markdownIt-Anchor" href="#重装系统后恢复"></a> 重装系统后恢复</h2>
+<p>即使重装系统后，也可以通过以下命令恢复数据。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 导入阵列，必须加-f 参数</span>
+<span class="token function">sudo</span> zpool <span class="token function">import</span> <span class="token parameter variable">-f</span> pool_name   
+<span class="token comment"># 上线阵列</span>
+<span class="token function">sudo</span> online <span class="token punctuation">[</span>-e<span class="token punctuation">]</span> pool_name /dev/sdX  
+<span class="token comment"># 清除错误状态   </span>
+<span class="token function">sudo</span> zpool <span class="token function">clear</span> pool_name  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>文中的命令摘自<a href="https://www.pocketdigi.com/article/linux_zfs_raid1_mirror_replace.html">Ubuntu 22.04 环境 zfs raid1 mirror配置，在线无损替换故障硬盘</a>，另外<code>mdadm</code> 工具也可以配置软RAID。但即使配置了RAID 也需要设置数据的定期备份，这一点也是很重要的。</p>
+]]></content>
+      <categories>
+        <category>运维</category>
+      </categories>
+      <tags>
+        <tag>Ubuntu</tag>
+        <tag>zfs</tag>
+        <tag>raid</tag>
+        <tag>backup</tag>
       </tags>
   </entry>
 </search>
