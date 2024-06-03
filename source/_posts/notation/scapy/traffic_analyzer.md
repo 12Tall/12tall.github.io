@@ -2,7 +2,7 @@
 title: Scapy 抓包分析代码阅读
 date: 2024-05-26 15:33:23
 tags: [python, scapy, sniff]
-categories: [安全, 开发]  
+categories: [安全]  
 description: Python+Scapy打造网络流量分析监控工具的源码阅读       
 ---
 

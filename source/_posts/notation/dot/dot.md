@@ -2,7 +2,7 @@
 title: DOT 语言
 date: 2024-05-26 14:47:29
 tags: [dot, language, graphviz]
-categories: [开发, 绘图]  
+categories: [开发]  
 description: Graphviz/DOT 语言学习     
 ---
 
@@ -95,7 +95,7 @@ digraph G {
     node [shape=box, style=filled,color=".7, .3, 1.0"];  // node 属性
     execute -> compare;
 }
-```  
+```
 
 ### 子图绘制  
 ```dot  
