@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="/lib/@fortawesome/fontawesome-free/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/animate.css/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.githb.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":true,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":{"gitalk":{"order":-2}}},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="群晖中如果出现636 端口关闭、389 端口要求强认证，那么大概问题是出在证书配置错误了，需要将Synology Directory Server 的证书恢复为域名相同。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ldapjs 笔记">
+<meta property="og:url" content="https://12tall.githb.io/2024/06/03/notation/ldap/ldapjs/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="群晖中如果出现636 端口关闭、389 端口要求强认证，那么大概问题是出在证书配置错误了，需要将Synology Directory Server 的证书恢复为域名相同。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-06-03T12:45:27.000Z">
+<meta property="article:modified_time" content="2024-06-03T23:47:06.261Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="ldap">
+<meta property="article:tag" content="synology">
+<meta property="article:tag" content="monitor">
+<meta property="article:tag" content="389">
+<meta property="article:tag" content="636">
+<meta property="article:tag" content="群晖">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://12tall.githb.io/2024/06/03/notation/ldap/ldapjs/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.githb.io/2024/06/03/notation/ldap/ldapjs/","path":"2024/06/03/notation/ldap/ldapjs/","title":"ldapjs 笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ldapjs 笔记 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+
+<!--
+<script defer src="https://vercount.one/js"></script>
+<script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>
+-->
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">蝉噪林逾静 鸟鸣山更幽</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ldap-%E7%AD%9B%E9%80%89%E5%99%A8%E8%AF%AD%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text"> LDAP 筛选器语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ldap-%E6%9F%A5%E8%AF%A2%E6%B3%A8%E5%85%A5"><span class="nav-number">1.1.</span> <span class="nav-text"> LDAP 查询注入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ldapjs-%E6%9F%A5%E8%AF%A2"><span class="nav-number">2.</span> <span class="nav-text"> LDAPJS 查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C"><span class="nav-number">2.1.</span> <span class="nav-text"> 查询结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%94%E8%BE%83entry-%E5%8F%98%E5%8C%96"><span class="nav-number">2.2.</span> <span class="nav-text"> 比较Entry 变化</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/img/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.githb.io/2024/06/03/notation/ldap/ldapjs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/img/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ldapjs 笔记 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ldapjs 笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-06-03 20:45:27" itemprop="dateCreated datePublished" datetime="2024-06-03T20:45:27+08:00">2024-06-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-06-04 07:47:06" itemprop="dateModified" datetime="2024-06-04T07:47:06+08:00">2024-06-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>群晖中如果出现<code>636</code> 端口关闭、<code>389</code> 端口要求强认证，那么大概问题是出在证书配置错误了，需要将<code>Synology Directory Server</code> 的证书恢复为域名相同。</p>
+</blockquote>
+<span id="more"></span>  
+<h2 id="ldap-筛选器语法"><a class="markdownIt-Anchor" href="#ldap-筛选器语法"></a> LDAP 筛选器语法</h2>
+<p>LDAP 筛选器的语法的逻辑运算符在前面，主要有<code>&amp;,|,!</code>，然后以<code>()</code>包围。数值运算主要有<code>=,&gt;=,&lt;=</code>。再包含一个通配符<code>*</code>。基本就够用了，例如：</p>
+<pre class="line-numbers language-none"><code class="language-none">
+(| (&amp; (mail&gt;&#x3D;b@example.com) (mail&#x3D;b@example.com)) (sn&#x3D;c*d))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>也许用语法图表示下更形象：</p>
+<pre class="line-numbers language-antlr4" data-language="antlr4"><code class="language-antlr4"><span class="token definition rule class-name">filter</span><span class="token punctuation">:</span> expr
+
+<span class="token definition rule class-name">expr</span>
+    <span class="token punctuation">:</span> <span class="token constant">LP</span> andExpr <span class="token constant">RP</span>
+    <span class="token operator">|</span> <span class="token constant">LP</span> orExpr <span class="token constant">RP</span>
+    <span class="token operator">|</span> <span class="token constant">LP</span> notExpr <span class="token constant">RP</span>
+    <span class="token operator">|</span> simpleExpr
+
+<span class="token definition rule class-name">andExpr</span>
+    <span class="token punctuation">:</span> <span class="token constant">AND</span> expr expr
+
+<span class="token definition rule class-name">orExpr</span>
+    <span class="token punctuation">:</span> <span class="token constant">OR</span> expr expr
+
+<span class="token definition rule class-name">notExpr</span>
+    <span class="token punctuation">:</span> <span class="token constant">NOT</span> expr
+
+<span class="token definition rule class-name">simpleExpr</span>
+    <span class="token punctuation">:</span> <span class="token constant">LP</span> <span class="token constant">ATTR</span> <span class="token punctuation">(</span><span class="token constant">EQ</span> <span class="token operator">|</span> <span class="token constant">GE</span> <span class="token operator">|</span> <span class="token constant">LE</span><span class="token punctuation">)</span> <span class="token constant">VAL</span> <span class="token constant">RP</span>
+
+<span class="token definition token constant">LP</span>    <span class="token punctuation">:</span> <span class="token string">'('</span> 
+<span class="token definition token constant">RP</span>    <span class="token punctuation">:</span> <span class="token string">')'</span> 
+<span class="token definition token constant">AND</span>   <span class="token punctuation">:</span> <span class="token string">'&amp;'</span> 
+<span class="token definition token constant">OR</span>    <span class="token punctuation">:</span> <span class="token string">'|'</span> 
+<span class="token definition token constant">NOT</span>   <span class="token punctuation">:</span> <span class="token string">'!'</span> 
+<span class="token definition token constant">EQ</span>    <span class="token punctuation">:</span> <span class="token string">'='</span> 
+<span class="token definition token constant">GE</span>    <span class="token punctuation">:</span> <span class="token string">'>='</span> 
+<span class="token definition token constant">LE</span>    <span class="token punctuation">:</span> <span class="token string">'&lt;='</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>还是要注意表达式在语法中的重要地位。</p>
+<h3 id="ldap-查询注入"><a class="markdownIt-Anchor" href="#ldap-查询注入"></a> LDAP 查询注入</h3>
+<p>在某些LDAP 服务器中，会存在注入的漏洞。例如：将<code>(attribute=$input)</code> 中的<code>$input</code> 输入为<code>value)(injected_filter</code>，便有可能使后续的条件失效。</p>
+<h2 id="ldapjs-查询"><a class="markdownIt-Anchor" href="#ldapjs-查询"></a> LDAPJS 查询</h2>
+<p>NodeJS 的所有IO 操作都是基于<a target="_blank" rel="noopener" href="https://luohaha.github.io/Chinese-uvbook/source/introduction.html">libuv</a>，是非阻塞的，<code>ldapjs</code> 也是类似，基本上是基于回调函数来实现查询：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// npm install ldapjs</span>
+<span class="token keyword">const</span> ldap <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'ldapjs'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+
+<span class="token comment">// LDAP服务器的URL</span>
+<span class="token keyword">const</span> ldapUrl <span class="token operator">=</span> <span class="token string">'ldaps://10.22.33.36'</span><span class="token punctuation">;</span>
+
+<span class="token comment">// LDAP服务器的基本DN</span>
+<span class="token keyword">const</span> baseDN <span class="token operator">=</span> <span class="token string">'dc=exp,dc=com'</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 创建LDAP客户端</span>
+<span class="token keyword">const</span> client <span class="token operator">=</span> ldap<span class="token punctuation">.</span><span class="token function">createClient</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">url</span><span class="token operator">:</span> ldapUrl<span class="token punctuation">,</span>
+    <span class="token literal-property property">tlsOptions</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        <span class="token literal-property property">rejectUnauthorized</span><span class="token operator">:</span> <span class="token boolean">false</span> <span class="token comment">// 忽略证书错误</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// bind 相当于用户登录</span>
+<span class="token function">client</span><span class="token punctuation">.</span><span class="token function">bind</span><span class="token punctuation">(</span>user_dn<span class="token punctuation">,</span> passwd<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">err</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+client<span class="token punctuation">.</span><span class="token function">search</span><span class="token punctuation">(</span><span class="token string">'dc=exp,dc=com'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">filter</span><span class="token operator">:</span> <span class="token string">'(objectClass=user)'</span><span class="token punctuation">,</span>  <span class="token comment">// 过滤器，查询用户</span>
+    <span class="token literal-property property">scope</span><span class="token operator">:</span> <span class="token string">'sub'</span><span class="token punctuation">,</span>  <span class="token comment">// 有三种，sub 是查询所有子节点</span>
+    <span class="token literal-property property">attributes</span><span class="token operator">:</span><span class="token punctuation">[</span><span class="token string">'cn'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>  <span class="token comment">// 需要的属性，默认全部属性</span>
+    <span class="token comment">// 还有分页信息可以传入，但不是必须</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">err<span class="token punctuation">,</span> res</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    res<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'searchRequest'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">searchRequest</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'searchRequest: '</span><span class="token punctuation">,</span> searchRequest<span class="token punctuation">.</span>messageId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    res<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'searchEntry'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">entry</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 这里是每一条符合条件的结果都会调用一次on-searchEntry 方法</span>
+        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>entry<span class="token punctuation">.</span>pojo<span class="token punctuation">.</span>attributes<span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    res<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'searchReference'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">referral</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'referral: '</span> <span class="token operator">+</span> referral<span class="token punctuation">.</span>uris<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    res<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'error'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">err</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        console<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">'error: '</span> <span class="token operator">+</span> err<span class="token punctuation">.</span>message<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    res<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'end'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">result</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'status: '</span> <span class="token operator">+</span> result<span class="token punctuation">.</span>status<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        client<span class="token punctuation">.</span><span class="token function">unbind</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">err</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+            assert<span class="token punctuation">.</span><span class="token function">ifError</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="查询结果"><a class="markdownIt-Anchor" href="#查询结果"></a> 查询结果</h3>
+<p>以群晖为例，其中常用的属性有<code>[cn, mail, givenName, sn, displayName, memberOf, whenChanged, userPrincipalName, sAMAccountName, objectGUID]</code>：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">[</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'objectClass'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'top'</span><span class="token punctuation">,</span> <span class="token string">'person'</span><span class="token punctuation">,</span> <span class="token string">'organizationalPerson'</span><span class="token punctuation">,</span> <span class="token string">'user'</span> <span class="token punctuation">]</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'cn'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'xxx'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'instanceType'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'4'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'whenCreated'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'20240222023600.0Z'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'uSNCreated'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'4038'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'name'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'xxx'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'objectGUID'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'xxxxxxxxxx'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'codePage'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'0'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'countryCode'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'0'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'lastLogoff'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'0'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'primaryGroupID'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'513'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'objectSid'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token string">'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'accountExpires'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'9223372036854775807'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'sAMAccountName'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'xxx'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'sAMAccountType'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'805306368'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'userPrincipalName'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'xxx@xxx.com'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'objectCategory'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'CN=Person,CN=Schema,CN=Configuration,DC=xxx,DC=com'</span> <span class="token punctuation">]</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'mail'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'xxx@xxx.com'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'description'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'XXX'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'displayName'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'XXX'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'givenName'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'XXX'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'sn'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'XXX'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'userAccountControl'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'66048'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'lockoutTime'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'0'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'memberOf'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token string">'CN=vpn-users,CN=Users,DC=xxx,DC=com'</span><span class="token punctuation">,</span>
+      <span class="token string">'CN=default-users,CN=Users,DC=xxx,DC=com'</span><span class="token punctuation">,</span>
+      <span class="token string">'CN=IT,CN=Users,DC=xxx,DC=com'</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'lastLogonTimestamp'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'133614245182887960'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'pwdLastSet'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'133616164634316900'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'whenChanged'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'20240531080743.0Z'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'uSNChanged'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'4982'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'badPasswordTime'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'133618697735623060'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'badPwdCount'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'0'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'lastLogon'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'133618902525867560'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'logonCount'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'128'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'distinguishedName'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'CN=xxx,CN=Users,DC=xxx,DC=com'</span> <span class="token punctuation">]</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="比较entry-变化"><a class="markdownIt-Anchor" href="#比较entry-变化"></a> 比较Entry 变化</h3>
+<p>因为主要用到ldap 中的用户组信息，直接更新到<code>postgresql</code> 是没问题的，但是还要与Lark 进行数据同步，这样就要比较下哪些属性是新加的，哪些是作废的：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// 通过以下函数可以快速比较数组中的元素变化O(1)</span>
+<span class="token keyword">function</span> <span class="token function">compareArrays</span><span class="token punctuation">(</span><span class="token parameter">oldArray<span class="token punctuation">,</span> newArray</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+        <span class="token literal-property property">added</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">removed</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 创建集合来存储旧数组和新数组的元素</span>
+    <span class="token keyword">const</span> oldSet <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Set</span><span class="token punctuation">(</span>oldArray<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> newSet <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Set</span><span class="token punctuation">(</span>newArray<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 找出新数组中有但旧数组中没有的元素</span>
+    newArray<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token parameter">item</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>oldSet<span class="token punctuation">.</span><span class="token function">has</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            result<span class="token punctuation">.</span>added<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 找出旧数组中有但新数组中没有的元素</span>
+    oldArray<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token parameter">item</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>newSet<span class="token punctuation">.</span><span class="token function">has</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            result<span class="token punctuation">.</span>removed<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 如果条目不多的话可以用下面方法O(n)</span>
+<span class="token keyword">function</span> <span class="token function">compareArrays</span><span class="token punctuation">(</span><span class="token parameter">oldArray<span class="token punctuation">,</span> newArray</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> added <span class="token operator">=</span> newArray<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token parameter">item</span> <span class="token operator">=></span> <span class="token operator">!</span>oldArray<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> removed <span class="token operator">=</span> oldArray<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token parameter">item</span> <span class="token operator">=></span> <span class="token operator">!</span>newArray<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> <span class="token punctuation">&#123;</span> added<span class="token punctuation">,</span> removed <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://github.com/12Tall">
+            <span class="icon">
+              <i class="fa-brands fa-github"></i>
+            </span>
+
+            <span class="label">Github</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://space.bilibili.com/66003054">
+            <span class="icon">
+              <i class="fa-brands fa-bilibili"></i>
+            </span>
+
+            <span class="label">BiliBili</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/ldap/" rel="tag"># ldap</a>
+              <a href="/tags/synology/" rel="tag"># synology</a>
+              <a href="/tags/monitor/" rel="tag"># monitor</a>
+              <a href="/tags/389/" rel="tag"># 389</a>
+              <a href="/tags/636/" rel="tag"># 636</a>
+              <a href="/tags/%E7%BE%A4%E6%99%96/" rel="tag"># 群晖</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/05/26/notation/scapy/traffic_analyzer/" rel="prev" title="Scapy 抓包分析代码阅读">
+                  <i class="fa fa-angle-left"></i> Scapy 抓包分析代码阅读
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="/lib/animejs/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="/lib/hexo-generator-searchdb/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"/lib/mermaid/dist/mermaid.min.js","integrity":"sha256-TtLOdUA8mstPoO6sGvHIGx2ceXrrX4KgIItO06XOn8A="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"zh-CN","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+
+</body>
+</html>

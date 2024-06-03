@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Hello World</title>
+    <url>/2024/03/24/hello-world/</url>
+    <content><![CDATA[<p><code>Hexo Next</code> 在使用中遇到的问题与结局办法汇总。</p>
+<span id="more"></span>
+<pre class="highlight"><code class="bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span>  
+$ hexo new -p  notation/pm2/pm2-简单教程
+$ hexo clean  
+$ hexo generate
+$ hexo server  
+$ hexo deploy
+</code></pre>
+<ul>
+<li>代码块显示异常：代码块结束符``` 后不要跟空格</li>
+<li>轻易使用<code>markdown-it</code> 会导致<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>L</mi><mi>A</mi></msup><msub><mi>T</mi><mi>E</mi></msub><mi>X</mi></mrow><annotation encoding="application/x-tex">L^AT_EX</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.991331em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">A</span></span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05764em;">E</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span></span></span></span> 显示异常</li>
+</ul>
+<h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
+<ol>
+<li><a href="https://github.com/next-theme/hexo-next-giscus">启用Hexo Next Giscus 评论系统</a></li>
+<li><a href="https://giscus.app/">Giscus</a> 在这个界面上可以得到Giscus 所需的所有参数</li>
+<li><a href="https://yueyue200830.github.io/2020/02/23/%E8%AE%BE%E7%BD%AEhexo%E9%A6%96%E9%A1%B5%E5%8F%AA%E6%98%BE%E7%A4%BA%E9%83%A8%E5%88%86%E6%91%98%E8%A6%81%EF%BC%88%E4%B8%8D%E6%98%BE%E7%A4%BA%E5%85%A8%E6%96%87%EF%BC%89/">显示摘要</a></li>
+</ol>
+]]></content>
+  </entry>
+  <entry>
     <title>Gitlab简单安装</title>
     <url>/2024/05/16/notation/Gitlab%E7%AE%80%E5%8D%95%E5%AE%89%E8%A3%85/</url>
     <content><![CDATA[<p>以前一直在用Gogs，但是Gitlab 提供了CI/CD 的功能，故而尝试部署下。</p>
@@ -217,30 +241,6 @@ irb<span class="token punctuation">(</span>main<span class="token punctuation">)
         <tag>ldap</tag>
         <tag>synology</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2024/03/24/hello-world/</url>
-    <content><![CDATA[<p><code>Hexo Next</code> 在使用中遇到的问题与结局办法汇总。</p>
-<span id="more"></span>
-<pre class="highlight"><code class="bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span>  
-$ hexo new -p  notation/pm2/pm2-简单教程
-$ hexo clean  
-$ hexo generate
-$ hexo server  
-$ hexo deploy
-</code></pre>
-<ul>
-<li>代码块显示异常：代码块结束符``` 后不要跟空格</li>
-<li>轻易使用<code>markdown-it</code> 会导致<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>L</mi><mi>A</mi></msup><msub><mi>T</mi><mi>E</mi></msub><mi>X</mi></mrow><annotation encoding="application/x-tex">L^AT_EX</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.991331em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">A</span></span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05764em;">E</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span></span></span></span> 显示异常</li>
-</ul>
-<h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
-<ol>
-<li><a href="https://github.com/next-theme/hexo-next-giscus">启用Hexo Next Giscus 评论系统</a></li>
-<li><a href="https://giscus.app/">Giscus</a> 在这个界面上可以得到Giscus 所需的所有参数</li>
-<li><a href="https://yueyue200830.github.io/2020/02/23/%E8%AE%BE%E7%BD%AEhexo%E9%A6%96%E9%A1%B5%E5%8F%AA%E6%98%BE%E7%A4%BA%E9%83%A8%E5%88%86%E6%91%98%E8%A6%81%EF%BC%88%E4%B8%8D%E6%98%BE%E7%A4%BA%E5%85%A8%E6%96%87%EF%BC%89/">显示摘要</a></li>
-</ol>
-]]></content>
   </entry>
   <entry>
     <title>pyside6-tabel-delegate</title>
@@ -692,175 +692,6 @@ sys<span class="token punctuation">.</span>exit<span class="token punctuation">(
       </tags>
   </entry>
   <entry>
-    <title>pm2 简单教程</title>
-    <url>/2024/03/22/notation/pm2/pm2%20%E7%AE%80%E5%8D%95%E6%95%99%E7%A8%8B/</url>
-    <content><![CDATA[<blockquote>
-<p>以前简单了解过<code>PM2</code>，但是没有太多的实战经验，仅用于托管单个站点。现在因为手头上要部署二进制服务和Python 自动化脚本，故而记一下常用的指令，尤其是开机自启动与定时任务部分。</p>
-</blockquote>
-<p>PM2 就是一个管理进程的进程，可以用于部署web 服务，自动化脚本。它能够实现基本的定时任务、故障重启、均衡负载。相较于systemd 或者是windows 服务，使用起来更加简单。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">npm</span> i <span class="token parameter variable">-g</span> pm2<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="命令行参数"><a class="markdownIt-Anchor" href="#命令行参数"></a> 命令行参数</h2>
-<p>添加并启动一个实例：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 启动脚本</span>
-pm2 start app.js  
-<span class="token comment"># 给脚本传入参数，要用 -- 隔开  </span>
-pm2 start app.exe -- <span class="token parameter variable">--port</span> <span class="token number">2333</span>
-<span class="token comment"># 常用参数  </span>
-<span class="token parameter variable">--name</span> <span class="token operator">&lt;</span>pm2 实例名<span class="token operator">></span>  
-<span class="token comment"># 监控当前文件夹（含子文件夹）变化，指定排除项  </span>
-<span class="token parameter variable">--watch</span> --ignore-watch<span class="token operator">=</span><span class="token string">"node_modules"</span>
-<span class="token comment"># 超过内存自动重启</span>
---max-momory-restart <span class="token operator">&lt;</span>200MB<span class="token operator">></span>  
-<span class="token comment"># &lt;日志文件路径></span>
-<span class="token parameter variable">--log</span>  
-<span class="token comment"># 日志添加时间前缀</span>
-<span class="token parameter variable">--time</span>
-
-<span class="token comment"># 重启延迟</span>
---restart-delay <span class="token operator">&lt;</span>毫秒数<span class="token operator">></span>  
-<span class="token comment"># 不自动重启  </span>
---no-autorestart
-<span class="token comment"># 定时重启任务  </span>
-<span class="token parameter variable">--cron</span> <span class="token operator">&lt;</span>规则<span class="token operator">></span>  
-<span class="token comment"># 不作为后台进程运行（不常用）</span>
---no-daemon
-
-<span class="token comment">##  集群  ##</span>
-<span class="token comment"># 对于NodeJS 的应用，可以自动启动多个实例并且均衡负载  </span>
-pm2 start app.js <span class="token parameter variable">-i</span> number  
-
-<span class="token comment"># 对于计划任务，可以采用下面的方式（对于单次任务脚本，要禁用掉自动重启）：  </span>
-pm2 start app.js --cron-restart<span class="token operator">=</span><span class="token string">"0/10 10,14 9-17 * * *"</span> --no-autorestart
-<span class="token comment"># cron 的模式为</span>
-<span class="token comment"># 1. 秒（0 - 59）</span>
-<span class="token comment"># 2. 分钟（0 - 59）</span>
-<span class="token comment"># 3. 小时（0 - 23）</span>
-<span class="token comment"># 4. 日（1 - 31）</span>
-<span class="token comment"># 5. 月份（1 - 12）</span>
-<span class="token comment"># 6. 星期（0 - 7，其中0和7代表星期日）</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="管理实例"><a class="markdownIt-Anchor" href="#管理实例"></a> 管理实例</h2>
-<p>管理服务：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pm2 <span class="token punctuation">[</span>list<span class="token operator">|</span><span class="token function">ls</span><span class="token operator">|</span>status<span class="token punctuation">]</span>
-pm2 delete name
-<span class="token comment"># 查看日志  </span>
-pm2 logs <span class="token punctuation">[</span>--lines <span class="token number">200</span><span class="token punctuation">]</span> <span class="token comment"># 限制行数</span>
-<span class="token comment"># 简单的仪表盘  </span>
-pm2 monit 
-pm2 plus <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="通过配置文件启动"><a class="markdownIt-Anchor" href="#通过配置文件启动"></a> 通过配置文件启动</h2>
-<p>通过配置文件可以方便地管理许多实例，并且对于任务的修改也比较友好：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pm2 ecosystem 
-pm2 start ecosystem.config.js
-pm2 reload ecosystem.config.js
-pm2 <span class="token punctuation">[</span>start<span class="token operator">|</span>reload<span class="token punctuation">]</span> ecosystem.config.js <span class="token parameter variable">--only</span> name  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="配置文件"><a class="markdownIt-Anchor" href="#配置文件"></a> 配置文件</h2>
-<p>下面是<code>ecosystem.config.js</code> 文件的结构：</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-	<span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">"app"</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">script</span><span class="token operator">:</span> <span class="token string">"./app.js"</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">env</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"development"</span><span class="token punctuation">,</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">env_production</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"production"</span><span class="token punctuation">,</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token comment">// app2 更为常用，并且可以用于设置非NodeJS 的应用</span>
-<span class="token keyword">const</span> app2 <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-     <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'实例名，默认是脚本文件名'</span><span class="token punctuation">,</span>
-     <span class="token literal-property property">script</span><span class="token operator">:</span> <span class="token string">'脚本的路径'</span><span class="token punctuation">,</span>
-     <span class="token literal-property property">cwd</span><span class="token operator">:</span> <span class="token string">'指定工作目录'</span><span class="token punctuation">,</span>  
-     <span class="token literal-property property">args</span><span class="token operator">:</span> <span class="token string">'指定参数'</span><span class="token punctuation">,</span>  
-     <span class="token literal-property property">interpreter</span><span class="token operator">:</span> <span class="token string">'解释器路径，默认为Node， 但其实也可用于Poetry'</span><span class="token punctuation">,</span>
-     <span class="token literal-property property">interpreter_args</span><span class="token operator">:</span> <span class="token string">'解释器参数'</span><span class="token punctuation">,</span>  
-     <span class="token literal-property property">node_args</span><span class="token operator">:</span> <span class="token string">'解释器参数的别名'</span><span class="token punctuation">,</span>  
-
-	 <span class="token comment">// 高级参数  </span>
-	 <span class="token literal-property property">instance</span><span class="token operator">:</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span>  <span class="token comment">// 实例数量，为0 的话，自动创建CPU 核心数  </span>
-	 <span class="token literal-property property">exec_mode</span><span class="token operator">:</span> <span class="token string">'fork'</span><span class="token punctuation">,</span> <span class="token comment">// 也可以选择集群模式`cluster`</span>
-	 <span class="token literal-property property">watch</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>  <span class="token comment">// 监控文件变化  </span>
-	 <span class="token literal-property property">ignore_watch</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'[\/\\]\./'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>  <span class="token comment">// 忽略项  </span>
-	 <span class="token literal-property property">env</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-       <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"development"</span><span class="token punctuation">,</span>
-     <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-	 <span class="token literal-property property">env_production</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-	   <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"production"</span><span class="token punctuation">,</span>
-	 <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>  
-
-	 <span class="token comment">// 控制流</span>
-     <span class="token literal-property property">cron_restart</span><span class="token operator">:</span> <span class="token string">'0 0 * * *'</span><span class="token punctuation">,</span>  <span class="token comment">//定时重启</span>
-     <span class="token literal-property property">autorestart</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>  <span class="token comment">// 自动重启  </span>
-     <span class="token literal-property property">restart_delay</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>  <span class="token comment">// 重启延时，微秒</span>
-
-  <span class="token punctuation">&#125;</span>
-
-module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">apps</span> <span class="token operator">:</span> <span class="token punctuation">[</span>app<span class="token punctuation">,</span> app2<span class="token punctuation">]</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="设置开机启动"><a class="markdownIt-Anchor" href="#设置开机启动"></a> 设置开机启动</h2>
-<p>注意，下面命令生成的启动项文件会在当前用户工作区间内，也可以以管理员用户运行，这样就可以访问所有资源了。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 生成一个开机启动项</span>
-pm2 startup  
-
-<span class="token comment"># 保存当前运行的实例为开机启动项</span>
-pm2 save <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="使用实例"><a class="markdownIt-Anchor" href="#使用实例"></a> 使用实例</h2>
-<p>以安装<code>Gogs</code> 为例，因为通过包安装不比通过二进制文件配合PM2 简单</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 1. 创建git 用户，禁止交互式（如ssh）登录  </span>
-<span class="token function">sudo</span> adduser --disabled-login <span class="token parameter variable">--gecos</span> <span class="token string">'Gogs'</span> <span class="token function">git</span> <span class="token comment"># --gecos 'Gogs' 信息不重要  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>安装配置好数据库的信息，之后切换到git 用户</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token parameter variable">-i</span> <span class="token parameter variable">-u</span> <span class="token function">git</span>  
-<span class="token function">curl</span> https://dl.gogs.io/0.13.0/gogs_0.13.0_linux_amd64.zip <span class="token parameter variable">--output</span> gogs.zip  
-<span class="token function">unzip</span> gogs.zip 
-
-<span class="token comment"># 其实这里就已经可以通过pm2 启动了  </span>
-pm2 start ./gogs web  
-
-<span class="token comment"># 但是还有更好的方案  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>因为要设置为开机启动，所以最好通过<code>su</code> 账户统一启动，但同时又考虑到服务的权限问题，因此需要设置一个启动脚本：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 配置pm2 开机自启动  </span>
-<span class="token function">sudo</span> pm2 startup  
-
-<span class="token comment"># 创建一个从其他用户启动gogs 实例的脚本</span>
-<span class="token function">sudo</span> <span class="token function">vim</span> /home/git/gogs/gogs.sh  
-
-<span class="token comment"># 以下为脚本内容， &lt;&lt;EOF 表示创建一个文本块，并传递给脚本命令。EOF 可以自己定义  </span>
-<span class="token function">sudo</span> <span class="token function">su</span> - <span class="token function">git</span> <span class="token operator">&lt;&lt;</span><span class="token string">EOF
-    # 进入 git 用户的主目录
-    cd ~
-
-    # 进入 gogs 目录
-    cd gogs
-
-    # 启动 gogs
-    ./gogs web
-EOF</span>
-<span class="token comment"># 结束</span>
-
-<span class="token comment"># 将上述脚本设置内可执行  </span>
-<span class="token function">sudo</span> <span class="token function">chmod</span> +x /home/git/gogs/gogs.sh
-
-<span class="token comment"># 启动服务  </span>
-<span class="token function">sudo</span> pm2 start /home/git/gogs/gogs.sh  
-
-<span class="token comment"># 保存  </span>
-<span class="token function">sudo</span> pm2 save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>比较重要的就是上面创建用户，和用户脚本的编写了。🎂</p>
-]]></content>
-      <categories>
-        <category>运维</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>pm2</tag>
-        <tag>node</tag>
-        <tag>server</tag>
-        <tag>cron</tag>
-        <tag>gogs</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>DOT 语言</title>
     <url>/2024/05/26/notation/dot/dot/</url>
     <content><![CDATA[<p>比较有意思的是，Graphviz 直接将<a href="https://www.graphviz.org/doc/info/lang.html">DOT 语法定义</a> 给贴出来了。可以通过<a href="https://dreampuf.github.io/GraphvizOnline/#">在线Graphviz 绘图</a> 学习，但是任何工具都是熟能生巧，要经常用才好。</p>
@@ -1086,6 +917,376 @@ st_table [label=&lt;
         <tag>dot</tag>
         <tag>language</tag>
         <tag>graphviz</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ldapjs 笔记</title>
+    <url>/2024/06/03/notation/ldap/ldapjs/</url>
+    <content><![CDATA[<blockquote>
+<p>群晖中如果出现<code>636</code> 端口关闭、<code>389</code> 端口要求强认证，那么大概问题是出在证书配置错误了，需要将<code>Synology Directory Server</code> 的证书恢复为域名相同。</p>
+</blockquote>
+<span id="more"></span>  
+<h2 id="ldap-筛选器语法"><a class="markdownIt-Anchor" href="#ldap-筛选器语法"></a> LDAP 筛选器语法</h2>
+<p>LDAP 筛选器的语法的逻辑运算符在前面，主要有<code>&amp;,|,!</code>，然后以<code>()</code>包围。数值运算主要有<code>=,&gt;=,&lt;=</code>。再包含一个通配符<code>*</code>。基本就够用了，例如：</p>
+<pre class="line-numbers language-none"><code class="language-none">
+(| (&amp; (mail&gt;&#x3D;b@example.com) (mail&#x3D;b@example.com)) (sn&#x3D;c*d))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>也许用语法图表示下更形象：</p>
+<pre class="line-numbers language-antlr4" data-language="antlr4"><code class="language-antlr4"><span class="token definition rule class-name">filter</span><span class="token punctuation">:</span> expr
+
+<span class="token definition rule class-name">expr</span>
+    <span class="token punctuation">:</span> <span class="token constant">LP</span> andExpr <span class="token constant">RP</span>
+    <span class="token operator">|</span> <span class="token constant">LP</span> orExpr <span class="token constant">RP</span>
+    <span class="token operator">|</span> <span class="token constant">LP</span> notExpr <span class="token constant">RP</span>
+    <span class="token operator">|</span> simpleExpr
+
+<span class="token definition rule class-name">andExpr</span>
+    <span class="token punctuation">:</span> <span class="token constant">AND</span> expr expr
+
+<span class="token definition rule class-name">orExpr</span>
+    <span class="token punctuation">:</span> <span class="token constant">OR</span> expr expr
+
+<span class="token definition rule class-name">notExpr</span>
+    <span class="token punctuation">:</span> <span class="token constant">NOT</span> expr
+
+<span class="token definition rule class-name">simpleExpr</span>
+    <span class="token punctuation">:</span> <span class="token constant">LP</span> <span class="token constant">ATTR</span> <span class="token punctuation">(</span><span class="token constant">EQ</span> <span class="token operator">|</span> <span class="token constant">GE</span> <span class="token operator">|</span> <span class="token constant">LE</span><span class="token punctuation">)</span> <span class="token constant">VAL</span> <span class="token constant">RP</span>
+
+<span class="token definition token constant">LP</span>    <span class="token punctuation">:</span> <span class="token string">'('</span> 
+<span class="token definition token constant">RP</span>    <span class="token punctuation">:</span> <span class="token string">')'</span> 
+<span class="token definition token constant">AND</span>   <span class="token punctuation">:</span> <span class="token string">'&amp;'</span> 
+<span class="token definition token constant">OR</span>    <span class="token punctuation">:</span> <span class="token string">'|'</span> 
+<span class="token definition token constant">NOT</span>   <span class="token punctuation">:</span> <span class="token string">'!'</span> 
+<span class="token definition token constant">EQ</span>    <span class="token punctuation">:</span> <span class="token string">'='</span> 
+<span class="token definition token constant">GE</span>    <span class="token punctuation">:</span> <span class="token string">'>='</span> 
+<span class="token definition token constant">LE</span>    <span class="token punctuation">:</span> <span class="token string">'&lt;='</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>还是要注意表达式在语法中的重要地位。</p>
+<h3 id="ldap-查询注入"><a class="markdownIt-Anchor" href="#ldap-查询注入"></a> LDAP 查询注入</h3>
+<p>在某些LDAP 服务器中，会存在注入的漏洞。例如：将<code>(attribute=$input)</code> 中的<code>$input</code> 输入为<code>value)(injected_filter</code>，便有可能使后续的条件失效。</p>
+<h2 id="ldapjs-查询"><a class="markdownIt-Anchor" href="#ldapjs-查询"></a> LDAPJS 查询</h2>
+<p>NodeJS 的所有IO 操作都是基于<a href="https://luohaha.github.io/Chinese-uvbook/source/introduction.html">libuv</a>，是非阻塞的，<code>ldapjs</code> 也是类似，基本上是基于回调函数来实现查询：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// npm install ldapjs</span>
+<span class="token keyword">const</span> ldap <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'ldapjs'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+
+<span class="token comment">// LDAP服务器的URL</span>
+<span class="token keyword">const</span> ldapUrl <span class="token operator">=</span> <span class="token string">'ldaps://10.22.33.36'</span><span class="token punctuation">;</span>
+
+<span class="token comment">// LDAP服务器的基本DN</span>
+<span class="token keyword">const</span> baseDN <span class="token operator">=</span> <span class="token string">'dc=exp,dc=com'</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 创建LDAP客户端</span>
+<span class="token keyword">const</span> client <span class="token operator">=</span> ldap<span class="token punctuation">.</span><span class="token function">createClient</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">url</span><span class="token operator">:</span> ldapUrl<span class="token punctuation">,</span>
+    <span class="token literal-property property">tlsOptions</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        <span class="token literal-property property">rejectUnauthorized</span><span class="token operator">:</span> <span class="token boolean">false</span> <span class="token comment">// 忽略证书错误</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// bind 相当于用户登录</span>
+<span class="token function">client</span><span class="token punctuation">.</span><span class="token function">bind</span><span class="token punctuation">(</span>user_dn<span class="token punctuation">,</span> passwd<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">err</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+client<span class="token punctuation">.</span><span class="token function">search</span><span class="token punctuation">(</span><span class="token string">'dc=exp,dc=com'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">filter</span><span class="token operator">:</span> <span class="token string">'(objectClass=user)'</span><span class="token punctuation">,</span>  <span class="token comment">// 过滤器，查询用户</span>
+    <span class="token literal-property property">scope</span><span class="token operator">:</span> <span class="token string">'sub'</span><span class="token punctuation">,</span>  <span class="token comment">// 有三种，sub 是查询所有子节点</span>
+    <span class="token literal-property property">attributes</span><span class="token operator">:</span><span class="token punctuation">[</span><span class="token string">'cn'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>  <span class="token comment">// 需要的属性，默认全部属性</span>
+    <span class="token comment">// 还有分页信息可以传入，但不是必须</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">err<span class="token punctuation">,</span> res</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    res<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'searchRequest'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">searchRequest</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'searchRequest: '</span><span class="token punctuation">,</span> searchRequest<span class="token punctuation">.</span>messageId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    res<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'searchEntry'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">entry</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 这里是每一条符合条件的结果都会调用一次on-searchEntry 方法</span>
+        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>entry<span class="token punctuation">.</span>pojo<span class="token punctuation">.</span>attributes<span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    res<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'searchReference'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">referral</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'referral: '</span> <span class="token operator">+</span> referral<span class="token punctuation">.</span>uris<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    res<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'error'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">err</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        console<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">'error: '</span> <span class="token operator">+</span> err<span class="token punctuation">.</span>message<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    res<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'end'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">result</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'status: '</span> <span class="token operator">+</span> result<span class="token punctuation">.</span>status<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        client<span class="token punctuation">.</span><span class="token function">unbind</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">err</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+            assert<span class="token punctuation">.</span><span class="token function">ifError</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="查询结果"><a class="markdownIt-Anchor" href="#查询结果"></a> 查询结果</h3>
+<p>以群晖为例，其中常用的属性有<code>[cn, mail, givenName, sn, displayName, memberOf, whenChanged, userPrincipalName, sAMAccountName, objectGUID]</code>：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">[</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'objectClass'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'top'</span><span class="token punctuation">,</span> <span class="token string">'person'</span><span class="token punctuation">,</span> <span class="token string">'organizationalPerson'</span><span class="token punctuation">,</span> <span class="token string">'user'</span> <span class="token punctuation">]</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'cn'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'xxx'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'instanceType'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'4'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'whenCreated'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'20240222023600.0Z'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'uSNCreated'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'4038'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'name'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'xxx'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'objectGUID'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'xxxxxxxxxx'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'codePage'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'0'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'countryCode'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'0'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'lastLogoff'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'0'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'primaryGroupID'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'513'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'objectSid'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token string">'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'accountExpires'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'9223372036854775807'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'sAMAccountName'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'xxx'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'sAMAccountType'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'805306368'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'userPrincipalName'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'xxx@xxx.com'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'objectCategory'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'CN=Person,CN=Schema,CN=Configuration,DC=xxx,DC=com'</span> <span class="token punctuation">]</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'mail'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'xxx@xxx.com'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'description'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'XXX'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'displayName'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'XXX'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'givenName'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'XXX'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'sn'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'XXX'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'userAccountControl'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'66048'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'lockoutTime'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'0'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'memberOf'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token string">'CN=vpn-users,CN=Users,DC=xxx,DC=com'</span><span class="token punctuation">,</span>
+      <span class="token string">'CN=default-users,CN=Users,DC=xxx,DC=com'</span><span class="token punctuation">,</span>
+      <span class="token string">'CN=IT,CN=Users,DC=xxx,DC=com'</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'lastLogonTimestamp'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'133614245182887960'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'pwdLastSet'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'133616164634316900'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'whenChanged'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'20240531080743.0Z'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'uSNChanged'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'4982'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'badPasswordTime'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'133618697735623060'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'badPwdCount'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'0'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'lastLogon'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'133618902525867560'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'logonCount'</span><span class="token punctuation">,</span> <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'128'</span> <span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'distinguishedName'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">values</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'CN=xxx,CN=Users,DC=xxx,DC=com'</span> <span class="token punctuation">]</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="比较entry-变化"><a class="markdownIt-Anchor" href="#比较entry-变化"></a> 比较Entry 变化</h3>
+<p>因为主要用到ldap 中的用户组信息，直接更新到<code>postgresql</code> 是没问题的，但是还要与Lark 进行数据同步，这样就要比较下哪些属性是新加的，哪些是作废的：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// 通过以下函数可以快速比较数组中的元素变化O(1)</span>
+<span class="token keyword">function</span> <span class="token function">compareArrays</span><span class="token punctuation">(</span><span class="token parameter">oldArray<span class="token punctuation">,</span> newArray</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+        <span class="token literal-property property">added</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">removed</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 创建集合来存储旧数组和新数组的元素</span>
+    <span class="token keyword">const</span> oldSet <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Set</span><span class="token punctuation">(</span>oldArray<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> newSet <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Set</span><span class="token punctuation">(</span>newArray<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 找出新数组中有但旧数组中没有的元素</span>
+    newArray<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token parameter">item</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>oldSet<span class="token punctuation">.</span><span class="token function">has</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            result<span class="token punctuation">.</span>added<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 找出旧数组中有但新数组中没有的元素</span>
+    oldArray<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token parameter">item</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>newSet<span class="token punctuation">.</span><span class="token function">has</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            result<span class="token punctuation">.</span>removed<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 如果条目不多的话可以用下面方法O(n)</span>
+<span class="token keyword">function</span> <span class="token function">compareArrays</span><span class="token punctuation">(</span><span class="token parameter">oldArray<span class="token punctuation">,</span> newArray</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> added <span class="token operator">=</span> newArray<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token parameter">item</span> <span class="token operator">=></span> <span class="token operator">!</span>oldArray<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> removed <span class="token operator">=</span> oldArray<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token parameter">item</span> <span class="token operator">=></span> <span class="token operator">!</span>newArray<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> <span class="token punctuation">&#123;</span> added<span class="token punctuation">,</span> removed <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+      <tags>
+        <tag>ldap</tag>
+        <tag>synology</tag>
+        <tag>monitor</tag>
+        <tag>389</tag>
+        <tag>636</tag>
+        <tag>群晖</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pm2 简单教程</title>
+    <url>/2024/03/22/notation/pm2/pm2%20%E7%AE%80%E5%8D%95%E6%95%99%E7%A8%8B/</url>
+    <content><![CDATA[<blockquote>
+<p>以前简单了解过<code>PM2</code>，但是没有太多的实战经验，仅用于托管单个站点。现在因为手头上要部署二进制服务和Python 自动化脚本，故而记一下常用的指令，尤其是开机自启动与定时任务部分。</p>
+</blockquote>
+<p>PM2 就是一个管理进程的进程，可以用于部署web 服务，自动化脚本。它能够实现基本的定时任务、故障重启、均衡负载。相较于systemd 或者是windows 服务，使用起来更加简单。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">npm</span> i <span class="token parameter variable">-g</span> pm2<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="命令行参数"><a class="markdownIt-Anchor" href="#命令行参数"></a> 命令行参数</h2>
+<p>添加并启动一个实例：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 启动脚本</span>
+pm2 start app.js  
+<span class="token comment"># 给脚本传入参数，要用 -- 隔开  </span>
+pm2 start app.exe -- <span class="token parameter variable">--port</span> <span class="token number">2333</span>
+<span class="token comment"># 常用参数  </span>
+<span class="token parameter variable">--name</span> <span class="token operator">&lt;</span>pm2 实例名<span class="token operator">></span>  
+<span class="token comment"># 监控当前文件夹（含子文件夹）变化，指定排除项  </span>
+<span class="token parameter variable">--watch</span> --ignore-watch<span class="token operator">=</span><span class="token string">"node_modules"</span>
+<span class="token comment"># 超过内存自动重启</span>
+--max-momory-restart <span class="token operator">&lt;</span>200MB<span class="token operator">></span>  
+<span class="token comment"># &lt;日志文件路径></span>
+<span class="token parameter variable">--log</span>  
+<span class="token comment"># 日志添加时间前缀</span>
+<span class="token parameter variable">--time</span>
+
+<span class="token comment"># 重启延迟</span>
+--restart-delay <span class="token operator">&lt;</span>毫秒数<span class="token operator">></span>  
+<span class="token comment"># 不自动重启  </span>
+--no-autorestart
+<span class="token comment"># 定时重启任务  </span>
+<span class="token parameter variable">--cron</span> <span class="token operator">&lt;</span>规则<span class="token operator">></span>  
+<span class="token comment"># 不作为后台进程运行（不常用）</span>
+--no-daemon
+
+<span class="token comment">##  集群  ##</span>
+<span class="token comment"># 对于NodeJS 的应用，可以自动启动多个实例并且均衡负载  </span>
+pm2 start app.js <span class="token parameter variable">-i</span> number  
+
+<span class="token comment"># 对于计划任务，可以采用下面的方式（对于单次任务脚本，要禁用掉自动重启）：  </span>
+pm2 start app.js --cron-restart<span class="token operator">=</span><span class="token string">"0/10 10,14 9-17 * * *"</span> --no-autorestart
+<span class="token comment"># cron 的模式为</span>
+<span class="token comment"># 1. 秒（0 - 59）</span>
+<span class="token comment"># 2. 分钟（0 - 59）</span>
+<span class="token comment"># 3. 小时（0 - 23）</span>
+<span class="token comment"># 4. 日（1 - 31）</span>
+<span class="token comment"># 5. 月份（1 - 12）</span>
+<span class="token comment"># 6. 星期（0 - 7，其中0和7代表星期日）</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="管理实例"><a class="markdownIt-Anchor" href="#管理实例"></a> 管理实例</h2>
+<p>管理服务：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pm2 <span class="token punctuation">[</span>list<span class="token operator">|</span><span class="token function">ls</span><span class="token operator">|</span>status<span class="token punctuation">]</span>
+pm2 delete name
+<span class="token comment"># 查看日志  </span>
+pm2 logs <span class="token punctuation">[</span>--lines <span class="token number">200</span><span class="token punctuation">]</span> <span class="token comment"># 限制行数</span>
+<span class="token comment"># 简单的仪表盘  </span>
+pm2 monit 
+pm2 plus <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="通过配置文件启动"><a class="markdownIt-Anchor" href="#通过配置文件启动"></a> 通过配置文件启动</h2>
+<p>通过配置文件可以方便地管理许多实例，并且对于任务的修改也比较友好：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pm2 ecosystem 
+pm2 start ecosystem.config.js
+pm2 reload ecosystem.config.js
+pm2 <span class="token punctuation">[</span>start<span class="token operator">|</span>reload<span class="token punctuation">]</span> ecosystem.config.js <span class="token parameter variable">--only</span> name  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="配置文件"><a class="markdownIt-Anchor" href="#配置文件"></a> 配置文件</h2>
+<p>下面是<code>ecosystem.config.js</code> 文件的结构：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+	<span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">"app"</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">script</span><span class="token operator">:</span> <span class="token string">"./app.js"</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">env</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"development"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">env_production</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"production"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// app2 更为常用，并且可以用于设置非NodeJS 的应用</span>
+<span class="token keyword">const</span> app2 <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+     <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'实例名，默认是脚本文件名'</span><span class="token punctuation">,</span>
+     <span class="token literal-property property">script</span><span class="token operator">:</span> <span class="token string">'脚本的路径'</span><span class="token punctuation">,</span>
+     <span class="token literal-property property">cwd</span><span class="token operator">:</span> <span class="token string">'指定工作目录'</span><span class="token punctuation">,</span>  
+     <span class="token literal-property property">args</span><span class="token operator">:</span> <span class="token string">'指定参数'</span><span class="token punctuation">,</span>  
+     <span class="token literal-property property">interpreter</span><span class="token operator">:</span> <span class="token string">'解释器路径，默认为Node， 但其实也可用于Poetry'</span><span class="token punctuation">,</span>
+     <span class="token literal-property property">interpreter_args</span><span class="token operator">:</span> <span class="token string">'解释器参数'</span><span class="token punctuation">,</span>  
+     <span class="token literal-property property">node_args</span><span class="token operator">:</span> <span class="token string">'解释器参数的别名'</span><span class="token punctuation">,</span>  
+
+	 <span class="token comment">// 高级参数  </span>
+	 <span class="token literal-property property">instance</span><span class="token operator">:</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span>  <span class="token comment">// 实例数量，为0 的话，自动创建CPU 核心数  </span>
+	 <span class="token literal-property property">exec_mode</span><span class="token operator">:</span> <span class="token string">'fork'</span><span class="token punctuation">,</span> <span class="token comment">// 也可以选择集群模式`cluster`</span>
+	 <span class="token literal-property property">watch</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>  <span class="token comment">// 监控文件变化  </span>
+	 <span class="token literal-property property">ignore_watch</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'[\/\\]\./'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>  <span class="token comment">// 忽略项  </span>
+	 <span class="token literal-property property">env</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+       <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"development"</span><span class="token punctuation">,</span>
+     <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+	 <span class="token literal-property property">env_production</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+	   <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"production"</span><span class="token punctuation">,</span>
+	 <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>  
+
+	 <span class="token comment">// 控制流</span>
+     <span class="token literal-property property">cron_restart</span><span class="token operator">:</span> <span class="token string">'0 0 * * *'</span><span class="token punctuation">,</span>  <span class="token comment">//定时重启</span>
+     <span class="token literal-property property">autorestart</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>  <span class="token comment">// 自动重启  </span>
+     <span class="token literal-property property">restart_delay</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>  <span class="token comment">// 重启延时，微秒</span>
+
+  <span class="token punctuation">&#125;</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  <span class="token literal-property property">apps</span> <span class="token operator">:</span> <span class="token punctuation">[</span>app<span class="token punctuation">,</span> app2<span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="设置开机启动"><a class="markdownIt-Anchor" href="#设置开机启动"></a> 设置开机启动</h2>
+<p>注意，下面命令生成的启动项文件会在当前用户工作区间内，也可以以管理员用户运行，这样就可以访问所有资源了。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 生成一个开机启动项</span>
+pm2 startup  
+
+<span class="token comment"># 保存当前运行的实例为开机启动项</span>
+pm2 save <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="使用实例"><a class="markdownIt-Anchor" href="#使用实例"></a> 使用实例</h2>
+<p>以安装<code>Gogs</code> 为例，因为通过包安装不比通过二进制文件配合PM2 简单</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 1. 创建git 用户，禁止交互式（如ssh）登录  </span>
+<span class="token function">sudo</span> adduser --disabled-login <span class="token parameter variable">--gecos</span> <span class="token string">'Gogs'</span> <span class="token function">git</span> <span class="token comment"># --gecos 'Gogs' 信息不重要  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>安装配置好数据库的信息，之后切换到git 用户</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token parameter variable">-i</span> <span class="token parameter variable">-u</span> <span class="token function">git</span>  
+<span class="token function">curl</span> https://dl.gogs.io/0.13.0/gogs_0.13.0_linux_amd64.zip <span class="token parameter variable">--output</span> gogs.zip  
+<span class="token function">unzip</span> gogs.zip 
+
+<span class="token comment"># 其实这里就已经可以通过pm2 启动了  </span>
+pm2 start ./gogs web  
+
+<span class="token comment"># 但是还有更好的方案  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>因为要设置为开机启动，所以最好通过<code>su</code> 账户统一启动，但同时又考虑到服务的权限问题，因此需要设置一个启动脚本：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 配置pm2 开机自启动  </span>
+<span class="token function">sudo</span> pm2 startup  
+
+<span class="token comment"># 创建一个从其他用户启动gogs 实例的脚本</span>
+<span class="token function">sudo</span> <span class="token function">vim</span> /home/git/gogs/gogs.sh  
+
+<span class="token comment"># 以下为脚本内容， &lt;&lt;EOF 表示创建一个文本块，并传递给脚本命令。EOF 可以自己定义  </span>
+<span class="token function">sudo</span> <span class="token function">su</span> - <span class="token function">git</span> <span class="token operator">&lt;&lt;</span><span class="token string">EOF
+    # 进入 git 用户的主目录
+    cd ~
+
+    # 进入 gogs 目录
+    cd gogs
+
+    # 启动 gogs
+    ./gogs web
+EOF</span>
+<span class="token comment"># 结束</span>
+
+<span class="token comment"># 将上述脚本设置内可执行  </span>
+<span class="token function">sudo</span> <span class="token function">chmod</span> +x /home/git/gogs/gogs.sh
+
+<span class="token comment"># 启动服务  </span>
+<span class="token function">sudo</span> pm2 start /home/git/gogs/gogs.sh  
+
+<span class="token comment"># 保存  </span>
+<span class="token function">sudo</span> pm2 save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>比较重要的就是上面创建用户，和用户脚本的编写了。🎂</p>
+]]></content>
+      <categories>
+        <category>运维</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>pm2</tag>
+        <tag>node</tag>
+        <tag>server</tag>
+        <tag>cron</tag>
+        <tag>gogs</tag>
       </tags>
   </entry>
   <entry>
