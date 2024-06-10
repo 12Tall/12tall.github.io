@@ -224,6 +224,8 @@ gitlab_rails<span class="token punctuation">[</span><span class="token string">'
 </ol>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> gitlab-rails console
 irb<span class="token punctuation">(</span>main<span class="token punctuation">)</span>:001:<span class="token operator"><span class="token file-descriptor important">0</span>></span> Notify.test_email<span class="token punctuation">(</span><span class="token string">'XXXXXX@gmail.com'</span>,<span class="token string">'test Gitlab Email'</span>,<span class="token string">'Test'</span><span class="token punctuation">)</span>.deliver_now<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="数据库"><a class="markdownIt-Anchor" href="#数据库"></a> 数据库</h3>
+<p>GitLab 安装时如果系统已经安装PostgreSQL，则会自动创建<code>gitlab_db</code> 数据库。</p>
 <h3 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h3>
 <ol>
 <li><a href="https://qiita.com/inakadegaebal/items/3cc0603141a334fcc8af">CentOS7にGitLabをインストールする(既存nginxを使用)</a></li>
@@ -988,6 +990,7 @@ st_table [label=&lt;
 
 client<span class="token punctuation">.</span><span class="token function">search</span><span class="token punctuation">(</span><span class="token string">'dc=exp,dc=com'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
     <span class="token literal-property property">filter</span><span class="token operator">:</span> <span class="token string">'(objectClass=user)'</span><span class="token punctuation">,</span>  <span class="token comment">// 过滤器，查询用户</span>
+    <span class="token comment">// 按组所有g_ 开头的组 (&amp;(objectClass=group)(cn=g_*)</span>
     <span class="token literal-property property">scope</span><span class="token operator">:</span> <span class="token string">'sub'</span><span class="token punctuation">,</span>  <span class="token comment">// 有三种，sub 是查询所有子节点</span>
     <span class="token literal-property property">attributes</span><span class="token operator">:</span><span class="token punctuation">[</span><span class="token string">'cn'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>  <span class="token comment">// 需要的属性，默认全部属性</span>
     <span class="token comment">// 还有分页信息可以传入，但不是必须</span>
@@ -1011,7 +1014,7 @@ client<span class="token punctuation">.</span><span class="token function">searc
             assert<span class="token punctuation">.</span><span class="token function">ifError</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="查询结果"><a class="markdownIt-Anchor" href="#查询结果"></a> 查询结果</h3>
 <p>以群晖为例，其中常用的属性有<code>[cn, mail, givenName, sn, displayName, memberOf, whenChanged, userPrincipalName, sAMAccountName, objectGUID]</code>：</p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">[</span>
@@ -1118,175 +1121,6 @@ client<span class="token punctuation">.</span><span class="token function">searc
         <tag>389</tag>
         <tag>636</tag>
         <tag>群晖</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pm2 简单教程</title>
-    <url>/2024/03/22/notation/pm2/pm2%20%E7%AE%80%E5%8D%95%E6%95%99%E7%A8%8B/</url>
-    <content><![CDATA[<blockquote>
-<p>以前简单了解过<code>PM2</code>，但是没有太多的实战经验，仅用于托管单个站点。现在因为手头上要部署二进制服务和Python 自动化脚本，故而记一下常用的指令，尤其是开机自启动与定时任务部分。</p>
-</blockquote>
-<p>PM2 就是一个管理进程的进程，可以用于部署web 服务，自动化脚本。它能够实现基本的定时任务、故障重启、均衡负载。相较于systemd 或者是windows 服务，使用起来更加简单。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">npm</span> i <span class="token parameter variable">-g</span> pm2<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="命令行参数"><a class="markdownIt-Anchor" href="#命令行参数"></a> 命令行参数</h2>
-<p>添加并启动一个实例：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 启动脚本</span>
-pm2 start app.js  
-<span class="token comment"># 给脚本传入参数，要用 -- 隔开  </span>
-pm2 start app.exe -- <span class="token parameter variable">--port</span> <span class="token number">2333</span>
-<span class="token comment"># 常用参数  </span>
-<span class="token parameter variable">--name</span> <span class="token operator">&lt;</span>pm2 实例名<span class="token operator">></span>  
-<span class="token comment"># 监控当前文件夹（含子文件夹）变化，指定排除项  </span>
-<span class="token parameter variable">--watch</span> --ignore-watch<span class="token operator">=</span><span class="token string">"node_modules"</span>
-<span class="token comment"># 超过内存自动重启</span>
---max-momory-restart <span class="token operator">&lt;</span>200MB<span class="token operator">></span>  
-<span class="token comment"># &lt;日志文件路径></span>
-<span class="token parameter variable">--log</span>  
-<span class="token comment"># 日志添加时间前缀</span>
-<span class="token parameter variable">--time</span>
-
-<span class="token comment"># 重启延迟</span>
---restart-delay <span class="token operator">&lt;</span>毫秒数<span class="token operator">></span>  
-<span class="token comment"># 不自动重启  </span>
---no-autorestart
-<span class="token comment"># 定时重启任务  </span>
-<span class="token parameter variable">--cron</span> <span class="token operator">&lt;</span>规则<span class="token operator">></span>  
-<span class="token comment"># 不作为后台进程运行（不常用）</span>
---no-daemon
-
-<span class="token comment">##  集群  ##</span>
-<span class="token comment"># 对于NodeJS 的应用，可以自动启动多个实例并且均衡负载  </span>
-pm2 start app.js <span class="token parameter variable">-i</span> number  
-
-<span class="token comment"># 对于计划任务，可以采用下面的方式（对于单次任务脚本，要禁用掉自动重启）：  </span>
-pm2 start app.js --cron-restart<span class="token operator">=</span><span class="token string">"0/10 10,14 9-17 * * *"</span> --no-autorestart
-<span class="token comment"># cron 的模式为</span>
-<span class="token comment"># 1. 秒（0 - 59）</span>
-<span class="token comment"># 2. 分钟（0 - 59）</span>
-<span class="token comment"># 3. 小时（0 - 23）</span>
-<span class="token comment"># 4. 日（1 - 31）</span>
-<span class="token comment"># 5. 月份（1 - 12）</span>
-<span class="token comment"># 6. 星期（0 - 7，其中0和7代表星期日）</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="管理实例"><a class="markdownIt-Anchor" href="#管理实例"></a> 管理实例</h2>
-<p>管理服务：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pm2 <span class="token punctuation">[</span>list<span class="token operator">|</span><span class="token function">ls</span><span class="token operator">|</span>status<span class="token punctuation">]</span>
-pm2 delete name
-<span class="token comment"># 查看日志  </span>
-pm2 logs <span class="token punctuation">[</span>--lines <span class="token number">200</span><span class="token punctuation">]</span> <span class="token comment"># 限制行数</span>
-<span class="token comment"># 简单的仪表盘  </span>
-pm2 monit 
-pm2 plus <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="通过配置文件启动"><a class="markdownIt-Anchor" href="#通过配置文件启动"></a> 通过配置文件启动</h2>
-<p>通过配置文件可以方便地管理许多实例，并且对于任务的修改也比较友好：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pm2 ecosystem 
-pm2 start ecosystem.config.js
-pm2 reload ecosystem.config.js
-pm2 <span class="token punctuation">[</span>start<span class="token operator">|</span>reload<span class="token punctuation">]</span> ecosystem.config.js <span class="token parameter variable">--only</span> name  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="配置文件"><a class="markdownIt-Anchor" href="#配置文件"></a> 配置文件</h2>
-<p>下面是<code>ecosystem.config.js</code> 文件的结构：</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-	<span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">"app"</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">script</span><span class="token operator">:</span> <span class="token string">"./app.js"</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">env</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"development"</span><span class="token punctuation">,</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">env_production</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"production"</span><span class="token punctuation">,</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token comment">// app2 更为常用，并且可以用于设置非NodeJS 的应用</span>
-<span class="token keyword">const</span> app2 <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-     <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'实例名，默认是脚本文件名'</span><span class="token punctuation">,</span>
-     <span class="token literal-property property">script</span><span class="token operator">:</span> <span class="token string">'脚本的路径'</span><span class="token punctuation">,</span>
-     <span class="token literal-property property">cwd</span><span class="token operator">:</span> <span class="token string">'指定工作目录'</span><span class="token punctuation">,</span>  
-     <span class="token literal-property property">args</span><span class="token operator">:</span> <span class="token string">'指定参数'</span><span class="token punctuation">,</span>  
-     <span class="token literal-property property">interpreter</span><span class="token operator">:</span> <span class="token string">'解释器路径，默认为Node， 但其实也可用于Poetry'</span><span class="token punctuation">,</span>
-     <span class="token literal-property property">interpreter_args</span><span class="token operator">:</span> <span class="token string">'解释器参数'</span><span class="token punctuation">,</span>  
-     <span class="token literal-property property">node_args</span><span class="token operator">:</span> <span class="token string">'解释器参数的别名'</span><span class="token punctuation">,</span>  
-
-	 <span class="token comment">// 高级参数  </span>
-	 <span class="token literal-property property">instance</span><span class="token operator">:</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span>  <span class="token comment">// 实例数量，为0 的话，自动创建CPU 核心数  </span>
-	 <span class="token literal-property property">exec_mode</span><span class="token operator">:</span> <span class="token string">'fork'</span><span class="token punctuation">,</span> <span class="token comment">// 也可以选择集群模式`cluster`</span>
-	 <span class="token literal-property property">watch</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>  <span class="token comment">// 监控文件变化  </span>
-	 <span class="token literal-property property">ignore_watch</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'[\/\\]\./'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>  <span class="token comment">// 忽略项  </span>
-	 <span class="token literal-property property">env</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-       <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"development"</span><span class="token punctuation">,</span>
-     <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-	 <span class="token literal-property property">env_production</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-	   <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"production"</span><span class="token punctuation">,</span>
-	 <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>  
-
-	 <span class="token comment">// 控制流</span>
-     <span class="token literal-property property">cron_restart</span><span class="token operator">:</span> <span class="token string">'0 0 * * *'</span><span class="token punctuation">,</span>  <span class="token comment">//定时重启</span>
-     <span class="token literal-property property">autorestart</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>  <span class="token comment">// 自动重启  </span>
-     <span class="token literal-property property">restart_delay</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>  <span class="token comment">// 重启延时，微秒</span>
-
-  <span class="token punctuation">&#125;</span>
-
-module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">apps</span> <span class="token operator">:</span> <span class="token punctuation">[</span>app<span class="token punctuation">,</span> app2<span class="token punctuation">]</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="设置开机启动"><a class="markdownIt-Anchor" href="#设置开机启动"></a> 设置开机启动</h2>
-<p>注意，下面命令生成的启动项文件会在当前用户工作区间内，也可以以管理员用户运行，这样就可以访问所有资源了。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 生成一个开机启动项</span>
-pm2 startup  
-
-<span class="token comment"># 保存当前运行的实例为开机启动项</span>
-pm2 save <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="使用实例"><a class="markdownIt-Anchor" href="#使用实例"></a> 使用实例</h2>
-<p>以安装<code>Gogs</code> 为例，因为通过包安装不比通过二进制文件配合PM2 简单</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 1. 创建git 用户，禁止交互式（如ssh）登录  </span>
-<span class="token function">sudo</span> adduser --disabled-login <span class="token parameter variable">--gecos</span> <span class="token string">'Gogs'</span> <span class="token function">git</span> <span class="token comment"># --gecos 'Gogs' 信息不重要  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>安装配置好数据库的信息，之后切换到git 用户</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token parameter variable">-i</span> <span class="token parameter variable">-u</span> <span class="token function">git</span>  
-<span class="token function">curl</span> https://dl.gogs.io/0.13.0/gogs_0.13.0_linux_amd64.zip <span class="token parameter variable">--output</span> gogs.zip  
-<span class="token function">unzip</span> gogs.zip 
-
-<span class="token comment"># 其实这里就已经可以通过pm2 启动了  </span>
-pm2 start ./gogs web  
-
-<span class="token comment"># 但是还有更好的方案  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>因为要设置为开机启动，所以最好通过<code>su</code> 账户统一启动，但同时又考虑到服务的权限问题，因此需要设置一个启动脚本：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 配置pm2 开机自启动  </span>
-<span class="token function">sudo</span> pm2 startup  
-
-<span class="token comment"># 创建一个从其他用户启动gogs 实例的脚本</span>
-<span class="token function">sudo</span> <span class="token function">vim</span> /home/git/gogs/gogs.sh  
-
-<span class="token comment"># 以下为脚本内容， &lt;&lt;EOF 表示创建一个文本块，并传递给脚本命令。EOF 可以自己定义  </span>
-<span class="token function">sudo</span> <span class="token function">su</span> - <span class="token function">git</span> <span class="token operator">&lt;&lt;</span><span class="token string">EOF
-    # 进入 git 用户的主目录
-    cd ~
-
-    # 进入 gogs 目录
-    cd gogs
-
-    # 启动 gogs
-    ./gogs web
-EOF</span>
-<span class="token comment"># 结束</span>
-
-<span class="token comment"># 将上述脚本设置内可执行  </span>
-<span class="token function">sudo</span> <span class="token function">chmod</span> +x /home/git/gogs/gogs.sh
-
-<span class="token comment"># 启动服务  </span>
-<span class="token function">sudo</span> pm2 start /home/git/gogs/gogs.sh  
-
-<span class="token comment"># 保存  </span>
-<span class="token function">sudo</span> pm2 save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>比较重要的就是上面创建用户，和用户脚本的编写了。🎂</p>
-]]></content>
-      <categories>
-        <category>运维</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>pm2</tag>
-        <tag>node</tag>
-        <tag>server</tag>
-        <tag>cron</tag>
-        <tag>gogs</tag>
       </tags>
   </entry>
   <entry>
@@ -1728,6 +1562,175 @@ util<span class="token punctuation">.</span>add_cron<span class="token punctuati
       </tags>
   </entry>
   <entry>
+    <title>pm2 简单教程</title>
+    <url>/2024/03/22/notation/pm2/pm2%20%E7%AE%80%E5%8D%95%E6%95%99%E7%A8%8B/</url>
+    <content><![CDATA[<blockquote>
+<p>以前简单了解过<code>PM2</code>，但是没有太多的实战经验，仅用于托管单个站点。现在因为手头上要部署二进制服务和Python 自动化脚本，故而记一下常用的指令，尤其是开机自启动与定时任务部分。</p>
+</blockquote>
+<p>PM2 就是一个管理进程的进程，可以用于部署web 服务，自动化脚本。它能够实现基本的定时任务、故障重启、均衡负载。相较于systemd 或者是windows 服务，使用起来更加简单。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">npm</span> i <span class="token parameter variable">-g</span> pm2<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="命令行参数"><a class="markdownIt-Anchor" href="#命令行参数"></a> 命令行参数</h2>
+<p>添加并启动一个实例：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 启动脚本</span>
+pm2 start app.js  
+<span class="token comment"># 给脚本传入参数，要用 -- 隔开  </span>
+pm2 start app.exe -- <span class="token parameter variable">--port</span> <span class="token number">2333</span>
+<span class="token comment"># 常用参数  </span>
+<span class="token parameter variable">--name</span> <span class="token operator">&lt;</span>pm2 实例名<span class="token operator">></span>  
+<span class="token comment"># 监控当前文件夹（含子文件夹）变化，指定排除项  </span>
+<span class="token parameter variable">--watch</span> --ignore-watch<span class="token operator">=</span><span class="token string">"node_modules"</span>
+<span class="token comment"># 超过内存自动重启</span>
+--max-momory-restart <span class="token operator">&lt;</span>200MB<span class="token operator">></span>  
+<span class="token comment"># &lt;日志文件路径></span>
+<span class="token parameter variable">--log</span>  
+<span class="token comment"># 日志添加时间前缀</span>
+<span class="token parameter variable">--time</span>
+
+<span class="token comment"># 重启延迟</span>
+--restart-delay <span class="token operator">&lt;</span>毫秒数<span class="token operator">></span>  
+<span class="token comment"># 不自动重启  </span>
+--no-autorestart
+<span class="token comment"># 定时重启任务  </span>
+<span class="token parameter variable">--cron</span> <span class="token operator">&lt;</span>规则<span class="token operator">></span>  
+<span class="token comment"># 不作为后台进程运行（不常用）</span>
+--no-daemon
+
+<span class="token comment">##  集群  ##</span>
+<span class="token comment"># 对于NodeJS 的应用，可以自动启动多个实例并且均衡负载  </span>
+pm2 start app.js <span class="token parameter variable">-i</span> number  
+
+<span class="token comment"># 对于计划任务，可以采用下面的方式（对于单次任务脚本，要禁用掉自动重启）：  </span>
+pm2 start app.js --cron-restart<span class="token operator">=</span><span class="token string">"0/10 10,14 9-17 * * *"</span> --no-autorestart
+<span class="token comment"># cron 的模式为</span>
+<span class="token comment"># 1. 秒（0 - 59）</span>
+<span class="token comment"># 2. 分钟（0 - 59）</span>
+<span class="token comment"># 3. 小时（0 - 23）</span>
+<span class="token comment"># 4. 日（1 - 31）</span>
+<span class="token comment"># 5. 月份（1 - 12）</span>
+<span class="token comment"># 6. 星期（0 - 7，其中0和7代表星期日）</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="管理实例"><a class="markdownIt-Anchor" href="#管理实例"></a> 管理实例</h2>
+<p>管理服务：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pm2 <span class="token punctuation">[</span>list<span class="token operator">|</span><span class="token function">ls</span><span class="token operator">|</span>status<span class="token punctuation">]</span>
+pm2 delete name
+<span class="token comment"># 查看日志  </span>
+pm2 logs <span class="token punctuation">[</span>--lines <span class="token number">200</span><span class="token punctuation">]</span> <span class="token comment"># 限制行数</span>
+<span class="token comment"># 简单的仪表盘  </span>
+pm2 monit 
+pm2 plus <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="通过配置文件启动"><a class="markdownIt-Anchor" href="#通过配置文件启动"></a> 通过配置文件启动</h2>
+<p>通过配置文件可以方便地管理许多实例，并且对于任务的修改也比较友好：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pm2 ecosystem 
+pm2 start ecosystem.config.js
+pm2 reload ecosystem.config.js
+pm2 <span class="token punctuation">[</span>start<span class="token operator">|</span>reload<span class="token punctuation">]</span> ecosystem.config.js <span class="token parameter variable">--only</span> name  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="配置文件"><a class="markdownIt-Anchor" href="#配置文件"></a> 配置文件</h2>
+<p>下面是<code>ecosystem.config.js</code> 文件的结构：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+	<span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">"app"</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">script</span><span class="token operator">:</span> <span class="token string">"./app.js"</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">env</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"development"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">env_production</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"production"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// app2 更为常用，并且可以用于设置非NodeJS 的应用</span>
+<span class="token keyword">const</span> app2 <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+     <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'实例名，默认是脚本文件名'</span><span class="token punctuation">,</span>
+     <span class="token literal-property property">script</span><span class="token operator">:</span> <span class="token string">'脚本的路径'</span><span class="token punctuation">,</span>
+     <span class="token literal-property property">cwd</span><span class="token operator">:</span> <span class="token string">'指定工作目录'</span><span class="token punctuation">,</span>  
+     <span class="token literal-property property">args</span><span class="token operator">:</span> <span class="token string">'指定参数'</span><span class="token punctuation">,</span>  
+     <span class="token literal-property property">interpreter</span><span class="token operator">:</span> <span class="token string">'解释器路径，默认为Node， 但其实也可用于Poetry'</span><span class="token punctuation">,</span>
+     <span class="token literal-property property">interpreter_args</span><span class="token operator">:</span> <span class="token string">'解释器参数'</span><span class="token punctuation">,</span>  
+     <span class="token literal-property property">node_args</span><span class="token operator">:</span> <span class="token string">'解释器参数的别名'</span><span class="token punctuation">,</span>  
+
+	 <span class="token comment">// 高级参数  </span>
+	 <span class="token literal-property property">instance</span><span class="token operator">:</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span>  <span class="token comment">// 实例数量，为0 的话，自动创建CPU 核心数  </span>
+	 <span class="token literal-property property">exec_mode</span><span class="token operator">:</span> <span class="token string">'fork'</span><span class="token punctuation">,</span> <span class="token comment">// 也可以选择集群模式`cluster`</span>
+	 <span class="token literal-property property">watch</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>  <span class="token comment">// 监控文件变化  </span>
+	 <span class="token literal-property property">ignore_watch</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'[\/\\]\./'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>  <span class="token comment">// 忽略项  </span>
+	 <span class="token literal-property property">env</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+       <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"development"</span><span class="token punctuation">,</span>
+     <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+	 <span class="token literal-property property">env_production</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+	   <span class="token constant">NODE_ENV</span><span class="token operator">:</span> <span class="token string">"production"</span><span class="token punctuation">,</span>
+	 <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>  
+
+	 <span class="token comment">// 控制流</span>
+     <span class="token literal-property property">cron_restart</span><span class="token operator">:</span> <span class="token string">'0 0 * * *'</span><span class="token punctuation">,</span>  <span class="token comment">//定时重启</span>
+     <span class="token literal-property property">autorestart</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>  <span class="token comment">// 自动重启  </span>
+     <span class="token literal-property property">restart_delay</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>  <span class="token comment">// 重启延时，微秒</span>
+
+  <span class="token punctuation">&#125;</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  <span class="token literal-property property">apps</span> <span class="token operator">:</span> <span class="token punctuation">[</span>app<span class="token punctuation">,</span> app2<span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="设置开机启动"><a class="markdownIt-Anchor" href="#设置开机启动"></a> 设置开机启动</h2>
+<p>注意，下面命令生成的启动项文件会在当前用户工作区间内，也可以以管理员用户运行，这样就可以访问所有资源了。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 生成一个开机启动项</span>
+pm2 startup  
+
+<span class="token comment"># 保存当前运行的实例为开机启动项</span>
+pm2 save <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="使用实例"><a class="markdownIt-Anchor" href="#使用实例"></a> 使用实例</h2>
+<p>以安装<code>Gogs</code> 为例，因为通过包安装不比通过二进制文件配合PM2 简单</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 1. 创建git 用户，禁止交互式（如ssh）登录  </span>
+<span class="token function">sudo</span> adduser --disabled-login <span class="token parameter variable">--gecos</span> <span class="token string">'Gogs'</span> <span class="token function">git</span> <span class="token comment"># --gecos 'Gogs' 信息不重要  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>安装配置好数据库的信息，之后切换到git 用户</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token parameter variable">-i</span> <span class="token parameter variable">-u</span> <span class="token function">git</span>  
+<span class="token function">curl</span> https://dl.gogs.io/0.13.0/gogs_0.13.0_linux_amd64.zip <span class="token parameter variable">--output</span> gogs.zip  
+<span class="token function">unzip</span> gogs.zip 
+
+<span class="token comment"># 其实这里就已经可以通过pm2 启动了  </span>
+pm2 start ./gogs web  
+
+<span class="token comment"># 但是还有更好的方案  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>因为要设置为开机启动，所以最好通过<code>su</code> 账户统一启动，但同时又考虑到服务的权限问题，因此需要设置一个启动脚本：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 配置pm2 开机自启动  </span>
+<span class="token function">sudo</span> pm2 startup  
+
+<span class="token comment"># 创建一个从其他用户启动gogs 实例的脚本</span>
+<span class="token function">sudo</span> <span class="token function">vim</span> /home/git/gogs/gogs.sh  
+
+<span class="token comment"># 以下为脚本内容， &lt;&lt;EOF 表示创建一个文本块，并传递给脚本命令。EOF 可以自己定义  </span>
+<span class="token function">sudo</span> <span class="token function">su</span> - <span class="token function">git</span> <span class="token operator">&lt;&lt;</span><span class="token string">EOF
+    # 进入 git 用户的主目录
+    cd ~
+
+    # 进入 gogs 目录
+    cd gogs
+
+    # 启动 gogs
+    ./gogs web
+EOF</span>
+<span class="token comment"># 结束</span>
+
+<span class="token comment"># 将上述脚本设置内可执行  </span>
+<span class="token function">sudo</span> <span class="token function">chmod</span> +x /home/git/gogs/gogs.sh
+
+<span class="token comment"># 启动服务  </span>
+<span class="token function">sudo</span> pm2 start /home/git/gogs/gogs.sh  
+
+<span class="token comment"># 保存  </span>
+<span class="token function">sudo</span> pm2 save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>比较重要的就是上面创建用户，和用户脚本的编写了。🎂</p>
+]]></content>
+      <categories>
+        <category>运维</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>pm2</tag>
+        <tag>node</tag>
+        <tag>server</tag>
+        <tag>cron</tag>
+        <tag>gogs</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Ubuntu 安装zfs</title>
     <url>/2024/05/24/notation/zfs/zfs/</url>
     <content><![CDATA[<p>关于<code>zfs</code> 文件系统的介绍，可以参考：<a href="https://zhuanlan.zhihu.com/p/45137745">初学者指南：ZFS 是什么，为什么要使用 ZFS？</a></p>
@@ -1818,6 +1821,22 @@ md5sum /pool_name/test.data
         <tag>zfs</tag>
         <tag>raid</tag>
         <tag>backup</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网页应用防火墙</title>
+    <url>/2024/06/10/notation/waf/waf/</url>
+    <content><![CDATA[<p>高中那会儿通过黑客杂志了解到<a href="https://www.d99net.net/">啊D</a>的WAF，感觉很神奇。现在才了解到是通过<code>ISAPI</code> 和<a href="https://www.cnblogs.com/jmllc/p/14933269.html">自定义模块</a> 实现的。</p>
+<span id="more"></span>
+<p>今天看到了雷池的介绍，没想到软件的工作原理也不复杂，是通过自建了一个代理服务器实现的。本来以为还要抓包，以及怎么将抓包的过程<code>透明地</code>嵌入HTTP 请求。通过代理就容易理解了。</p>
+<p><img src="https://waf-ce.chaitin.cn/docs/assets/images/config_site3-b12ac242c64dc149db77d4f0741fa86f.png" alt="雷池-配置教程" /></p>
+<hr />
+<p>20 岁时买到10 岁时喜欢的玩具，依然开心地像个孩子。</p>
+]]></content>
+      <tags>
+        <tag>firewall</tag>
+        <tag>ips</tag>
+        <tag>security</tag>
       </tags>
   </entry>
 </search>
