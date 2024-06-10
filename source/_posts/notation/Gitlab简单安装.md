@@ -244,6 +244,9 @@ sudo gitlab-rails console
 irb(main):001:0> Notify.test_email('XXXXXX@gmail.com','test Gitlab Email','Test').deliver_now
 ```
 
+### 数据库  
+GitLab 安装时如果系统已经安装PostgreSQL，则会自动创建`gitlab_db` 数据库。
+
 ### 参考资料  
 1. [CentOS7にGitLabをインストールする(既存nginxを使用)](https://qiita.com/inakadegaebal/items/3cc0603141a334fcc8af)  
 2. [NGINX:Using a non-bundled web-server](https://docs.gitlab.com/omnibus/settings/nginx.html#using-a-non-bundled-web-server)  

@@ -79,6 +79,7 @@ client.bind(user_dn, passwd, (err) => {
 
 client.search('dc=exp,dc=com', {
     filter: '(objectClass=user)',  // 过滤器，查询用户
+    // 按组所有g_ 开头的组 (&(objectClass=group)(cn=g_*)
     scope: 'sub',  // 有三种，sub 是查询所有子节点
     attributes:['cn'],  // 需要的属性，默认全部属性
     // 还有分页信息可以传入，但不是必须
