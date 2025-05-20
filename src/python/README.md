@@ -43,3 +43,4 @@ Python 编码相关的项目，主要包括：Web、数学、控制与仿真等
 9. [FastAPI 工程化](./fastapi/README.md) 不包含路由和中间件的开发   
 10. [Poetry 简介](./poetry/README.md)  
 11. [Matplotlib 绘制等高线图](./contour/README.md)
+12. [Python 伪动态链接库](./pseudo-dll.md)
