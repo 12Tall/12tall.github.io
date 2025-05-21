@@ -31,7 +31,7 @@ i18n_dir: :lang
 skip_render:
 
 # Writing
-new_post_name: :title.md # File name of new posts
+new_post_name: :year/:category/:title.md # File name of new posts
 default_layout: post
 titlecase: false # Transform title into titlecase
 external_link:
@@ -100,10 +100,18 @@ theme: next
 # 生成rss
 Plugins: hexo-generator-feed
 
-# 解决换行异常的问题  
-marked:
-  gfm: true
-  
+markdown_it_plus:
+    highlight: true
+    html: true
+    xhtmlOut: true
+    # 解决换行异常的问题  
+    breaks: false
+    langPrefix:
+    linkify: true
+    typographer:
+    quotes: “”‘’
+    pre_class: highlight
+
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
