@@ -1,3 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
+  <entry>
+    <title>Python 实现动态链接库效果</title>
+    <url>/2025/05/21/py-pseudo-dll/</url>
+    <content><![CDATA[<p>需求来源是做<code>OSM</code> 编辑项目中要用Python 对<code>.osm</code> 文件进行校验，但是嘞，我的Python 代码是需要用Nuitka 打包成二进制的，而校验规则又可能会随时调整，每次增减规则都要重新打包的话非常浪费时间。因此，便想能否通过类似与调用<code>.dll</code> 一样来动态加载<code>.py</code> 文件（伪动态链接库）。</p>
+<span id="more"></span>
+<h2 id="前置要求"><a class="markdownIt-Anchor" href="#前置要求"></a> 前置要求</h2>
+<ol>
+<li>Nuitka 打包后的二进制文件要包含完整的Python 运行时；✅</li>
+<li><code>.py</code> 文件要有统一的入口函数；✅</li>
+<li><code>.py</code> 文件的依赖项要提前在二进制文件中<code>import</code>。✅</li>
+</ol>
+<h2 id="实现代码"><a class="markdownIt-Anchor" href="#实现代码"></a> 实现代码</h2>
+<p>演示代码主要分为主文件<code>main.py</code> 和库文件<code>ddl.py</code>，二者在相同目录：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># main.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> uuid</span><br><span class="line"><span class="keyword">import</span> importlib.util</span><br><span class="line"></span><br><span class="line"><span class="comment">###  调用外部.py 前的准备工作 ###</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np  <span class="comment"># 外部模块中需要用到的依赖项，需要提前导入准备</span></span><br><span class="line">module_path = os.path.abspath(<span class="string">&quot;dll.py&quot;</span>)  <span class="comment"># 获取目标.py 文件的绝对路径（此处可以读取该目录下的所有.py 文件，循环导入）</span></span><br><span class="line">module_name = <span class="string">f&quot;_dynamic_module_<span class="subst">&#123;uuid.uuid4().<span class="built_in">hex</span>&#125;</span>&quot;</span>  <span class="comment"># 生成随机的模块名</span></span><br><span class="line"><span class="comment"># 模块名作为模块身份的唯一标识，仅会被导入一次，通过随机化处理可以避免命名重复而无法导入</span></span><br><span class="line"></span><br><span class="line">spec = importlib.util.spec_from_file_location(module_name, module_path)  <span class="comment"># 创建一个加载说明（描述符）</span></span><br><span class="line">module = importlib.util.module_from_spec(spec)  <span class="comment"># 根据加载说明加载.py 文件为模块</span></span><br><span class="line">spec.loader.exec_module(module) <span class="comment"># 执行模块</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用模块中的函数</span></span><br><span class="line">module.hello()  <span class="comment"># 有必要约定模块中的函数签名保持一致，否则可能会报错</span></span><br></pre></td></tr></table></figure>
+<p>以下是库文件</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># dll.py</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np  <span class="comment"># numpy 需要提前打包在二进制文件中</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello from dll.py!&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>通过<code>python -m nuitka --clang --standalone --onefile main.py</code> 即可打包成二进制文件，即便在没有安装Python 环境的机器上也可以运行了。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ ./main.bin </span><br><span class="line">Hello from dll.py!</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>编程技巧</tag>
+      </tags>
+  </entry>
 </search>
