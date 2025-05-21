@@ -6,7 +6,7 @@
   <link href="https://12tall.github.io/atom.xml" rel="self"/>
   
   <link href="https://12tall.github.io/"/>
-  <updated>2025-05-21T05:08:51.341Z</updated>
+  <updated>2025-05-21T05:37:37.302Z</updated>
   <id>https://12tall.github.io/</id>
   
   <author>
@@ -18,20 +18,45 @@
   
   <entry>
     <title>Python 实现动态链接库效果</title>
-    <link href="https://12tall.github.io/2025/05/21/py-pseudo-dll/"/>
-    <id>https://12tall.github.io/2025/05/21/py-pseudo-dll/</id>
+    <link href="https://12tall.github.io/2025/05/21/pseudo-dll/"/>
+    <id>https://12tall.github.io/2025/05/21/pseudo-dll/</id>
     <published>2025-05-21T04:56:55.000Z</published>
-    <updated>2025-05-21T05:08:51.341Z</updated>
+    <updated>2025-05-21T05:37:37.302Z</updated>
     
     
-    <summary type="html">&lt;p&gt;需求来源是做&lt;code&gt;OSM&lt;/code&gt; 编辑项目中要用Python 对&lt;code&gt;.osm&lt;/code&gt; 文件进行校验，但是嘞，我的Python 代码是需要用Nuitka 打包成二进制的，而校验规则又可能会随时调整，每次增减规则都要重新打包的话非常浪费时间。因此，便想能否通过类似与调用&lt;code&gt;.dll&lt;/code&gt; 一样来动态加载&lt;code&gt;.py&lt;/code&gt; 文件（伪动态链接库）。&lt;/p&gt;</summary>
+    <summary type="html">&lt;p&gt;需求来源是做&lt;code&gt;OSM&lt;/code&gt; 编辑项目中要用Python 对&lt;code&gt;.osm&lt;/code&gt; 文件进行校验，但是嘞，我的Python 代码
+是需要用Nuitka 打包成二进制的，而校验规则又可能会随时调整，每次增减规则都要重新打包的话非常浪费时间。因此，便想能否通过类似与调用&lt;code&gt;.dll&lt;/code&gt; 一样来动态加载&lt;code&gt;.py&lt;/code&gt; 文件（伪动态链接库）。&lt;/p&gt;</summary>
     
     
     
-    <category term="Python" scheme="https://12tall.github.io/categories/Python/"/>
+    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
     
     
     <category term="编程技巧" scheme="https://12tall.github.io/tags/%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用gettext 进行国际化</title>
+    <link href="https://12tall.github.io/2025/05/15/gettext/"/>
+    <id>https://12tall.github.io/2025/05/15/gettext/</id>
+    <published>2025-05-15T05:27:44.000Z</published>
+    <updated>2025-05-21T05:33:01.404Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;一般来说，使用&lt;code&gt;gettext&lt;/code&gt; 为程序添加多语言支持时，需要遵循一些标准的步骤。另外就是，对于在&lt;code&gt;main()&lt;/code&gt; 函数之前就初始化的变量需要特殊处理。
+为此，特整理笔记备忘。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="cpp" scheme="https://12tall.github.io/categories/cpp/"/>
+    
+    
+    <category term="gettext" scheme="https://12tall.github.io/tags/gettext/"/>
+    
+    <category term="多语言" scheme="https://12tall.github.io/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/"/>
+    
+    <category term="国际化" scheme="https://12tall.github.io/tags/%E5%9B%BD%E9%99%85%E5%8C%96/"/>
     
   </entry>
   
