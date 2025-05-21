@@ -6,7 +6,7 @@
   <link href="https://12tall.github.io/atom.xml" rel="self"/>
   
   <link href="https://12tall.github.io/"/>
-  <updated>2025-05-21T05:04:03.522Z</updated>
+  <updated>2025-05-21T05:08:51.341Z</updated>
   <id>https://12tall.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://12tall.github.io/2025/05/21/py-pseudo-dll/"/>
     <id>https://12tall.github.io/2025/05/21/py-pseudo-dll/</id>
     <published>2025-05-21T04:56:55.000Z</published>
-    <updated>2025-05-21T05:04:03.522Z</updated>
+    <updated>2025-05-21T05:08:51.341Z</updated>
     
     
     <summary type="html">&lt;p&gt;需求来源是做&lt;code&gt;OSM&lt;/code&gt; 编辑项目中要用Python 对&lt;code&gt;.osm&lt;/code&gt; 文件进行校验，但是嘞，我的Python 代码是需要用Nuitka 打包成二进制的，而校验规则又可能会随时调整，每次增减规则都要重新打包的话非常浪费时间。因此，便想能否通过类似与调用&lt;code&gt;.dll&lt;/code&gt; 一样来动态加载&lt;code&gt;.py&lt;/code&gt; 文件（伪动态链接库）。&lt;/p&gt;</summary>
