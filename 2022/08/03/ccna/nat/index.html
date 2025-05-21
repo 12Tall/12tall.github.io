@@ -27,7 +27,7 @@
 <meta property="og:description" content="网路地址转换  作用 广域网中，高层网络设备，不能给私有网段回包。所以一般会需要将内网设备的端口映射到公网设备。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-08-02T15:00:00.000Z">
-<meta property="article:modified_time" content="2025-05-21T07:14:11.268Z">
+<meta property="article:modified_time" content="2025-05-21T07:28:03.308Z">
 <meta property="article:author" content="12Tall">
 <meta property="article:tag" content="ccna">
 <meta name="twitter:card" content="summary">
@@ -181,18 +181,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">31</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">64</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -269,7 +269,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-21 16:14:11" itemprop="dateModified" datetime="2025-05-21T16:14:11+09:00">2025-05-21</time>
+      <time title="修改时间：2025-05-21 16:28:03" itemprop="dateModified" datetime="2025-05-21T16:28:03+09:00">2025-05-21</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -327,7 +327,11 @@
 <ol start="3">
 <li>静态NAT</li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 匹配到ACL 1 的转化为f0/0 接口的IP</span></span><br><span class="line">ip nat inside <span class="built_in">source</span> &lt;acl-list&gt; interface f0/0 overload  </span><br><span class="line"></span><br><span class="line">show ip nat tran</span><br><span class="line"><span class="comment"># ip nat inseide source static tcp 172.16.10.1 23 123.1.1.1 23</span></span><br><span class="line">Switch(config)#ip nat inside <span class="built_in">source</span> static 192.168.1.1 202.101.100.1</span><br><span class="line">```  </span><br><span class="line">4. 动态NAT  </span><br><span class="line">```bash</span><br><span class="line">Switch(config)#$ nat_name 202.101.100.1 202.101.100.10 netmask 255.255.255.0</span><br><span class="line">Switch(config)#access-list ?</span><br><span class="line">  &lt;1-99&gt;            IP standard access list</span><br><span class="line">  &lt;100-199&gt;         IP extended access list</span><br><span class="line">  &lt;1000-1099&gt;       IPX SAP access list</span><br><span class="line">  &lt;1100-1199&gt;       Extended 48-bit MAC address access list</span><br><span class="line">  &lt;1200-1299&gt;       IPX summary address access list</span><br><span class="line">  &lt;1300-1999&gt;       IP standard access list (expanded range)</span><br><span class="line">  &lt;200-299&gt;         Protocol type-code access list</span><br><span class="line">  &lt;2000-2699&gt;       IP extended access list (expanded range)</span><br><span class="line">  &lt;2700-2799&gt;       MPLS access list</span><br><span class="line">  &lt;300-399&gt;         DECnet access list</span><br><span class="line">  &lt;400-499&gt;         XNS standard access list</span><br><span class="line">  &lt;500-599&gt;         XNS extended access list</span><br><span class="line">  &lt;600-699&gt;         Appletalk access list</span><br><span class="line">  &lt;700-799&gt;         48-bit MAC address access list</span><br><span class="line">  &lt;800-899&gt;         IPX standard access list</span><br><span class="line">  &lt;900-999&gt;         IPX extended access list</span><br><span class="line">  dynamic-extended  Extend the dynamic ACL absolute timer</span><br><span class="line">  rate-limit        Simple rate-limit specific access list</span><br><span class="line"></span><br><span class="line">Switch(config)#access-list 1 permit 192.168.1.0 0.0.0.255</span><br><span class="line">Switch(config)#ip nat inside <span class="built_in">source</span> list 1 pool nat_name</span><br><span class="line">Switch(config)#^Z</span><br><span class="line"></span><br><span class="line">show ip nat tran</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 匹配到ACL 1 的转化为f0/0 接口的IP</span></span><br><span class="line">ip nat inside <span class="built_in">source</span> &lt;acl-list&gt; interface f0/0 overload  </span><br><span class="line"></span><br><span class="line">show ip nat tran</span><br><span class="line"><span class="comment"># ip nat inseide source static tcp 172.16.10.1 23 123.1.1.1 23</span></span><br><span class="line">Switch(config)#ip nat inside <span class="built_in">source</span> static 192.168.1.1 202.101.100.1</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>动态NAT</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">Switch(config)#$ nat_name 202.101.100.1 202.101.100.10 netmask 255.255.255.0</span><br><span class="line">Switch(config)#access-list ?</span><br><span class="line">  &lt;1-99&gt;            IP standard access list</span><br><span class="line">  &lt;100-199&gt;         IP extended access list</span><br><span class="line">  &lt;1000-1099&gt;       IPX SAP access list</span><br><span class="line">  &lt;1100-1199&gt;       Extended 48-bit MAC address access list</span><br><span class="line">  &lt;1200-1299&gt;       IPX summary address access list</span><br><span class="line">  &lt;1300-1999&gt;       IP standard access list (expanded range)</span><br><span class="line">  &lt;200-299&gt;         Protocol type-code access list</span><br><span class="line">  &lt;2000-2699&gt;       IP extended access list (expanded range)</span><br><span class="line">  &lt;2700-2799&gt;       MPLS access list</span><br><span class="line">  &lt;300-399&gt;         DECnet access list</span><br><span class="line">  &lt;400-499&gt;         XNS standard access list</span><br><span class="line">  &lt;500-599&gt;         XNS extended access list</span><br><span class="line">  &lt;600-699&gt;         Appletalk access list</span><br><span class="line">  &lt;700-799&gt;         48-bit MAC address access list</span><br><span class="line">  &lt;800-899&gt;         IPX standard access list</span><br><span class="line">  &lt;900-999&gt;         IPX extended access list</span><br><span class="line">  dynamic-extended  Extend the dynamic ACL absolute timer</span><br><span class="line">  rate-limit        Simple rate-limit specific access list</span><br><span class="line"></span><br><span class="line">Switch(config)#access-list 1 permit 192.168.1.0 0.0.0.255</span><br><span class="line">Switch(config)#ip nat inside <span class="built_in">source</span> list 1 pool nat_name</span><br><span class="line">Switch(config)#^Z</span><br><span class="line"></span><br><span class="line">show ip nat tran</span><br></pre></td></tr></table></figure>
 <ol start="5">
 <li>端口映射</li>
 </ol>
@@ -374,8 +378,8 @@
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/08/03/ccna/ip/" rel="next" title="IP Address">
-                  IP Address <i class="fa fa-angle-right"></i>
+                <a href="/2022/08/03/ccna/route/" rel="next" title="路由">
+                  路由 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -413,13 +417,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">26k</span>
+    <span title="站点总字数">34k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:35</span>
+    <span title="站点阅读时长">2:03</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动

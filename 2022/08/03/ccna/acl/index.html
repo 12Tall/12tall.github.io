@@ -19,16 +19,16 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="访问控制列表  作用 过滤，抓取数据，但是ACL 会影响设备性能  动作  允许：permit 拒绝：deny 日志：logging   使用场景  VPN 路由过滤 NAT   小技巧  标准acl 只能匹配源地址 扩展acl 支持匹配源地址、目的地址、端口号、协议等 acl 是自上而下顺序匹配的 acl 的步长一般应为10，为了便于后面插入新的规则 核心交换机最好不要配置任何ACL，单一功">
+    <meta name="description" content="访问控制列表  作用 过滤，抓取数据，但是ACL 会影响设备性能">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ACL">
 <meta property="og:url" content="https://12tall.github.io/2022/08/03/ccna/acl/index.html">
 <meta property="og:site_name" content="12Tall">
-<meta property="og:description" content="访问控制列表  作用 过滤，抓取数据，但是ACL 会影响设备性能  动作  允许：permit 拒绝：deny 日志：logging   使用场景  VPN 路由过滤 NAT   小技巧  标准acl 只能匹配源地址 扩展acl 支持匹配源地址、目的地址、端口号、协议等 acl 是自上而下顺序匹配的 acl 的步长一般应为10，为了便于后面插入新的规则 核心交换机最好不要配置任何ACL，单一功">
+<meta property="og:description" content="访问控制列表  作用 过滤，抓取数据，但是ACL 会影响设备性能">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://12tall.github.io/2022/08/03/ccna/acl/acl.png">
 <meta property="article:published_time" content="2022-08-02T15:00:00.000Z">
-<meta property="article:modified_time" content="2025-05-21T07:13:53.218Z">
+<meta property="article:modified_time" content="2025-05-21T07:29:01.676Z">
 <meta property="article:author" content="12Tall">
 <meta property="article:tag" content="ccna">
 <meta name="twitter:card" content="summary">
@@ -183,18 +183,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">31</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">64</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -271,7 +271,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-21 16:13:53" itemprop="dateModified" datetime="2025-05-21T16:13:53+09:00">2025-05-21</time>
+      <time title="修改时间：2025-05-21 16:29:01" itemprop="dateModified" datetime="2025-05-21T16:29:01+09:00">2025-05-21</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -307,10 +307,10 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><span id="more"></span>
-<h2 id="访问控制列表"><a class="markdownIt-Anchor" href="#访问控制列表"></a> 访问控制列表</h2>
+    <div class="post-body" itemprop="articleBody"><h2 id="访问控制列表"><a class="markdownIt-Anchor" href="#访问控制列表"></a> 访问控制列表</h2>
 <h3 id="作用"><a class="markdownIt-Anchor" href="#作用"></a> 作用</h3>
 <p>过滤，抓取数据，但是ACL 会影响设备性能</p>
+<span id="more"></span>
 <h3 id="动作"><a class="markdownIt-Anchor" href="#动作"></a> 动作</h3>
 <ul>
 <li>允许：permit</li>
@@ -377,8 +377,8 @@
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/08/03/eve-ng/" rel="next" title="Eve-Ng使用笔记">
-                  Eve-Ng使用笔记 <i class="fa fa-angle-right"></i>
+                <a href="/2022/08/03/github-action/" rel="next" title="GitHub Actions">
+                  GitHub Actions <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -416,13 +416,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">26k</span>
+    <span title="站点总字数">34k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:35</span>
+    <span title="站点阅读时长">2:03</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动

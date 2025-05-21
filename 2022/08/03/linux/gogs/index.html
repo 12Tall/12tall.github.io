@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Gogs 是一款轻量级的私有Git 服务器。满足一般开发需要，且安装部署比较方便。这里记录其作为Windows 服务部署的过程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gogs">
+<meta property="og:url" content="https://12tall.github.io/2022/08/03/linux/gogs/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="Gogs 是一款轻量级的私有Git 服务器。满足一般开发需要，且安装部署比较方便。这里记录其作为Windows 服务部署的过程。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://12tall.github.io/2022/08/03/linux/gogs/gogs-mariadb-add-user.png">
+<meta property="article:published_time" content="2022-08-02T15:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-21T07:32:56.745Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="ssh">
+<meta property="article:tag" content="gogs">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="mysql">
+<meta property="article:tag" content="mariadb">
+<meta property="article:tag" content="openssh">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://12tall.github.io/2022/08/03/linux/gogs/gogs-mariadb-add-user.png">
+
+
+<link rel="canonical" href="https://12tall.github.io/2022/08/03/linux/gogs/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2022/08/03/linux/gogs/","path":"2022/08/03/linux/gogs/","title":"Gogs"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Gogs | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85gogs"><span class="nav-number">1.</span> <span class="nav-text"> 安装Gogs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85mariadb"><span class="nav-number">1.1.</span> <span class="nav-text"> 安装MariaDB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEmariadb"><span class="nav-number">1.2.</span> <span class="nav-text"> 配置MariaDB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85git-%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-number">1.3.</span> <span class="nav-text"> 安装Git 客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E5%86%8Cgogs-%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.4.</span> <span class="nav-text"> 注册Gogs 服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%83%E4%B8%BA%E5%AE%8C%E6%95%B4%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">1.5.</span> <span class="nav-text"> 较为完整的配置文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text"> 异常处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#env-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">2.1.</span> <span class="nav-text"> ENV 环境变量</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">64</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/linux/gogs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Gogs | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Gogs
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-03 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-03T00:00:00+09:00">2022-08-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-21 16:32:56" itemprop="dateModified" datetime="2025-05-21T16:32:56+09:00">2025-05-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/maintenance/" itemprop="url" rel="index"><span itemprop="name">maintenance</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>710</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>Gogs 是一款轻量级的私有Git 服务器。满足一般开发需要，且安装部署比较方便。这里记录其作为Windows 服务部署的过程。</p>
+<span id="more"></span>
+<h2 id="安装gogs"><a class="markdownIt-Anchor" href="#安装gogs"></a> 安装Gogs</h2>
+<p>以Gogs + MariaDB 为例。优先采用内置<code>SSH</code> 服务端，微软自带的SSH 服务端会要求验证用户身份。</p>
+<h3 id="安装mariadb"><a class="markdownIt-Anchor" href="#安装mariadb"></a> 安装MariaDB</h3>
+<p>MariaDB 兼容MySQL</p>
+<ol>
+<li>下载<a target="_blank" rel="noopener" href="https://mariadb.org/download/">安装包</a></li>
+<li>设置以<code>UTF-8</code> 作为默认字符集</li>
+<li>设置密码，并保持默认直到结束</li>
+</ol>
+<p>安装过程会自动安装一个数据库管理工具<code>HeidiSQL</code>，也是在Windows 下一款非常好用的数据库管理工具。</p>
+<h3 id="配置mariadb"><a class="markdownIt-Anchor" href="#配置mariadb"></a> 配置MariaDB</h3>
+<p>通过<code>HeidiSQL</code> 连接本地数据库</p>
+<ol>
+<li>创建数据库<code>gogs</code></li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 创建数据库 */</span></span><br><span class="line"><span class="keyword">CREATE</span> DATABASE `gogs` <span class="comment">/*!40100 COLLATE &#x27;utf8_general_ci&#x27; */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 创建用户</span></span><br><span class="line"><span class="comment"> * 可以从192.168.% 网段远程访问</span></span><br><span class="line"><span class="comment"> * 如果gogs 服务也托管在数据库服务器上，也不用设置远程登录，相对来说更安全  </span></span><br><span class="line"><span class="comment"> * 并赋予操作gogs 数据库的权限</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">&#x27;gogs&#x27;</span>@<span class="string">&#x27;192.168.%&#x27;</span> IDENTIFIED <span class="keyword">BY</span> <span class="string">&#x27;password&#x27;</span>;</span><br><span class="line"><span class="keyword">GRANT</span> USAGE <span class="keyword">ON</span> <span class="operator">*</span>.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;gogs&#x27;</span>@<span class="string">&#x27;192.168.%&#x27;</span>;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">EXECUTE</span>, <span class="keyword">SELECT</span>, <span class="keyword">SHOW</span> <span class="keyword">VIEW</span>, <span class="keyword">ALTER</span>, <span class="keyword">ALTER</span> ROUTINE, <span class="keyword">CREATE</span>, <span class="keyword">CREATE</span> ROUTINE, <span class="keyword">CREATE</span> TEMPORARY TABLES, <span class="keyword">CREATE</span> <span class="keyword">VIEW</span>, <span class="keyword">DELETE</span>, <span class="keyword">DROP</span>, EVENT, INDEX, <span class="keyword">INSERT</span>, <span class="keyword">REFERENCES</span>, <span class="keyword">TRIGGER</span>, <span class="keyword">UPDATE</span>, LOCK TABLES  <span class="keyword">ON</span> `gogs`.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;gogs&#x27;</span>@<span class="string">&#x27;192.168.%&#x27;</span> <span class="keyword">WITH</span> <span class="keyword">GRANT</span> OPTION;</span><br><span class="line">FLUSH PRIVILEGES;</span><br><span class="line"><span class="keyword">SHOW</span> GRANTS <span class="keyword">FOR</span> <span class="string">&#x27;gogs&#x27;</span>@<span class="string">&#x27;192.168.%&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p><img src="gogs-mariadb-add-user.png" alt="gogs-mariadb-add-user.png" /></p>
+<h3 id="安装git-客户端"><a class="markdownIt-Anchor" href="#安装git-客户端"></a> 安装Git 客户端</h3>
+<p>直接从<a target="_blank" rel="noopener" href="https://git-scm.com/download/win">Git 官网</a>下载，保持默认安装即可</p>
+<h3 id="注册gogs-服务"><a class="markdownIt-Anchor" href="#注册gogs-服务"></a> 注册Gogs 服务</h3>
+<p>下载并解压<a target="_blank" rel="noopener" href="https://dl.gogs.io/">安装包</a>到<code>C:\gogs</code>，或者其他目录。注意文件名带有<code>_mws</code> 表示提供Windows 服务支持。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 注册服务</span></span><br><span class="line">sc create gogs start= auto binPath= <span class="string">&quot;\&quot;C:\gogs\gogs.exe\&quot; web --config \&quot;C:\gogs\custom\conf\app.ini\&quot;&quot;</span>  </span><br><span class="line"><span class="comment"># 启动服务</span></span><br><span class="line">net start gogs</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除服务，一般不会用到  </span></span><br><span class="line"><span class="comment"># sc delete gogs</span></span><br></pre></td></tr></table></figure>
+<p>在启动服务后，登录<code>http://&#123;ip&#125;:3000</code> 即可进入初始配置界面。详细配置见<a href="#%E8%BE%83%E4%B8%BA%E5%AE%8C%E6%95%B4%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">下文</a>，记得选择使用内置的SSH 服务器即可。<br />
+在配置完成后重启下服务。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">net stop gogs</span><br><span class="line">net start gogs</span><br></pre></td></tr></table></figure>
+<p>至此，安装完成。</p>
+<h3 id="较为完整的配置文件"><a class="markdownIt-Anchor" href="#较为完整的配置文件"></a> 较为完整的配置文件</h3>
+<p>注意，在此之前，请首先阅读Gogs 的<a target="_blank" rel="noopener" href="https://gogs.io/docs/installation/configuration_and_run">配置文档</a>。<br />
+完整的配置文件请参见<a target="_blank" rel="noopener" href="https://github.com/gogs/gogs/blob/main/conf/app.ini">Github</a></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">BRAND_NAME</span> = Gogs  </span><br><span class="line"><span class="attr">RUN_USER</span>   = git  <span class="comment">; 主机名，但如果采用内置SSH 服务的话，写作git 即可</span></span><br><span class="line"><span class="attr">RUN_MODE</span>   = prod <span class="comment">; 生产模式</span></span><br><span class="line"></span><br><span class="line"><span class="section">[database]</span></span><br><span class="line"><span class="attr">TYPE</span>     = mysql</span><br><span class="line"><span class="attr">HOST</span>     = <span class="number">192.168</span>.*.*:<span class="number">3306</span></span><br><span class="line"><span class="attr">NAME</span>     = gogs</span><br><span class="line"><span class="attr">USER</span>     = gogs</span><br><span class="line"><span class="attr">PASSWORD</span> = password</span><br><span class="line"><span class="attr">SSL_MODE</span> = disable</span><br><span class="line"><span class="attr">PATH</span>     = C:\gogs\data\gogs.db</span><br><span class="line"></span><br><span class="line"><span class="section">[repository]</span></span><br><span class="line"><span class="attr">ROOT</span> = C:/gogs/repos</span><br><span class="line"></span><br><span class="line"><span class="section">[server]</span></span><br><span class="line"><span class="attr">DOMAIN</span>           = <span class="number">192.168</span>.*.*</span><br><span class="line"><span class="attr">HTTP_PORT</span>        = <span class="number">3000</span></span><br><span class="line"><span class="attr">EXTERNAL_URL</span>     = http://<span class="number">192.168</span>.*.*:<span class="number">3000</span>/</span><br><span class="line"><span class="attr">DISABLE_SSH</span>      = <span class="literal">false</span></span><br><span class="line"><span class="attr">SSH_PORT</span>         = <span class="number">22</span></span><br><span class="line"><span class="attr">START_SSH_SERVER</span> = <span class="literal">true</span>  <span class="comment">; 启用内置SSH 服务器</span></span><br><span class="line"><span class="attr">OFFLINE_MODE</span>     = <span class="literal">true</span>  <span class="comment">; 离线模式</span></span><br><span class="line"></span><br><span class="line"><span class="section">[mailer]</span></span><br><span class="line"><span class="attr">ENABLED</span> = <span class="literal">true</span></span><br><span class="line"><span class="attr">HOST</span>    = mail.domain.com:port</span><br><span class="line"><span class="attr">FROM</span>    = <span class="string">&quot;12Tall&quot;</span>&lt;<span class="number">12</span>tall@domain.com&gt;</span><br><span class="line"><span class="attr">USER</span>    = <span class="number">12</span>tall@domain.com</span><br><span class="line"><span class="attr">PASSWD</span>  = password</span><br><span class="line"></span><br><span class="line"><span class="section">[service]</span></span><br><span class="line"><span class="attr">REGISTER_EMAIL_CONFIRM</span> = <span class="literal">true</span></span><br><span class="line"><span class="attr">ENABLE_NOTIFY_MAIL</span>     = <span class="literal">true</span></span><br><span class="line"><span class="attr">DISABLE_REGISTRATION</span>   = <span class="literal">false</span></span><br><span class="line"><span class="attr">ENABLE_CAPTCHA</span>         = <span class="literal">true</span></span><br><span class="line"><span class="attr">REQUIRE_SIGNIN_VIEW</span>    = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="section">[picture]</span></span><br><span class="line"><span class="attr">DISABLE_GRAVATAR</span>        = <span class="literal">true</span></span><br><span class="line"><span class="attr">ENABLE_FEDERATED_AVATAR</span> = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="section">[session]</span></span><br><span class="line"><span class="attr">PROVIDER</span> = file</span><br><span class="line"></span><br><span class="line"><span class="section">[log]</span></span><br><span class="line"><span class="attr">MODE</span>      = console, file</span><br><span class="line"><span class="attr">LEVEL</span>     = Info</span><br><span class="line"><span class="attr">ROOT_PATH</span> = C:/gogs/log</span><br><span class="line"></span><br><span class="line"><span class="section">[security]</span></span><br><span class="line"><span class="attr">INSTALL_LOCK</span> = <span class="literal">true</span></span><br><span class="line"><span class="attr">SECRET_KEY</span>   = ****************</span><br></pre></td></tr></table></figure>
+<h2 id="异常处理"><a class="markdownIt-Anchor" href="#异常处理"></a> 异常处理</h2>
+<h3 id="env-环境变量"><a class="markdownIt-Anchor" href="#env-环境变量"></a> ENV 环境变量</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> git@192.168.227.110:ouyfb/test.git</span><br><span class="line"><span class="comment"># Cloning into &#x27;test&#x27;...</span></span><br><span class="line"><span class="comment"># fatal: Could not read from remote repository.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Please make sure you have the correct access rights</span></span><br><span class="line"><span class="comment"># and the repository exists.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 找不到env 的路径，将`&#123;Git 安装目录&#125;\usr\bin` 添加到PATH 环境变量即可  </span></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2022/08/03/linux/gogs/" title="Gogs">https://12tall.github.io/2022/08/03/linux/gogs/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/ssh/" rel="tag"># ssh</a>
+              <a href="/tags/gogs/" rel="tag"># gogs</a>
+              <a href="/tags/git/" rel="tag"># git</a>
+              <a href="/tags/mysql/" rel="tag"># mysql</a>
+              <a href="/tags/mariadb/" rel="tag"># mariadb</a>
+              <a href="/tags/openssh/" rel="tag"># openssh</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/08/03/windows/01_dns/" rel="prev" title="DNS 服务器">
+                  <i class="fa fa-angle-left"></i> DNS 服务器
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/08/03/linux/samba/" rel="next" title="域控制器杂谈">
+                  域控制器杂谈 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">34k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:03</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+
+</body>
+</html>

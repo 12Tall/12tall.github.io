@@ -64,7 +64,7 @@
     <link href="https://12tall.github.io/2025/05/15/gettext/"/>
     <id>https://12tall.github.io/2025/05/15/gettext/</id>
     <published>2025-05-15T05:27:44.000Z</published>
-    <updated>2025-05-21T05:33:01.404Z</updated>
+    <updated>2025-05-21T07:28:03.299Z</updated>
     
     
     <summary type="html">&lt;p&gt;一般来说，使用&lt;code&gt;gettext&lt;/code&gt; 为程序添加多语言支持时，需要遵循一些标准的步骤。另外就是，对于在&lt;code&gt;main()&lt;/code&gt; 函数之前就初始化的变量需要特殊处理。
@@ -80,6 +80,29 @@
     <category term="多语言" scheme="https://12tall.github.io/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/"/>
     
     <category term="国际化" scheme="https://12tall.github.io/tags/%E5%9B%BD%E9%99%85%E5%8C%96/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>封装自定义Windows 安装镜像</title>
+    <link href="https://12tall.github.io/2023/09/05/windows/encapsulate_installer_image/"/>
+    <id>https://12tall.github.io/2023/09/05/windows/encapsulate_installer_image/</id>
+    <published>2023-09-04T15:00:00.000Z</published>
+    <updated>2025-05-21T07:26:53.748Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;因为公司的电脑有时需要重装系统，需要一同重装的还有许多专业软件。如果手工安装的话费时费力。于是想着能封装一个安装包，可以自动部署系统和软件，考虑过Ghost，但是出于各种原因不敢使用。于是参考&lt;a href=&quot;https://blog.csdn.net/qq_24946447/article/details/123851055&quot;&gt;制作企业批量安装的WIN10封装镜像&lt;/a&gt;一文，记录下自己的一些实践。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
+    
+    
+    <category term="windows" scheme="https://12tall.github.io/tags/windows/"/>
+    
+    <category term="VMware" scheme="https://12tall.github.io/tags/VMware/"/>
     
   </entry>
   
@@ -219,11 +242,35 @@
   </entry>
   
   <entry>
+    <title>MariaDB 运维</title>
+    <link href="https://12tall.github.io/2022/11/26/linux/mariadb/"/>
+    <id>https://12tall.github.io/2022/11/26/linux/mariadb/</id>
+    <published>2022-11-25T15:00:00.000Z</published>
+    <updated>2025-05-21T07:27:46.862Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;安装与登录&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#安装与登录&quot;&gt;&lt;/a&gt; 安装与登录&lt;/h2&gt;
+&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ sudo apt install mariadb-server mariadb-common mariadb-client mariadb-backup  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;mariadb-common 是所有MariaDB 所需的配置文件    &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;mariadb-backup 是备份与恢复的工具  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ sudo systemctl enable mariadb&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ sudo systemctl start mariadb&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ sudo mysql  # 匿名登陆，但是这样不够安全  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;MariaDB [(none)]&amp;gt; quit&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Bye&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
+    
+    
+    <category term="linux" scheme="https://12tall.github.io/tags/linux/"/>
+    
+    <category term="数据库" scheme="https://12tall.github.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+    <category term="MariaDB" scheme="https://12tall.github.io/tags/MariaDB/"/>
+    
+  </entry>
+  
+  <entry>
     <title>我理解的神经网络</title>
     <link href="https://12tall.github.io/2022/10/07/neural-network/"/>
     <id>https://12tall.github.io/2022/10/07/neural-network/</id>
     <published>2022-10-07T06:26:23.000Z</published>
-    <updated>2025-05-21T06:29:46.667Z</updated>
+    <updated>2025-05-21T07:33:03.920Z</updated>
     
     
     <summary type="html">&lt;p&gt;我一直希望，能不能有一种非常非常简单、形象的方式，来向人们解释复杂的理论。最好是能用生动的比喻、连同它的历史一起、娓娓道来。这种方式一定非常适合人们对事物的理解的习惯吧。&lt;/p&gt;
@@ -333,7 +380,7 @@
     <link href="https://12tall.github.io/2022/08/03/eve-ng/"/>
     <id>https://12tall.github.io/2022/08/03/eve-ng/</id>
     <published>2022-08-03T06:57:24.000Z</published>
-    <updated>2025-05-21T06:58:43.428Z</updated>
+    <updated>2025-05-21T07:28:09.024Z</updated>
     
     
     <summary type="html">&lt;p&gt;Eve-Ng 的简单使用教程。&lt;/p&gt;</summary>
@@ -368,22 +415,45 @@
   </entry>
   
   <entry>
+    <title>GitHub Actions</title>
+    <link href="https://12tall.github.io/2022/08/03/github-action/"/>
+    <id>https://12tall.github.io/2022/08/03/github-action/</id>
+    <published>2022-08-02T15:00:00.000Z</published>
+    <updated>2025-05-21T07:33:14.062Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;不出意外的话，在百度上搜索&lt;code&gt;GitHub Actions 自动部署&lt;/code&gt;，大概率会得到阮一峰老师的&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="notation" scheme="https://12tall.github.io/categories/notation/"/>
+    
+    
+    <category term="CI" scheme="https://12tall.github.io/tags/CI/"/>
+    
+    <category term="shell" scheme="https://12tall.github.io/tags/shell/"/>
+    
+    <category term="vuepress" scheme="https://12tall.github.io/tags/vuepress/"/>
+    
+  </entry>
+  
+  <entry>
     <title>ACL</title>
     <link href="https://12tall.github.io/2022/08/03/ccna/acl/"/>
     <id>https://12tall.github.io/2022/08/03/ccna/acl/</id>
     <published>2022-08-02T15:00:00.000Z</published>
-    <updated>2025-05-21T07:13:53.218Z</updated>
+    <updated>2025-05-21T07:29:01.676Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;span id=&quot;more&quot;&gt;&lt;/span&gt;
-&lt;h2 id=&quot;访问控制列表&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#访问控制列表&quot;&gt;&lt;/a&gt; 访问控制列表&lt;/h2&gt;
-&lt;h3 id=&quot;作用&quot;&gt;&lt;a</summary>
-        
-      
+    <summary type="html">&lt;h2 id=&quot;访问控制列表&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#访问控制列表&quot;&gt;&lt;/a&gt; 访问控制列表&lt;/h2&gt;
+&lt;h3 id=&quot;作用&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#作用&quot;&gt;&lt;/a&gt; 作用&lt;/h3&gt;
+&lt;p&gt;过滤，抓取数据，但是ACL 会影响设备性能&lt;/p&gt;</summary>
     
     
     
@@ -399,7 +469,7 @@
     <link href="https://12tall.github.io/2022/08/03/ccna/fhrp/"/>
     <id>https://12tall.github.io/2022/08/03/ccna/fhrp/</id>
     <published>2022-08-02T15:00:00.000Z</published>
-    <updated>2025-05-21T07:13:59.840Z</updated>
+    <updated>2025-05-21T07:28:03.313Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;常见故障与对策&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#常见故障与对策&quot;&gt;&lt;/a&gt; 常见故障与对策&lt;/h2&gt;
@@ -428,11 +498,40 @@
   </entry>
   
   <entry>
+    <title>IP Address</title>
+    <link href="https://12tall.github.io/2022/08/03/ccna/ip/"/>
+    <id>https://12tall.github.io/2022/08/03/ccna/ip/</id>
+    <published>2022-08-02T15:00:00.000Z</published>
+    <updated>2025-05-21T07:14:05.065Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;分类&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#分类&quot;&gt;&lt;/a&gt; 分类&lt;/h2&gt;
+&lt;h3 id=&quot;有类&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#有类&quot;&gt;&lt;/a&gt; 有类&lt;/h3&gt;
+&lt;h4 id=&quot;单播地址&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#单播地址&quot;&gt;&lt;/a&gt; 单播地址&lt;/h4&gt;
+&lt;p&gt;能够配置使用的，可以一对一地传输数据&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A: &lt;code&gt;0xxx xxx;xxxx xxxx,xxxx xxxx,xxxx xxxx&lt;/code&gt; 掩码 8位 1.0.0.0 - 126.0.0.0&lt;/li&gt;
+&lt;li&gt;B: &lt;code&gt;10xx xxx,xxxx xxxx;xxxx xxxx,xxxx xxxx&lt;/code&gt; 掩码16位 128.0.0.0 - 191.255.0.0&lt;/li&gt;
+&lt;li&gt;C: &lt;code&gt;110x xxx,xxxx xxxx,xxxx xxxx;xxxx xxxx&lt;/code&gt; 掩码24位 192.0.0.0 - 223.255.255.0&lt;/li&gt;
+&lt;li&gt;D: &lt;code&gt;1110 xxx,xxxx xxxx,xxxx xxxx,xxxx xxxx&lt;/code&gt; 多播组号&lt;/li&gt;
+&lt;li&gt;E: &lt;code&gt;1111 0xx,xxxx xxxx,xxxx xxxx,xxxx xxxx&lt;/code&gt; 备用&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
+    
+    
+    <category term="ccna" scheme="https://12tall.github.io/tags/ccna/"/>
+    
+  </entry>
+  
+  <entry>
     <title>路由</title>
     <link href="https://12tall.github.io/2022/08/03/ccna/route/"/>
     <id>https://12tall.github.io/2022/08/03/ccna/route/</id>
     <published>2022-08-02T15:00:00.000Z</published>
-    <updated>2025-05-21T07:14:18.139Z</updated>
+    <updated>2025-05-21T07:28:03.313Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;路由基础&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#路由基础&quot;&gt;&lt;/a&gt; 路由基础&lt;/h2&gt;
@@ -467,137 +566,16 @@
   </entry>
   
   <entry>
-    <title>IP Address</title>
-    <link href="https://12tall.github.io/2022/08/03/ccna/ip/"/>
-    <id>https://12tall.github.io/2022/08/03/ccna/ip/</id>
-    <published>2022-08-02T15:00:00.000Z</published>
-    <updated>2025-05-21T07:14:05.065Z</updated>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;分类&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#分类&quot;&gt;&lt;/a&gt; 分类&lt;/h2&gt;
-&lt;h3 id=&quot;有类&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#有类&quot;&gt;&lt;/a&gt; 有类&lt;/h3&gt;
-&lt;h4 id=&quot;单播地址&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#单播地址&quot;&gt;&lt;/a&gt; 单播地址&lt;/h4&gt;
-&lt;p&gt;能够配置使用的，可以一对一地传输数据&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;A: &lt;code&gt;0xxx xxx;xxxx xxxx,xxxx xxxx,xxxx xxxx&lt;/code&gt; 掩码 8位 1.0.0.0 - 126.0.0.0&lt;/li&gt;
-&lt;li&gt;B: &lt;code&gt;10xx xxx,xxxx xxxx;xxxx xxxx,xxxx xxxx&lt;/code&gt; 掩码16位 128.0.0.0 - 191.255.0.0&lt;/li&gt;
-&lt;li&gt;C: &lt;code&gt;110x xxx,xxxx xxxx,xxxx xxxx;xxxx xxxx&lt;/code&gt; 掩码24位 192.0.0.0 - 223.255.255.0&lt;/li&gt;
-&lt;li&gt;D: &lt;code&gt;1110 xxx,xxxx xxxx,xxxx xxxx,xxxx xxxx&lt;/code&gt; 多播组号&lt;/li&gt;
-&lt;li&gt;E: &lt;code&gt;1111 0xx,xxxx xxxx,xxxx xxxx,xxxx xxxx&lt;/code&gt; 备用&lt;/li&gt;
-&lt;/ul&gt;</summary>
-    
-    
-    
-    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
-    
-    
-    <category term="ccna" scheme="https://12tall.github.io/tags/ccna/"/>
-    
-  </entry>
-  
-  <entry>
     <title>NAT</title>
     <link href="https://12tall.github.io/2022/08/03/ccna/nat/"/>
     <id>https://12tall.github.io/2022/08/03/ccna/nat/</id>
     <published>2022-08-02T15:00:00.000Z</published>
-    <updated>2025-05-21T07:14:11.268Z</updated>
+    <updated>2025-05-21T07:28:03.308Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;网路地址转换&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#网路地址转换&quot;&gt;&lt;/a&gt; 网路地址转换&lt;/h2&gt;
 &lt;h3 id=&quot;作用&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#作用&quot;&gt;&lt;/a&gt; 作用&lt;/h3&gt;
 &lt;p&gt;广域网中，高层网络设备，不能给私有网段回包。所以一般会需要将内网设备的端口映射到公网设备。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
-    
-    
-    <category term="ccna" scheme="https://12tall.github.io/tags/ccna/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Spanning-Tree</title>
-    <link href="https://12tall.github.io/2022/08/03/ccna/spanning-tree/"/>
-    <id>https://12tall.github.io/2022/08/03/ccna/spanning-tree/</id>
-    <published>2022-08-02T15:00:00.000Z</published>
-    <updated>2025-05-21T07:14:25.740Z</updated>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;stp&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#stp&quot;&gt;&lt;/a&gt; STP&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;网络中常见的问题：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;设备的单点故障。一台设备宕机，所有子设备都会失去连接&lt;/li&gt;
-&lt;li&gt;提高网络的稳定性、增加冗余，但是这样可能会造成二层环路&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;解决方案：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;手动冷备份（一台设备宕机之后手工启用备用设备）&lt;/li&gt;
-&lt;li&gt;热备（通过生成树协议）&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;生成树协议会自动阻塞一些接口，来避免环路&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
-    
-    
-    <category term="ccna" scheme="https://12tall.github.io/tags/ccna/"/>
-    
-    <category term="spanning" scheme="https://12tall.github.io/tags/spanning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>交换机基础</title>
-    <link href="https://12tall.github.io/2022/08/03/ccna/switch/"/>
-    <id>https://12tall.github.io/2022/08/03/ccna/switch/</id>
-    <published>2022-08-02T15:00:00.000Z</published>
-    <updated>2025-05-21T07:14:34.354Z</updated>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;交换机&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#交换机&quot;&gt;&lt;/a&gt; 交换机&lt;/h2&gt;
-&lt;h3 id=&quot;二层交换机&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#二层交换机&quot;&gt;&lt;/a&gt; 二层交换机&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;二层交换机能且只能配置一个IP（管理用）&lt;/li&gt;
-&lt;li&gt;二层交换机也可以配置一条静态路由&lt;/li&gt;
-&lt;/ul&gt;</summary>
-    
-    
-    
-    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
-    
-    
-    <category term="ccna" scheme="https://12tall.github.io/tags/ccna/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>TCP/IP 基础</title>
-    <link href="https://12tall.github.io/2022/08/03/ccna/tcp-ip/"/>
-    <id>https://12tall.github.io/2022/08/03/ccna/tcp-ip/</id>
-    <published>2022-08-02T15:00:00.000Z</published>
-    <updated>2025-05-21T07:14:42.586Z</updated>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;网络协议分层&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#网络协议分层&quot;&gt;&lt;/a&gt; 网络协议分层&lt;/h2&gt;
-&lt;h3 id=&quot;osi-分层标准&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#osi-分层标准&quot;&gt;&lt;/a&gt; OSI 分层标准&lt;/h3&gt;
-&lt;p&gt;自上而下分为七层：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;应用层：QQ、Edge&lt;/li&gt;
-&lt;li&gt;表示层：对上层数据进行转码、压缩&lt;/li&gt;
-&lt;li&gt;会话层：控制发送速率（下载限速）&lt;/li&gt;
-&lt;li&gt;传输层：TCP/UDP（防火墙）&lt;/li&gt;
-&lt;li&gt;网络层：IP（路由，以IP 地址为目的）&lt;/li&gt;
-&lt;li&gt;链路层：tracert（交换，以MAC 为目的）&lt;/li&gt;
-&lt;li&gt;物理层：电缆等等&lt;/li&gt;
-&lt;/ul&gt;</summary>
     
     
     
