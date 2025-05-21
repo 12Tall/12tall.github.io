@@ -102,11 +102,11 @@
     
     <category term="router" scheme="https://12tall.github.io/tags/router/"/>
     
+    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
+    
     <category term="OpenWRT" scheme="https://12tall.github.io/tags/OpenWRT/"/>
     
     <category term="v2raya" scheme="https://12tall.github.io/tags/v2raya/"/>
-    
-    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
     
     <category term="bridge" scheme="https://12tall.github.io/tags/bridge/"/>
     
@@ -136,15 +136,13 @@
     <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
     
     
-    <category term="router" scheme="https://12tall.github.io/tags/router/"/>
-    
-    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
-    
-    <category term="pnet-lab" scheme="https://12tall.github.io/tags/pnet-lab/"/>
+    <category term="ssh" scheme="https://12tall.github.io/tags/ssh/"/>
     
     <category term="cisco" scheme="https://12tall.github.io/tags/cisco/"/>
     
     <category term="switch" scheme="https://12tall.github.io/tags/switch/"/>
+    
+    <category term="router" scheme="https://12tall.github.io/tags/router/"/>
     
     <category term="image" scheme="https://12tall.github.io/tags/image/"/>
     
@@ -152,11 +150,13 @@
     
     <category term="iol" scheme="https://12tall.github.io/tags/iol/"/>
     
-    <category term="ssh" scheme="https://12tall.github.io/tags/ssh/"/>
-    
     <category term="scp" scheme="https://12tall.github.io/tags/scp/"/>
     
+    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
+    
     <category term="chmod" scheme="https://12tall.github.io/tags/chmod/"/>
+    
+    <category term="pnet-lab" scheme="https://12tall.github.io/tags/pnet-lab/"/>
     
     <category term="fortigate" scheme="https://12tall.github.io/tags/fortigate/"/>
     
@@ -270,25 +270,341 @@
   </entry>
   
   <entry>
-    <title>生命起源</title>
-    <link href="https://12tall.github.io/2022/05/21/life/"/>
-    <id>https://12tall.github.io/2022/05/21/life/</id>
-    <published>2022-05-21T05:51:41.000Z</published>
-    <updated>2025-05-21T05:56:29.775Z</updated>
+    <title>aruba 设备</title>
+    <link href="https://12tall.github.io/2022/08/03/aruba/"/>
+    <id>https://12tall.github.io/2022/08/03/aruba/</id>
+    <published>2022-08-03T07:02:52.000Z</published>
+    <updated>2025-05-21T07:06:14.914Z</updated>
     
     
-    <summary type="html">&lt;p&gt;我们所说的灵魂应该是建立在自我意识之上的&lt;br /&gt;
-而自我意识则应该是以感情、感觉为基础的&lt;br /&gt;
-感情、感觉可能是对神经、电、化学等各种信号量的抽象&lt;br /&gt;
-某些可能还是副产品&lt;br /&gt;
-我是想按照这个思路来找到一个最符合自己理解的答案&lt;/p&gt;</summary>
+    <summary type="html">&lt;p&gt;本文主要包含交换机设备的权限、登录、升级、备份、恢复等操作。&lt;br /&gt;
+2930F 可以采用多种途径登录管理，但除了Console 以外，其余的方式均需要提前设置交换机的IP。&lt;/p&gt;</summary>
     
     
     
-    <category term="thoughts" scheme="https://12tall.github.io/categories/thoughts/"/>
+    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
     
     
-    <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
+    <category term="Aruba" scheme="https://12tall.github.io/tags/Aruba/"/>
+    
+    <category term="路由" scheme="https://12tall.github.io/tags/%E8%B7%AF%E7%94%B1/"/>
+    
+    <category term="三层" scheme="https://12tall.github.io/tags/%E4%B8%89%E5%B1%82/"/>
+    
+    <category term="交换" scheme="https://12tall.github.io/tags/%E4%BA%A4%E6%8D%A2/"/>
+    
+    <category term="二层" scheme="https://12tall.github.io/tags/%E4%BA%8C%E5%B1%82/"/>
+    
+    <category term="登录" scheme="https://12tall.github.io/tags/%E7%99%BB%E5%BD%95/"/>
+    
+    <category term="ssh" scheme="https://12tall.github.io/tags/ssh/"/>
+    
+    <category term="web" scheme="https://12tall.github.io/tags/web/"/>
+    
+    <category term="telnet" scheme="https://12tall.github.io/tags/telnet/"/>
+    
+    <category term="console" scheme="https://12tall.github.io/tags/console/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>飞塔防火墙</title>
+    <link href="https://12tall.github.io/2022/08/03/fortigate/"/>
+    <id>https://12tall.github.io/2022/08/03/fortigate/</id>
+    <published>2022-08-03T06:59:25.000Z</published>
+    <updated>2025-05-21T07:01:07.706Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;只有在注册以后，才能得到技术支持、产品特性信息、最新威胁防护&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
+    
+    
+    <category term="防火墙" scheme="https://12tall.github.io/tags/%E9%98%B2%E7%81%AB%E5%A2%99/"/>
+    
+    <category term="fortinet" scheme="https://12tall.github.io/tags/fortinet/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Eve-Ng使用笔记</title>
+    <link href="https://12tall.github.io/2022/08/03/eve-ng/"/>
+    <id>https://12tall.github.io/2022/08/03/eve-ng/</id>
+    <published>2022-08-03T06:57:24.000Z</published>
+    <updated>2025-05-21T06:58:43.428Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;Eve-Ng 的简单使用教程。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
+    
+    
+    <category term="ssh" scheme="https://12tall.github.io/tags/ssh/"/>
+    
+    <category term="eve" scheme="https://12tall.github.io/tags/eve/"/>
+    
+    <category term="cisco" scheme="https://12tall.github.io/tags/cisco/"/>
+    
+    <category term="switch" scheme="https://12tall.github.io/tags/switch/"/>
+    
+    <category term="router" scheme="https://12tall.github.io/tags/router/"/>
+    
+    <category term="image" scheme="https://12tall.github.io/tags/image/"/>
+    
+    <category term="dynamipshe" scheme="https://12tall.github.io/tags/dynamipshe/"/>
+    
+    <category term="iol" scheme="https://12tall.github.io/tags/iol/"/>
+    
+    <category term="scp" scheme="https://12tall.github.io/tags/scp/"/>
+    
+    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
+    
+    <category term="chmod" scheme="https://12tall.github.io/tags/chmod/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ACL</title>
+    <link href="https://12tall.github.io/2022/08/03/ccna/acl/"/>
+    <id>https://12tall.github.io/2022/08/03/ccna/acl/</id>
+    <published>2022-08-02T15:00:00.000Z</published>
+    <updated>2025-05-21T07:13:53.218Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;span id=&quot;more&quot;&gt;&lt;/span&gt;
+&lt;h2 id=&quot;访问控制列表&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#访问控制列表&quot;&gt;&lt;/a&gt; 访问控制列表&lt;/h2&gt;
+&lt;h3 id=&quot;作用&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
+    
+    
+    <category term="ccna" scheme="https://12tall.github.io/tags/ccna/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>首跳冗余协议</title>
+    <link href="https://12tall.github.io/2022/08/03/ccna/fhrp/"/>
+    <id>https://12tall.github.io/2022/08/03/ccna/fhrp/</id>
+    <published>2022-08-02T15:00:00.000Z</published>
+    <updated>2025-05-21T07:13:59.840Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;常见故障与对策&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#常见故障与对策&quot;&gt;&lt;/a&gt; 常见故障与对策&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;单线路故障：端口聚合&lt;/li&gt;
+&lt;li&gt;单设备故障：
+&lt;ul&gt;
+&lt;li&gt;堆叠&lt;/li&gt;
+&lt;li&gt;VRRP&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;单电源故障：双电源（市电+UPS）&lt;/li&gt;
+&lt;li&gt;单服务器故障：做集群&lt;/li&gt;
+&lt;li&gt;机房冗余&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
+    
+    
+    <category term="ccna" scheme="https://12tall.github.io/tags/ccna/"/>
+    
+    <category term="vrrp" scheme="https://12tall.github.io/tags/vrrp/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>路由</title>
+    <link href="https://12tall.github.io/2022/08/03/ccna/route/"/>
+    <id>https://12tall.github.io/2022/08/03/ccna/route/</id>
+    <published>2022-08-02T15:00:00.000Z</published>
+    <updated>2025-05-21T07:14:18.139Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;路由基础&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#路由基础&quot;&gt;&lt;/a&gt; 路由基础&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;为什么要引入路由：
+&lt;ul&gt;
+&lt;li&gt;随着设备的增加，二层的转发会变得难以管理，此时需要引入路由&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;路由的工作步骤：
+&lt;ol&gt;
+&lt;li&gt;匹配目标网段&lt;/li&gt;
+&lt;li&gt;匹配成功后将数据扔给&lt;code&gt;出接口&lt;/code&gt;或者&lt;code&gt;下一跳&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;关键点
+&lt;ul&gt;
+&lt;li&gt;每次三层设备接收到包的时候&lt;code&gt;TTL&lt;/code&gt; 都会减一&lt;/li&gt;
+&lt;li&gt;每次经过三层设备都会改变数据包的源和目的&lt;code&gt;MAC&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;每次经过三层设备数据包的&lt;code&gt;IP&lt;/code&gt; 地址一般都是不会变的（&lt;code&gt;NAT&lt;/code&gt; 除外）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
+    
+    
+    <category term="ccna" scheme="https://12tall.github.io/tags/ccna/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>IP Address</title>
+    <link href="https://12tall.github.io/2022/08/03/ccna/ip/"/>
+    <id>https://12tall.github.io/2022/08/03/ccna/ip/</id>
+    <published>2022-08-02T15:00:00.000Z</published>
+    <updated>2025-05-21T07:14:05.065Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;分类&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#分类&quot;&gt;&lt;/a&gt; 分类&lt;/h2&gt;
+&lt;h3 id=&quot;有类&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#有类&quot;&gt;&lt;/a&gt; 有类&lt;/h3&gt;
+&lt;h4 id=&quot;单播地址&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#单播地址&quot;&gt;&lt;/a&gt; 单播地址&lt;/h4&gt;
+&lt;p&gt;能够配置使用的，可以一对一地传输数据&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A: &lt;code&gt;0xxx xxx;xxxx xxxx,xxxx xxxx,xxxx xxxx&lt;/code&gt; 掩码 8位 1.0.0.0 - 126.0.0.0&lt;/li&gt;
+&lt;li&gt;B: &lt;code&gt;10xx xxx,xxxx xxxx;xxxx xxxx,xxxx xxxx&lt;/code&gt; 掩码16位 128.0.0.0 - 191.255.0.0&lt;/li&gt;
+&lt;li&gt;C: &lt;code&gt;110x xxx,xxxx xxxx,xxxx xxxx;xxxx xxxx&lt;/code&gt; 掩码24位 192.0.0.0 - 223.255.255.0&lt;/li&gt;
+&lt;li&gt;D: &lt;code&gt;1110 xxx,xxxx xxxx,xxxx xxxx,xxxx xxxx&lt;/code&gt; 多播组号&lt;/li&gt;
+&lt;li&gt;E: &lt;code&gt;1111 0xx,xxxx xxxx,xxxx xxxx,xxxx xxxx&lt;/code&gt; 备用&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
+    
+    
+    <category term="ccna" scheme="https://12tall.github.io/tags/ccna/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>NAT</title>
+    <link href="https://12tall.github.io/2022/08/03/ccna/nat/"/>
+    <id>https://12tall.github.io/2022/08/03/ccna/nat/</id>
+    <published>2022-08-02T15:00:00.000Z</published>
+    <updated>2025-05-21T07:14:11.268Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;网路地址转换&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#网路地址转换&quot;&gt;&lt;/a&gt; 网路地址转换&lt;/h2&gt;
+&lt;h3 id=&quot;作用&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#作用&quot;&gt;&lt;/a&gt; 作用&lt;/h3&gt;
+&lt;p&gt;广域网中，高层网络设备，不能给私有网段回包。所以一般会需要将内网设备的端口映射到公网设备。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
+    
+    
+    <category term="ccna" scheme="https://12tall.github.io/tags/ccna/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Spanning-Tree</title>
+    <link href="https://12tall.github.io/2022/08/03/ccna/spanning-tree/"/>
+    <id>https://12tall.github.io/2022/08/03/ccna/spanning-tree/</id>
+    <published>2022-08-02T15:00:00.000Z</published>
+    <updated>2025-05-21T07:14:25.740Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;stp&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#stp&quot;&gt;&lt;/a&gt; STP&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;网络中常见的问题：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;设备的单点故障。一台设备宕机，所有子设备都会失去连接&lt;/li&gt;
+&lt;li&gt;提高网络的稳定性、增加冗余，但是这样可能会造成二层环路&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;解决方案：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;手动冷备份（一台设备宕机之后手工启用备用设备）&lt;/li&gt;
+&lt;li&gt;热备（通过生成树协议）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;生成树协议会自动阻塞一些接口，来避免环路&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
+    
+    
+    <category term="ccna" scheme="https://12tall.github.io/tags/ccna/"/>
+    
+    <category term="spanning" scheme="https://12tall.github.io/tags/spanning/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>交换机基础</title>
+    <link href="https://12tall.github.io/2022/08/03/ccna/switch/"/>
+    <id>https://12tall.github.io/2022/08/03/ccna/switch/</id>
+    <published>2022-08-02T15:00:00.000Z</published>
+    <updated>2025-05-21T07:14:34.354Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;交换机&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#交换机&quot;&gt;&lt;/a&gt; 交换机&lt;/h2&gt;
+&lt;h3 id=&quot;二层交换机&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#二层交换机&quot;&gt;&lt;/a&gt; 二层交换机&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;二层交换机能且只能配置一个IP（管理用）&lt;/li&gt;
+&lt;li&gt;二层交换机也可以配置一条静态路由&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
+    
+    
+    <category term="ccna" scheme="https://12tall.github.io/tags/ccna/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>TCP/IP 基础</title>
+    <link href="https://12tall.github.io/2022/08/03/ccna/tcp-ip/"/>
+    <id>https://12tall.github.io/2022/08/03/ccna/tcp-ip/</id>
+    <published>2022-08-02T15:00:00.000Z</published>
+    <updated>2025-05-21T07:14:42.586Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;网络协议分层&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#网络协议分层&quot;&gt;&lt;/a&gt; 网络协议分层&lt;/h2&gt;
+&lt;h3 id=&quot;osi-分层标准&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#osi-分层标准&quot;&gt;&lt;/a&gt; OSI 分层标准&lt;/h3&gt;
+&lt;p&gt;自上而下分为七层：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;应用层：QQ、Edge&lt;/li&gt;
+&lt;li&gt;表示层：对上层数据进行转码、压缩&lt;/li&gt;
+&lt;li&gt;会话层：控制发送速率（下载限速）&lt;/li&gt;
+&lt;li&gt;传输层：TCP/UDP（防火墙）&lt;/li&gt;
+&lt;li&gt;网络层：IP（路由，以IP 地址为目的）&lt;/li&gt;
+&lt;li&gt;链路层：tracert（交换，以MAC 为目的）&lt;/li&gt;
+&lt;li&gt;物理层：电缆等等&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
+    
+    
+    <category term="ccna" scheme="https://12tall.github.io/tags/ccna/"/>
     
   </entry>
   
