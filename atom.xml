@@ -60,4 +60,134 @@
     
   </entry>
   
+  <entry>
+    <title>RK4 中PID 算法的初值问题</title>
+    <link href="https://12tall.github.io/2023/04/26/rk4-pid/"/>
+    <id>https://12tall.github.io/2023/04/26/rk4-pid/</id>
+    <published>2023-04-26T06:31:58.000Z</published>
+    <updated>2025-05-21T06:33:54.604Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;&lt;strong&gt;考虑一个问题：当系统开始运行时&lt;code&gt;PID&lt;/code&gt; 控制器的输出应该是0，还是其他值呢？&lt;/strong&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="thoughts" scheme="https://12tall.github.io/categories/thoughts/"/>
+    
+    
+    <category term="math" scheme="https://12tall.github.io/tags/math/"/>
+    
+    <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
+    
+    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
+    
+    <category term="control" scheme="https://12tall.github.io/tags/control/"/>
+    
+    <category term="pid" scheme="https://12tall.github.io/tags/pid/"/>
+    
+    <category term="数值分析" scheme="https://12tall.github.io/tags/%E6%95%B0%E5%80%BC%E5%88%86%E6%9E%90/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>方程的思想</title>
+    <link href="https://12tall.github.io/2022/12/06/equation/"/>
+    <id>https://12tall.github.io/2022/12/06/equation/</id>
+    <published>2022-12-06T05:58:06.000Z</published>
+    <updated>2025-05-21T06:30:30.502Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;吾见其难为，怵然为戒，视为止，行为迟。动刀甚微，謋然已解，如土委地。提刀而立，为之四顾，为之踌躇满志，善刀而藏之。——《庖丁解牛》&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="thoughts" scheme="https://12tall.github.io/categories/thoughts/"/>
+    
+    
+    <category term="math" scheme="https://12tall.github.io/tags/math/"/>
+    
+    <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
+    
+    <category term="simulation" scheme="https://12tall.github.io/tags/simulation/"/>
+    
+    <category term="modeling" scheme="https://12tall.github.io/tags/modeling/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>我理解的神经网络</title>
+    <link href="https://12tall.github.io/2022/10/07/neural-network/"/>
+    <id>https://12tall.github.io/2022/10/07/neural-network/</id>
+    <published>2022-10-07T06:26:23.000Z</published>
+    <updated>2025-05-21T06:29:46.667Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;我一直希望，能不能有一种非常非常简单、形象的方式，来向人们解释复杂的理论。最好是能用生动的比喻、连同它的历史一起、娓娓道来。这种方式一定非常适合人们对事物的理解的习惯吧。&lt;/p&gt;
+&lt;p&gt;也许这是一个死胡同，走到某一步便走不下去了。也许这也是前人走过无数遍的道路，只不过谁也不曾注意到路边的野花。我更愿意说这是一种思维方式，中间掺杂着我大学以来学习、思考的结果。边走边看吧。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="thoughts" scheme="https://12tall.github.io/categories/thoughts/"/>
+    
+    
+    <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
+    
+    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
+    
+    <category term="neural network" scheme="https://12tall.github.io/tags/neural-network/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>反馈</title>
+    <link href="https://12tall.github.io/2022/10/07/feedback/"/>
+    <id>https://12tall.github.io/2022/10/07/feedback/</id>
+    <published>2022-10-07T05:59:46.000Z</published>
+    <updated>2025-05-21T06:24:20.038Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;想到以前解证明题：条件推导下，结论推导下，中间一凑，解决战斗~&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="thoughts" scheme="https://12tall.github.io/categories/thoughts/"/>
+    
+    
+    <category term="math" scheme="https://12tall.github.io/tags/math/"/>
+    
+    <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
+    
+    <category term="control" scheme="https://12tall.github.io/tags/control/"/>
+    
+    <category term="circuit" scheme="https://12tall.github.io/tags/circuit/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>生命起源</title>
+    <link href="https://12tall.github.io/2022/05/21/life/"/>
+    <id>https://12tall.github.io/2022/05/21/life/</id>
+    <published>2022-05-21T05:51:41.000Z</published>
+    <updated>2025-05-21T05:56:29.775Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;我们所说的灵魂应该是建立在自我意识之上的&lt;br /&gt;
+而自我意识则应该是以感情、感觉为基础的&lt;br /&gt;
+感情、感觉可能是对神经、电、化学等各种信号量的抽象&lt;br /&gt;
+某些可能还是副产品&lt;br /&gt;
+我是想按照这个思路来找到一个最符合自己理解的答案&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="thoughts" scheme="https://12tall.github.io/categories/thoughts/"/>
+    
+    
+    <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
+    
+  </entry>
+  
 </feed>
