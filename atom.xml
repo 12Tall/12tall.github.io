@@ -6,7 +6,7 @@
   <link href="https://12tall.github.io/atom.xml" rel="self"/>
   
   <link href="https://12tall.github.io/"/>
-  <updated>2025-05-21T05:37:37.302Z</updated>
+  <updated>2025-05-21T06:51:57.281Z</updated>
   <id>https://12tall.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>迁移通知</title>
+    <link href="https://12tall.github.io/2025/05/21/info/"/>
+    <id>https://12tall.github.io/2025/05/21/info/</id>
+    <published>2025-05-21T06:50:23.000Z</published>
+    <updated>2025-05-21T06:51:57.281Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;该博客通过&lt;code&gt;Hexo Next&lt;/code&gt;</summary>
+        
+      
+    
+    
+    
+    <category term="post" scheme="https://12tall.github.io/categories/post/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>Python 实现动态链接库效果</title>
@@ -61,6 +84,85 @@
   </entry>
   
   <entry>
+    <title>VM 中配置OpenWRT 透明路由</title>
+    <link href="https://12tall.github.io/2023/09/01/openwrt/"/>
+    <id>https://12tall.github.io/2023/09/01/openwrt/</id>
+    <published>2023-09-01T06:41:34.000Z</published>
+    <updated>2025-05-21T06:43:50.393Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;写这篇笔记的起因是在家里的电脑上安装&lt;code&gt;Pnetlab&lt;/code&gt; 时，因为GFW 的原因，导致ishare2 无法下载镜像。通过各种&lt;code&gt;PROXY&lt;/code&gt; 也不能解决问题，只好尝试配置&lt;code&gt;OpenWRT&lt;/code&gt; 路由并结合&lt;code&gt;V2rayA&lt;/code&gt; 透明代理来解决。发现能行，所以记录一下实现的过程。将以有为也~&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
+    
+    
+    <category term="router" scheme="https://12tall.github.io/tags/router/"/>
+    
+    <category term="OpenWRT" scheme="https://12tall.github.io/tags/OpenWRT/"/>
+    
+    <category term="v2raya" scheme="https://12tall.github.io/tags/v2raya/"/>
+    
+    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
+    
+    <category term="bridge" scheme="https://12tall.github.io/tags/bridge/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PNet-Lab 使用笔记</title>
+    <link href="https://12tall.github.io/2023/07/05/pnet-lab/"/>
+    <id>https://12tall.github.io/2023/07/05/pnet-lab/</id>
+    <published>2023-07-05T06:45:02.000Z</published>
+    <updated>2025-05-21T06:47:54.625Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;内网环境建议先&lt;a href=&quot;../openwrt/README.md&quot;&gt;配置OpenWRT 透明路由&lt;/a&gt;，只用Proxy 代理的话还是会有问题&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.pnetlab.com/&quot;&gt;PNet-Lab&lt;/a&gt; 应该是我见过最好用的网工实验室了。它一般运行于VMware 或VBox 之上，也可以&lt;a href=&quot;https://www.pnetlab.com/pages/documentation?slug=install-bare-metal&quot;&gt;裸机安装&lt;/a&gt;。并且：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;相比于普通的客户端，它具有一个Web 界面，可以多用户同时使用&lt;/li&gt;
+&lt;li&gt;相比于EVE，它支持热插拔&lt;/li&gt;
+&lt;li&gt;自带了一款镜像管理软件&lt;code&gt;ishare2&lt;/code&gt;，可以方便地下载很多镜像&lt;/li&gt;
+&lt;li&gt;不建议再安装pnetlab-v5.*，因为维护起来好复杂&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
+    
+    
+    <category term="router" scheme="https://12tall.github.io/tags/router/"/>
+    
+    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
+    
+    <category term="pnet-lab" scheme="https://12tall.github.io/tags/pnet-lab/"/>
+    
+    <category term="cisco" scheme="https://12tall.github.io/tags/cisco/"/>
+    
+    <category term="switch" scheme="https://12tall.github.io/tags/switch/"/>
+    
+    <category term="image" scheme="https://12tall.github.io/tags/image/"/>
+    
+    <category term="dynamipshe" scheme="https://12tall.github.io/tags/dynamipshe/"/>
+    
+    <category term="iol" scheme="https://12tall.github.io/tags/iol/"/>
+    
+    <category term="ssh" scheme="https://12tall.github.io/tags/ssh/"/>
+    
+    <category term="scp" scheme="https://12tall.github.io/tags/scp/"/>
+    
+    <category term="chmod" scheme="https://12tall.github.io/tags/chmod/"/>
+    
+    <category term="fortigate" scheme="https://12tall.github.io/tags/fortigate/"/>
+    
+  </entry>
+  
+  <entry>
     <title>RK4 中PID 算法的初值问题</title>
     <link href="https://12tall.github.io/2023/04/26/rk4-pid/"/>
     <id>https://12tall.github.io/2023/04/26/rk4-pid/</id>
@@ -79,9 +181,9 @@
     
     <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
     
-    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
-    
     <category term="control" scheme="https://12tall.github.io/tags/control/"/>
+    
+    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
     
     <category term="pid" scheme="https://12tall.github.io/tags/pid/"/>
     
@@ -134,9 +236,9 @@
     
     <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
     
-    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
-    
     <category term="neural network" scheme="https://12tall.github.io/tags/neural-network/"/>
+    
+    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
     
   </entry>
   
@@ -161,9 +263,9 @@
     
     <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
     
-    <category term="control" scheme="https://12tall.github.io/tags/control/"/>
-    
     <category term="circuit" scheme="https://12tall.github.io/tags/circuit/"/>
+    
+    <category term="control" scheme="https://12tall.github.io/tags/control/"/>
     
   </entry>
   
