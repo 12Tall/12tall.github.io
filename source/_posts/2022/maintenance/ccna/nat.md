@@ -32,7 +32,7 @@ ip nat inside source <acl-list> interface f0/0 overload
 show ip nat tran
 # ip nat inseide source static tcp 172.16.10.1 23 123.1.1.1 23
 Switch(config)#ip nat inside source static 192.168.1.1 202.101.100.1
-```  
+```
 4. 动态NAT  
 ```bash
 Switch(config)#$ nat_name 202.101.100.1 202.101.100.10 netmask 255.255.255.0

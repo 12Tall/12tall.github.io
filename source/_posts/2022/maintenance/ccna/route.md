@@ -101,7 +101,7 @@ int f0/0
 ip ospf network point-to-point 
 # 或者将其他接口设置为不参加选举，优先级为0
 ip ospf priority 0
-```  
+```
 配置原则：  
 - DR 应设置为性能比较好的设备  
 - 大规模网络中才有用，两台设备直连没有必要 

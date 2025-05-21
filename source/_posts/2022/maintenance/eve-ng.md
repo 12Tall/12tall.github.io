@@ -26,7 +26,7 @@ VMware Workstation does not support nested virtualization on this host.
 
 module 'MonitorMode' power on failed.  
 Failed to start the virtual machine.
-```  
+```
 最简单的方法就是在虚拟机设置中取消使用虚拟化技术。  
 
 ### eve-ng  
@@ -70,7 +70,7 @@ Host key verification failed.
 # 一般重置过服务器之后再次尝试连接会出现这个问题
 # 这个时候需要重新执行一下  
 ssh-keygen -R 192.168.1.2
-```   
+```
 
 #### 2. scp  
 通过ssh 协议进行文件传输  
@@ -101,7 +101,7 @@ scp -r ./* root@172.20.10.12:/opt/unetlab/addons/dynamips
 ssh root@172.20.10.12
 # 修复镜像（必需，否则镜像不能正常工作）
 /opt/unetlab/wrappers/unl_wrapper -a fixpermissions  
-```  
+```
 
 ### IOL  
 1. 下载文件：`链接：http://pan.baidu.com/s/1dEHvhHf 密码：dqvm`，并解压  

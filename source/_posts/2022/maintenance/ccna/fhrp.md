@@ -30,7 +30,7 @@ vrrp vrid 1 priority 101 越大越优先
 虚拟IP 的MAC 是根据vrid 生成的
 
 dis vrrp brief
-```  
+```
 
 ### 分流  
 两个设备互为主备，见下图：  

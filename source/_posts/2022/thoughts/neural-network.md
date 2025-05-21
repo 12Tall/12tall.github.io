@@ -63,7 +63,7 @@ sum = simplify(
 )
 print(latex(sum))
 # 5.0 b^{2} + 28.0 b k - 38.0 b + 54.0 k^{2} - 137.0 k + 88.5
-```    
+```
 
 </CodeGroupItem>
 
@@ -508,7 +508,7 @@ c = (1-np.sum(np.abs(Y-model(X)))/len(X))*100
 # 绘制边界图
 plot_decision_boundary2(lambda x: model(x), X, Y)
 plt.title('Single Hidden Layer with %s nodes(%s%%)'%(dim,c))
-```  
+```
 
 </CodeGroupItem>
 <CodeGroupItem  title="双隐藏层">
@@ -928,7 +928,7 @@ class HiddenLayer(Layer):  # 每一层都可以独立设置学习率
 -        self.w = np.random.randn(prevLayer.dim, self.dim) * 0.01
 +        self.w = np.random.randn(prevLayer.dim, self.dim) / np.sqrt(prevLayer.dim)
         # ...
-```  
+```
 权重的大小会影响梯度下降的速度：如果权重过大，就会导致模型梯度下降速度变慢，也就是上面提到的问题；如果权重设置过小，则会导致模型过于简单，失去深度学习的意义。所以上文采用了`Xavier Initialization`：`随机数*1/sqrt(上一层维度)`。而对于`ReLU`激活函数，更推荐`He Initialization`：`随机数*sqrt(2/上一层维度)`，并且此方法在其他激活函数也相当好使。顺便提一句，我们给每一层预留了重置初始值的接口。只需修改简单的代码即可让我们的模型顺畅地跑起来：
 
 ```python{5,8,11,14,17,24,27-31}
