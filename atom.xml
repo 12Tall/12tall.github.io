@@ -6,7 +6,7 @@
   <link href="https://12tall.github.io/atom.xml" rel="self"/>
   
   <link href="https://12tall.github.io/"/>
-  <updated>2025-05-21T06:51:57.281Z</updated>
+  <updated>2025-05-21T23:38:54.141Z</updated>
   <id>https://12tall.github.io/</id>
   
   <author>
@@ -18,10 +18,10 @@
   
   <entry>
     <title>迁移通知</title>
-    <link href="https://12tall.github.io/2025/05/21/info/"/>
-    <id>https://12tall.github.io/2025/05/21/info/</id>
-    <published>2025-05-21T06:50:23.000Z</published>
-    <updated>2025-05-21T06:51:57.281Z</updated>
+    <link href="https://12tall.github.io/2099/12/31/info/"/>
+    <id>https://12tall.github.io/2099/12/31/info/</id>
+    <published>2099-12-31T06:50:23.000Z</published>
+    <updated>2025-05-21T23:38:54.141Z</updated>
     
     
       
@@ -36,6 +36,43 @@
     
     <category term="post" scheme="https://12tall.github.io/categories/post/"/>
     
+    
+  </entry>
+  
+  <entry>
+    <title>acme 证书管理</title>
+    <link href="https://12tall.github.io/2025/05/22/linux/acme/"/>
+    <id>https://12tall.github.io/2025/05/22/linux/acme/</id>
+    <published>2025-05-21T23:30:26.000Z</published>
+    <updated>2025-05-22T00:12:25.282Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;通过&lt;code&gt;acme.sh&lt;/code&gt; 安装并更新Let’s Encrypt 证书。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
+    
+    
+    <category term="domain" scheme="https://12tall.github.io/tags/domain/"/>
+    
+    <category term="certificate" scheme="https://12tall.github.io/tags/certificate/"/>
+    
+    <category term="acme" scheme="https://12tall.github.io/tags/acme/"/>
+    
+    <category term="ssl" scheme="https://12tall.github.io/tags/ssl/"/>
+    
+    <category term="https" scheme="https://12tall.github.io/tags/https/"/>
+    
+    <category term="Let&#39;s Encrypt" scheme="https://12tall.github.io/tags/Let-s-Encrypt/"/>
+    
+    <category term="nginx" scheme="https://12tall.github.io/tags/nginx/"/>
+    
+    <category term="fnm" scheme="https://12tall.github.io/tags/fnm/"/>
+    
+    <category term="nodejs" scheme="https://12tall.github.io/tags/nodejs/"/>
+    
+    <category term="pm2" scheme="https://12tall.github.io/tags/pm2/"/>
     
   </entry>
   
@@ -465,39 +502,6 @@
   </entry>
   
   <entry>
-    <title>首跳冗余协议</title>
-    <link href="https://12tall.github.io/2022/08/03/ccna/fhrp/"/>
-    <id>https://12tall.github.io/2022/08/03/ccna/fhrp/</id>
-    <published>2022-08-02T15:00:00.000Z</published>
-    <updated>2025-05-21T07:28:03.313Z</updated>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;常见故障与对策&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#常见故障与对策&quot;&gt;&lt;/a&gt; 常见故障与对策&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;单线路故障：端口聚合&lt;/li&gt;
-&lt;li&gt;单设备故障：
-&lt;ul&gt;
-&lt;li&gt;堆叠&lt;/li&gt;
-&lt;li&gt;VRRP&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;单电源故障：双电源（市电+UPS）&lt;/li&gt;
-&lt;li&gt;单服务器故障：做集群&lt;/li&gt;
-&lt;li&gt;机房冗余&lt;/li&gt;
-&lt;/ul&gt;</summary>
-    
-    
-    
-    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
-    
-    
-    <category term="ccna" scheme="https://12tall.github.io/tags/ccna/"/>
-    
-    <category term="vrrp" scheme="https://12tall.github.io/tags/vrrp/"/>
-    
-  </entry>
-  
-  <entry>
     <title>IP Address</title>
     <link href="https://12tall.github.io/2022/08/03/ccna/ip/"/>
     <id>https://12tall.github.io/2022/08/03/ccna/ip/</id>
@@ -527,33 +531,25 @@
   </entry>
   
   <entry>
-    <title>路由</title>
-    <link href="https://12tall.github.io/2022/08/03/ccna/route/"/>
-    <id>https://12tall.github.io/2022/08/03/ccna/route/</id>
+    <title>首跳冗余协议</title>
+    <link href="https://12tall.github.io/2022/08/03/ccna/fhrp/"/>
+    <id>https://12tall.github.io/2022/08/03/ccna/fhrp/</id>
     <published>2022-08-02T15:00:00.000Z</published>
     <updated>2025-05-21T07:28:03.313Z</updated>
     
     
-    <summary type="html">&lt;h2 id=&quot;路由基础&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#路由基础&quot;&gt;&lt;/a&gt; 路由基础&lt;/h2&gt;
+    <summary type="html">&lt;h2 id=&quot;常见故障与对策&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#常见故障与对策&quot;&gt;&lt;/a&gt; 常见故障与对策&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;为什么要引入路由：
+&lt;li&gt;单线路故障：端口聚合&lt;/li&gt;
+&lt;li&gt;单设备故障：
 &lt;ul&gt;
-&lt;li&gt;随着设备的增加，二层的转发会变得难以管理，此时需要引入路由&lt;/li&gt;
+&lt;li&gt;堆叠&lt;/li&gt;
+&lt;li&gt;VRRP&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;路由的工作步骤：
-&lt;ol&gt;
-&lt;li&gt;匹配目标网段&lt;/li&gt;
-&lt;li&gt;匹配成功后将数据扔给&lt;code&gt;出接口&lt;/code&gt;或者&lt;code&gt;下一跳&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/li&gt;
-&lt;li&gt;关键点
-&lt;ul&gt;
-&lt;li&gt;每次三层设备接收到包的时候&lt;code&gt;TTL&lt;/code&gt; 都会减一&lt;/li&gt;
-&lt;li&gt;每次经过三层设备都会改变数据包的源和目的&lt;code&gt;MAC&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;每次经过三层设备数据包的&lt;code&gt;IP&lt;/code&gt; 地址一般都是不会变的（&lt;code&gt;NAT&lt;/code&gt; 除外）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
+&lt;li&gt;单电源故障：双电源（市电+UPS）&lt;/li&gt;
+&lt;li&gt;单服务器故障：做集群&lt;/li&gt;
+&lt;li&gt;机房冗余&lt;/li&gt;
 &lt;/ul&gt;</summary>
     
     
@@ -562,6 +558,8 @@
     
     
     <category term="ccna" scheme="https://12tall.github.io/tags/ccna/"/>
+    
+    <category term="vrrp" scheme="https://12tall.github.io/tags/vrrp/"/>
     
   </entry>
   
