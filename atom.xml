@@ -223,11 +223,11 @@
     
     <category term="router" scheme="https://12tall.github.io/tags/router/"/>
     
+    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
+    
     <category term="OpenWRT" scheme="https://12tall.github.io/tags/OpenWRT/"/>
     
     <category term="v2raya" scheme="https://12tall.github.io/tags/v2raya/"/>
-    
-    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
     
     <category term="bridge" scheme="https://12tall.github.io/tags/bridge/"/>
     
@@ -286,15 +286,13 @@
     <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
     
     
-    <category term="router" scheme="https://12tall.github.io/tags/router/"/>
-    
-    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
-    
-    <category term="pnet-lab" scheme="https://12tall.github.io/tags/pnet-lab/"/>
+    <category term="ssh" scheme="https://12tall.github.io/tags/ssh/"/>
     
     <category term="cisco" scheme="https://12tall.github.io/tags/cisco/"/>
     
     <category term="switch" scheme="https://12tall.github.io/tags/switch/"/>
+    
+    <category term="router" scheme="https://12tall.github.io/tags/router/"/>
     
     <category term="image" scheme="https://12tall.github.io/tags/image/"/>
     
@@ -302,11 +300,13 @@
     
     <category term="iol" scheme="https://12tall.github.io/tags/iol/"/>
     
-    <category term="ssh" scheme="https://12tall.github.io/tags/ssh/"/>
-    
     <category term="scp" scheme="https://12tall.github.io/tags/scp/"/>
     
+    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
+    
     <category term="chmod" scheme="https://12tall.github.io/tags/chmod/"/>
+    
+    <category term="pnet-lab" scheme="https://12tall.github.io/tags/pnet-lab/"/>
     
     <category term="fortigate" scheme="https://12tall.github.io/tags/fortigate/"/>
     
@@ -342,6 +342,32 @@
   </entry>
   
   <entry>
+    <title>零星经验</title>
+    <link href="https://12tall.github.io/2023/06/09/experiences/"/>
+    <id>https://12tall.github.io/2023/06/09/experiences/</id>
+    <published>2023-06-08T15:00:00.000Z</published>
+    <updated>2025-05-22T05:22:02.590Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;复杂功能简单化&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#复杂功能简单化&quot;&gt;&lt;/a&gt; 复杂功能简单化&lt;/h2&gt;
+&lt;p&gt;（仅针对自己）在复杂的功能中，很多时候一个函数或者一条&lt;code&gt;SQL&lt;/code&gt; 虽然可以完成任务，但是需要考虑的情况很多且不利于扩展，这个时候不要想着非得将所有功能塞在一起，比如：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;SQL&lt;/code&gt; 插入去重：先&lt;code&gt;SELECT&lt;/code&gt; 记录是否存在，没有再插入&lt;/li&gt;
+&lt;li&gt;项目管理：先添加项目，再给项目添加负责人或成员&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="nodejs" scheme="https://12tall.github.io/categories/nodejs/"/>
+    
+    
+    <category term="JSDoc" scheme="https://12tall.github.io/tags/JSDoc/"/>
+    
+    <category term="注释" scheme="https://12tall.github.io/tags/%E6%B3%A8%E9%87%8A/"/>
+    
+  </entry>
+  
+  <entry>
     <title>RK4 中PID 算法的初值问题</title>
     <link href="https://12tall.github.io/2023/04/26/rk4-pid/"/>
     <id>https://12tall.github.io/2023/04/26/rk4-pid/</id>
@@ -356,17 +382,17 @@
     <category term="thoughts" scheme="https://12tall.github.io/categories/thoughts/"/>
     
     
+    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
+    
+    <category term="数值分析" scheme="https://12tall.github.io/tags/%E6%95%B0%E5%80%BC%E5%88%86%E6%9E%90/"/>
+    
     <category term="math" scheme="https://12tall.github.io/tags/math/"/>
     
     <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
     
-    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
-    
     <category term="control" scheme="https://12tall.github.io/tags/control/"/>
     
     <category term="pid" scheme="https://12tall.github.io/tags/pid/"/>
-    
-    <category term="数值分析" scheme="https://12tall.github.io/tags/%E6%95%B0%E5%80%BC%E5%88%86%E6%9E%90/"/>
     
   </entry>
   
@@ -430,11 +456,11 @@
     <category term="math" scheme="https://12tall.github.io/categories/math/"/>
     
     
+    <category term="工程数学" scheme="https://12tall.github.io/tags/%E5%B7%A5%E7%A8%8B%E6%95%B0%E5%AD%A6/"/>
+    
     <category term="python" scheme="https://12tall.github.io/tags/python/"/>
     
     <category term="pid" scheme="https://12tall.github.io/tags/pid/"/>
-    
-    <category term="工程数学" scheme="https://12tall.github.io/tags/%E5%B7%A5%E7%A8%8B%E6%95%B0%E5%AD%A6/"/>
     
     <category term="控制理论" scheme="https://12tall.github.io/tags/%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA/"/>
     
@@ -505,9 +531,9 @@
     <category term="math" scheme="https://12tall.github.io/categories/math/"/>
     
     
-    <category term="数值分析" scheme="https://12tall.github.io/tags/%E6%95%B0%E5%80%BC%E5%88%86%E6%9E%90/"/>
-    
     <category term="微分方程" scheme="https://12tall.github.io/tags/%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B/"/>
+    
+    <category term="数值分析" scheme="https://12tall.github.io/tags/%E6%95%B0%E5%80%BC%E5%88%86%E6%9E%90/"/>
     
     <category term="Python" scheme="https://12tall.github.io/tags/Python/"/>
     
@@ -532,34 +558,13 @@
     <category term="thoughts" scheme="https://12tall.github.io/categories/thoughts/"/>
     
     
+    <category term="modeling" scheme="https://12tall.github.io/tags/modeling/"/>
+    
     <category term="math" scheme="https://12tall.github.io/tags/math/"/>
     
     <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
     
-    <category term="modeling" scheme="https://12tall.github.io/tags/modeling/"/>
-    
     <category term="simulation" scheme="https://12tall.github.io/tags/simulation/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>LDAP 认证</title>
-    <link href="https://12tall.github.io/2022/11/26/ldap/"/>
-    <id>https://12tall.github.io/2022/11/26/ldap/</id>
-    <published>2022-11-25T15:00:00.000Z</published>
-    <updated>2025-05-22T05:10:44.202Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;通过阅读&lt;a href=&quot;https://github.com/shaozi/ldap-authentication&quot;&gt;shaozi/ldap-authentication&lt;/a&gt; 仓库的源码，来记录一下通过&lt;a href=&quot;http://ldapjs.org/index.html&quot;&gt;ldapjs&lt;/a&gt; 的过程。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="nodejs" scheme="https://12tall.github.io/categories/nodejs/"/>
-    
-    
-    <category term="ldap" scheme="https://12tall.github.io/tags/ldap/"/>
-    
-    <category term="认证" scheme="https://12tall.github.io/tags/%E8%AE%A4%E8%AF%81/"/>
     
   </entry>
   
