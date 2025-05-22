@@ -54,8 +54,6 @@
     <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
     
     
-    <category term="domain" scheme="https://12tall.github.io/tags/domain/"/>
-    
     <category term="certificate" scheme="https://12tall.github.io/tags/certificate/"/>
     
     <category term="acme" scheme="https://12tall.github.io/tags/acme/"/>
@@ -63,6 +61,8 @@
     <category term="ssl" scheme="https://12tall.github.io/tags/ssl/"/>
     
     <category term="https" scheme="https://12tall.github.io/tags/https/"/>
+    
+    <category term="domain" scheme="https://12tall.github.io/tags/domain/"/>
     
     <category term="Let&#39;s Encrypt" scheme="https://12tall.github.io/tags/Let-s-Encrypt/"/>
     
@@ -125,7 +125,7 @@
     <link href="https://12tall.github.io/2023/09/05/windows/encapsulate_installer_image/"/>
     <id>https://12tall.github.io/2023/09/05/windows/encapsulate_installer_image/</id>
     <published>2023-09-04T15:00:00.000Z</published>
-    <updated>2025-05-21T07:26:53.748Z</updated>
+    <updated>2025-05-22T01:39:47.390Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -162,13 +162,42 @@
     
     <category term="router" scheme="https://12tall.github.io/tags/router/"/>
     
-    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
-    
     <category term="OpenWRT" scheme="https://12tall.github.io/tags/OpenWRT/"/>
     
     <category term="v2raya" scheme="https://12tall.github.io/tags/v2raya/"/>
     
+    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
+    
     <category term="bridge" scheme="https://12tall.github.io/tags/bridge/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>一维静电场有限元例子</title>
+    <link href="https://12tall.github.io/2023/07/10/fem/1-D_FEM/"/>
+    <id>https://12tall.github.io/2023/07/10/fem/1-D_FEM/</id>
+    <published>2023-07-09T15:00:00.000Z</published>
+    <updated>2025-05-22T01:53:53.840Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;1-D_element_question.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="math" scheme="https://12tall.github.io/categories/math/"/>
+    
+    
+    <category term="电机" scheme="https://12tall.github.io/tags/%E7%94%B5%E6%9C%BA/"/>
+    
+    <category term="仿真" scheme="https://12tall.github.io/tags/%E4%BB%BF%E7%9C%9F/"/>
+    
+    <category term="CAE" scheme="https://12tall.github.io/tags/CAE/"/>
+    
+    <category term="有限元" scheme="https://12tall.github.io/tags/%E6%9C%89%E9%99%90%E5%85%83/"/>
+    
+    <category term="电磁学" scheme="https://12tall.github.io/tags/%E7%94%B5%E7%A3%81%E5%AD%A6/"/>
     
   </entry>
   
@@ -177,7 +206,7 @@
     <link href="https://12tall.github.io/2023/07/05/pnet-lab/"/>
     <id>https://12tall.github.io/2023/07/05/pnet-lab/</id>
     <published>2023-07-05T06:45:02.000Z</published>
-    <updated>2025-05-21T06:47:54.625Z</updated>
+    <updated>2025-05-22T01:39:47.390Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -196,13 +225,15 @@
     <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
     
     
-    <category term="ssh" scheme="https://12tall.github.io/tags/ssh/"/>
+    <category term="router" scheme="https://12tall.github.io/tags/router/"/>
+    
+    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
+    
+    <category term="pnet-lab" scheme="https://12tall.github.io/tags/pnet-lab/"/>
     
     <category term="cisco" scheme="https://12tall.github.io/tags/cisco/"/>
     
     <category term="switch" scheme="https://12tall.github.io/tags/switch/"/>
-    
-    <category term="router" scheme="https://12tall.github.io/tags/router/"/>
     
     <category term="image" scheme="https://12tall.github.io/tags/image/"/>
     
@@ -210,15 +241,42 @@
     
     <category term="iol" scheme="https://12tall.github.io/tags/iol/"/>
     
-    <category term="scp" scheme="https://12tall.github.io/tags/scp/"/>
+    <category term="ssh" scheme="https://12tall.github.io/tags/ssh/"/>
     
-    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
+    <category term="scp" scheme="https://12tall.github.io/tags/scp/"/>
     
     <category term="chmod" scheme="https://12tall.github.io/tags/chmod/"/>
     
-    <category term="pnet-lab" scheme="https://12tall.github.io/tags/pnet-lab/"/>
-    
     <category term="fortigate" scheme="https://12tall.github.io/tags/fortigate/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>有限元计算电磁场</title>
+    <link href="https://12tall.github.io/2023/06/15/fem/intro/"/>
+    <id>https://12tall.github.io/2023/06/15/fem/intro/</id>
+    <published>2023-06-14T15:00:00.000Z</published>
+    <updated>2025-05-22T01:52:05.689Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;笔记中涉及公式推导的部分并不严谨，仅为了便于理解而记录。如果需要严谨的推导过程，则需要参考专业书籍。笔记中的例子取自&lt;a href=&quot;https://de.mathworks.com/academia/books/introduction-to-the-finite-element-method-in-electromagnetics-polycarpou.html&quot;&gt;《INTRODUCTION TO THE FINITE ELEMENT METHOD IN ELECTROMAGNETICS》&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="math" scheme="https://12tall.github.io/categories/math/"/>
+    
+    
+    <category term="电机" scheme="https://12tall.github.io/tags/%E7%94%B5%E6%9C%BA/"/>
+    
+    <category term="仿真" scheme="https://12tall.github.io/tags/%E4%BB%BF%E7%9C%9F/"/>
+    
+    <category term="CAE" scheme="https://12tall.github.io/tags/CAE/"/>
+    
+    <category term="有限元" scheme="https://12tall.github.io/tags/%E6%9C%89%E9%99%90%E5%85%83/"/>
+    
+    <category term="电磁学" scheme="https://12tall.github.io/tags/%E7%94%B5%E7%A3%81%E5%AD%A6/"/>
     
   </entry>
   
@@ -227,7 +285,7 @@
     <link href="https://12tall.github.io/2023/04/26/rk4-pid/"/>
     <id>https://12tall.github.io/2023/04/26/rk4-pid/</id>
     <published>2023-04-26T06:31:58.000Z</published>
-    <updated>2025-05-21T06:33:54.604Z</updated>
+    <updated>2025-05-22T01:39:47.390Z</updated>
     
     
     <summary type="html">&lt;p&gt;&lt;strong&gt;考虑一个问题：当系统开始运行时&lt;code&gt;PID&lt;/code&gt; 控制器的输出应该是0，还是其他值呢？&lt;/strong&gt;&lt;/p&gt;</summary>
@@ -241,9 +299,9 @@
     
     <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
     
-    <category term="control" scheme="https://12tall.github.io/tags/control/"/>
-    
     <category term="python" scheme="https://12tall.github.io/tags/python/"/>
+    
+    <category term="control" scheme="https://12tall.github.io/tags/control/"/>
     
     <category term="pid" scheme="https://12tall.github.io/tags/pid/"/>
     
@@ -252,11 +310,62 @@
   </entry>
   
   <entry>
+    <title>PID 控制算法</title>
+    <link href="https://12tall.github.io/2023/01/04/control/20-pid/"/>
+    <id>https://12tall.github.io/2023/01/04/control/20-pid/</id>
+    <published>2023-01-03T15:00:00.000Z</published>
+    <updated>2025-05-22T02:07:33.088Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;对于连续信号来说，PID 控制器的函数形式为：&lt;/p&gt;
+&lt;p class=&#39;katex-block&#39;&gt;&lt;span class=&quot;katex-display&quot;&gt;&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;u&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;msub&gt;&lt;mi&gt;K&lt;/mi&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;/msub&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;msub&gt;&lt;mi&gt;K&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;/msub&gt;&lt;msubsup&gt;&lt;mo&gt;∫&lt;/mo&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;/msubsup&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;msub&gt;&lt;mi&gt;K&lt;/mi&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;/msub&gt;&lt;mfrac&gt;&lt;mrow&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;/mrow&gt;&lt;/mfrac&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;u(t) = K_pe(t) + K_i&#92;int^t_0e(t)dt + K_d&#92;frac{de(t)}{dt}
+&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:1em;vertical-align:-0.25em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;mopen&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;mclose&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mrel&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:1.036108em;vertical-align:-0.286108em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.07153em;&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;msupsub&quot;&gt;&lt;span class=&quot;vlist-t vlist-t2&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.15139200000000003em;&quot;&gt;&lt;span style=&quot;top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mathnormal mtight&quot;&gt;p&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-s&quot;&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.286108em;&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mopen&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;mclose&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:2.455406em;vertical-align:-0.9119499999999999em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.07153em;&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;msupsub&quot;&gt;&lt;span class=&quot;vlist-t vlist-t2&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.31166399999999994em;&quot;&gt;&lt;span style=&quot;top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mathnormal mtight&quot;&gt;i&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-s&quot;&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.15em;&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.16666666666666666em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mop&quot;&gt;&lt;span class=&quot;mop op-symbol large-op&quot; style=&quot;margin-right:0.44445em;position:relative;top:-0.0011249999999999316em;&quot;&gt;∫&lt;/span&gt;&lt;span class=&quot;msupsub&quot;&gt;&lt;span class=&quot;vlist-t vlist-t2&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:1.5434560000000002em;&quot;&gt;&lt;span style=&quot;top:-1.7880500000000001em;margin-left:-0.44445em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mtight&quot;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;top:-3.8129000000000004em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mathnormal mtight&quot;&gt;t&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-s&quot;&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.9119499999999999em;&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.16666666666666666em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mopen&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;mclose&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:2.113em;vertical-align:-0.686em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.07153em;&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;msupsub&quot;&gt;&lt;span class=&quot;vlist-t vlist-t2&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.33610799999999996em;&quot;&gt;&lt;span style=&quot;top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mathnormal mtight&quot;&gt;d&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-s&quot;&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.15em;&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mopen nulldelimiter&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mfrac&quot;&gt;&lt;span class=&quot;vlist-t vlist-t2&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:1.427em;&quot;&gt;&lt;span style=&quot;top:-2.314em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:3em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;top:-3.23em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:3em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;frac-line&quot; style=&quot;border-bottom-width:0.04em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;top:-3.677em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:3em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mopen&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;mclose&quot;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-s&quot;&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.686em;&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mclose nulldelimiter&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;其中&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mi&gt;r&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;e(t) = r(t) - c(t)&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:1em;vertical-align:-0.25em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mopen&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;mclose&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mrel&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:1em;vertical-align:-0.25em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.02778em;&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;mopen&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;mclose&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:1em;vertical-align:-0.25em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;mopen&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;mclose&quot;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 表示系统反馈与输入直接按的误差。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="math" scheme="https://12tall.github.io/categories/math/"/>
+    
+    
+    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
+    
+    <category term="pid" scheme="https://12tall.github.io/tags/pid/"/>
+    
+    <category term="控制理论" scheme="https://12tall.github.io/tags/%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA/"/>
+    
+    <category term="工程数学" scheme="https://12tall.github.io/tags/%E5%B7%A5%E7%A8%8B%E6%95%B0%E5%AD%A6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>液压油 Oil</title>
+    <link href="https://12tall.github.io/2022/12/27/openhydraulics/oil/"/>
+    <id>https://12tall.github.io/2022/12/27/openhydraulics/oil/</id>
+    <published>2022-12-26T15:00:00.000Z</published>
+    <updated>2025-05-22T01:45:10.827Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;Openhydraulics 中的液压油位于Fluids 包下面，液压油是所有液压组件的基础。在OpenHydraulics 中，预设了两种液压油模型，二者均以&lt;code&gt;PartialFluid&lt;/code&gt; 为基类。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="math" scheme="https://12tall.github.io/categories/math/"/>
+    
+    
+    <category term="OpenModelica" scheme="https://12tall.github.io/tags/OpenModelica/"/>
+    
+    <category term="OpenHydrualics" scheme="https://12tall.github.io/tags/OpenHydrualics/"/>
+    
+    <category term="建模" scheme="https://12tall.github.io/tags/%E5%BB%BA%E6%A8%A1/"/>
+    
+  </entry>
+  
+  <entry>
     <title>方程的思想</title>
     <link href="https://12tall.github.io/2022/12/06/equation/"/>
     <id>https://12tall.github.io/2022/12/06/equation/</id>
     <published>2022-12-06T05:58:06.000Z</published>
-    <updated>2025-05-21T06:30:30.502Z</updated>
+    <updated>2025-05-22T01:39:47.390Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -283,11 +392,20 @@
     <link href="https://12tall.github.io/2022/11/26/linux/mariadb/"/>
     <id>https://12tall.github.io/2022/11/26/linux/mariadb/</id>
     <published>2022-11-25T15:00:00.000Z</published>
-    <updated>2025-05-21T07:27:46.862Z</updated>
+    <updated>2025-05-22T01:44:25.696Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;安装与登录&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#安装与登录&quot;&gt;&lt;/a&gt; 安装与登录&lt;/h2&gt;
-&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ sudo apt install mariadb-server mariadb-common mariadb-client mariadb-backup  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;mariadb-common 是所有MariaDB 所需的配置文件    &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;mariadb-backup 是备份与恢复的工具  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ sudo systemctl enable mariadb&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ sudo systemctl start mariadb&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ sudo mysql  # 匿名登陆，但是这样不够安全  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;MariaDB [(none)]&amp;gt; quit&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Bye&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+&lt;pre class=&quot;line-numbers language-shell-session&quot; data-language=&quot;shell-session&quot;&gt;&lt;code class=&quot;language-shell-session&quot;&gt;&lt;span class=&quot;token command&quot;&gt;&lt;span class=&quot;token shell-symbol important&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;token bash language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apt&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; mariadb-server mariadb-common mariadb-client mariadb-backup  &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;token output&quot;&gt;mariadb-common 是所有MariaDB 所需的配置文件    
+mariadb-backup 是备份与恢复的工具  
+
+&lt;/span&gt;&lt;span class=&quot;token command&quot;&gt;&lt;span class=&quot;token shell-symbol important&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;token bash language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; systemctl &lt;span class=&quot;token builtin class-name&quot;&gt;enable&lt;/span&gt; mariadb&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;token command&quot;&gt;&lt;span class=&quot;token shell-symbol important&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;token bash language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; systemctl start mariadb&lt;/span&gt;&lt;/span&gt;
+
+&lt;span class=&quot;token command&quot;&gt;&lt;span class=&quot;token shell-symbol important&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;token bash language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; mysql  &lt;span class=&quot;token comment&quot;&gt;# 匿名登陆，但是这样不够安全  &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;token output&quot;&gt;MariaDB [(none)]&gt; quit
+Bye&lt;/span&gt;&lt;span aria-hidden=&quot;true&quot; class=&quot;line-numbers-rows&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;</summary>
     
     
     
@@ -320,9 +438,9 @@
     
     <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
     
-    <category term="neural network" scheme="https://12tall.github.io/tags/neural-network/"/>
-    
     <category term="python" scheme="https://12tall.github.io/tags/python/"/>
+    
+    <category term="neural network" scheme="https://12tall.github.io/tags/neural-network/"/>
     
   </entry>
   
@@ -331,7 +449,7 @@
     <link href="https://12tall.github.io/2022/10/07/feedback/"/>
     <id>https://12tall.github.io/2022/10/07/feedback/</id>
     <published>2022-10-07T05:59:46.000Z</published>
-    <updated>2025-05-21T06:24:20.038Z</updated>
+    <updated>2025-05-22T02:11:47.096Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -347,240 +465,102 @@
     
     <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
     
-    <category term="circuit" scheme="https://12tall.github.io/tags/circuit/"/>
-    
     <category term="control" scheme="https://12tall.github.io/tags/control/"/>
     
-  </entry>
-  
-  <entry>
-    <title>aruba 设备</title>
-    <link href="https://12tall.github.io/2022/08/03/aruba/"/>
-    <id>https://12tall.github.io/2022/08/03/aruba/</id>
-    <published>2022-08-03T07:02:52.000Z</published>
-    <updated>2025-05-21T07:06:14.914Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;本文主要包含交换机设备的权限、登录、升级、备份、恢复等操作。&lt;br /&gt;
-2930F 可以采用多种途径登录管理，但除了Console 以外，其余的方式均需要提前设置交换机的IP。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
-    
-    
-    <category term="Aruba" scheme="https://12tall.github.io/tags/Aruba/"/>
-    
-    <category term="路由" scheme="https://12tall.github.io/tags/%E8%B7%AF%E7%94%B1/"/>
-    
-    <category term="三层" scheme="https://12tall.github.io/tags/%E4%B8%89%E5%B1%82/"/>
-    
-    <category term="交换" scheme="https://12tall.github.io/tags/%E4%BA%A4%E6%8D%A2/"/>
-    
-    <category term="二层" scheme="https://12tall.github.io/tags/%E4%BA%8C%E5%B1%82/"/>
-    
-    <category term="登录" scheme="https://12tall.github.io/tags/%E7%99%BB%E5%BD%95/"/>
-    
-    <category term="ssh" scheme="https://12tall.github.io/tags/ssh/"/>
-    
-    <category term="web" scheme="https://12tall.github.io/tags/web/"/>
-    
-    <category term="telnet" scheme="https://12tall.github.io/tags/telnet/"/>
-    
-    <category term="console" scheme="https://12tall.github.io/tags/console/"/>
+    <category term="circuit" scheme="https://12tall.github.io/tags/circuit/"/>
     
   </entry>
   
   <entry>
-    <title>飞塔防火墙</title>
-    <link href="https://12tall.github.io/2022/08/03/fortigate/"/>
-    <id>https://12tall.github.io/2022/08/03/fortigate/</id>
-    <published>2022-08-03T06:59:25.000Z</published>
-    <updated>2025-05-21T07:01:07.706Z</updated>
+    <title>状态空间</title>
+    <link href="https://12tall.github.io/2022/08/25/control/01-state-space-equation/"/>
+    <id>https://12tall.github.io/2022/08/25/control/01-state-space-equation/</id>
+    <published>2022-08-24T15:00:00.000Z</published>
+    <updated>2025-05-22T02:08:22.131Z</updated>
     
     
-    <summary type="html">&lt;p&gt;只有在注册以后，才能得到技术支持、产品特性信息、最新威胁防护&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
-    
-    
-    <category term="防火墙" scheme="https://12tall.github.io/tags/%E9%98%B2%E7%81%AB%E5%A2%99/"/>
-    
-    <category term="fortinet" scheme="https://12tall.github.io/tags/fortinet/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Eve-Ng使用笔记</title>
-    <link href="https://12tall.github.io/2022/08/03/eve-ng/"/>
-    <id>https://12tall.github.io/2022/08/03/eve-ng/</id>
-    <published>2022-08-03T06:57:24.000Z</published>
-    <updated>2025-05-21T07:28:09.024Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;Eve-Ng 的简单使用教程。&lt;/p&gt;</summary>
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;看&lt;a href=&quot;https://www.bilibili.com/video/BV1fx41137dA&quot;&gt;状态空间&lt;/a&gt; 的笔记&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
     
     
     
-    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
+    <category term="math" scheme="https://12tall.github.io/categories/math/"/>
     
     
-    <category term="ssh" scheme="https://12tall.github.io/tags/ssh/"/>
+    <category term="控制理论" scheme="https://12tall.github.io/tags/%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA/"/>
     
-    <category term="eve" scheme="https://12tall.github.io/tags/eve/"/>
-    
-    <category term="cisco" scheme="https://12tall.github.io/tags/cisco/"/>
-    
-    <category term="switch" scheme="https://12tall.github.io/tags/switch/"/>
-    
-    <category term="router" scheme="https://12tall.github.io/tags/router/"/>
-    
-    <category term="image" scheme="https://12tall.github.io/tags/image/"/>
-    
-    <category term="dynamipshe" scheme="https://12tall.github.io/tags/dynamipshe/"/>
-    
-    <category term="iol" scheme="https://12tall.github.io/tags/iol/"/>
-    
-    <category term="scp" scheme="https://12tall.github.io/tags/scp/"/>
-    
-    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
-    
-    <category term="chmod" scheme="https://12tall.github.io/tags/chmod/"/>
+    <category term="线性定常系统" scheme="https://12tall.github.io/tags/%E7%BA%BF%E6%80%A7%E5%AE%9A%E5%B8%B8%E7%B3%BB%E7%BB%9F/"/>
     
   </entry>
   
   <entry>
-    <title>GitHub Actions</title>
-    <link href="https://12tall.github.io/2022/08/03/github-action/"/>
-    <id>https://12tall.github.io/2022/08/03/github-action/</id>
-    <published>2022-08-02T15:00:00.000Z</published>
-    <updated>2025-05-21T07:33:14.062Z</updated>
+    <title>相轨迹图/Phase Portrait</title>
+    <link href="https://12tall.github.io/2022/08/25/control/02-phase-portrait/"/>
+    <id>https://12tall.github.io/2022/08/25/control/02-phase-portrait/</id>
+    <published>2022-08-24T15:00:00.000Z</published>
+    <updated>2025-05-22T02:10:17.346Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;不出意外的话，在百度上搜索&lt;code&gt;GitHub Actions 自动部署&lt;/code&gt;，大概率会得到阮一峰老师的&lt;a</summary>
-        
-      
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;看&lt;a href=&quot;https://www.bilibili.com/video/BV1ex411g7t3&quot;&gt;相图_相轨迹&lt;/a&gt; 的笔记&lt;br /&gt;
+需要注意的是，下文中所有的&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo separator=&quot;true&quot;&gt;,&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo separator=&quot;true&quot;&gt;,&lt;/mo&gt;&lt;mi&gt;X&lt;/mi&gt;&lt;mo separator=&quot;true&quot;&gt;,&lt;/mo&gt;&lt;mi&gt;Y&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;x,y,X,Y&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.8777699999999999em;vertical-align:-0.19444em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;mpunct&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.16666666666666666em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03588em;&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;mpunct&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.16666666666666666em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.07847em;&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;mpunct&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.16666666666666666em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.22222em;&quot;&gt;Y&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 都是关于时&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;t&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.61508em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 的变量，而这里的&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo separator=&quot;true&quot;&gt;,&lt;/mo&gt;&lt;mi&gt;Y&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;y, Y&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.8777699999999999em;vertical-align:-0.19444em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03588em;&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;mpunct&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.16666666666666666em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.22222em;&quot;&gt;Y&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 也不是状态空间方程里的&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;Y&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;Y&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.68333em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.22222em;&quot;&gt;Y&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
     
     
     
-    <category term="notation" scheme="https://12tall.github.io/categories/notation/"/>
+    <category term="math" scheme="https://12tall.github.io/categories/math/"/>
     
     
-    <category term="CI" scheme="https://12tall.github.io/tags/CI/"/>
+    <category term="控制理论" scheme="https://12tall.github.io/tags/%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA/"/>
     
-    <category term="shell" scheme="https://12tall.github.io/tags/shell/"/>
-    
-    <category term="vuepress" scheme="https://12tall.github.io/tags/vuepress/"/>
+    <category term="线性定常系统" scheme="https://12tall.github.io/tags/%E7%BA%BF%E6%80%A7%E5%AE%9A%E5%B8%B8%E7%B3%BB%E7%BB%9F/"/>
     
   </entry>
   
   <entry>
-    <title>ACL</title>
-    <link href="https://12tall.github.io/2022/08/03/ccna/acl/"/>
-    <id>https://12tall.github.io/2022/08/03/ccna/acl/</id>
-    <published>2022-08-02T15:00:00.000Z</published>
-    <updated>2025-05-21T07:29:01.676Z</updated>
+    <title>线性时不变系统的可控性</title>
+    <link href="https://12tall.github.io/2022/08/25/control/03-controllability/"/>
+    <id>https://12tall.github.io/2022/08/25/control/03-controllability/</id>
+    <published>2022-08-24T15:00:00.000Z</published>
+    <updated>2025-05-22T02:13:28.976Z</updated>
     
     
-    <summary type="html">&lt;h2 id=&quot;访问控制列表&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#访问控制列表&quot;&gt;&lt;/a&gt; 访问控制列表&lt;/h2&gt;
-&lt;h3 id=&quot;作用&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#作用&quot;&gt;&lt;/a&gt; 作用&lt;/h3&gt;
-&lt;p&gt;过滤，抓取数据，但是ACL 会影响设备性能&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
-    
-    
-    <category term="ccna" scheme="https://12tall.github.io/tags/ccna/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>IP Address</title>
-    <link href="https://12tall.github.io/2022/08/03/ccna/ip/"/>
-    <id>https://12tall.github.io/2022/08/03/ccna/ip/</id>
-    <published>2022-08-02T15:00:00.000Z</published>
-    <updated>2025-05-21T07:14:05.065Z</updated>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;分类&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#分类&quot;&gt;&lt;/a&gt; 分类&lt;/h2&gt;
-&lt;h3 id=&quot;有类&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#有类&quot;&gt;&lt;/a&gt; 有类&lt;/h3&gt;
-&lt;h4 id=&quot;单播地址&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#单播地址&quot;&gt;&lt;/a&gt; 单播地址&lt;/h4&gt;
-&lt;p&gt;能够配置使用的，可以一对一地传输数据&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;A: &lt;code&gt;0xxx xxx;xxxx xxxx,xxxx xxxx,xxxx xxxx&lt;/code&gt; 掩码 8位 1.0.0.0 - 126.0.0.0&lt;/li&gt;
-&lt;li&gt;B: &lt;code&gt;10xx xxx,xxxx xxxx;xxxx xxxx,xxxx xxxx&lt;/code&gt; 掩码16位 128.0.0.0 - 191.255.0.0&lt;/li&gt;
-&lt;li&gt;C: &lt;code&gt;110x xxx,xxxx xxxx,xxxx xxxx;xxxx xxxx&lt;/code&gt; 掩码24位 192.0.0.0 - 223.255.255.0&lt;/li&gt;
-&lt;li&gt;D: &lt;code&gt;1110 xxx,xxxx xxxx,xxxx xxxx,xxxx xxxx&lt;/code&gt; 多播组号&lt;/li&gt;
-&lt;li&gt;E: &lt;code&gt;1111 0xx,xxxx xxxx,xxxx xxxx,xxxx xxxx&lt;/code&gt; 备用&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;观看&lt;a href=&quot;https://www.bilibili.com/video/BV1vx411j7ah&quot;&gt;系统的可控性_Controllability&lt;/a&gt;的笔记&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
     
     
     
-    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
+    <category term="math" scheme="https://12tall.github.io/categories/math/"/>
     
     
-    <category term="ccna" scheme="https://12tall.github.io/tags/ccna/"/>
+    <category term="控制理论" scheme="https://12tall.github.io/tags/%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA/"/>
+    
+    <category term="线性定常系统" scheme="https://12tall.github.io/tags/%E7%BA%BF%E6%80%A7%E5%AE%9A%E5%B8%B8%E7%B3%BB%E7%BB%9F/"/>
     
   </entry>
   
   <entry>
-    <title>首跳冗余协议</title>
-    <link href="https://12tall.github.io/2022/08/03/ccna/fhrp/"/>
-    <id>https://12tall.github.io/2022/08/03/ccna/fhrp/</id>
-    <published>2022-08-02T15:00:00.000Z</published>
-    <updated>2025-05-21T07:28:03.313Z</updated>
+    <title>线性定常系统的稳定性</title>
+    <link href="https://12tall.github.io/2022/08/25/control/04-stability/"/>
+    <id>https://12tall.github.io/2022/08/25/control/04-stability/</id>
+    <published>2022-08-24T15:00:00.000Z</published>
+    <updated>2025-05-22T02:08:09.017Z</updated>
     
     
-    <summary type="html">&lt;h2 id=&quot;常见故障与对策&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#常见故障与对策&quot;&gt;&lt;/a&gt; 常见故障与对策&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;单线路故障：端口聚合&lt;/li&gt;
-&lt;li&gt;单设备故障：
-&lt;ul&gt;
-&lt;li&gt;堆叠&lt;/li&gt;
-&lt;li&gt;VRRP&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;单电源故障：双电源（市电+UPS）&lt;/li&gt;
-&lt;li&gt;单服务器故障：做集群&lt;/li&gt;
-&lt;li&gt;机房冗余&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;看&lt;a href=&quot;https://www.bilibili.com/video/BV1vx411V7EH&quot;&gt;稳定性_李雅普诺夫_Lyapunov&lt;/a&gt; 的笔记&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
     
     
     
-    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
+    <category term="math" scheme="https://12tall.github.io/categories/math/"/>
     
     
-    <category term="ccna" scheme="https://12tall.github.io/tags/ccna/"/>
+    <category term="控制理论" scheme="https://12tall.github.io/tags/%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA/"/>
     
-    <category term="vrrp" scheme="https://12tall.github.io/tags/vrrp/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>NAT</title>
-    <link href="https://12tall.github.io/2022/08/03/ccna/nat/"/>
-    <id>https://12tall.github.io/2022/08/03/ccna/nat/</id>
-    <published>2022-08-02T15:00:00.000Z</published>
-    <updated>2025-05-21T07:28:03.308Z</updated>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;网路地址转换&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#网路地址转换&quot;&gt;&lt;/a&gt; 网路地址转换&lt;/h2&gt;
-&lt;h3 id=&quot;作用&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#作用&quot;&gt;&lt;/a&gt; 作用&lt;/h3&gt;
-&lt;p&gt;广域网中，高层网络设备，不能给私有网段回包。所以一般会需要将内网设备的端口映射到公网设备。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
-    
-    
-    <category term="ccna" scheme="https://12tall.github.io/tags/ccna/"/>
+    <category term="线性定常系统" scheme="https://12tall.github.io/tags/%E7%BA%BF%E6%80%A7%E5%AE%9A%E5%B8%B8%E7%B3%BB%E7%BB%9F/"/>
     
   </entry>
   

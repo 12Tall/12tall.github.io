@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
     <meta name="description" content="Eve-Ng 的简单使用教程。">
 <meta property="og:type" content="article">
@@ -29,17 +29,17 @@
 <meta property="article:published_time" content="2022-08-03T06:57:24.000Z">
 <meta property="article:modified_time" content="2025-05-21T07:28:09.024Z">
 <meta property="article:author" content="12Tall">
-<meta property="article:tag" content="ssh">
-<meta property="article:tag" content="eve">
+<meta property="article:tag" content="router">
+<meta property="article:tag" content="vmware">
 <meta property="article:tag" content="cisco">
 <meta property="article:tag" content="switch">
-<meta property="article:tag" content="router">
 <meta property="article:tag" content="image">
 <meta property="article:tag" content="dynamipshe">
 <meta property="article:tag" content="iol">
+<meta property="article:tag" content="ssh">
 <meta property="article:tag" content="scp">
-<meta property="article:tag" content="vmware">
 <meta property="article:tag" content="chmod">
+<meta property="article:tag" content="eve">
 <meta name="twitter:card" content="summary">
 
 
@@ -191,18 +191,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-count">56</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">73</span>
+        <span class="site-state-item-count">87</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -319,7 +319,10 @@
 <span id="more"></span>
 <h3 id="vmware"><a class="markdownIt-Anchor" href="#vmware"></a> VMware</h3>
 <p>可以选择<code>VMware Workstation</code> 也可以选择<code>VMware Player(免费)</code>。但是在<code>Win10</code> 开启了<code>Hyper-V</code> 功能的机器上，虚拟机可能会报异常：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">VMware Workstation does not support nested virtualization on this host.  </span><br><span class="line"></span><br><span class="line">module &#x27;MonitorMode&#x27; power on failed.  </span><br><span class="line">Failed to start the virtual machine.</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">VMware Workstation does not support nested virtualization on this host.  
+
+module &#39;MonitorMode&#39; power on failed.  
+Failed to start the virtual machine.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>最简单的方法就是在虚拟机设置中取消使用虚拟化技术。</p>
 <h3 id="eve-ng"><a class="markdownIt-Anchor" href="#eve-ng"></a> eve-ng</h3>
 <p>直接从<a target="_blank" rel="noopener" href="https://www.eve-ng.net/index.php/download/">官网</a>下载以下两个安装包，<s><code>可能需要梯子</code></s></p>
@@ -347,10 +350,32 @@
 <h3 id="sshscp-连接"><a class="markdownIt-Anchor" href="#sshscp-连接"></a> ssh/scp 连接</h3>
 <h4 id="1-ssh"><a class="markdownIt-Anchor" href="#1-ssh"></a> 1. ssh</h4>
 <p>有时<code>ssh root@&#123;ip&#125;</code> 会报异常：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">$ ssh root@192.168.1.2</span><br><span class="line">@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@</span><br><span class="line">@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @</span><br><span class="line">@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@</span><br><span class="line">IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!</span><br><span class="line">Someone could be eavesdropping on you right now (man-in-the-middle attack)!</span><br><span class="line">It is also possible that a host key has just been changed.</span><br><span class="line">The fingerprint <span class="keyword">for</span> the ECDSA key sent by the remote host is</span><br><span class="line">SHA256:HDjXJvu0VYXWF+SKMZjSGn4FQmg/+w6eV9ljJvIXpx0.</span><br><span class="line">Please contact your system administrator.</span><br><span class="line">Add correct host key <span class="keyword">in</span> /Users/wangdong/.ssh/known_hosts to get rid of this message.</span><br><span class="line">Offending ECDSA key <span class="keyword">in</span> /Users/wangdong/.ssh/known_hosts:46</span><br><span class="line">ECDSA host key <span class="keyword">for</span> 192.168.1.2 has changed and you have requested strict checking.</span><br><span class="line">Host key verification failed.  </span><br><span class="line"></span><br><span class="line"><span class="comment"># 一般重置过服务器之后再次尝试连接会出现这个问题</span></span><br><span class="line"><span class="comment"># 这个时候需要重新执行一下  </span></span><br><span class="line">ssh-keygen -R 192.168.1.2</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">ssh</span> root@192.168.1.2
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED<span class="token operator">!</span>     @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY<span class="token operator">!</span>
+Someone could be eavesdropping on you right now <span class="token punctuation">(</span>man-in-the-middle attack<span class="token punctuation">)</span><span class="token operator">!</span>
+It is also possible that a <span class="token function">host</span> key has just been changed.
+The fingerprint <span class="token keyword">for</span> the ECDSA key sent by the remote <span class="token function">host</span> is
+SHA256:HDjXJvu0VYXWF+SKMZjSGn4FQmg/+w6eV9ljJvIXpx0.
+Please contact your system administrator.
+Add correct <span class="token function">host</span> key <span class="token keyword">in</span> /Users/wangdong/.ssh/known_hosts to get rid of this message.
+Offending ECDSA key <span class="token keyword">in</span> /Users/wangdong/.ssh/known_hosts:46
+ECDSA <span class="token function">host</span> key <span class="token keyword">for</span> <span class="token number">192.168</span>.1.2 has changed and you have requested strict checking.
+Host key verification failed.  
+
+<span class="token comment"># 一般重置过服务器之后再次尝试连接会出现这个问题</span>
+<span class="token comment"># 这个时候需要重新执行一下  </span>
+ssh-keygen <span class="token parameter variable">-R</span> <span class="token number">192.168</span>.1.2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h4 id="2-scp"><a class="markdownIt-Anchor" href="#2-scp"></a> 2. scp</h4>
 <p>通过ssh 协议进行文件传输</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">scp -r ./* root@172.20.10.12:/opt/unetlab/addons/iol/bin</span><br><span class="line"><span class="comment"># scp -r &#123;source&#125; &#123;destination&#125;</span></span><br><span class="line"><span class="comment"># -r 遍历所有子文件（夹）</span></span><br><span class="line"><span class="comment"># 远程目录：&#123;user&#125;@&#123;ip&#125;:/&#123;path&#125;  </span></span><br><span class="line"><span class="comment"># 本地目录：就是正常的写法  </span></span><br><span class="line"><span class="comment"># 本地在前是上传；本地在后是下载  </span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">scp</span> <span class="token parameter variable">-r</span> ./* root@172.20.10.12:/opt/unetlab/addons/iol/bin
+<span class="token comment"># scp -r &#123;source&#125; &#123;destination&#125;</span>
+<span class="token comment"># -r 遍历所有子文件（夹）</span>
+<span class="token comment"># 远程目录：&#123;user&#125;@&#123;ip&#125;:/&#123;path&#125;  </span>
+<span class="token comment"># 本地目录：就是正常的写法  </span>
+<span class="token comment"># 本地在前是上传；本地在后是下载  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="镜像类型"><a class="markdownIt-Anchor" href="#镜像类型"></a> 镜像类型</h3>
 <p>一般来说，有三种类型的镜像文件可供选择，但是真的是不好下载，有些还要先注册后下载</p>
 <ol>
@@ -364,7 +389,12 @@
 <li>将<code>*.image</code> 文件上传至<code>eve-ng</code> 虚拟机<code>/opt/unetlab/addons/dynamips</code> 目录下</li>
 <li>刷新浏览器，测试新增的镜像</li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 上传文件  </span></span><br><span class="line">scp -r ./* root@172.20.10.12:/opt/unetlab/addons/dynamips  </span><br><span class="line"></span><br><span class="line">ssh root@172.20.10.12</span><br><span class="line"><span class="comment"># 修复镜像（必需，否则镜像不能正常工作）</span></span><br><span class="line">/opt/unetlab/wrappers/unl_wrapper -a fixpermissions  </span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 上传文件  </span>
+<span class="token function">scp</span> <span class="token parameter variable">-r</span> ./* root@172.20.10.12:/opt/unetlab/addons/dynamips  
+
+<span class="token function">ssh</span> root@172.20.10.12
+<span class="token comment"># 修复镜像（必需，否则镜像不能正常工作）</span>
+/opt/unetlab/wrappers/unl_wrapper <span class="token parameter variable">-a</span> fixpermissions  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="iol"><a class="markdownIt-Anchor" href="#iol"></a> IOL</h3>
 <ol>
 <li>下载文件：<code>链接：http://pan.baidu.com/s/1dEHvhHf 密码：dqvm</code>，并解压</li>
@@ -372,11 +402,24 @@
 <li>重新生成<code>iourc</code>文件，然后给予权限</li>
 <li>刷新浏览器，测试新增的镜像</li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 上传文件 </span></span><br><span class="line">scp -r ./* root@172.20.10.12:/opt/unetlab/addons/iol/bin  </span><br><span class="line"></span><br><span class="line">ssh root@172.20.10.12</span><br><span class="line"><span class="comment"># 重新生成iourc 文件，然后给予权限  </span></span><br><span class="line"><span class="built_in">rm</span> iourc  </span><br><span class="line">python CiscoIOUKeygen.py | grep -A 1 <span class="string">&#x27;license&#x27;</span> &gt; iourc</span><br><span class="line"><span class="built_in">chmod</span> -R 777 *  </span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 上传文件 </span>
+<span class="token function">scp</span> <span class="token parameter variable">-r</span> ./* root@172.20.10.12:/opt/unetlab/addons/iol/bin  
+
+<span class="token function">ssh</span> root@172.20.10.12
+<span class="token comment"># 重新生成iourc 文件，然后给予权限  </span>
+<span class="token function">rm</span> iourc  
+python CiscoIOUKeygen.py <span class="token operator">|</span> <span class="token function">grep</span> <span class="token parameter variable">-A</span> <span class="token number">1</span> <span class="token string">'license'</span> <span class="token operator">></span> iourc
+<span class="token function">chmod</span> <span class="token parameter variable">-R</span> <span class="token number">777</span> *  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="客户端配置"><a class="markdownIt-Anchor" href="#客户端配置"></a> 客户端配置</h2>
 <ul>
 <li>默认安装可以直接打开本地的<code>Putty</code></li>
-<li>但是打开<code>wireshark</code> 时可能会出现异常：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">The server<span class="string">&#x27;s host key is not cached in the registry. You</span></span><br><span class="line"><span class="string">have no guarantee that the server is the computer you</span></span><br><span class="line"><span class="string">think it is.</span></span><br><span class="line"><span class="string">...</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 这时需要执行以下命令  </span></span><br><span class="line"><span class="string">echo y | plink -ssh root@&#123;ip&#125; &quot;exit&quot;  # 向后一条命令输出y</span></span><br></pre></td></tr></table></figure>
+<li>但是打开<code>wireshark</code> 时可能会出现异常：<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">The server's <span class="token function">host</span> key is not cached <span class="token keyword">in</span> the registry. You
+have no guarantee that the server is the computer you
+think it is.
+<span class="token punctuation">..</span>.
+
+<span class="token comment"># 这时需要执行以下命令  </span>
+<span class="token builtin class-name">echo</span> y <span class="token operator">|</span> plink <span class="token parameter variable">-ssh</span> root@<span class="token punctuation">&#123;</span>ip<span class="token punctuation">&#125;</span> <span class="token string">"exit"</span>  <span class="token comment"># 向后一条命令输出y</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 </li>
 </ul>
 <p>暂时记录这么多，以后再补充</p>
@@ -413,17 +456,17 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/ssh/" rel="tag"># ssh</a>
-              <a href="/tags/eve/" rel="tag"># eve</a>
+              <a href="/tags/router/" rel="tag"># router</a>
+              <a href="/tags/vmware/" rel="tag"># vmware</a>
               <a href="/tags/cisco/" rel="tag"># cisco</a>
               <a href="/tags/switch/" rel="tag"># switch</a>
-              <a href="/tags/router/" rel="tag"># router</a>
               <a href="/tags/image/" rel="tag"># image</a>
               <a href="/tags/dynamipshe/" rel="tag"># dynamipshe</a>
               <a href="/tags/iol/" rel="tag"># iol</a>
+              <a href="/tags/ssh/" rel="tag"># ssh</a>
               <a href="/tags/scp/" rel="tag"># scp</a>
-              <a href="/tags/vmware/" rel="tag"># vmware</a>
               <a href="/tags/chmod/" rel="tag"># chmod</a>
+              <a href="/tags/eve/" rel="tag"># eve</a>
           </div>
 
         
@@ -474,13 +517,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">34k</span>
+    <span title="站点总字数">57k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:05</span>
+    <span title="站点阅读时长">3:26</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动

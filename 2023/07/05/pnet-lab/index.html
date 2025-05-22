@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
     <meta name="description" content="内网环境建议先配置OpenWRT 透明路由，只用Proxy 代理的话还是会有问题 PNet-Lab 应该是我见过最好用的网工实验室了。它一般运行于VMware 或VBox 之上，也可以裸机安装。并且：  相比于普通的客户端，它具有一个Web 界面，可以多用户同时使用 相比于EVE，它支持热插拔 自带了一款镜像管理软件ishare2，可以方便地下载很多镜像 不建议再安装pnetlab-v5.*，因">
 <meta property="og:type" content="article">
@@ -29,19 +29,19 @@
 <meta property="og:image" content="https://12tall.github.io/2023/07/05/pnet-lab/demo.png">
 <meta property="og:image" content="https://12tall.github.io/2023/07/05/pnet-lab/ishare2_web_gui.png">
 <meta property="article:published_time" content="2023-07-05T06:45:02.000Z">
-<meta property="article:modified_time" content="2025-05-21T06:47:54.625Z">
+<meta property="article:modified_time" content="2025-05-22T01:39:47.390Z">
 <meta property="article:author" content="12Tall">
-<meta property="article:tag" content="ssh">
+<meta property="article:tag" content="router">
+<meta property="article:tag" content="vmware">
+<meta property="article:tag" content="pnet-lab">
 <meta property="article:tag" content="cisco">
 <meta property="article:tag" content="switch">
-<meta property="article:tag" content="router">
 <meta property="article:tag" content="image">
 <meta property="article:tag" content="dynamipshe">
 <meta property="article:tag" content="iol">
+<meta property="article:tag" content="ssh">
 <meta property="article:tag" content="scp">
-<meta property="article:tag" content="vmware">
 <meta property="article:tag" content="chmod">
-<meta property="article:tag" content="pnet-lab">
 <meta property="article:tag" content="fortigate">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://12tall.github.io/2023/07/05/pnet-lab/demo.png">
@@ -195,18 +195,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-count">56</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">73</span>
+        <span class="site-state-item-count">87</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -283,7 +283,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-21 15:47:54" itemprop="dateModified" datetime="2025-05-21T15:47:54+09:00">2025-05-21</time>
+      <time title="修改时间：2025-05-22 10:39:47" itemprop="dateModified" datetime="2025-05-22T10:39:47+09:00">2025-05-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -336,10 +336,26 @@
 但是在安装<code>ishare2</code> 的时候，会遇到<code>sourcelist</code> 报404 的问题，这时需要将其注释掉（在<code>/etc/apt/sources.list</code> 文件中注释掉含<code>repo.pnetlab.com</code> 字样的行）。<br />
 然后再安装并更新<code>ishare2</code> 和<code>ishare2 gui</code>。
 <img src="ishare2_web_gui.png" alt="" /></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@pnetlab:~# curl -o /usr/sbin/ishare2 https://raw.githubusercontent.com/pnetlabrepo/ishare2/main/ishare2 &gt; /dev/null 2&gt;&amp;1 &amp;&amp; chmod +x /usr/sbin/ishare2 &amp;&amp; ishare2  </span><br><span class="line">root@pnetlab:~# ishare2 upgrade  </span><br><span class="line">root@pnetlab:~# ishare2  </span><br><span class="line">root@pnetlab:~# ishare2 gui install</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-shell-session" data-language="shell-session"><code class="language-shell-session"><span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash"><span class="token function">curl</span> <span class="token parameter variable">-o</span> /usr/sbin/ishare2 https://raw.githubusercontent.com/pnetlabrepo/ishare2/main/ishare2 <span class="token operator">></span> /dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span> <span class="token operator">&amp;&amp;</span> <span class="token function">chmod</span> +x /usr/sbin/ishare2 <span class="token operator">&amp;&amp;</span> ishare2  </span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash">ishare2 upgrade  </span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash">ishare2  </span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash">ishare2 gui <span class="token function">install</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="裸机安装"><a class="markdownIt-Anchor" href="#裸机安装"></a> 裸机安装</h3>
 <p>裸机安装分两步，先是安装系统，这一步与官网的<a target="_blank" rel="noopener" href="https://www.pnetlab.com/pages/documentation?slug=install-bare-metal">教程</a>一致。但是后面因为<code>repo</code> 不再可用，所以需要使用以下命令安装：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">user@pnetlab:~$ sudo -i # 进入root 账号  </span><br><span class="line"># 升级到安装v5，前提是必须安装v4.10  </span><br><span class="line">root@pnetlab:~#  bash -c &quot;$(curl -sL https://labhub.eu.org/api/raw/?path=/UNETLAB%20I/upgrades_pnetlab/bionic/install_pnetlab_latest_v5.sh)&quot; </span><br><span class="line"></span><br><span class="line"># 安装v6</span><br><span class="line">root@pnetlab:~#  bash -c &quot;$(curl -sL https://labhub.eu.org/api/raw/?path=/UNETLAB%20I/upgrades_pnetlab/Focal/install_pnetlab_v6.sh)&quot; </span><br><span class="line"></span><br><span class="line">root@pnetlab:~#  reboot  </span><br><span class="line"></span><br><span class="line"># 安装ishare2  </span><br><span class="line">root@pnetlab:~# curl -o /usr/sbin/ishare2 https://raw.githubusercontent.com/pnetlabrepo/ishare2/main/ishare2 &gt; /dev/null 2&gt;&amp;1 &amp;&amp; chmod +x /usr/sbin/ishare2 &amp;&amp; ishare2  </span><br><span class="line">root@pnetlab:~# ishare2 upgrade  </span><br><span class="line">root@pnetlab:~# ishare2  </span><br><span class="line">root@pnetlab:~# ishare2 gui install</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-shell-session" data-language="shell-session"><code class="language-shell-session"><span class="token command"><span class="token info punctuation"><span class="token user">user@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">sudo</span> <span class="token parameter variable">-i</span> <span class="token comment"># 进入root 账号  </span></span></span>
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">升级到安装v5，前提是必须安装v4.10  </span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span>  <span class="token bash language-bash"><span class="token function">bash</span> <span class="token parameter variable">-c</span> <span class="token string">"<span class="token variable"><span class="token variable">$(</span><span class="token function">curl</span> <span class="token parameter variable">-sL</span> https://labhub.eu.org/api/raw/?path<span class="token operator">=</span>/UNETLAB%20I/upgrades_pnetlab/bionic/install_pnetlab_latest_v5.sh<span class="token variable">)</span></span>"</span> </span></span>
+
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">安装v6</span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span>  <span class="token bash language-bash"><span class="token function">bash</span> <span class="token parameter variable">-c</span> <span class="token string">"<span class="token variable"><span class="token variable">$(</span><span class="token function">curl</span> <span class="token parameter variable">-sL</span> https://labhub.eu.org/api/raw/?path<span class="token operator">=</span>/UNETLAB%20I/upgrades_pnetlab/Focal/install_pnetlab_v6.sh<span class="token variable">)</span></span>"</span> </span></span>
+
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span>  <span class="token bash language-bash"><span class="token function">reboot</span>  </span></span>
+
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">安装ishare2  </span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash"><span class="token function">curl</span> <span class="token parameter variable">-o</span> /usr/sbin/ishare2 https://raw.githubusercontent.com/pnetlabrepo/ishare2/main/ishare2 <span class="token operator">></span> /dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span> <span class="token operator">&amp;&amp;</span> <span class="token function">chmod</span> +x /usr/sbin/ishare2 <span class="token operator">&amp;&amp;</span> ishare2  </span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash">ishare2 upgrade  </span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash">ishare2  </span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash">ishare2 gui <span class="token function">install</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="使用踩坑"><a class="markdownIt-Anchor" href="#使用踩坑"></a> 使用踩坑</h3>
 <ol>
 <li>在VMware 中运行虚拟机时，要注意勾选<a target="_blank" rel="noopener" href="https://www.pnetlab.com/pages/documentation?slug=install-PNETlab">VT-x 虚拟化支持</a>。否则基于QEMU 的镜像在启动后会闪退。</li>
@@ -350,10 +366,49 @@
 <hr />
 <h2 id="使用代理"><a class="markdownIt-Anchor" href="#使用代理"></a> 使用代理</h2>
 <p>可能会用到，在当前会话中使用代理，配置了OpenWRT 透明路由后此节将不再需要：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">## 在国内设置系统代理，如果本地局域网中没有代理的话，可以安装v2raya 服务在系统上  </span><br><span class="line">## 因为aria2c 工具需要用到下面两个环境变量，所以最好不要只使用all_proxy：  </span><br><span class="line">root@pnetlab:~# export http_proxy=http://ip:port </span><br><span class="line">root@pnetlab:~# export https_proxy=http://ip:port </span><br><span class="line">root@pnetlab:~# export ftp_proxy=http://ip:port </span><br><span class="line"># root@pnetlab:~# export all_proxy=http://ip:port  </span><br><span class="line"># 因为代理的原因 ishare2 gui 不可用  </span><br><span class="line"># 并且ishare2 必须要走代理，所以可以将环境变量写入/etc/environment</span><br><span class="line"></span><br><span class="line"># docker 切换国内源  </span><br><span class="line">root@pnetlab:~# vim /etc/docker/daemon.json</span><br><span class="line"></span><br><span class="line"># 添加如下属性：  </span><br><span class="line"># &quot;registry-mirrors&quot;: [</span><br><span class="line">#     &quot;https://dockerproxy.com&quot;,</span><br><span class="line">#     &quot;https://hub-mirror.c.163.com&quot;,</span><br><span class="line">#     &quot;https://mirror.baidubce.com&quot;,</span><br><span class="line">#     &quot;https://ccr.ccs.tencentyun.com&quot;</span><br><span class="line"># ]</span><br><span class="line"></span><br><span class="line"># 重启docker 服务</span><br><span class="line">root@pnetlab:~# systemctl daemon-reload</span><br><span class="line">root@pnetlab:~# systemctl restart docker</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-shell-session" data-language="shell-session"><code class="language-shell-session"><span class="token output">## 在国内设置系统代理，如果本地局域网中没有代理的话，可以安装v2raya 服务在系统上  
+## 因为aria2c 工具需要用到下面两个环境变量，所以最好不要只使用all_proxy：  
+</span><span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash"><span class="token builtin class-name">export</span> <span class="token assign-left variable">http_proxy</span><span class="token operator">=</span>http://ip:port </span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash"><span class="token builtin class-name">export</span> <span class="token assign-left variable">https_proxy</span><span class="token operator">=</span>http://ip:port </span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash"><span class="token builtin class-name">export</span> <span class="token assign-left variable">ftp_proxy</span><span class="token operator">=</span>http://ip:port </span></span>
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">root@pnetlab:~<span class="token comment"># export all_proxy=http://ip:port  </span></span></span>
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">因为代理的原因 ishare2 gui 不可用  </span></span>
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">并且ishare2 必须要走代理，所以可以将环境变量写入/etc/environment</span></span>
+
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash"><span class="token function">docker</span> 切换国内源  </span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash"><span class="token function">vim</span> /etc/docker/daemon.json</span></span>
+
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">添加如下属性：  </span></span>
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash"><span class="token string">"registry-mirrors"</span><span class="token builtin class-name">:</span> <span class="token punctuation">[</span></span></span>
+<span class="token command"><span class="token shell-symbol important">#</span>     <span class="token bash language-bash"><span class="token string">"https://dockerproxy.com"</span>,</span></span>
+<span class="token command"><span class="token shell-symbol important">#</span>     <span class="token bash language-bash"><span class="token string">"https://hub-mirror.c.163.com"</span>,</span></span>
+<span class="token command"><span class="token shell-symbol important">#</span>     <span class="token bash language-bash"><span class="token string">"https://mirror.baidubce.com"</span>,</span></span>
+<span class="token command"><span class="token shell-symbol important">#</span>     <span class="token bash language-bash"><span class="token string">"https://ccr.ccs.tencentyun.com"</span></span></span>
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash"><span class="token punctuation">]</span></span></span>
+
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">重启docker 服务</span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash">systemctl daemon-reload</span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash">systemctl restart <span class="token function">docker</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="v2raya-代理的安装"><a class="markdownIt-Anchor" href="#v2raya-代理的安装"></a> V2rayA 代理的安装</h2>
 <p>配置了OpenWRT 透明路由后此节将不再需要。如果本地电脑上已经安装了<code>v2ray</code> 则只需启用局域网代理功能即可。如果没有，则可以在<code>Ubuntu</code> 上安装<code>v2raya</code> 服务，此服务会启动一个web 管理接口。万不得已再用此方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">## 安装v2ray-core  </span><br><span class="line"># 访问raw.githubusercontent.com 可能需要修改hosts  </span><br><span class="line">curl  https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh &gt; install-release.sh</span><br><span class="line">sudo chmod +x install-release.sh</span><br><span class="line">sudo ./install-release.sh</span><br><span class="line"></span><br><span class="line">sudo systemctl disable v2ray --now  </span><br><span class="line"></span><br><span class="line">## 安装v2raya 服务</span><br><span class="line">wget -qO - https://apt.v2raya.org/key/public-key.asc | sudo tee /etc/apt/trusted.gpg.d/v2raya.asc  </span><br><span class="line"></span><br><span class="line">echo &quot;deb https://apt.v2raya.org/ v2raya main&quot; | sudo tee /etc/apt/sources.list.d/v2raya.list</span><br><span class="line">sudo apt update</span><br><span class="line"></span><br><span class="line">sudo apt install v2raya</span><br><span class="line"></span><br><span class="line">sudo systemctl start v2raya.service</span><br><span class="line">sudo systemctl enable v2raya.service</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-shell-session" data-language="shell-session"><code class="language-shell-session"><span class="token output">## 安装v2ray-core  
+</span><span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">访问raw.githubusercontent.com 可能需要修改hosts  </span></span>
+<span class="token output">curl  https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh > install-release.sh
+sudo chmod +x install-release.sh
+sudo ./install-release.sh
+
+sudo systemctl disable v2ray --now  
+
+## 安装v2raya 服务
+wget -qO - https://apt.v2raya.org/key/public-key.asc | sudo tee /etc/apt/trusted.gpg.d/v2raya.asc  
+
+echo "deb https://apt.v2raya.org/ v2raya main" | sudo tee /etc/apt/sources.list.d/v2raya.list
+sudo apt update
+
+sudo apt install v2raya
+
+sudo systemctl start v2raya.service
+sudo systemctl enable v2raya.service</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
     </div>
 
     
@@ -379,17 +434,17 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/ssh/" rel="tag"># ssh</a>
+              <a href="/tags/router/" rel="tag"># router</a>
+              <a href="/tags/vmware/" rel="tag"># vmware</a>
+              <a href="/tags/pnet-lab/" rel="tag"># pnet-lab</a>
               <a href="/tags/cisco/" rel="tag"># cisco</a>
               <a href="/tags/switch/" rel="tag"># switch</a>
-              <a href="/tags/router/" rel="tag"># router</a>
               <a href="/tags/image/" rel="tag"># image</a>
               <a href="/tags/dynamipshe/" rel="tag"># dynamipshe</a>
               <a href="/tags/iol/" rel="tag"># iol</a>
+              <a href="/tags/ssh/" rel="tag"># ssh</a>
               <a href="/tags/scp/" rel="tag"># scp</a>
-              <a href="/tags/vmware/" rel="tag"># vmware</a>
               <a href="/tags/chmod/" rel="tag"># chmod</a>
-              <a href="/tags/pnet-lab/" rel="tag"># pnet-lab</a>
               <a href="/tags/fortigate/" rel="tag"># fortigate</a>
           </div>
 
@@ -397,13 +452,13 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2023/04/26/rk4-pid/" rel="prev" title="RK4 中PID 算法的初值问题">
-                  <i class="fa fa-angle-left"></i> RK4 中PID 算法的初值问题
+                <a href="/2023/06/15/fem/intro/" rel="prev" title="有限元计算电磁场">
+                  <i class="fa fa-angle-left"></i> 有限元计算电磁场
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2023/09/01/openwrt/" rel="next" title="VM 中配置OpenWRT 透明路由">
-                  VM 中配置OpenWRT 透明路由 <i class="fa fa-angle-right"></i>
+                <a href="/2023/07/10/fem/1-D_FEM/" rel="next" title="一维静电场有限元例子">
+                  一维静电场有限元例子 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -441,13 +496,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">34k</span>
+    <span title="站点总字数">57k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:05</span>
+    <span title="站点阅读时长">3:26</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
