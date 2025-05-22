@@ -69,7 +69,7 @@ root@pnetlab:~# ishare2 gui install
 3. 在下载了镜像之后，最好通过网页中的`System --> System Setting --> Fix Permission` 修复一下权限，尤其是下载了Windows 的镜像之后。  
 4. 
 
------  
+-----
 
 
 ## 使用代理  

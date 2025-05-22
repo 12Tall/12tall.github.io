@@ -6,7 +6,7 @@ tags:
     - 我理解的  
     - circuit  
     - control
----  
+---
 
 > 想到以前解证明题：条件推导下，结论推导下，中间一凑，解决战斗~  
 
@@ -40,14 +40,14 @@ $$\left\{
 其中，$R'_L = R_L // R_c$ ，计算后得到：  
 $$\left\{ 
     \begin{array}{lll}
-        \dot{A}_u = \frac{\dot{U}_o}{\dot{U}_i} = - \frac{\beta R'_L}{r_{be}+(1+\beta)R_e}   \\ \\ 
+        \dot{A}_u = \frac{\dot{U}_o}{\dot{U}_i} = - \frac{\beta R'_L}{r_{be}+(1+\beta)R_e}   \\ 
         R_i = \frac{\dot{U}_i}{\dot{I}_i} = [r_{be} + (1+\beta)R_e]\dot{I}_b // R_b 
     \end{array}    
 \right.$$  
 看$\dot{A}_u$ 是不是很眼熟啊，因为$\beta \gg 1$，所以可以进一步化简为：  
 $$
 \begin{array}{lll}
-    \dot{A}_u & = & - \frac{K R'_L}{r_{be}+KR_e}\\  \\
+    \dot{A}_u & = & - \frac{K R'_L}{r_{be}+KR_e}\\
     & = & - \frac{\frac{K R'_L}{r_{be}}}{1+\frac{K R'_L}{r_{be}} *\frac{R_e}{R'_L}}
 \end{array} 
 $$

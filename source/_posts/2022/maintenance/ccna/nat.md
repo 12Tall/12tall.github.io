@@ -3,7 +3,7 @@ title: NAT
 date: 2022-08-03
 tag:   
   - ccna
----  
+---
 
 ## 网路地址转换  
 ### 作用  
@@ -72,8 +72,8 @@ Switch#s
 Switch#show ip nat tr
 Switch#show ip nat translations
 Pro Inside global      Inside local       Outside local      Outside global
-tcp 123.1.1.1:23       172.16.10.1:23     ---                ---
---- 202.101.100.1      192.168.1.1        ---                ---
+tcp 123.1.1.1:23       172.16.10.1:23     ---         ---
+--- 202.101.100.1      192.168.1.1        ---         ---
 ```
 
 ## 参考资料  

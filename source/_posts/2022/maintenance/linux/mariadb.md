@@ -5,7 +5,7 @@ tag:
     - linux  
     - 数据库    
     - MariaDB  
----     
+---
 
 ## 安装与登录    
 ```shell-session  
@@ -112,5 +112,5 @@ $ mysql -uroot -p --one-database test < all.bak  # 从所有备份中恢复某�
 2. [Linux运维笔记----Mariadb数据库基本管理](https://blog.cuiran.cc/522.html)  
 3. [Full Backup and Restore with Mariabackup](https://mariadb.com/kb/en/full-backup-and-restore-with-mariabackup/)
 
------  
+-----
 2022-11-26 Aachen  

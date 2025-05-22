@@ -66,7 +66,7 @@ Router(config-if-range)#exit
 Router#show vlan-switch brief
 
 VLAN Name                             Status    Ports
----- -------------------------------- --------- -------------------------------
+----------------------------------------------------------------------------
 1    default                          active    Fa1/2, Fa1/3, Fa1/4, Fa1/5
                                                 Fa1/6, Fa1/7, Fa1/8, Fa1/9
                                                 Fa1/10, Fa1/11, Fa1/12, Fa1/13
