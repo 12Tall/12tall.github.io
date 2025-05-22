@@ -27,7 +27,7 @@
 <meta property="og:description" content="虽然C++ 是C 语言的超集，但是二者并不能做到无缝衔接。这里记一下C 和C++是如何以静态链接库的形式调用彼此的。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-08-02T15:00:00.000Z">
-<meta property="article:modified_time" content="2025-05-22T06:12:53.469Z">
+<meta property="article:modified_time" content="2025-05-22T06:19:03.339Z">
 <meta property="article:author" content="12Tall">
 <meta property="article:tag" content="c">
 <meta property="article:tag" content="cpp">
@@ -168,7 +168,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#c-%E8%AF%AD%E8%A8%80%E8%B0%83%E7%94%A8c-%E7%9A%84%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text"> C 语言调用C++ 的成员函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E9%87%8D%E8%BD%BD"><span class="nav-number">2.</span> <span class="nav-text"> 函数的重载</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-%E8%AF%AD%E8%A8%80%E8%B0%83%E7%94%A8go"><span class="nav-number"></span> <span class="nav-text"> C 语言调用Go</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text"> 准备工作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text"> 变量类型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vc-%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96"><span class="nav-number"></span> <span class="nav-text"> VC 内联汇编</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%BA%A6%E5%AE%9A"><span class="nav-number">1.</span> <span class="nav-text"> 函数调用约定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E6%98%93%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text"> 简易实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mingw-%E7%9B%B8%E5%85%B3"><span class="nav-number"></span> <span class="nav-text"> Mingw 相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E5%8F%91dll"><span class="nav-number">1.</span> <span class="nav-text"> 开发dll</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%98%85%E8%AF%BB"><span class="nav-number"></span> <span class="nav-text"> 参考阅读</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#c-cpp-%E7%9B%B8%E5%85%B3"><span class="nav-number">1.</span> <span class="nav-text"> C-Cpp 相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#go-%E7%9B%B8%E5%85%B3"><span class="nav-number">2.</span> <span class="nav-text"> Go 相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vc-%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96-2"><span class="nav-number">3.</span> <span class="nav-text"> VC 内联汇编</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#c-%E8%AF%AD%E8%A8%80%E8%B0%83%E7%94%A8c-%E7%9A%84%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text"> C 语言调用C++ 的成员函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E9%87%8D%E8%BD%BD"><span class="nav-number">2.</span> <span class="nav-text"> 函数的重载</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-%E8%AF%AD%E8%A8%80%E8%B0%83%E7%94%A8go"><span class="nav-number"></span> <span class="nav-text"> C 语言调用Go</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text"> 准备工作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text"> 变量类型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="nav-number">2.</span> <span class="nav-text"> 示例代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vc-%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96"><span class="nav-number"></span> <span class="nav-text"> VC 内联汇编</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%BA%A6%E5%AE%9A"><span class="nav-number">1.</span> <span class="nav-text"> 函数调用约定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E6%98%93%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text"> 简易实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mingw-%E7%9B%B8%E5%85%B3"><span class="nav-number"></span> <span class="nav-text"> Mingw 相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E5%8F%91dll"><span class="nav-number">1.</span> <span class="nav-text"> 开发dll</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%98%85%E8%AF%BB"><span class="nav-number"></span> <span class="nav-text"> 参考阅读</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#c-cpp-%E7%9B%B8%E5%85%B3"><span class="nav-number">1.</span> <span class="nav-text"> C-Cpp 相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#go-%E7%9B%B8%E5%85%B3"><span class="nav-number">2.</span> <span class="nav-text"> Go 相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vc-%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96-2"><span class="nav-number">3.</span> <span class="nav-text"> VC 内联汇编</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -183,18 +183,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-count">101</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">157</span>
+        <span class="site-state-item-count">165</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -271,7 +271,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-22 15:12:53" itemprop="dateModified" datetime="2025-05-22T15:12:53+09:00">2025-05-22</time>
+      <time title="修改时间：2025-05-22 15:19:03" itemprop="dateModified" datetime="2025-05-22T15:19:03+09:00">2025-05-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -513,56 +513,51 @@ extern &quot;C&quot; int GetAge(void *stu)&#123;
 <p>在使用时注意内存的释放:</p>
 <pre class="line-numbers language-go" data-language="go"><code class="language-go">cs <span class="token operator">:=</span> C<span class="token punctuation">.</span><span class="token function">CString</span><span class="token punctuation">(</span><span class="token string">"PN"</span><span class="token punctuation">)</span>
 <span class="token comment">// ...</span>
-C<span class="token punctuation">.</span><span class="token function">free</span><span class="token punctuation">(</span>unsafe<span class="token punctuation">.</span><span class="token function">Pointer</span><span class="token punctuation">(</span>cs<span class="token punctuation">)</span><span class="token punctuation">)</span>
-<span class="token string">``</span><span class="token string">`  
+C<span class="token punctuation">.</span><span class="token function">free</span><span class="token punctuation">(</span>unsafe<span class="token punctuation">.</span><span class="token function">Pointer</span><span class="token punctuation">(</span>cs<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h3 id="示例代码"><a class="markdownIt-Anchor" href="#示例代码"></a> 示例代码</h3>
+<p>示例包含两个文件：trj.go 和main.c。
+需要注意的是，golang 中需要有特殊的注释来声明导出函数。</p>
+<CodeGroup>
+<CodeGroupItem title="trj.go">  
+<pre class="line-numbers language-go&#123;13&#125;" data-language="go&#123;13&#125;"><code class="language-go&#123;13&#125;">package main
 
-### 示例代码  
-示例包含两个文件：trj.go 和main.c。
-需要注意的是，golang 中需要有特殊的注释来声明导出函数。  
+import &quot;C&quot;
+&#x2F;&#x2F; 添加C 库的支持，用于类型转换
+&#x2F;&#x2F; 使用C.free 时，必须按照上面格式引入C 语言的头文件。
 
-&lt;CodeGroup>
-&lt;CodeGroupItem title="trj.go">  
+import (
+	&quot;fmt&quot;
+	&quot;unsafe&quot;
+)
 
-`</span><span class="token string">``</span><span class="token keyword">go</span><span class="token punctuation">&#123;</span><span class="token number">13</span><span class="token punctuation">&#125;</span>
-<span class="token keyword">package</span> main
+&#x2F;&#x2F; 下面的注释是必须的，声明该函数会被导出
+&#x2F;&#x2F; export 前后分别必须只有0 个和1 个空格
 
-<span class="token keyword">import</span> <span class="token string">"C"</span>
-<span class="token comment">// 添加C 库的支持，用于类型转换</span>
-<span class="token comment">// 使用C.free 时，必须按照上面格式引入C 语言的头文件。</span>
+&#x2F;&#x2F;export PrintBye
+func PrintBye() &#123;
+	fmt.Println(&quot;bye&quot;)
+&#125;
 
-<span class="token keyword">import</span> <span class="token punctuation">(</span>
-	<span class="token string">"fmt"</span>
-	<span class="token string">"unsafe"</span>
-<span class="token punctuation">)</span>
+&#x2F;&#x2F;export Sum
+func Sum(a C.int, b C.int) C.int &#123;
+	return a + b
+&#125;
 
-<span class="token comment">// 下面的注释是必须的，声明该函数会被导出</span>
-<span class="token comment">// export 前后分别必须只有0 个和1 个空格</span>
+&#x2F;&#x2F;export GetStr
+func GetStr() *C.char &#123;
+	var a &#x3D; &quot;1&quot;
+	var b &#x3D; &quot;2&quot;
+	return C.CString(a + b)
+&#125;
 
-<span class="token comment">//export PrintBye</span>
-<span class="token keyword">func</span> <span class="token function">PrintBye</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-	fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">"bye"</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span>
+&#x2F;&#x2F;export FreeStr
+func FreeStr(str unsafe.Pointer) &#123;
+	C.free(str)
+&#125;
 
-<span class="token comment">//export Sum</span>
-<span class="token keyword">func</span> <span class="token function">Sum</span><span class="token punctuation">(</span>a C<span class="token punctuation">.</span><span class="token builtin">int</span><span class="token punctuation">,</span> b C<span class="token punctuation">.</span><span class="token builtin">int</span><span class="token punctuation">)</span> C<span class="token punctuation">.</span><span class="token builtin">int</span> <span class="token punctuation">&#123;</span>
-	<span class="token keyword">return</span> a <span class="token operator">+</span> b
-<span class="token punctuation">&#125;</span>
-
-<span class="token comment">//export GetStr</span>
-<span class="token keyword">func</span> <span class="token function">GetStr</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span>C<span class="token punctuation">.</span>char <span class="token punctuation">&#123;</span>
-	<span class="token keyword">var</span> a <span class="token operator">=</span> <span class="token string">"1"</span>
-	<span class="token keyword">var</span> b <span class="token operator">=</span> <span class="token string">"2"</span>
-	<span class="token keyword">return</span> C<span class="token punctuation">.</span><span class="token function">CString</span><span class="token punctuation">(</span>a <span class="token operator">+</span> b<span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token comment">//export FreeStr</span>
-<span class="token keyword">func</span> <span class="token function">FreeStr</span><span class="token punctuation">(</span>str unsafe<span class="token punctuation">.</span>Pointer<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-	C<span class="token punctuation">.</span><span class="token function">free</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// main 方法是必须的</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+func main() &#123;
+    &#x2F;&#x2F; main 方法是必须的
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 </CodeGroupItem>
 <CodeGroupItem title="main.c">
 <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;windows.h&gt;
@@ -727,13 +722,10 @@ BOOL APIENTRY DllMain(
     return TRUE;
 &#125;
 &#x2F;&#x2F; 执行&#96;gcc .&#x2F;my_dll.c -shared -o my_dll.dll&#96;，
-&#x2F;&#x2F; 将会在当前目录生成生成&#96;my_dll.dll&#96;。  
-&#96;&#96;&#96;  
-&lt;&#x2F;CodeGroupItem&gt;
-&lt;CodeGroupItem title&#x3D;&quot;调用&quot;&gt;
-
-&#96;&#96;&#96;c++&#123;16&#125;
-#include &lt;windows.h&gt;
+&#x2F;&#x2F; 将会在当前目录生成生成&#96;my_dll.dll&#96;。  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+<CodeGroupItem title="调用">
+<pre class="line-numbers language-c++&#123;16&#125;" data-language="c++&#123;16&#125;"><code class="language-c++&#123;16&#125;">#include &lt;windows.h&gt;
 #include&lt;stdio.h&gt;
 
 typedef int (*Add)(int ,int);  &#x2F;&#x2F; 定义函数指针类型
@@ -750,7 +742,7 @@ int main(void)&#123;
 
         FreeLibrary(hDll);  &#x2F;&#x2F; 释放my_dll.dll
     &#125;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 </CodeGroupItem>
 <CodeGroupItem title="入口函数">
 <pre class="line-numbers language-c++&#123;16&#125;" data-language="c++&#123;16&#125;"><code class="language-c++&#123;16&#125;">BOOL APIENTRY DllMain( 
@@ -823,13 +815,13 @@ int main(void)&#123;
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2022/08/03/container/" rel="prev" title="容器技术简介">
-                  <i class="fa fa-angle-left"></i> 容器技术简介
+                <a href="/2022/08/03/tinyos/" rel="prev" title="x86 操作系统笔记">
+                  <i class="fa fa-angle-left"></i> x86 操作系统笔记
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/08/03/win32/" rel="next" title="Win32 SDK编程">
-                  Win32 SDK编程 <i class="fa fa-angle-right"></i>
+                <a href="/2022/08/03/dll-injection/" rel="next" title="DLL 注入相关">
+                  DLL 注入相关 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -867,13 +859,13 @@ int main(void)&#123;
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">92k</span>
+    <span title="站点总字数">112k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:35</span>
+    <span title="站点阅读时长">6:49</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动

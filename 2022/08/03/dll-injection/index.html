@@ -27,10 +27,10 @@
 <meta property="og:description" content="远程线程注入 文中代码多摘自Win32创建远程线程，仅作部分注释">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-08-02T15:00:00.000Z">
-<meta property="article:modified_time" content="2025-05-22T06:16:18.475Z">
+<meta property="article:modified_time" content="2025-05-22T06:19:03.339Z">
 <meta property="article:author" content="12Tall">
-<meta property="article:tag" content="win32">
 <meta property="article:tag" content="c&#x2F;cpp">
+<meta property="article:tag" content="win32">
 <meta property="article:tag" content="远程线程">
 <meta property="article:tag" content="注入">
 <meta name="twitter:card" content="summary">
@@ -169,7 +169,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E7%BA%BF%E7%A8%8B%E6%B3%A8%E5%85%A5"><span class="nav-number">1.</span> <span class="nav-text"> 远程线程注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">1.1.</span> <span class="nav-text"> 注意事项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-%E8%AF%AD%E8%A8%80%E8%B0%83%E7%94%A8go-%E7%94%9F%E6%88%90%E7%9A%84dll"><span class="nav-number">2.</span> <span class="nav-text"> C 语言调用Go 生成的DLL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#golang-%E7%BC%96%E5%86%99http-%E6%9C%8D%E5%8A%A1"><span class="nav-number">2.1.</span> <span class="nav-text"> golang 编写http 服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-%E7%BC%96%E5%86%99dll"><span class="nav-number">2.2.</span> <span class="nav-text"> c 编写dll</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#dll-%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92"><span class="nav-number">2.2.1.</span> <span class="nav-text"> dll 参数传递</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">3.</span> <span class="nav-text"> 参考链接</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E7%BA%BF%E7%A8%8B%E6%B3%A8%E5%85%A5"><span class="nav-number">1.</span> <span class="nav-text"> 远程线程注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">1.1.</span> <span class="nav-text"> 注意事项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-%E8%AF%AD%E8%A8%80%E8%B0%83%E7%94%A8go-%E7%94%9F%E6%88%90%E7%9A%84dll"><span class="nav-number">2.</span> <span class="nav-text"> C 语言调用Go 生成的DLL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#golang-%E7%BC%96%E5%86%99http-%E6%9C%8D%E5%8A%A1"><span class="nav-number">2.1.</span> <span class="nav-text"> golang 编写http 服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-%E7%BC%96%E5%86%99dll"><span class="nav-number">2.2.</span> <span class="nav-text"> c 编写dll</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#dll-%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92"><span class="nav-number">2.2.1.</span> <span class="nav-text"> dll 参数传递</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E8%AF%95"><span class="nav-number">2.3.</span> <span class="nav-text"> 调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E7%BA%BF%E7%A8%8B%E6%B3%A8%E5%85%A5-2"><span class="nav-number">2.4.</span> <span class="nav-text"> 远程线程注入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">3.</span> <span class="nav-text"> 参考链接</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -184,18 +184,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-count">101</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">157</span>
+        <span class="site-state-item-count">165</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -272,7 +272,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-22 15:16:18" itemprop="dateModified" datetime="2025-05-22T15:16:18+09:00">2025-05-22</time>
+      <time title="修改时间：2025-05-22 15:19:03" itemprop="dateModified" datetime="2025-05-22T15:19:03+09:00">2025-05-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -559,15 +559,13 @@ func StartHttp() &#123;
 func main() &#123;
     &#x2F;&#x2F; StartHttp();  &#x2F;&#x2F; 调试时取消这一行的注释  
     &#x2F;&#x2F; 编译时main 函数最好为空
-&#125;
-&#96;&#96;&#96;  
-通过以下命令进行调试：  
-&#96;&#96;&#96;bash
-# 注意调试时需要取消掉main 方法里面的注释
-go run .\http.go  # 如果不出意外，访问&#96;http:&#x2F;&#x2F;localhost:9999&#96; 就能看到&#96;Hello World!&#96; 了  
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>通过以下命令进行调试：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 注意调试时需要取消掉main 方法里面的注释</span>
+go run .<span class="token punctuation">\</span>http.go  <span class="token comment"># 如果不出意外，访问`http://localhost:9999` 就能看到`Hello World!` 了  </span>
 
-# 编译  
-go build -buildmode&#x3D;c-shared -o http.dll .\http.go<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment"># 编译  </span>
+go build <span class="token parameter variable">-buildmode</span><span class="token operator">=</span>c-shared <span class="token parameter variable">-o</span> http.dll .<span class="token punctuation">\</span>http.go<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>编译好后待用。</p>
 <h3 id="c-编写dll"><a class="markdownIt-Anchor" href="#c-编写dll"></a> c 编写dll</h3>
 <p>如果我们需要从远程线程注入上面的<code>http.dll</code> 是不行的，因为它没有显式的入口函数。需要用C/C++ 开发一个带入口函数的<code>loader.dll</code> 来包装一下。注入<code>loader.dll</code>，在<code>loader.dll</code> 初始化的过程中，加载并获取<code>http.dll</code> 内<code>StartHttp()</code> 函数的地址。注意，只获取地址就行了，不要执行，因为一旦执行就会引发程序死锁。这是本文的重点一。</p>
@@ -625,176 +623,168 @@ HANDLE GetHttpStarter()
     return k;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>如果是直接调用<code>http.dll</code> 的话，是不需要这个C 语言中间层的。编译备用</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gcc .<span class="token punctuation">\</span>loader.c <span class="token parameter variable">-shared</span> <span class="token parameter variable">-o</span> .<span class="token punctuation">\</span>loader.dll
-``<span class="token variable"><span class="token variable">`</span>  
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gcc .<span class="token punctuation">\</span>loader.c <span class="token parameter variable">-shared</span> <span class="token parameter variable">-o</span> .<span class="token punctuation">\</span>loader.dll<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="调试"><a class="markdownIt-Anchor" href="#调试"></a> 调试</h3>
+<p>下面是通过C 语言调用<code>loader.dll</code> 进而调用<code>http.dll</code> 的例子。</p>
+<pre class="line-numbers language-c++&#123;15-18&#125;" data-language="c++&#123;15-18&#125;"><code class="language-c++&#123;15-18&#125;">&#x2F;&#x2F; client.c  
+#include &lt;windows.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;memory.h&gt;
 
-<span class="token comment">### 调试  </span>
-下面是通过C 语言调用<span class="token variable">`</span></span>loader.dll<span class="token variable"><span class="token variable">`</span> 进而调用<span class="token variable">`</span></span>http.dll<span class="token variable"><span class="token variable">`</span> 的例子。
-<span class="token variable">`</span></span>`<span class="token variable"><span class="token variable">`</span>c++<span class="token punctuation">&#123;</span><span class="token number">15</span>-18<span class="token punctuation">&#125;</span>
-// client.c  
-<span class="token comment">#include &lt;windows.h></span>
-<span class="token comment">#include &lt;stdio.h></span>
-<span class="token comment">#include &lt;memory.h></span>
+typedef void (*StartHttp)();  &#x2F;&#x2F; http.dll 中的到处方法类型
+typedef HMODULE (*GetHttpStarter)();  &#x2F;&#x2F; loader.dll 中的导出方法类型
 
-typedef void <span class="token punctuation">(</span>*StartHttp<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  // http.dll 中的到处方法类型
-typedef HMODULE <span class="token punctuation">(</span>*GetHttpStarter<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  // loader.dll 中的导出方法类型
+int main()
+&#123;
+    char *dllPath &#x3D; &quot;loader.dll&quot;;
+    HMODULE hLoader &#x3D; NULL;
 
-int <span class="token function-name function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    char *dllPath <span class="token operator">=</span> <span class="token string">"loader.dll"</span><span class="token punctuation">;</span>
-    HMODULE hLoader <span class="token operator">=</span> NULL<span class="token punctuation">;</span>
-
-    hLoader <span class="token operator">=</span> LoadLibrary<span class="token punctuation">(</span><span class="token string">"loader.dll"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    GetHttpStarter getHttpStarter <span class="token operator">=</span> <span class="token punctuation">(</span>GetHttpStarter<span class="token punctuation">)</span>GetProcAddress<span class="token punctuation">(</span>hLoader, <span class="token string">"GetHttpStarter"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    // 获取loader.dll 中的到处方法
-    StartHttp startHttp <span class="token operator">=</span> <span class="token punctuation">(</span>StartHttp<span class="token punctuation">)</span>getHttpStarter<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    // 获取http.dll 中的导出方法
-    startHttp<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  // 启动http 服务
-    printf<span class="token punctuation">(</span><span class="token string">"^^<span class="token entity" title="\n">\n</span>"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    FreeLibrary<span class="token punctuation">(</span>hLoader<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token builtin class-name">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token variable">`</span></span>`<span class="token variable"><span class="token variable">`</span>  
-编译，并且将<span class="token variable">`</span></span>loader.dll<span class="token variable"><span class="token variable">`</span>、<span class="token variable">`</span></span>http.dll<span class="token variable"><span class="token variable">`</span> 放在同一目录，然后执行  
-<span class="token variable">`</span></span>`<span class="token variable"><span class="token variable">`</span><span class="token function">bash</span>
-gcc .<span class="token punctuation">\</span>client.c <span class="token parameter variable">-o</span> .<span class="token punctuation">\</span>client.exe  
+    hLoader &#x3D; LoadLibrary(&quot;loader.dll&quot;);
+    GetHttpStarter getHttpStarter &#x3D; (GetHttpStarter)GetProcAddress(hLoader, &quot;GetHttpStarter&quot;);
+    &#x2F;&#x2F; 获取loader.dll 中的到处方法
+    StartHttp startHttp &#x3D; (StartHttp)getHttpStarter();
+    &#x2F;&#x2F; 获取http.dll 中的导出方法
+    startHttp();  &#x2F;&#x2F; 启动http 服务
+    printf(&quot;^^\n&quot;);
+    FreeLibrary(hLoader);
+    return 0;
+&#125;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>编译，并且将<code>loader.dll</code>、<code>http.dll</code> 放在同一目录，然后执行</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gcc .<span class="token punctuation">\</span>client.c <span class="token parameter variable">-o</span> .<span class="token punctuation">\</span>client.exe  
 
 .<span class="token punctuation">\</span>client.exe 
-<span class="token comment"># 正常来说，访问</span><span class="token variable">`</span></span>http://localshost:9999<span class="token variable"><span class="token variable">`</span> 也是能看到<span class="token variable">`</span></span>Hello World<span class="token operator">!</span><span class="token variable"><span class="token variable">`</span> 的
-<span class="token variable">`</span></span>`<span class="token variable"><span class="token variable">`</span>  
-<span class="token comment">### 远程线程注入</span>
-一般来说，<span class="token variable">`</span></span>LoadLibrary<span class="token variable"><span class="token variable">`</span> 函数会默认加载同目录下的dll 文件。由于我们是在目标进程中开启远程线程，那么在加载dll 文件时的默认目录就需要手工指定了，最好是绝对目录。   
+<span class="token comment"># 正常来说，访问`http://localshost:9999` 也是能看到`Hello World!` 的</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="远程线程注入-2"><a class="markdownIt-Anchor" href="#远程线程注入-2"></a> 远程线程注入</h3>
+<p>一般来说，<code>LoadLibrary</code> 函数会默认加载同目录下的dll 文件。由于我们是在目标进程中开启远程线程，那么在加载dll 文件时的默认目录就需要手工指定了，最好是绝对目录。</p>
+<p>::: details Client.c</p>
+<pre class="line-numbers language-c++&#123;15-19,&#125;" data-language="c++&#123;15-19,&#125;"><code class="language-c++&#123;15-19,&#125;">&#x2F;&#x2F; client.c  
+#include &lt;windows.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;TlHelp32.h&gt;
+#include &lt;string.h&gt;
 
-::: details Client.c 
-<span class="token variable">`</span></span>`<span class="token variable"><span class="token variable">`</span>c++<span class="token punctuation">&#123;</span><span class="token number">15</span>-19,<span class="token punctuation">&#125;</span>
-// client.c  
-<span class="token comment">#include &lt;windows.h></span>
-<span class="token comment">#include &lt;stdio.h></span>
-<span class="token comment">#include &lt;TlHelp32.h></span>
-<span class="token comment">#include &lt;string.h></span>
+typedef void (*StartHttp)();
+typedef HMODULE (*GetHttpStarter)();
 
-typedef void <span class="token punctuation">(</span>*StartHttp<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-typedef HMODULE <span class="token punctuation">(</span>*GetHttpStarter<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+DWORD GetProcIdByName(const char *sProcName);
+void InjectDll(DWORD nPid, const char *sDllName);
 
-DWORD GetProcIdByName<span class="token punctuation">(</span>const char *sProcName<span class="token punctuation">)</span><span class="token punctuation">;</span>
-void InjectDll<span class="token punctuation">(</span>DWORD nPid, const char *sDllName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+int main(int argc, char *argv[])
+&#123;
+    &#x2F;&#x2F; 获取loader.dll 的绝对路径
+    char dllPath[MAX_PATH],
+        *dllName &#x3D; &quot;\\loader.dll&quot;;
+    GetCurrentDirectory(MAX_PATH, dllPath);
+    strncat(dllPath, dllName, strlen(dllName));
 
-int main<span class="token punctuation">(</span>int argc, char *argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    // 获取loader.dll 的绝对路径
-    char dllPath<span class="token punctuation">[</span>MAX_PATH<span class="token punctuation">]</span>,
-        *dllName <span class="token operator">=</span> <span class="token string">"<span class="token entity" title="\\">\\</span>loader.dll"</span><span class="token punctuation">;</span>
-    GetCurrentDirectory<span class="token punctuation">(</span>MAX_PATH, dllPath<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    strncat<span class="token punctuation">(</span>dllPath, dllName, strlen<span class="token punctuation">(</span>dllName<span class="token punctuation">))</span><span class="token punctuation">;</span>
-
-    // 获取目标进程
-    char *sTarget <span class="token operator">=</span> argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-    int nPid <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token number">0</span> <span class="token operator">==</span> <span class="token punctuation">(</span>nPid <span class="token operator">=</span> GetProcIdByName<span class="token punctuation">(</span>sTarget<span class="token punctuation">))</span><span class="token punctuation">)</span>
-    <span class="token punctuation">&#123;</span>
-        printf<span class="token punctuation">(</span><span class="token string">"There is no process named %s<span class="token entity" title="\n">\n</span>"</span>, sTarget<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        exit<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-    // 第一次开启远程线程，注入loader.dll  
-    // 自动加载http.dll  
-    InjectDll<span class="token punctuation">(</span>nPid, dllPath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    &#x2F;&#x2F; 获取目标进程
+    char *sTarget &#x3D; argv[1];
+    int nPid &#x3D; 0;
+    if (0 &#x3D;&#x3D; (nPid &#x3D; GetProcIdByName(sTarget)))
+    &#123;
+        printf(&quot;There is no process named %s\n&quot;, sTarget);
+        exit(1);
+    &#125;
+    &#x2F;&#x2F; 第一次开启远程线程，注入loader.dll  
+    &#x2F;&#x2F; 自动加载http.dll  
+    InjectDll(nPid, dllPath);
     
-    // 客户端加载loader.dll 通过共享内存获取http.dll 中函数的实际位置
-    HMODULE hLoader <span class="token operator">=</span> LoadLibrary<span class="token punctuation">(</span>dllPath<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    GetHttpStarter getHttpStarter <span class="token operator">=</span> <span class="token punctuation">(</span>GetHttpStarter<span class="token punctuation">)</span>GetProcAddress<span class="token punctuation">(</span>hLoader, <span class="token string">"GetHttpStarter"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    StartHttp startHttp <span class="token operator">=</span> <span class="token punctuation">(</span>StartHttp<span class="token punctuation">)</span>getHttpStarter<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    &#x2F;&#x2F; 客户端加载loader.dll 通过共享内存获取http.dll 中函数的实际位置
+    HMODULE hLoader &#x3D; LoadLibrary(dllPath);
+    GetHttpStarter getHttpStarter &#x3D; (GetHttpStarter)GetProcAddress(hLoader, &quot;GetHttpStarter&quot;);
+    StartHttp startHttp &#x3D; (StartHttp)getHttpStarter();
 
-    // 第二次开启远程线程  
-    // 启动http 服务
-    HANDLE hProcess <span class="token operator">=</span>OpenProcess<span class="token punctuation">(</span>PROCESS_ALL_ACCESS, FALSE, nPid<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    HANDLE hThread<span class="token punctuation">;</span>
-    DWORD dwThread <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    hThread <span class="token operator">=</span> CreateRemoteThread<span class="token punctuation">(</span>hProcess, NULL, <span class="token number">0</span>, <span class="token punctuation">(</span>LPTHREAD_START_ROUTINE<span class="token punctuation">)</span>startHttp, NULL, <span class="token number">0</span>, <span class="token operator">&amp;</span>dwThread<span class="token punctuation">)</span><span class="token punctuation">;</span>    
-    CloseHandle<span class="token punctuation">(</span>hProcess<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    CloseHandle<span class="token punctuation">(</span>hThread<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    &#x2F;&#x2F; 第二次开启远程线程  
+    &#x2F;&#x2F; 启动http 服务
+    HANDLE hProcess &#x3D;OpenProcess(PROCESS_ALL_ACCESS, FALSE, nPid);
+    HANDLE hThread;
+    DWORD dwThread &#x3D; 0;
+    hThread &#x3D; CreateRemoteThread(hProcess, NULL, 0, (LPTHREAD_START_ROUTINE)startHttp, NULL, 0, &amp;dwThread);    
+    CloseHandle(hProcess);
+    CloseHandle(hThread);
     
-    printf<span class="token punctuation">(</span><span class="token string">"^^<span class="token entity" title="\n">\n</span>"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    FreeLibrary<span class="token punctuation">(</span>hLoader<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token builtin class-name">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
+    printf(&quot;^^\n&quot;);
+    FreeLibrary(hLoader);
+    return 0;
+&#125;
 
 
-// 通过进程名获取进程Id
-DWORD GetProcIdByName<span class="token punctuation">(</span>const char *sProcName<span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    PROCESSENTRY32 pe32<span class="token punctuation">;</span>
-    pe32.dwSize <span class="token operator">=</span> sizeof<span class="token punctuation">(</span>PROCESSENTRY32<span class="token punctuation">)</span><span class="token punctuation">;</span>
+&#x2F;&#x2F; 通过进程名获取进程Id
+DWORD GetProcIdByName(const char *sProcName)
+&#123;
+    PROCESSENTRY32 pe32;
+    pe32.dwSize &#x3D; sizeof(PROCESSENTRY32);
 
-    HANDLE hProcessSnap <span class="token operator">=</span> CreateToolhelp32Snapshot<span class="token punctuation">(</span>TH32CS_SNAPPROCESS, <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>hProcessSnap <span class="token operator">==</span> INVALID_HANDLE_VALUE<span class="token punctuation">)</span>
-    <span class="token punctuation">&#123;</span>
-        <span class="token builtin class-name">return</span> -1<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
+    HANDLE hProcessSnap &#x3D; CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    if (hProcessSnap &#x3D;&#x3D; INVALID_HANDLE_VALUE)
+    &#123;
+        return -1;
+    &#125;
 
-    BOOL bMore <span class="token operator">=</span> Process32First<span class="token punctuation">(</span>hProcessSnap, <span class="token operator">&amp;</span>pe32<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    BOOL bMore &#x3D; Process32First(hProcessSnap, &amp;pe32);
 
-    <span class="token keyword">while</span> <span class="token punctuation">(</span>bMore<span class="token punctuation">)</span>
-    <span class="token punctuation">&#123;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>strcasecmp<span class="token punctuation">(</span>pe32.szExeFile, sProcName<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
-        <span class="token punctuation">&#123;</span>
-            <span class="token builtin class-name">return</span> pe32.th32ProcessID<span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-        bMore <span class="token operator">=</span> Process32Next<span class="token punctuation">(</span>hProcessSnap, <span class="token operator">&amp;</span>pe32<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-    CloseHandle<span class="token punctuation">(</span>hProcessSnap<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token builtin class-name">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
+    while (bMore)
+    &#123;
+        if (strcasecmp(pe32.szExeFile, sProcName) &#x3D;&#x3D; 0)
+        &#123;
+            return pe32.th32ProcessID;
+        &#125;
+        bMore &#x3D; Process32Next(hProcessSnap, &amp;pe32);
+    &#125;
+    CloseHandle(hProcessSnap);
+    return 0;
+&#125;
 
-// 将dll 注入目标进程
-void InjectDll<span class="token punctuation">(</span>DWORD nPid, const char *sDllName<span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    HANDLE hProcess <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    HANDLE hThread<span class="token punctuation">;</span>
-    DWORD dwThread <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+&#x2F;&#x2F; 将dll 注入目标进程
+void InjectDll(DWORD nPid, const char *sDllName)
+&#123;
+    HANDLE hProcess &#x3D; 0;
+    HANDLE hThread;
+    DWORD dwThread &#x3D; 0;
 
-    hProcess <span class="token operator">=</span> OpenProcess<span class="token punctuation">(</span>PROCESS_ALL_ACCESS, FALSE, nPid<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>hProcess <span class="token operator">==</span> NULL<span class="token punctuation">)</span>
-    <span class="token punctuation">&#123;</span>
-        printf<span class="token punctuation">(</span><span class="token string">"open process failed<span class="token entity" title="\n">\n</span>"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        CloseHandle<span class="token punctuation">(</span>hProcess<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        exit<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
+    hProcess &#x3D; OpenProcess(PROCESS_ALL_ACCESS, FALSE, nPid);
+    if (hProcess &#x3D;&#x3D; NULL)
+    &#123;
+        printf(&quot;open process failed\n&quot;);
+        CloseHandle(hProcess);
+        exit(1);
+    &#125;
 
-    PVOID pDllName <span class="token operator">=</span> VirtualAllocEx<span class="token punctuation">(</span>hProcess, NULL, strlen<span class="token punctuation">(</span>sDllName<span class="token punctuation">)</span> + <span class="token number">1</span>, MEM_COMMIT, PAGE_READWRITE<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>pDllName <span class="token operator">==</span> NULL<span class="token punctuation">)</span>
-    <span class="token punctuation">&#123;</span>
-        printf<span class="token punctuation">(</span><span class="token string">"allocate memory for dll failed<span class="token entity" title="\n">\n</span>"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        CloseHandle<span class="token punctuation">(</span>hProcess<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        exit<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
+    PVOID pDllName &#x3D; VirtualAllocEx(hProcess, NULL, strlen(sDllName) + 1, MEM_COMMIT, PAGE_READWRITE);
+    if (pDllName &#x3D;&#x3D; NULL)
+    &#123;
+        printf(&quot;allocate memory for dll failed\n&quot;);
+        CloseHandle(hProcess);
+        exit(1);
+    &#125;
 
-    SIZE_T lenDll <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    WriteProcessMemory<span class="token punctuation">(</span>hProcess, pDllName, <span class="token punctuation">(</span>BYTE *<span class="token punctuation">)</span>sDllName, strlen<span class="token punctuation">(</span>sDllName<span class="token punctuation">)</span> + <span class="token number">1</span>, <span class="token operator">&amp;</span>lenDll<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    SIZE_T lenDll &#x3D; 0;
+    WriteProcessMemory(hProcess, pDllName, (BYTE *)sDllName, strlen(sDllName) + 1, &amp;lenDll);
 
-    // 获取Kernal32.dll 中的<span class="token variable">`</span></span>LoadLibraryA` 方法
-    HMODULE hModule <span class="token operator">=</span> GetModuleHandle<span class="token punctuation">(</span>TEXT<span class="token punctuation">(</span><span class="token string">"Kernel32.dll"</span><span class="token punctuation">))</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>hModule <span class="token operator">==</span> NULL<span class="token punctuation">)</span>
-    <span class="token punctuation">&#123;</span>
-        printf<span class="token punctuation">(</span><span class="token string">"Load Kernel32.dll failed<span class="token entity" title="\n">\n</span>"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        CloseHandle<span class="token punctuation">(</span>hProcess<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        exit<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-    FARPROC func1 <span class="token operator">=</span> GetProcAddress<span class="token punctuation">(</span>hModule, <span class="token string">"LoadLibraryA"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    &#x2F;&#x2F; 获取Kernal32.dll 中的&#96;LoadLibraryA&#96; 方法
+    HMODULE hModule &#x3D; GetModuleHandle(TEXT(&quot;Kernel32.dll&quot;));
+    if (hModule &#x3D;&#x3D; NULL)
+    &#123;
+        printf(&quot;Load Kernel32.dll failed\n&quot;);
+        CloseHandle(hProcess);
+        exit(1);
+    &#125;
+    FARPROC func1 &#x3D; GetProcAddress(hModule, &quot;LoadLibraryA&quot;);
 
-    hThread <span class="token operator">=</span> CreateRemoteThread<span class="token punctuation">(</span>hProcess, NULL, <span class="token number">0</span>, <span class="token punctuation">(</span>LPTHREAD_START_ROUTINE<span class="token punctuation">)</span>func1, pDllName, <span class="token number">0</span>, <span class="token operator">&amp;</span>dwThread<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    hThread &#x3D; CreateRemoteThread(hProcess, NULL, 0, (LPTHREAD_START_ROUTINE)func1, pDllName, 0, &amp;dwThread);
     
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>hThread <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
-    <span class="token punctuation">&#123;</span>
-        printf<span class="token punctuation">(</span><span class="token string">"create remote thread failed"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        CloseHandle<span class="token punctuation">(</span>hProcess<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        CloseHandle<span class="token punctuation">(</span>hThread<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        exit<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
+    if (hThread &#x3D;&#x3D; 0)
+    &#123;
+        printf(&quot;create remote thread failed&quot;);
+        CloseHandle(hProcess);
+        CloseHandle(hThread);
+        exit(1);
+    &#125;
 
-    CloseHandle<span class="token punctuation">(</span>hProcess<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    CloseHandle<span class="token punctuation">(</span>hThread<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    CloseHandle(hProcess);
+    CloseHandle(hThread);
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>:::</p>
 <p>同时<code>loader.dll</code> 在加载<code>http.dll</code> 时也需要绝对路径。</p>
 <p>::: details loader.c</p>
@@ -907,8 +897,8 @@ HANDLE GetHttpStarter()
 </div>
 
           <div class="post-tags">
-              <a href="/tags/win32/" rel="tag"># win32</a>
               <a href="/tags/c-cpp/" rel="tag"># c/cpp</a>
+              <a href="/tags/win32/" rel="tag"># win32</a>
               <a href="/tags/%E8%BF%9C%E7%A8%8B%E7%BA%BF%E7%A8%8B/" rel="tag"># 远程线程</a>
               <a href="/tags/%E6%B3%A8%E5%85%A5/" rel="tag"># 注入</a>
           </div>
@@ -917,13 +907,13 @@ HANDLE GetHttpStarter()
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2022/08/03/win-high-accuracy-timmer/" rel="prev" title="Windows 平台上的高精度定时器">
-                  <i class="fa fa-angle-left"></i> Windows 平台上的高精度定时器
+                <a href="/2022/08/03/vc-inline-asm/" rel="prev" title="C 语言内联汇编">
+                  <i class="fa fa-angle-left"></i> C 语言内联汇编
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/08/03/eve-ng/" rel="next" title="Eve-Ng使用笔记">
-                  Eve-Ng使用笔记 <i class="fa fa-angle-right"></i>
+                <a href="/2022/08/03/mem-mgmt/" rel="next" title="C 语言内存管理">
+                  C 语言内存管理 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -961,13 +951,13 @@ HANDLE GetHttpStarter()
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">92k</span>
+    <span title="站点总字数">112k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:35</span>
+    <span title="站点阅读时长">6:49</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动

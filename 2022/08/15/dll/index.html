@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://12tall.github.io/2022/08/15/dll/img/project-structure.png">
 <meta property="article:published_time" content="2022-08-14T15:00:00.000Z">
-<meta property="article:modified_time" content="2025-05-22T06:09:29.666Z">
+<meta property="article:modified_time" content="2025-05-22T06:19:03.345Z">
 <meta property="article:author" content="12Tall">
 <meta property="article:tag" content="rust">
 <meta property="article:tag" content="dll">
@@ -184,18 +184,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-count">101</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">157</span>
+        <span class="site-state-item-count">165</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -272,7 +272,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-22 15:09:29" itemprop="dateModified" datetime="2025-05-22T15:09:29+09:00">2025-05-22</time>
+      <time title="修改时间：2025-05-22 15:19:03" itemprop="dateModified" datetime="2025-05-22T15:19:03+09:00">2025-05-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -319,64 +319,61 @@
 <img src="./img/project-structure.png" alt="" /></p>
 <h2 id="添加依赖项"><a class="markdownIt-Anchor" href="#添加依赖项"></a> 添加依赖项</h2>
 <p>因为是编译为DLL 文件，这里仅添加最基本的<code>windows-rs</code> 依赖：</p>
-<pre class="highlight"><code class="toml&#123;8-10&#125;">[package]
-name = &quot;native_dll&quot;
-version = &quot;0.1.0&quot;
-edition = &quot;2021&quot;
+<pre class="line-numbers language-toml&#123;8-10&#125;" data-language="toml&#123;8-10&#125;"><code class="language-toml&#123;8-10&#125;">[package]
+name &#x3D; &quot;native_dll&quot;
+version &#x3D; &quot;0.1.0&quot;
+edition &#x3D; &quot;2021&quot;
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+# See more keys and their definitions at https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;cargo&#x2F;reference&#x2F;manifest.html
 
 [lib]  
-name = &quot;native_dll&quot;    # 项目类型是动态链接库
-crate-type=[&quot;cdylib&quot;]
+name &#x3D; &quot;native_dll&quot;    # 项目类型是动态链接库
+crate-type&#x3D;[&quot;cdylib&quot;]
 
 [dependencies]
 
 [dependencies.windows]  # 添加windows-rs 依赖
-version = &quot;0.39.0&quot;
-features = [
+version &#x3D; &quot;0.39.0&quot;
+features &#x3D; [
     &quot;Data_Xml_Dom&quot;,
     &quot;Win32_Foundation&quot;,
     &quot;Win32_Security&quot;,
     &quot;Win32_System_Threading&quot;,
     &quot;Win32_UI_WindowsAndMessaging&quot;,
-]
-</code></pre>
+]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="librs"><a class="markdownIt-Anchor" href="#librs"></a> <a target="_blank" rel="noopener" href="http://lib.rs">lib.rs</a> 源码</h2>
 <p>生成普通的动态链接库很简单，但是我们在做项目时，有时会需要在动态链接库加载时就执行某些动作，例如弹出对话框、开启子线程等。这时候我们需要为DLL 添加入口函数：</p>
-<pre class="highlight"><code class="rust"><span class="hljs-keyword">use</span> windows::&#123;
-    s,
-    Win32::UI::WindowsAndMessaging::&#123;MessageBoxA, MB_OK&#125;,
-&#125;;
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">use</span> <span class="token namespace">windows<span class="token punctuation">::</span></span><span class="token punctuation">&#123;</span>
+    s<span class="token punctuation">,</span>
+    <span class="token class-name">Win32</span><span class="token punctuation">::</span><span class="token constant">UI</span><span class="token punctuation">::</span><span class="token class-name">WindowsAndMessaging</span><span class="token punctuation">::</span><span class="token punctuation">&#123;</span><span class="token class-name">MessageBoxA</span><span class="token punctuation">,</span> <span class="token constant">MB_OK</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
 
-<span class="hljs-meta">#[no_mangle]</span>  <span class="hljs-comment">// 禁止编译器修改函数名称  </span>
-<span class="hljs-keyword">pub</span> <span class="hljs-keyword">extern</span> <span class="hljs-string">&quot;C&quot;</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">add</span> (a: <span class="hljs-type">u8</span>, b: <span class="hljs-type">u8</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">u8</span>&#123;  <span class="hljs-comment">// 函数将被编译为C 语言风格</span>
-    <span class="hljs-keyword">let</span> <span class="hljs-variable">s</span> = a + b;
-    s  <span class="hljs-comment">// s 是windows-rs 中的宏命令，用于字符串处理</span>
-&#125;
+<span class="token attribute attr-name">#[no_mangle]</span>  <span class="token comment">// 禁止编译器修改函数名称  </span>
+<span class="token keyword">pub</span> <span class="token keyword">extern</span> <span class="token string">"C"</span> <span class="token keyword">fn</span> <span class="token function-definition function">add</span> <span class="token punctuation">(</span>a<span class="token punctuation">:</span> <span class="token keyword">u8</span><span class="token punctuation">,</span> b<span class="token punctuation">:</span> <span class="token keyword">u8</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token keyword">u8</span><span class="token punctuation">&#123;</span>  <span class="token comment">// 函数将被编译为C 语言风格</span>
+    <span class="token keyword">let</span> s <span class="token operator">=</span> a <span class="token operator">+</span> b<span class="token punctuation">;</span>
+    s  <span class="token comment">// s 是windows-rs 中的宏命令，用于字符串处理</span>
+<span class="token punctuation">&#125;</span>
 
-<span class="hljs-meta">#[allow(unused)]</span>
-<span class="hljs-meta">#[no_mangle]</span>
-<span class="hljs-keyword">pub</span> <span class="hljs-keyword">extern</span> <span class="hljs-string">&quot;system&quot;</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">DllMain</span>(_inst: <span class="hljs-type">isize</span>, reason: <span class="hljs-type">u32</span>, _: *<span class="hljs-keyword">const</span> <span class="hljs-type">u8</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">u32</span> &#123;
-    <span class="hljs-comment">// win32 中应当用extern &quot;stdcall&quot;</span>
-    <span class="hljs-keyword">if</span> reason == <span class="hljs-number">1</span> &#123;
-        <span class="hljs-keyword">unsafe</span> &#123;
-            <span class="hljs-title function_ invoke__">MessageBoxA</span>(<span class="hljs-literal">None</span>, s!(<span class="hljs-string">&quot;Ansi&quot;</span>), s!(<span class="hljs-string">&quot;Caption&quot;</span>), MB_OK);
-        &#125;
-    &#125;
-    <span class="hljs-number">1</span>
-&#125;
-
-</code></pre>
+<span class="token attribute attr-name">#[allow(unused)]</span>
+<span class="token attribute attr-name">#[no_mangle]</span>
+<span class="token keyword">pub</span> <span class="token keyword">extern</span> <span class="token string">"system"</span> <span class="token keyword">fn</span> <span class="token function-definition function">DllMain</span><span class="token punctuation">(</span>_inst<span class="token punctuation">:</span> <span class="token keyword">isize</span><span class="token punctuation">,</span> reason<span class="token punctuation">:</span> <span class="token keyword">u32</span><span class="token punctuation">,</span> _<span class="token punctuation">:</span> <span class="token operator">*</span><span class="token keyword">const</span> <span class="token keyword">u8</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token keyword">u32</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// win32 中应当用extern "stdcall"</span>
+    <span class="token keyword">if</span> reason <span class="token operator">==</span> <span class="token number">1</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">unsafe</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">MessageBoxA</span><span class="token punctuation">(</span><span class="token class-name">None</span><span class="token punctuation">,</span> <span class="token macro property">s!</span><span class="token punctuation">(</span><span class="token string">"Ansi"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token macro property">s!</span><span class="token punctuation">(</span><span class="token string">"Caption"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token constant">MB_OK</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token number">1</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>需要注意的是，DllMain 方法并不是必须的，很多情况下也不会用到。</p>
 <h2 id="在python-中调用"><a class="markdownIt-Anchor" href="#在python-中调用"></a> 在Python 中调用</h2>
 <p>在Python 中可以通过<code>ctypes.cdll.LoadLibrary</code> 方法调用DLL 文件，但是应该用绝对路径或者是<code>.</code>、<code>..</code> 开头的相对路径：</p>
-<pre class="highlight"><code class="python"><span class="hljs-keyword">from</span> ctypes <span class="hljs-keyword">import</span>*
-<span class="hljs-comment"># give location of dll</span>
-mydll = cdll.LoadLibrary(<span class="hljs-string">&quot;..\\native_dll\\native_dll.dll&quot;</span>)  <span class="hljs-comment"># 自动执行DllMain 方法  </span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> ctypes <span class="token keyword">import</span><span class="token operator">*</span>
+<span class="token comment"># give location of dll</span>
+mydll <span class="token operator">=</span> cdll<span class="token punctuation">.</span>LoadLibrary<span class="token punctuation">(</span><span class="token string">"..\\native_dll\\native_dll.dll"</span><span class="token punctuation">)</span>  <span class="token comment"># 自动执行DllMain 方法  </span>
 
-<span class="hljs-built_in">print</span>(mydll.add(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>))  <span class="hljs-comment"># 打印3   </span>
-</code></pre>
+<span class="token keyword">print</span><span class="token punctuation">(</span>mydll<span class="token punctuation">.</span>add<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 打印3   </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <blockquote>
 <p>注意：<br />
 如果Python 的与DLL 的位数不一致，则会报<code>OSError: [WinError 193] %1 不是有效的 Win32 应用程序。</code> 的错误。<br />
@@ -431,8 +428,8 @@ mydll = cdll.LoadLibrary(<span class="hljs-string">&quot;..\\native_dll\\native_
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/08/25/openmodelica/variable/" rel="next" title="变量 variable">
-                  变量 variable <i class="fa fa-angle-right"></i>
+                <a href="/2022/08/25/openmodelica/vector/" rel="next" title="向量与数组 vector">
+                  向量与数组 vector <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -470,13 +467,13 @@ mydll = cdll.LoadLibrary(<span class="hljs-string">&quot;..\\native_dll\\native_
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">92k</span>
+    <span title="站点总字数">112k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:35</span>
+    <span title="站点阅读时长">6:49</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动

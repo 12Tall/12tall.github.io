@@ -27,7 +27,7 @@
 <meta property="og:description" content="仅记录对N-api 的使用方法以及函数签名。在Windows 平台下，如果我们安装的是32 位的Nodejs，N-api 应该是生成32 位的.node 文件，而且并没有启用UNICODE 的支持，即所有_WIN64, UNICODE 下的宏定义都是无效的。所以在Winodws 版本下的API 函数最好都调用A 结尾的。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-08-02T15:00:00.000Z">
-<meta property="article:modified_time" content="2025-05-22T06:15:03.517Z">
+<meta property="article:modified_time" content="2025-05-22T06:19:03.339Z">
 <meta property="article:author" content="12Tall">
 <meta property="article:tag" content="c&#x2F;cpp">
 <meta property="article:tag" content="nodeJS">
@@ -168,7 +168,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text"> 一般函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E6%95%B0%E6%8D%AE"><span class="nav-number">2.</span> <span class="nav-text"> 一般数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B7%E4%BD%93%E7%BB%86%E8%8A%82"><span class="nav-number">3.</span> <span class="nav-text"> 具体细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0"><span class="nav-number">3.1.</span> <span class="nav-text"> 获取函数的参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E7%94%A8%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0"><span class="nav-number">3.2.</span> <span class="nav-text"> 调用（回调）函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%B7%A5%E5%8E%82"><span class="nav-number">3.3.</span> <span class="nav-text"> 对象工厂</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%B7%A5%E5%8E%82"><span class="nav-number">3.4.</span> <span class="nav-text"> 函数工厂</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E5%8E%82%E5%B0%81%E8%A3%85"><span class="nav-number">3.5.</span> <span class="nav-text"> 工厂封装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#passing_wraoed"><span class="nav-number">3.6.</span> <span class="nav-text"> Passing_Wraoed</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-addon-api"><span class="nav-number">4.</span> <span class="nav-text"> node-addon-api</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6"><span class="nav-number">4.1.</span> <span class="nav-text"> 前提条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="nav-number">4.2.</span> <span class="nav-text"> 安装和使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%AC%AC%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE"><span class="nav-number">4.3.</span> <span class="nav-text"> 创建第一个项目</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E8%B5%84%E6%96%99"><span class="nav-number">5.</span> <span class="nav-text"> 相关资料</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text"> 一般函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E6%95%B0%E6%8D%AE"><span class="nav-number">2.</span> <span class="nav-text"> 一般数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B7%E4%BD%93%E7%BB%86%E8%8A%82"><span class="nav-number">3.</span> <span class="nav-text"> 具体细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0"><span class="nav-number">3.1.</span> <span class="nav-text"> 获取函数的参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E7%94%A8%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0"><span class="nav-number">3.2.</span> <span class="nav-text"> 调用（回调）函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%B7%A5%E5%8E%82"><span class="nav-number">3.3.</span> <span class="nav-text"> 对象工厂</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%B7%A5%E5%8E%82"><span class="nav-number">3.4.</span> <span class="nav-text"> 函数工厂</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%99%8B%E7%BA%A7c"><span class="nav-number">4.</span> <span class="nav-text"> 晋级C++</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B0%81%E8%A3%85"><span class="nav-number">4.1.</span> <span class="nav-text"> 对象的封装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E5%8E%82%E5%B0%81%E8%A3%85"><span class="nav-number">4.2.</span> <span class="nav-text"> 工厂封装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#passing_wraoed"><span class="nav-number">4.3.</span> <span class="nav-text"> Passing_Wraoed</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-addon-api"><span class="nav-number">5.</span> <span class="nav-text"> node-addon-api</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6"><span class="nav-number">5.1.</span> <span class="nav-text"> 前提条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="nav-number">5.2.</span> <span class="nav-text"> 安装和使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%AC%AC%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE"><span class="nav-number">5.3.</span> <span class="nav-text"> 创建第一个项目</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E8%B5%84%E6%96%99"><span class="nav-number">6.</span> <span class="nav-text"> 相关资料</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -183,18 +183,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-count">101</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">157</span>
+        <span class="site-state-item-count">165</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -271,7 +271,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-22 15:15:03" itemprop="dateModified" datetime="2025-05-22T15:15:03+09:00">2025-05-22</time>
+      <time title="修改时间：2025-05-22 15:19:03" itemprop="dateModified" datetime="2025-05-22T15:19:03+09:00">2025-05-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -820,26 +820,20 @@ NAPI_MODULE(NODE_GYP_MODULE_NAME, Init)<span aria-hidden="true" class="line-numb
   <span class="token function">assert</span><span class="token punctuation">(</span>status <span class="token operator">==</span> napi_ok<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
   <span class="token keyword">return</span> fn<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-```  
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="晋级c"><a class="markdownIt-Anchor" href="#晋级c"></a> 晋级C++</h2>
+<p>前面我们基本上已经了解了<code>C</code> 语言插件的开发，特点就是代码很长。于是我们可以采用面向对象的方式来封装代码。于是，以后将开始引入<code>C++</code>，将JS 对象与CPP 对象一一对应起来。然鹅对于不熟悉<code>C++</code> 的我来说，看代码果然还是太难了些。</p>
+<h3 id="对象的封装"><a class="markdownIt-Anchor" href="#对象的封装"></a> 对象的封装</h3>
+<p>封装一个自定义的<code>C++</code> 对象类型，并将函数、属性、初始化的方法，统统写到对象内部。这样就可以只对外保留导出模块的接口了。似乎每一个模块都会有一个实例<code>instance</code>。**而<code>Constructor,New</code> 则应该是约定好的，会被JS 调用的函数名。**看一遍源码只能说能了解个大概，真要是用还需要大量的练习。</p>
+<CodeGroup>
+<CodeGroupItem title="addon.cc">
+<pre class="line-numbers language-c++&#123;4&#125;" data-language="c++&#123;4&#125;"><code class="language-c++&#123;4&#125;">#include &quot;myobject.h&quot;
 
-## 晋级C<span class="token operator">++</span>  
-前面我们基本上已经了解了`C` 语言插件的开发，特点就是代码很长。于是我们可以采用面向对象的方式来封装代码。于是，以后将开始引入`C<span class="token operator">++</span>`，将JS 对象与CPP 对象一一对应起来。然鹅对于不熟悉`C<span class="token operator">++</span>` 的我来说，看代码果然还是太难了些。  
+napi_value Init(napi_env env, napi_value exports) &#123;
+  return MyObject::Init(env, exports);
+&#125;
 
-### 对象的封装  
-封装一个自定义的`C<span class="token operator">++</span>` 对象类型，并将函数、属性、初始化的方法，统统写到对象内部。这样就可以只对外保留导出模块的接口了。似乎每一个模块都会有一个实例`instance`。<span class="token operator">*</span><span class="token operator">*</span>而`Constructor<span class="token punctuation">,</span>New` 则应该是约定好的，会被JS 调用的函数名。<span class="token operator">*</span><span class="token operator">*</span>看一遍源码只能说能了解个大概，真要是用还需要大量的练习。  
-
-<span class="token operator">&lt;</span>CodeGroup<span class="token operator">></span>
-<span class="token operator">&lt;</span>CodeGroupItem title<span class="token operator">=</span><span class="token string">"addon.cc"</span><span class="token operator">></span>
-
-```c<span class="token operator">++</span><span class="token punctuation">&#123;</span><span class="token number">4</span><span class="token punctuation">&#125;</span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"myobject.h"</span></span>
-
-napi_value <span class="token function">Init</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value exports<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">return</span> MyObject<span class="token operator">::</span><span class="token function">Init</span><span class="token punctuation">(</span>env<span class="token punctuation">,</span> exports<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token function">NAPI_MODULE</span><span class="token punctuation">(</span>NODE_GYP_MODULE_NAME<span class="token punctuation">,</span> Init<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+NAPI_MODULE(NODE_GYP_MODULE_NAME, Init)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 </CodeGroupItem>
 <CodeGroupItem title="myobject.h">
 <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#ifndef TEST_ADDONS_NAPI_6_OBJECT_WRAP_MYOBJECT_H_
@@ -1332,13 +1326,13 @@ Is this OK? <span class="token punctuation">(</span>yes<span class="token punctu
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2022/08/03/ldap/" rel="prev" title="LDAP 相关">
-                  <i class="fa fa-angle-left"></i> LDAP 相关
+                <a href="/2022/08/03/container/" rel="prev" title="容器技术简介">
+                  <i class="fa fa-angle-left"></i> 容器技术简介
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/08/03/github-action/" rel="next" title="GitHub Actions">
-                  GitHub Actions <i class="fa fa-angle-right"></i>
+                <a href="/2022/08/03/win32/" rel="next" title="Win32 SDK编程">
+                  Win32 SDK编程 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -1376,13 +1370,13 @@ Is this OK? <span class="token punctuation">(</span>yes<span class="token punctu
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">92k</span>
+    <span title="站点总字数">112k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:35</span>
+    <span title="站点阅读时长">6:49</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动

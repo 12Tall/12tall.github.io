@@ -381,15 +381,15 @@
     <category term="math" scheme="https://12tall.github.io/categories/math/"/>
     
     
-    <category term="电磁学" scheme="https://12tall.github.io/tags/%E7%94%B5%E7%A3%81%E5%AD%A6/"/>
-    
     <category term="电机" scheme="https://12tall.github.io/tags/%E7%94%B5%E6%9C%BA/"/>
+    
+    <category term="电磁学" scheme="https://12tall.github.io/tags/%E7%94%B5%E7%A3%81%E5%AD%A6/"/>
     
     <category term="仿真" scheme="https://12tall.github.io/tags/%E4%BB%BF%E7%9C%9F/"/>
     
-    <category term="CAE" scheme="https://12tall.github.io/tags/CAE/"/>
-    
     <category term="有限元" scheme="https://12tall.github.io/tags/%E6%9C%89%E9%99%90%E5%85%83/"/>
+    
+    <category term="CAE" scheme="https://12tall.github.io/tags/CAE/"/>
     
   </entry>
   
@@ -474,6 +474,30 @@
   </entry>
   
   <entry>
+    <title>GCC 中的符号</title>
+    <link href="https://12tall.github.io/2023/06/16/symbol/"/>
+    <id>https://12tall.github.io/2023/06/16/symbol/</id>
+    <published>2023-06-15T15:00:00.000Z</published>
+    <updated>2025-05-22T06:21:11.287Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;在C 语言中没有命名空间的概念，于是就存在可能的命名冲突的问题，例如：两个文件中都存在&lt;code&gt;abc()&lt;/code&gt; 函数，而程序员又不愿意修改源代码，否则可能会污染其他项目。&lt;br /&gt;
+这时，我们可以通过&lt;code&gt;objcopy&lt;/code&gt; 命令来手动修改&lt;code&gt;object&lt;/code&gt; 文件中的符号来进行解决。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="c_cpp" scheme="https://12tall.github.io/categories/c-cpp/"/>
+    
+    
+    <category term="c/cpp" scheme="https://12tall.github.io/tags/c-cpp/"/>
+    
+    <category term="编译" scheme="https://12tall.github.io/tags/%E7%BC%96%E8%AF%91/"/>
+    
+  </entry>
+  
+  <entry>
     <title>有限元计算电磁场</title>
     <link href="https://12tall.github.io/2023/06/15/fem/intro/"/>
     <id>https://12tall.github.io/2023/06/15/fem/intro/</id>
@@ -490,15 +514,15 @@
     <category term="math" scheme="https://12tall.github.io/categories/math/"/>
     
     
-    <category term="电磁学" scheme="https://12tall.github.io/tags/%E7%94%B5%E7%A3%81%E5%AD%A6/"/>
-    
     <category term="电机" scheme="https://12tall.github.io/tags/%E7%94%B5%E6%9C%BA/"/>
+    
+    <category term="电磁学" scheme="https://12tall.github.io/tags/%E7%94%B5%E7%A3%81%E5%AD%A6/"/>
     
     <category term="仿真" scheme="https://12tall.github.io/tags/%E4%BB%BF%E7%9C%9F/"/>
     
-    <category term="CAE" scheme="https://12tall.github.io/tags/CAE/"/>
-    
     <category term="有限元" scheme="https://12tall.github.io/tags/%E6%9C%89%E9%99%90%E5%85%83/"/>
+    
+    <category term="CAE" scheme="https://12tall.github.io/tags/CAE/"/>
     
   </entry>
   
@@ -529,54 +553,29 @@
   </entry>
   
   <entry>
-    <title>RK4 中PID 算法的初值问题</title>
-    <link href="https://12tall.github.io/2023/04/26/rk4-pid/"/>
-    <id>https://12tall.github.io/2023/04/26/rk4-pid/</id>
-    <published>2023-04-26T06:31:58.000Z</published>
-    <updated>2025-05-22T01:39:47.390Z</updated>
+    <title>使用PyFemm 进行电磁场仿真</title>
+    <link href="https://12tall.github.io/2023/05/12/pyfemm/"/>
+    <id>https://12tall.github.io/2023/05/12/pyfemm/</id>
+    <published>2023-05-11T15:00:00.000Z</published>
+    <updated>2025-05-22T06:36:24.037Z</updated>
     
     
-    <summary type="html">&lt;p&gt;&lt;strong&gt;考虑一个问题：当系统开始运行时&lt;code&gt;PID&lt;/code&gt; 控制器的输出应该是0，还是其他值呢？&lt;/strong&gt;&lt;/p&gt;</summary>
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;通过&lt;a href=&quot;../../python/win32com/README.md&quot;&gt;Python 调用COM 组件&lt;/a&gt; 可以调用FEMM 软件来自动构建仿真项目，软件官方也提供了&lt;a href=&quot;https://pypi.org/project/pyfemm/&quot;&gt;pyfemm&lt;/a&gt; 可以用来以类似于交互命令行的形式操作软件。但是，这样并不能让项目看起来非常清爽。感觉可以通过面向对象的方法来进一步封装。这里仅记录下探索的过程。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
     
     
     
-    <category term="thought" scheme="https://12tall.github.io/categories/thought/"/>
+    <category term="em" scheme="https://12tall.github.io/categories/em/"/>
     
     
-    <category term="数值分析" scheme="https://12tall.github.io/tags/%E6%95%B0%E5%80%BC%E5%88%86%E6%9E%90/"/>
+    <category term="Python" scheme="https://12tall.github.io/tags/Python/"/>
     
-    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
+    <category term="仿真" scheme="https://12tall.github.io/tags/%E4%BB%BF%E7%9C%9F/"/>
     
-    <category term="math" scheme="https://12tall.github.io/tags/math/"/>
+    <category term="有限元" scheme="https://12tall.github.io/tags/%E6%9C%89%E9%99%90%E5%85%83/"/>
     
     <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
-    
-    <category term="control" scheme="https://12tall.github.io/tags/control/"/>
-    
-    <category term="pid" scheme="https://12tall.github.io/tags/pid/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Golang 编译Win32 程序</title>
-    <link href="https://12tall.github.io/2023/04/08/app/"/>
-    <id>https://12tall.github.io/2023/04/08/app/</id>
-    <published>2023-04-07T15:00:00.000Z</published>
-    <updated>2025-05-22T06:05:28.555Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;因为工作中需要给某些&lt;code&gt;.dll&lt;/code&gt; 文件设置所有者为&lt;code&gt;everyone&lt;/code&gt;，需要请求&lt;code&gt;UAC&lt;/code&gt; 权限，故做笔记备忘。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="golang" scheme="https://12tall.github.io/categories/golang/"/>
-    
-    
-    <category term="win32" scheme="https://12tall.github.io/tags/win32/"/>
-    
-    <category term="go" scheme="https://12tall.github.io/tags/go/"/>
-    
-    <category term="UAC" scheme="https://12tall.github.io/tags/UAC/"/>
     
   </entry>
   

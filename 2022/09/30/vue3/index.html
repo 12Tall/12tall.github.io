@@ -28,11 +28,11 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://12tall.github.io/2022/09/30/vue3/img/concurrent-task.png">
 <meta property="article:published_time" content="2022-09-29T15:00:00.000Z">
-<meta property="article:modified_time" content="2025-05-22T06:08:43.101Z">
+<meta property="article:modified_time" content="2025-05-22T06:19:09.701Z">
 <meta property="article:author" content="12Tall">
+<meta property="article:tag" content="server">
 <meta property="article:tag" content="rust">
 <meta property="article:tag" content="vue3">
-<meta property="article:tag" content="server">
 <meta property="article:tag" content="rocket-rs">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://12tall.github.io/2022/09/30/vue3/img/concurrent-task.png">
@@ -186,18 +186,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-count">101</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">157</span>
+        <span class="site-state-item-count">165</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -274,7 +274,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-22 15:08:43" itemprop="dateModified" datetime="2025-05-22T15:08:43+09:00">2025-05-22</time>
+      <time title="修改时间：2025-05-22 15:19:09" itemprop="dateModified" datetime="2025-05-22T15:19:09+09:00">2025-05-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -323,7 +323,7 @@
 <p>首先我们创建一个vue3 项目，然后在vue3 项目中再添加rust 子项目，通过修改<code>package.json</code> 中的相关配置，可以同时启动前端和后端的调试工作。</p>
 <h3 id="创建vue3-项目"><a class="markdownIt-Anchor" href="#创建vue3-项目"></a> 创建vue3 项目</h3>
 <p>为简单起见，这里在创建vue3 项目时，并没有启用全部特性。因为是新手嘛，贪多嚼不烂</p>
-<pre class="highlight"><code class="console-session">&gt; npm init vue@latest           # 初始化vue3 项目  
+<pre class="line-numbers language-console-session" data-language="console-session"><code class="language-console-session">&gt; npm init vue@latest           # 初始化vue3 项目  
 
 √ Project name: ... project_name
 √ Add TypeScript? ... No
@@ -340,83 +340,78 @@ Done. Now run:
 
   cd project_name
   npm install
-  npm run dev
-</code></pre>
+  npm run dev<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="创建rocket-项目"><a class="markdownIt-Anchor" href="#创建rocket-项目"></a> 创建Rocket 项目</h3>
-<pre class="highlight"><code class="console-session">&gt; cd project_name  
+<pre class="line-numbers language-console-session" data-language="console-session"><code class="language-console-session">&gt; cd project_name  
 &gt; cargo new src-rocket --bin
-&gt; cd src-rocket
-</code></pre>
+&gt; cd src-rocket<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>在创建Rocket 项目后，我们需要做一些配置：</p>
 <ol>
 <li>在<code>Cargo.toml</code> 中添加依赖：<code>rocket = &quot;0.5.0-rc.2&quot;</code></li>
 <li>在rust 项目根目录下新建<code>Rocket.toml</code>，并<a target="_blank" rel="noopener" href="https://rocket.rs/v0.5-rc/guide/configuration/#rockettoml">配置默认启动参数</a>（可选）</li>
 </ol>
 <p>修改完配置后，我们就可以向<code>src-rocket/src/main.rs</code> 中添加处理<code>http</code> 请求的代码了</p>
-<pre class="highlight"><code class="rust"><span class="hljs-comment">// main.rs</span>
-<span class="hljs-meta">#[macro_use]</span> <span class="hljs-keyword">extern</span> <span class="hljs-keyword">crate</span> rocket;
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token comment">// main.rs</span>
+<span class="token attribute attr-name">#[macro_use]</span> <span class="token keyword">extern</span> <span class="token keyword">crate</span> <span class="token module-declaration namespace">rocket</span><span class="token punctuation">;</span>
 
-<span class="hljs-meta">#[get(<span class="hljs-string">&quot;/&quot;</span>)]</span>
-<span class="hljs-keyword">fn</span> <span class="hljs-title function_">index</span>() <span class="hljs-punctuation">-&gt;</span> &amp;<span class="hljs-symbol">&#x27;static</span> <span class="hljs-type">str</span> &#123;
-    <span class="hljs-string">&quot;Hello, world!&quot;</span>
-&#125;
+<span class="token attribute attr-name">#[get(<span class="token string">"/"</span>)]</span>
+<span class="token keyword">fn</span> <span class="token function-definition function">index</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'static</span> <span class="token keyword">str</span> <span class="token punctuation">&#123;</span>
+    <span class="token string">"Hello, world!"</span>
+<span class="token punctuation">&#125;</span>
 
-<span class="hljs-meta">#[launch]</span>  <span class="hljs-comment">// launch 宏中会定义一个main 函数，所以项目不需要重复定义main 函数</span>
-<span class="hljs-keyword">fn</span> <span class="hljs-title function_">rocket</span>() <span class="hljs-punctuation">-&gt;</span> _ &#123;
-    rocket::<span class="hljs-title function_ invoke__">build</span>().<span class="hljs-title function_ invoke__">mount</span>(<span class="hljs-string">&quot;/&quot;</span>, routes![index])
-&#125;
-</code></pre>
+<span class="token attribute attr-name">#[launch]</span>  <span class="token comment">// launch 宏中会定义一个main 函数，所以项目不需要重复定义main 函数</span>
+<span class="token keyword">fn</span> <span class="token function-definition function">rocket</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> _ <span class="token punctuation">&#123;</span>
+    <span class="token namespace">rocket<span class="token punctuation">::</span></span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">mount</span><span class="token punctuation">(</span><span class="token string">"/"</span><span class="token punctuation">,</span> <span class="token macro property">routes!</span><span class="token punctuation">[</span>index<span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="开发调试"><a class="markdownIt-Anchor" href="#开发调试"></a> 开发调试</h2>
 <p>为了开发调试方便，我们需要分别对vue3 和rocket 项目修改一些配置。</p>
 <h3 id="vue3-proxy"><a class="markdownIt-Anchor" href="#vue3-proxy"></a> Vue3 Proxy</h3>
 <p>为了能够找得到服务的端口，我们需要修改<code>vite.config.js</code>。将后端端口（默认为8000，可以在<a href="#%E5%88%9B%E5%BB%BArocket-%E9%A1%B9%E7%9B%AE">创建Rocket 项目</a>中修改）转发到指定url 下：</p>
-<pre class="highlight"><code class="js&#123;20-25&#125;">import &#123; fileURLToPath, URL &#125; from 'node:url'
+<pre class="line-numbers language-js&#123;20-25&#125;" data-language="js&#123;20-25&#125;"><code class="language-js&#123;20-25&#125;">import &#123; fileURLToPath, URL &#125; from &#39;node:url&#39;
 
-import &#123; defineConfig &#125; from 'vite'
-import vue from '@vitejs/plugin-vue'
+import &#123; defineConfig &#125; from &#39;vite&#39;
+import vue from &#39;@vitejs&#x2F;plugin-vue&#39;
 
-// https://vitejs.dev/config/
+&#x2F;&#x2F; https:&#x2F;&#x2F;vitejs.dev&#x2F;config&#x2F;
 export default defineConfig(&#123;
   plugins: [vue()],
   resolve: &#123;
     alias: &#123;
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      &#39;@&#39;: fileURLToPath(new URL(&#39;.&#x2F;src&#39;, import.meta.url))
     &#125;
   &#125;,
   server:&#123;        
     open:true,        
-    host:'127.0.0.1',        
-    port:8001,    // vue3 项目启动的端口          
+    host:&#39;127.0.0.1&#39;,        
+    port:8001,    &#x2F;&#x2F; vue3 项目启动的端口          
     https:false,        
-    proxy:&#123;    // 配置跨域                
-        '/api':&#123;      // /api 起始的url 会走代理
-            target:'http://127.0.0.1:8000/',                
+    proxy:&#123;    &#x2F;&#x2F; 配置跨域                
+        &#39;&#x2F;api&#39;:&#123;      &#x2F;&#x2F; &#x2F;api 起始的url 会走代理
+            target:&#39;http:&#x2F;&#x2F;127.0.0.1:8000&#x2F;&#39;,                
             ws:true,                
             changeOrigin:true,     
-            rewrite: (path) =&gt; path.replace(/^\/api/, '')  // 重写url，将`/api` 去掉           
+            rewrite: (path) &#x3D;&gt; path.replace(&#x2F;^\&#x2F;api&#x2F;, &#39;&#39;)  &#x2F;&#x2F; 重写url，将&#96;&#x2F;api&#96; 去掉           
         &#125;        
     &#125;    
 &#125;
-&#125;)
-</code></pre>
+&#125;)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>关于代理的更多配置，可以参考<a target="_blank" rel="noopener" href="https://vitejs.dev/config/server-options.html#server-proxy">详细配置说明</a>。</p>
 <h3 id="rocket-路由"><a class="markdownIt-Anchor" href="#rocket-路由"></a> Rocket 路由</h3>
 <p>如果在配置vue3 代理时，重写路径时需要定向到自定义的路由，比方说：<code>http://127.0.0.1:8000/api</code>。就需要在Rust 代码中修改了。</p>
 <h3 id="启动调试"><a class="markdownIt-Anchor" href="#启动调试"></a> 启动调试</h3>
 <p>我们需要通过<code>concurrently</code> 库来同时启动后端与前端，并将输出合并在一个控制台中，于是需要在<code>package.json</code> 中添加下面行：</p>
-<pre class="highlight"><code class="json&#123;3,9&#125;">&#123;
+<pre class="line-numbers language-json&#123;3,9&#125;" data-language="json&#123;3,9&#125;"><code class="language-json&#123;3,9&#125;">&#123;
   &quot;scripts&quot;: &#123;
     &quot;dev&quot;: &quot;concurrently -k --names \&quot;Rust,Vue3\&quot; --prefix-colors \&quot;bgBlue.bold,bgMagenta.bold\&quot;  \&quot;cd rocket-rs &amp; cargo run\&quot; \&quot;vite\&quot;&quot;,
     &quot;build&quot;: &quot;vite build&quot;,
     &quot;preview&quot;: &quot;vite preview --port 4173&quot;
   &#125;,
   &quot;devDependencies&quot;: &#123;
-    &quot;@vitejs/plugin-vue&quot;: &quot;^3.0.3&quot;,
+    &quot;@vitejs&#x2F;plugin-vue&quot;: &quot;^3.0.3&quot;,
     &quot;concurrently&quot;: &quot;^4.1.0&quot;,
     &quot;vite&quot;: &quot;^3.0.9&quot;
   &#125;
-&#125;
-</code></pre>
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>其中：</p>
 <ol>
 <li>参数<code>-k</code> 表示在有一个程序退出时，会停止所有进程</li>
@@ -455,9 +450,9 @@ export default defineConfig(&#123;
 </div>
 
           <div class="post-tags">
+              <a href="/tags/server/" rel="tag"># server</a>
               <a href="/tags/rust/" rel="tag"># rust</a>
               <a href="/tags/vue3/" rel="tag"># vue3</a>
-              <a href="/tags/server/" rel="tag"># server</a>
               <a href="/tags/rocket-rs/" rel="tag"># rocket-rs</a>
           </div>
 
@@ -470,8 +465,8 @@ export default defineConfig(&#123;
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/10/07/integral_transform/fourier-transform/" rel="next" title="傅里叶变换">
-                  傅里叶变换 <i class="fa fa-angle-right"></i>
+                <a href="/2022/10/07/integral_transform/z-transform/" rel="next" title="Z 变换">
+                  Z 变换 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -509,13 +504,13 @@ export default defineConfig(&#123;
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">92k</span>
+    <span title="站点总字数">112k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:35</span>
+    <span title="站点阅读时长">6:49</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
