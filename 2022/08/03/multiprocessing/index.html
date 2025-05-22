@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="处于跨平台考虑，仅记录multiprocessing 库的用法  因为Python 中的多线程在CPU 密集型的任务中会变成线性的，并不能充分发挥多核处理器的优势。所以我们可以通过多进程来进行并行任务，并且我们还可以通过管道、共享内存、进程锁等机制来实现进程间的数据共享。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 多进程">
+<meta property="og:url" content="https://12tall.github.io/2022/08/03/multiprocessing/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="处于跨平台考虑，仅记录multiprocessing 库的用法  因为Python 中的多线程在CPU 密集型的任务中会变成线性的，并不能充分发挥多核处理器的优势。所以我们可以通过多进程来进行并行任务，并且我们还可以通过管道、共享内存、进程锁等机制来实现进程间的数据共享。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-02T15:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-22T06:50:14.165Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="multiprocessing">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://12tall.github.io/2022/08/03/multiprocessing/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2022/08/03/multiprocessing/","path":"2022/08/03/multiprocessing/","title":"Python 多进程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Python 多进程 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%AD%90%E8%BF%9B%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text"> 创建一个子进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E6%95%B0%E6%8D%AE"><span class="nav-number">2.</span> <span class="nav-text"> 共享数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#array"><span class="nav-number">2.1.</span> <span class="nav-text"> Array</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#manager"><span class="nav-number">2.2.</span> <span class="nav-text"> Manager</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#queue"><span class="nav-number">2.3.</span> <span class="nav-text"> Queue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pipe-%E7%AE%A1%E9%81%93"><span class="nav-number">2.4.</span> <span class="nav-text"> Pipe 管道</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%94%81"><span class="nav-number">3.</span> <span class="nav-text"> 进程锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E6%B1%A0"><span class="nav-number">4.</span> <span class="nav-text"> 进程池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">5.</span> <span class="nav-text"> 参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">209</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/multiprocessing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Python 多进程 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python 多进程
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-03 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-03T00:00:00+09:00">2022-08-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-22 15:50:14" itemprop="dateModified" datetime="2025-05-22T15:50:14+09:00">2025-05-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>处于跨平台考虑，仅记录multiprocessing 库的用法</p>
+</blockquote>
+<p>因为Python 中的多线程在CPU 密集型的任务中会变成线性的，并不能充分发挥多核处理器的优势。所以我们可以通过多进程来进行并行任务，并且我们还可以通过管道、共享内存、进程锁等机制来实现进程间的数据共享。</p>
+<span id="more"></span>
+<h2 id="创建一个子进程"><a class="markdownIt-Anchor" href="#创建一个子进程"></a> 创建一个子进程</h2>
+<p>首先我们通过<code>multiprocessing.Process</code> 创建一个子进程，但是在<code>multiprocessing</code> 模块中<code>Process</code> 和<code>process</code> 是不同的东西，并且在Windows 平台上使用时必须要用<code>if __name__ == '__main__':</code>，尤其需要注意。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> os
+<span class="token keyword">from</span> multiprocessing <span class="token keyword">import</span> Process<span class="token punctuation">,</span> current_process
+
+
+<span class="token keyword">def</span> <span class="token function">task</span><span class="token punctuation">(</span>param<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    info <span class="token operator">=</span> <span class="token triple-quoted-string string">"""
+进程名：%s  
+进程Id：%s  
+模块名：%s  
+父进程Id：%s  
+传入参数：%s  
+"""</span> <span class="token operator">%</span> <span class="token punctuation">(</span>current_process<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name<span class="token punctuation">,</span> os<span class="token punctuation">.</span>getpid<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> __name__<span class="token punctuation">,</span> os<span class="token punctuation">.</span>getppid<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> param<span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>info<span class="token punctuation">)</span>
+
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    t <span class="token operator">=</span> Process<span class="token punctuation">(</span>target<span class="token operator">=</span>task<span class="token punctuation">,</span> args<span class="token operator">=</span><span class="token punctuation">(</span><span class="token string">"233"</span><span class="token punctuation">,</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    t<span class="token punctuation">.</span>start<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    t<span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="共享数据"><a class="markdownIt-Anchor" href="#共享数据"></a> 共享数据</h2>
+<p>因为每个进程都有自己的数据空间，在Python 脚本中声明的全局变量也是不能共享的：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> os
+<span class="token keyword">from</span> multiprocessing <span class="token keyword">import</span> Process<span class="token punctuation">,</span> current_process
+
+arr <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>  
+
+<span class="token keyword">def</span> <span class="token function">task</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"In process %s, the arr's address is: %s"</span><span class="token operator">%</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> <span class="token builtin">id</span><span class="token punctuation">(</span>arr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        t <span class="token operator">=</span> Process<span class="token punctuation">(</span>target<span class="token operator">=</span>task<span class="token punctuation">,</span> args<span class="token operator">=</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        t<span class="token punctuation">.</span>start<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        t<span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment"># 输出：</span>
+<span class="token comment"># In process 0, the arr's address is: 2172256009216</span>
+<span class="token comment"># In process 1, the arr's address is: 2485094464512        </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果要在进程间共享数据，可以使用<code>multiprocessing</code> 提供的<code>Queues</code>、<code>Array</code> 和<code>Manager</code> 三个类。</p>
+<h3 id="array"><a class="markdownIt-Anchor" href="#array"></a> Array</h3>
+<p>Array 类在初始化时必须指定类型与长度，也可以选择添加内容。如：<code>arr = Array('i',5)</code>。下面是数据类型的定义：</p>
+<pre class="line-numbers language-none"><code class="language-none">&#39;c&#39;: ctypes.c_char, &#39;u&#39;: ctypes.c_wchar,
+&#39;b&#39;: ctypes.c_byte, &#39;B&#39;: ctypes.c_ubyte,
+&#39;h&#39;: ctypes.c_short, &#39;H&#39;: ctypes.c_ushort,
+&#39;i&#39;: ctypes.c_int, &#39;I&#39;: ctypes.c_uint,
+&#39;l&#39;: ctypes.c_long, &#39;L&#39;: ctypes.c_ulong,
+&#39;f&#39;: ctypes.c_float, &#39;d&#39;: ctypes.c_double<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>需要注意的是：Array 对象必须作为参数传入子进程，否则也是不起作用的：</p>
+<pre class="line-numbers language-python&#123;11&#125;" data-language="python&#123;11&#125;"><code class="language-python&#123;11&#125;">import os
+from multiprocessing import Array, Process, current_process
+
+
+def task(i, arr):
+    arr[i] &#x3D; i
+    print(&quot;In process %s, the arr&#39;s address is: %s&quot; % (i, id(arr)))
+
+
+if __name__ &#x3D;&#x3D; &#39;__main__&#39;:
+    arr &#x3D; Array(&#39;i&#39;, [5, 5, 5, 5, 5])  # 因为Array 需要作为参数传入子进程，所以写在里面更清晰些
+    for i in range(2):
+        t &#x3D; Process(target&#x3D;task, args&#x3D;(i, arr,))
+        t.start()
+        t.join()
+    print(arr[0], arr[1], arr[2])
+
+# 输出：
+# In process 0, the arr&#39;s address is: 2163785163584  # 虽然地址不同，但内容是一样的
+# In process 1, the arr&#39;s address is: 1995314455360
+# 0 1 5<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="manager"><a class="markdownIt-Anchor" href="#manager"></a> Manager</h3>
+<p>相比于Array，Manager 提供一个服务进程，其他进程可以通过代理的方式操作Python 对象，并且其支持的对象也更多：</p>
+<pre class="line-numbers language-python&#123;11&#125;" data-language="python&#123;11&#125;"><code class="language-python&#123;11&#125;">import os
+from multiprocessing import Array, Manager, Process, current_process
+
+
+def task(i, dic):
+    dic[i] &#x3D; i
+    print(&quot;In process %s, the dic&#39;s address is: %s&quot; % (i, id(dic)))
+
+
+if __name__ &#x3D;&#x3D; &#39;__main__&#39;:
+    dic &#x3D; Manager().dict()  # 同样，Manager 需要作为参数传入子进程
+    for i in range(2):
+        t &#x3D; Process(target&#x3D;task, args&#x3D;(i, dic,))
+        t.start()
+        t.join()
+    print(dic)
+# 输出：  
+# In process 0, the dic&#39;s address is: 2803704884720
+# In process 1, the dic&#39;s address is: 2914245176816
+# &#123;0: 0, 1: 1&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="queue"><a class="markdownIt-Anchor" href="#queue"></a> Queue</h3>
+<p>Queue 队列类似于管道的概念，多个进程可以同时往里面放数据和取数据：</p>
+<pre class="line-numbers language-python&#123;12-18&#125;" data-language="python&#123;12-18&#125;"><code class="language-python&#123;12-18&#125;">import os
+import multiprocessing as mp
+from multiprocessing import Process, Queue,queues
+
+
+def task(i, q: Queue):
+    res &#x3D; q.get(block&#x3D;True, timeout&#x3D;3)
+    print(&quot;In process %s, get: %s&quot; % (i, res))
+
+
+if __name__ &#x3D;&#x3D; &#39;__main__&#39;:
+    q &#x3D; Queue(maxsize&#x3D;5)  # 同样，Queue 需要作为参数传入子进程
+    # # 等价于     
+    # q &#x3D; queues.Queue(maxsize&#x3D;5, ctx&#x3D;mp.get_context())
+    # # 关于队列上下文的问题，参考：
+    # # 1. https:&#x2F;&#x2F;stackoverflow.com&#x2F;a&#x2F;24941654&#x2F;14791867  
+    # # 2. https:&#x2F;&#x2F;docs.python.org&#x2F;3.4&#x2F;library&#x2F;multiprocessing.html#contexts-and-start-methods
+    # # 简单理解就是要告诉multiprocessing 通过哪种方法创建子进程  
+
+    q.put(5)
+    for i in range(2):
+        t &#x3D; Process(target&#x3D;task, args&#x3D;(i, q,))
+        t.start()
+        # t.join()
+    sleep(0.5)
+    q.put(6)
+    print(&quot;233&quot;)
+
+
+# 输出：
+# In process 1, get: 5
+# 233
+# In process 0, get: 6 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以看到多个进程排队从一个队列里面取数据，取出以后再放进去一个给其他进程用。如果进程<code>get</code> 不到数据，则会一直等待。而且进程获取数据的顺序也是随机的。</p>
+<h3 id="pipe-管道"><a class="markdownIt-Anchor" href="#pipe-管道"></a> Pipe 管道</h3>
+<p>对于两个进程间的通信来说，我们更常用管道来作为载体，使用完后注意关闭管道：</p>
+<pre class="line-numbers language-python&#123;10,15-16,24&#125;" data-language="python&#123;10,15-16,24&#125;"><code class="language-python&#123;10,15-16,24&#125;">from multiprocessing.connection import _ConnectionBase
+from multiprocessing import Pipe, Process
+from time import sleep
+
+
+def task(i, cEnd:_ConnectionBase):
+    res &#x3D; cEnd.recv()
+    print(&quot;In process %s, get: %s&quot; % (i, res))
+    cEnd.send(&quot;pong&quot;)
+    cEnd.close()
+
+
+
+if __name__ &#x3D;&#x3D; &#39;__main__&#39;:
+    (pEnd, cEnd) &#x3D;Pipe(duplex&#x3D;True)  # 同样，Pipe 需要作为参数传入子进程
+    # 如果duplex&#x3D;False，则pEnd 只能接收，cEnd 只能发送
+    pEnd.send(&quot;ping&quot;)
+    t &#x3D; Process(target&#x3D;task, args&#x3D;(1, cEnd,))
+    t.start()
+    
+    print(&quot;In main process, get: %s&quot; % (pEnd.recv()))
+    print(&quot;233&quot;)
+    sleep(0.5)
+    pEnd.close()
+
+# 输出：  
+# In process 1, get: ping
+# In main process, get: pong
+# 233<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="进程锁"><a class="markdownIt-Anchor" href="#进程锁"></a> 进程锁</h2>
+<p>同多线程一样，进程间为了避免数据竞争或者脏数据的问题，页需要通过进程锁来保持数据同步：</p>
+<pre class="line-numbers language-python&#123;9,13&#125;" data-language="python&#123;9,13&#125;"><code class="language-python&#123;9,13&#125;"># 以下代码摘自：https:&#x2F;&#x2F;www.liujiangblog.com&#x2F;course&#x2F;python&#x2F;82  
+
+from multiprocessing import Process
+from multiprocessing import Array
+from multiprocessing import RLock, Lock, Event, Condition, Semaphore
+import time
+
+def func(i,lis,lc):
+    lc.acquire()
+    lis[0] &#x3D; lis[0] - 1
+    time.sleep(1)
+    print(&#39;say hi&#39;, lis[0])
+    lc.release()
+
+if __name__ &#x3D;&#x3D; &quot;__main__&quot;:
+    array &#x3D; Array(&#39;i&#39;, 1)
+    array[0] &#x3D; 10
+    lock &#x3D; RLock()
+    for i in range(10):
+        p &#x3D; Process(target&#x3D;func, args&#x3D;(i, array, lock))
+        p.start()
+
+# 输出：
+# say hi 9
+# say hi 8
+# say hi 7
+# say hi 6
+# say hi 5
+# say hi 4
+# say hi 3
+# say hi 2
+# say hi 1
+# say hi 0        <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="进程池"><a class="markdownIt-Anchor" href="#进程池"></a> 进程池</h2>
+<p>创建进程的开销很大，如果需要同时启动很多进程，可以考虑使用进程池：</p>
+<pre class="line-numbers language-python&#123;11-17&#125;" data-language="python&#123;11-17&#125;"><code class="language-python&#123;11-17&#125;">from multiprocessing import Pool
+from time import sleep
+
+
+def task(i):
+    print(&quot;In process %s, sleep: %ss&quot; % (i, 7-i))
+    sleep(7-i)
+
+
+if __name__ &#x3D;&#x3D; &#39;__main__&#39;:
+    p &#x3D; Pool(5)     # 创建一个包含5个进程的进程池
+    for i in range(7):
+        p.apply_async(func&#x3D;task, args&#x3D;(i,))  # 异步执行，并行
+        # p.apply(func&#x3D;task, args&#x3D;(i,))  # 同步执行，串行
+    p.close()  # 等所有进程结束后关闭进程池
+    # p.terminate() # 立即关闭进程池
+    p.join()  # 主进程等待进程池关闭后才退出
+
+# 输出：
+# In process 0, sleep: 7s
+# In process 1, sleep: 6s
+# In process 2, sleep: 5s
+# In process 3, sleep: 4s
+# In process 4, sleep: 3s
+# In process 5, sleep: 2s
+# In process 6, sleep: 1s<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>以上便是多进程同步的所有内容了，就自己的使用经验来看：应当尽量选择管道、队列，其次在选择进程锁、共享数据，一是写起来简单、再者不容易出错。</p>
+<h2 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/1016959663602400/1017628290184064">多进程-廖雪峰的官方网站</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.liujiangblog.com/course/python/82">多进程multiprocess</a></li>
+<li><a target="_blank" rel="noopener" href="https://mofanpy.com/tutorials/python-basic/multiprocessing/">多进程(Multiprocessing) | 莫烦Python</a></li>
+<li>🌟<a target="_blank" rel="noopener" href="https://www.cnblogs.com/lizm166/p/14658360.html">Python3的multiprocessing多进程-Queue、Pipe进程间通信</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2022/08/03/multiprocessing/" title="Python 多进程">https://12tall.github.io/2022/08/03/multiprocessing/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"># python</a>
+              <a href="/tags/multiprocessing/" rel="tag"># multiprocessing</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/08/03/pyinstaller-inversion/" rel="prev" title="PyInstaller 程序逆向">
+                  <i class="fa fa-angle-left"></i> PyInstaller 程序逆向
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/08/03/ldap/" rel="next" title="LDAP 相关">
+                  LDAP 相关 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">141k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:32</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

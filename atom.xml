@@ -6,7 +6,7 @@
   <link href="https://12tall.github.io/atom.xml" rel="self"/>
   
   <link href="https://12tall.github.io/"/>
-  <updated>2025-05-21T23:38:54.141Z</updated>
+  <updated>2025-05-22T07:19:25.051Z</updated>
   <id>https://12tall.github.io/</id>
   
   <author>
@@ -21,16 +21,10 @@
     <link href="https://12tall.github.io/2099/12/31/info/"/>
     <id>https://12tall.github.io/2099/12/31/info/</id>
     <published>2099-12-31T06:50:23.000Z</published>
-    <updated>2025-05-21T23:38:54.141Z</updated>
+    <updated>2025-05-22T07:19:25.051Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;该博客通过&lt;code&gt;Hexo Next&lt;/code&gt;</summary>
-        
-      
+    <summary type="html">&lt;p&gt;该博客通过&lt;code&gt;Hexo Next&lt;/code&gt; 重构完成！之前数据&lt;a href=&quot;https://github.com/12Tall/12tall.github.io/commit/8f9a6e3f0581906e216e364eb09616b3e13b4365&quot;&gt;Tag&lt;/a&gt;。&lt;/p&gt;</summary>
     
     
     
@@ -150,6 +144,38 @@
   </entry>
   
   <entry>
+    <title>Matplotlib 绘制等高线图</title>
+    <link href="https://12tall.github.io/2024/03/03/contour/"/>
+    <id>https://12tall.github.io/2024/03/03/contour/</id>
+    <published>2024-03-02T15:00:00.000Z</published>
+    <updated>2025-05-22T07:08:53.851Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;帮老婆绘制科研中的图像，因为接触绘图工具较少，所以跟ChatGPT 聊了好久才调整出满意的图像。于是记录下源码：&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;预设参数&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
+    
+    
+    <category term="pandas" scheme="https://12tall.github.io/tags/pandas/"/>
+    
+    <category term="matplotlib" scheme="https://12tall.github.io/tags/matplotlib/"/>
+    
+    <category term="contour" scheme="https://12tall.github.io/tags/contour/"/>
+    
+  </entry>
+  
+  <entry>
     <title>一些简单的制作Cheatsheet 的技巧</title>
     <link href="https://12tall.github.io/2024/01/28/cheat-sheet/"/>
     <id>https://12tall.github.io/2024/01/28/cheat-sheet/</id>
@@ -215,9 +241,9 @@
     <category term="raspi" scheme="https://12tall.github.io/categories/raspi/"/>
     
     
-    <category term="c" scheme="https://12tall.github.io/tags/c/"/>
-    
     <category term="asm" scheme="https://12tall.github.io/tags/asm/"/>
+    
+    <category term="c" scheme="https://12tall.github.io/tags/c/"/>
     
     <category term="arm" scheme="https://12tall.github.io/tags/arm/"/>
     
@@ -226,6 +252,253 @@
     <category term="os" scheme="https://12tall.github.io/tags/os/"/>
     
     <category term="boot" scheme="https://12tall.github.io/tags/boot/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python 状态机</title>
+    <link href="https://12tall.github.io/2023/10/19/state-machine/"/>
+    <id>https://12tall.github.io/2023/10/19/state-machine/</id>
+    <published>2023-10-18T15:00:00.000Z</published>
+    <updated>2025-05-22T06:48:17.751Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;还是在做fmu 时引出的问题，需要用到&lt;a href=&quot;https://python-statemachine.readthedocs.io/en/latest/index.html&quot;&gt;Python State Machine&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
+    
+    
+    <category term="Python" scheme="https://12tall.github.io/tags/Python/"/>
+    
+    <category term="StateMachine" scheme="https://12tall.github.io/tags/StateMachine/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Poetry 简介</title>
+    <link href="https://12tall.github.io/2023/10/19/poetry/"/>
+    <id>https://12tall.github.io/2023/10/19/poetry/</id>
+    <published>2023-10-18T15:00:00.000Z</published>
+    <updated>2025-05-22T07:08:53.839Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;类似于&lt;code&gt;venv&lt;/code&gt;，&lt;code&gt;poetry&lt;/code&gt; 可以提供一个干净的依赖环境。因为&lt;code&gt;pip&lt;/code&gt; 是全局安装，如果项目比较多则不可避免地会出现依赖冲突。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
+    
+    
+    <category term="poetry" scheme="https://12tall.github.io/tags/poetry/"/>
+    
+    <category term="pip" scheme="https://12tall.github.io/tags/pip/"/>
+    
+    <category term="npm" scheme="https://12tall.github.io/tags/npm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>FastAPI 工程化</title>
+    <link href="https://12tall.github.io/2023/10/12/fastapi/"/>
+    <id>https://12tall.github.io/2023/10/12/fastapi/</id>
+    <published>2023-10-11T15:00:00.000Z</published>
+    <updated>2025-05-22T07:08:53.839Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&quot;http://xn--asp-8p9d.NET&quot;&gt;从asp.NET&lt;/a&gt; 到前后分离，到vue+koa2，兜兜转转又到了模板渲染。以前开发看逼格，现在开发看速度。SSR 有啥不好的，又不是不能用只要把内容展示出来就好了呗。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
+    
+    
+    <category term="router" scheme="https://12tall.github.io/tags/router/"/>
+    
+    <category term="fastapi" scheme="https://12tall.github.io/tags/fastapi/"/>
+    
+    <category term="asgi" scheme="https://12tall.github.io/tags/asgi/"/>
+    
+    <category term="jinja2" scheme="https://12tall.github.io/tags/jinja2/"/>
+    
+    <category term="lulu-ui" scheme="https://12tall.github.io/tags/lulu-ui/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python FMU 相关</title>
+    <link href="https://12tall.github.io/2023/10/11/fmu/"/>
+    <id>https://12tall.github.io/2023/10/11/fmu/</id>
+    <published>2023-10-10T15:00:00.000Z</published>
+    <updated>2025-05-22T07:08:53.839Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;同事在需要在Modelica 中使用状态机建模，并且导出FMU 用于在环测试。苦于Modelica 的语法要求方程个数必须等于变量个数，实现起来比较繁琐。于是谷歌一下Python 的解决方案。结果还发现了新大陆：&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
+    
+    
+    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
+    
+    <category term="simulation" scheme="https://12tall.github.io/tags/simulation/"/>
+    
+    <category term="fmi" scheme="https://12tall.github.io/tags/fmi/"/>
+    
+    <category term="fmu" scheme="https://12tall.github.io/tags/fmu/"/>
+    
+    <category term="modelica" scheme="https://12tall.github.io/tags/modelica/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Qt Quick 的学习笔记（二）</title>
+    <link href="https://12tall.github.io/2023/09/29/qt-quick-02/"/>
+    <id>https://12tall.github.io/2023/09/29/qt-quick-02/</id>
+    <published>2023-09-28T15:00:00.000Z</published>
+    <updated>2025-05-22T06:50:14.165Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;和Electron 类似，PyQt 与PySide 也支持向QML 的前端暴露对象以实现前后端的通信；但是呢，似乎QML 可以往任意子元素暴露对象变量&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
+    
+    
+    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
+    
+    <category term="qt" scheme="https://12tall.github.io/tags/qt/"/>
+    
+    <category term="pyside" scheme="https://12tall.github.io/tags/pyside/"/>
+    
+    <category term="qml" scheme="https://12tall.github.io/tags/qml/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Qt Quick 的学习笔记（一）</title>
+    <link href="https://12tall.github.io/2023/09/27/qt-quick-01/"/>
+    <id>https://12tall.github.io/2023/09/27/qt-quick-01/</id>
+    <published>2023-09-26T15:00:00.000Z</published>
+    <updated>2025-05-22T06:50:20.041Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;很难找到集成度高、配置简单、上手又快的GUI 框架，看起来QML 似是不错：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;跨平台&lt;/li&gt;
+&lt;li&gt;语法简单：类似JS+JSON 的语法&lt;/li&gt;
+&lt;li&gt;前后分离：通过信号与槽的机制进行通信，又不用自己定义各种API&lt;/li&gt;
+&lt;li&gt;PySide6 也支持&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
+    
+    
+    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
+    
+    <category term="qt" scheme="https://12tall.github.io/tags/qt/"/>
+    
+    <category term="pyside" scheme="https://12tall.github.io/tags/pyside/"/>
+    
+    <category term="qml" scheme="https://12tall.github.io/tags/qml/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Pymoo 多目标优化笔记（二）</title>
+    <link href="https://12tall.github.io/2023/09/25/pymoo-02/"/>
+    <id>https://12tall.github.io/2023/09/25/pymoo-02/</id>
+    <published>2023-09-24T15:00:00.000Z</published>
+    <updated>2025-05-22T07:08:53.836Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;因为许多任务并不是一个简单的函数调用可以解决的，但是我们可以将&lt;code&gt;pymoo&lt;/code&gt; 问题定义为一个泛函数，下面的点&lt;strong&gt;很重要&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;n_offspring&lt;/code&gt;：每一代产生多少个新个体，如果太小，则会收敛的很慢，如果太大，则会过度探索空间；&lt;/li&gt;
+&lt;li&gt;需要将&lt;code&gt;g&lt;/code&gt; 都写作：&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;g&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;≤&lt;/mo&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;g(x) &#92;le 0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:1em;vertical-align:-0.25em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03588em;&quot;&gt;g&lt;/span&gt;&lt;span class=&quot;mopen&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;mclose&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mrel&quot;&gt;≤&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.64444em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 的形式；&lt;/li&gt;
+&lt;li&gt;并且&lt;code&gt;f&lt;/code&gt; 也都应写作&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;min&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.65952em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;n&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 形式；&lt;/li&gt;
+&lt;li&gt;在Windows 上使用多进程，必须要在&lt;code&gt;__main__&lt;/code&gt; 代码块中才行；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
+    
+    
+    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
+    
+    <category term="math" scheme="https://12tall.github.io/tags/math/"/>
+    
+    <category term="pymoo" scheme="https://12tall.github.io/tags/pymoo/"/>
+    
+    <category term="optimization" scheme="https://12tall.github.io/tags/optimization/"/>
+    
+    <category term="multiple object" scheme="https://12tall.github.io/tags/multiple-object/"/>
+    
+    <category term="pareto" scheme="https://12tall.github.io/tags/pareto/"/>
+    
+    <category term="multiprocessing" scheme="https://12tall.github.io/tags/multiprocessing/"/>
+    
+    <category term="BaseManager" scheme="https://12tall.github.io/tags/BaseManager/"/>
+    
+    <category term="分布式" scheme="https://12tall.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+    <category term="parallelization" scheme="https://12tall.github.io/tags/parallelization/"/>
+    
+    <category term="多线程" scheme="https://12tall.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    
+    <category term="多进程" scheme="https://12tall.github.io/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Pymoo 多目标优化笔记（一）</title>
+    <link href="https://12tall.github.io/2023/09/19/pymoo-01/"/>
+    <id>https://12tall.github.io/2023/09/19/pymoo-01/</id>
+    <published>2023-09-18T15:00:00.000Z</published>
+    <updated>2025-05-22T07:08:53.828Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;和小姜一起看电机优化的程序时，听到了一句帕累托前沿。于是……&lt;br /&gt;
+原理固然很重要，但是简单应用的话，套路形式才是开始应该关注的&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
+    
+    
+    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
+    
+    <category term="math" scheme="https://12tall.github.io/tags/math/"/>
+    
+    <category term="pymoo" scheme="https://12tall.github.io/tags/pymoo/"/>
+    
+    <category term="optimization" scheme="https://12tall.github.io/tags/optimization/"/>
+    
+    <category term="multiple object" scheme="https://12tall.github.io/tags/multiple-object/"/>
+    
+    <category term="pareto" scheme="https://12tall.github.io/tags/pareto/"/>
     
   </entry>
   
@@ -303,279 +576,6 @@
     <category term="windows" scheme="https://12tall.github.io/tags/windows/"/>
     
     <category term="VMware" scheme="https://12tall.github.io/tags/VMware/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>VM 中配置OpenWRT 透明路由</title>
-    <link href="https://12tall.github.io/2023/09/01/openwrt/"/>
-    <id>https://12tall.github.io/2023/09/01/openwrt/</id>
-    <published>2023-09-01T06:41:34.000Z</published>
-    <updated>2025-05-21T06:43:50.393Z</updated>
-    
-    
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;写这篇笔记的起因是在家里的电脑上安装&lt;code&gt;Pnetlab&lt;/code&gt; 时，因为GFW 的原因，导致ishare2 无法下载镜像。通过各种&lt;code&gt;PROXY&lt;/code&gt; 也不能解决问题，只好尝试配置&lt;code&gt;OpenWRT&lt;/code&gt; 路由并结合&lt;code&gt;V2rayA&lt;/code&gt; 透明代理来解决。发现能行，所以记录一下实现的过程。将以有为也~&lt;/p&gt;
-&lt;/blockquote&gt;</summary>
-    
-    
-    
-    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
-    
-    
-    <category term="router" scheme="https://12tall.github.io/tags/router/"/>
-    
-    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
-    
-    <category term="OpenWRT" scheme="https://12tall.github.io/tags/OpenWRT/"/>
-    
-    <category term="v2raya" scheme="https://12tall.github.io/tags/v2raya/"/>
-    
-    <category term="bridge" scheme="https://12tall.github.io/tags/bridge/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>通过Github Actions 下载转存Youtube 视频</title>
-    <link href="https://12tall.github.io/2023/07/11/github-action-ytb-dl/"/>
-    <id>https://12tall.github.io/2023/07/11/github-action-ytb-dl/</id>
-    <published>2023-07-10T15:00:00.000Z</published>
-    <updated>2025-05-22T05:40:39.046Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;昨天发哥给我看了他的Github 爬虫，能够实现&lt;a</summary>
-        
-      
-    
-    
-    
-    <category term="notation" scheme="https://12tall.github.io/categories/notation/"/>
-    
-    
-    <category term="Github Actions" scheme="https://12tall.github.io/tags/Github-Actions/"/>
-    
-    <category term="Youtube" scheme="https://12tall.github.io/tags/Youtube/"/>
-    
-    <category term="Video" scheme="https://12tall.github.io/tags/Video/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>一维静电场有限元例子</title>
-    <link href="https://12tall.github.io/2023/07/10/fem/1-D_FEM/"/>
-    <id>https://12tall.github.io/2023/07/10/fem/1-D_FEM/</id>
-    <published>2023-07-09T15:00:00.000Z</published>
-    <updated>2025-05-22T01:53:53.840Z</updated>
-    
-    
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;&lt;img src=&quot;1-D_element_question.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-&lt;/blockquote&gt;</summary>
-    
-    
-    
-    <category term="math" scheme="https://12tall.github.io/categories/math/"/>
-    
-    
-    <category term="电机" scheme="https://12tall.github.io/tags/%E7%94%B5%E6%9C%BA/"/>
-    
-    <category term="电磁学" scheme="https://12tall.github.io/tags/%E7%94%B5%E7%A3%81%E5%AD%A6/"/>
-    
-    <category term="仿真" scheme="https://12tall.github.io/tags/%E4%BB%BF%E7%9C%9F/"/>
-    
-    <category term="有限元" scheme="https://12tall.github.io/tags/%E6%9C%89%E9%99%90%E5%85%83/"/>
-    
-    <category term="CAE" scheme="https://12tall.github.io/tags/CAE/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PNet-Lab 使用笔记</title>
-    <link href="https://12tall.github.io/2023/07/05/pnet-lab/"/>
-    <id>https://12tall.github.io/2023/07/05/pnet-lab/</id>
-    <published>2023-07-05T06:45:02.000Z</published>
-    <updated>2025-05-22T01:39:47.390Z</updated>
-    
-    
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;内网环境建议先&lt;a href=&quot;../openwrt/README.md&quot;&gt;配置OpenWRT 透明路由&lt;/a&gt;，只用Proxy 代理的话还是会有问题&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.pnetlab.com/&quot;&gt;PNet-Lab&lt;/a&gt; 应该是我见过最好用的网工实验室了。它一般运行于VMware 或VBox 之上，也可以&lt;a href=&quot;https://www.pnetlab.com/pages/documentation?slug=install-bare-metal&quot;&gt;裸机安装&lt;/a&gt;。并且：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;相比于普通的客户端，它具有一个Web 界面，可以多用户同时使用&lt;/li&gt;
-&lt;li&gt;相比于EVE，它支持热插拔&lt;/li&gt;
-&lt;li&gt;自带了一款镜像管理软件&lt;code&gt;ishare2&lt;/code&gt;，可以方便地下载很多镜像&lt;/li&gt;
-&lt;li&gt;不建议再安装pnetlab-v5.*，因为维护起来好复杂&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;</summary>
-    
-    
-    
-    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
-    
-    
-    <category term="ssh" scheme="https://12tall.github.io/tags/ssh/"/>
-    
-    <category term="cisco" scheme="https://12tall.github.io/tags/cisco/"/>
-    
-    <category term="switch" scheme="https://12tall.github.io/tags/switch/"/>
-    
-    <category term="router" scheme="https://12tall.github.io/tags/router/"/>
-    
-    <category term="image" scheme="https://12tall.github.io/tags/image/"/>
-    
-    <category term="dynamipshe" scheme="https://12tall.github.io/tags/dynamipshe/"/>
-    
-    <category term="iol" scheme="https://12tall.github.io/tags/iol/"/>
-    
-    <category term="scp" scheme="https://12tall.github.io/tags/scp/"/>
-    
-    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
-    
-    <category term="chmod" scheme="https://12tall.github.io/tags/chmod/"/>
-    
-    <category term="pnet-lab" scheme="https://12tall.github.io/tags/pnet-lab/"/>
-    
-    <category term="fortigate" scheme="https://12tall.github.io/tags/fortigate/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>HeidiSQL 工具</title>
-    <link href="https://12tall.github.io/2023/07/05/heidisql/"/>
-    <id>https://12tall.github.io/2023/07/05/heidisql/</id>
-    <published>2023-07-04T15:00:00.000Z</published>
-    <updated>2025-05-22T05:42:57.615Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;通过ssh-连接数据库&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#通过ssh-连接数据库&quot;&gt;&lt;/a&gt; 通过SSH 连接数据库&lt;/h2&gt;
-&lt;p&gt;服务器上的数据库不能直连，有时候又需要简单调试一下。可以试试HeidiSQL</summary>
-        
-      
-    
-    
-    
-    <category term="notation" scheme="https://12tall.github.io/categories/notation/"/>
-    
-    
-    <category term="ssh" scheme="https://12tall.github.io/tags/ssh/"/>
-    
-    <category term="MariaDB" scheme="https://12tall.github.io/tags/MariaDB/"/>
-    
-    <category term="MySQL" scheme="https://12tall.github.io/tags/MySQL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>GCC 中的符号</title>
-    <link href="https://12tall.github.io/2023/06/16/symbol/"/>
-    <id>https://12tall.github.io/2023/06/16/symbol/</id>
-    <published>2023-06-15T15:00:00.000Z</published>
-    <updated>2025-05-22T06:21:11.287Z</updated>
-    
-    
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;在C 语言中没有命名空间的概念，于是就存在可能的命名冲突的问题，例如：两个文件中都存在&lt;code&gt;abc()&lt;/code&gt; 函数，而程序员又不愿意修改源代码，否则可能会污染其他项目。&lt;br /&gt;
-这时，我们可以通过&lt;code&gt;objcopy&lt;/code&gt; 命令来手动修改&lt;code&gt;object&lt;/code&gt; 文件中的符号来进行解决。&lt;/p&gt;
-&lt;/blockquote&gt;</summary>
-    
-    
-    
-    <category term="c_cpp" scheme="https://12tall.github.io/categories/c-cpp/"/>
-    
-    
-    <category term="c/cpp" scheme="https://12tall.github.io/tags/c-cpp/"/>
-    
-    <category term="编译" scheme="https://12tall.github.io/tags/%E7%BC%96%E8%AF%91/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>有限元计算电磁场</title>
-    <link href="https://12tall.github.io/2023/06/15/fem/intro/"/>
-    <id>https://12tall.github.io/2023/06/15/fem/intro/</id>
-    <published>2023-06-14T15:00:00.000Z</published>
-    <updated>2025-05-22T01:52:05.689Z</updated>
-    
-    
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;笔记中涉及公式推导的部分并不严谨，仅为了便于理解而记录。如果需要严谨的推导过程，则需要参考专业书籍。笔记中的例子取自&lt;a href=&quot;https://de.mathworks.com/academia/books/introduction-to-the-finite-element-method-in-electromagnetics-polycarpou.html&quot;&gt;《INTRODUCTION TO THE FINITE ELEMENT METHOD IN ELECTROMAGNETICS》&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;</summary>
-    
-    
-    
-    <category term="math" scheme="https://12tall.github.io/categories/math/"/>
-    
-    
-    <category term="电机" scheme="https://12tall.github.io/tags/%E7%94%B5%E6%9C%BA/"/>
-    
-    <category term="电磁学" scheme="https://12tall.github.io/tags/%E7%94%B5%E7%A3%81%E5%AD%A6/"/>
-    
-    <category term="仿真" scheme="https://12tall.github.io/tags/%E4%BB%BF%E7%9C%9F/"/>
-    
-    <category term="有限元" scheme="https://12tall.github.io/tags/%E6%9C%89%E9%99%90%E5%85%83/"/>
-    
-    <category term="CAE" scheme="https://12tall.github.io/tags/CAE/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>零星经验</title>
-    <link href="https://12tall.github.io/2023/06/09/experiences/"/>
-    <id>https://12tall.github.io/2023/06/09/experiences/</id>
-    <published>2023-06-08T15:00:00.000Z</published>
-    <updated>2025-05-22T06:05:28.555Z</updated>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;复杂功能简单化&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#复杂功能简单化&quot;&gt;&lt;/a&gt; 复杂功能简单化&lt;/h2&gt;
-&lt;p&gt;（仅针对自己）在复杂的功能中，很多时候一个函数或者一条&lt;code&gt;SQL&lt;/code&gt; 虽然可以完成任务，但是需要考虑的情况很多且不利于扩展，这个时候不要想着非得将所有功能塞在一起，比如：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;SQL&lt;/code&gt; 插入去重：先&lt;code&gt;SELECT&lt;/code&gt; 记录是否存在，没有再插入&lt;/li&gt;
-&lt;li&gt;项目管理：先添加项目，再给项目添加负责人或成员&lt;/li&gt;
-&lt;/ul&gt;</summary>
-    
-    
-    
-    <category term="nodejs" scheme="https://12tall.github.io/categories/nodejs/"/>
-    
-    
-    <category term="JSDoc" scheme="https://12tall.github.io/tags/JSDoc/"/>
-    
-    <category term="注释" scheme="https://12tall.github.io/tags/%E6%B3%A8%E9%87%8A/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用PyFemm 进行电磁场仿真</title>
-    <link href="https://12tall.github.io/2023/05/12/pyfemm/"/>
-    <id>https://12tall.github.io/2023/05/12/pyfemm/</id>
-    <published>2023-05-11T15:00:00.000Z</published>
-    <updated>2025-05-22T06:36:24.037Z</updated>
-    
-    
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;通过&lt;a href=&quot;../../python/win32com/README.md&quot;&gt;Python 调用COM 组件&lt;/a&gt; 可以调用FEMM 软件来自动构建仿真项目，软件官方也提供了&lt;a href=&quot;https://pypi.org/project/pyfemm/&quot;&gt;pyfemm&lt;/a&gt; 可以用来以类似于交互命令行的形式操作软件。但是，这样并不能让项目看起来非常清爽。感觉可以通过面向对象的方法来进一步封装。这里仅记录下探索的过程。&lt;/p&gt;
-&lt;/blockquote&gt;</summary>
-    
-    
-    
-    <category term="em" scheme="https://12tall.github.io/categories/em/"/>
-    
-    
-    <category term="Python" scheme="https://12tall.github.io/tags/Python/"/>
-    
-    <category term="仿真" scheme="https://12tall.github.io/tags/%E4%BB%BF%E7%9C%9F/"/>
-    
-    <category term="有限元" scheme="https://12tall.github.io/tags/%E6%9C%89%E9%99%90%E5%85%83/"/>
-    
-    <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
     
   </entry>
   
