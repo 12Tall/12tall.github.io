@@ -31,7 +31,7 @@ class PosPIDController:
         self.limit = limit  # 输出限幅
 
     # 后面就是简单的数值运算了
-```  
+```
 
 ## 增量式PID  
 由于积分部分可能存在积分饱和，会让控制器需要很长时间才能退出饱和限幅。所以我们可以对PID 算法进行改进。PID 算法只返回控制器输出值的增量。  
@@ -62,7 +62,7 @@ class PosPIDController:
         self.output = 0     # 上一次的输出值
 
     # 后面就是简单的数值运算了
-```  
+```
 
 ## 参考  
 1. [位置式PID与增量式PID代码实现](https://blog.csdn.net/qq_43571752/article/details/120895749)  
