@@ -6,7 +6,7 @@
   <link href="https://12tall.github.io/atom.xml" rel="self"/>
   
   <link href="https://12tall.github.io/"/>
-  <updated>2025-05-22T07:19:25.051Z</updated>
+  <updated>2025-05-22T07:22:30.023Z</updated>
   <id>https://12tall.github.io/</id>
   
   <author>
@@ -18,10 +18,10 @@
   
   <entry>
     <title>迁移通知</title>
-    <link href="https://12tall.github.io/2099/12/31/info/"/>
-    <id>https://12tall.github.io/2099/12/31/info/</id>
-    <published>2099-12-31T06:50:23.000Z</published>
-    <updated>2025-05-22T07:19:25.051Z</updated>
+    <link href="https://12tall.github.io/2025/12/31/info/"/>
+    <id>https://12tall.github.io/2025/12/31/info/</id>
+    <published>2025-12-31T06:50:23.000Z</published>
+    <updated>2025-05-22T07:22:30.023Z</updated>
     
     
     <summary type="html">&lt;p&gt;该博客通过&lt;code&gt;Hexo Next&lt;/code&gt; 重构完成！之前数据&lt;a href=&quot;https://github.com/12Tall/12tall.github.io/commit/8f9a6e3f0581906e216e364eb09616b3e13b4365&quot;&gt;Tag&lt;/a&gt;。&lt;/p&gt;</summary>
@@ -241,9 +241,9 @@
     <category term="raspi" scheme="https://12tall.github.io/categories/raspi/"/>
     
     
-    <category term="c" scheme="https://12tall.github.io/tags/c/"/>
-    
     <category term="asm" scheme="https://12tall.github.io/tags/asm/"/>
+    
+    <category term="c" scheme="https://12tall.github.io/tags/c/"/>
     
     <category term="arm" scheme="https://12tall.github.io/tags/arm/"/>
     
@@ -446,9 +446,9 @@
     
     <category term="python" scheme="https://12tall.github.io/tags/python/"/>
     
-    <category term="multiprocessing" scheme="https://12tall.github.io/tags/multiprocessing/"/>
-    
     <category term="多进程" scheme="https://12tall.github.io/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
+    
+    <category term="multiprocessing" scheme="https://12tall.github.io/tags/multiprocessing/"/>
     
     <category term="pymoo" scheme="https://12tall.github.io/tags/pymoo/"/>
     
