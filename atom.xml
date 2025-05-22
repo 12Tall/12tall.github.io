@@ -121,6 +121,67 @@
   </entry>
   
   <entry>
+    <title>基于Node JS 的代码生成工具</title>
+    <link href="https://12tall.github.io/2024/01/20/code-generator/"/>
+    <id>https://12tall.github.io/2024/01/20/code-generator/</id>
+    <published>2024-01-19T15:00:00.000Z</published>
+    <updated>2025-05-22T05:12:53.450Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;之前见过一个用Jinja2 生成C 代码的例子，联想到刚入职时师傅介绍的CodeSmith，又结合当下在用Art-Template 生成前端页面。瞬间有一种实现自己的代码生成器的冲动。&lt;br /&gt;
+于是考虑从postgresql 生成对应的数据模型，重要的SQL 语句只有两条：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;SELECT * from information_schema.tables WHERE table_schema = &#39;public&#39;&lt;/code&gt; 选取数据表&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;select * from information_schema.columns where table_name = :table_name;&lt;/code&gt; 选取每个数据表的字段。这里用到了&lt;code&gt;yesql&lt;/code&gt; 库&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="nodejs" scheme="https://12tall.github.io/categories/nodejs/"/>
+    
+    
+    <category term="JavaScript" scheme="https://12tall.github.io/tags/JavaScript/"/>
+    
+    <category term="postgresql" scheme="https://12tall.github.io/tags/postgresql/"/>
+    
+    <category term="art-template" scheme="https://12tall.github.io/tags/art-template/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ThreeJS</title>
+    <link href="https://12tall.github.io/2023/09/11/three-js/"/>
+    <id>https://12tall.github.io/2023/09/11/three-js/</id>
+    <published>2023-09-10T15:00:00.000Z</published>
+    <updated>2025-05-22T05:13:30.179Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;上周看到一个&lt;code&gt;Unity&lt;/code&gt; 的项目，可以在Web 页面中开挖掘机。感觉挺好玩的，于是想着是否可以通过&lt;code&gt;ThreeJS&lt;/code&gt; 实现一个乞丐版的demo。还有一个比较难的点在物理引擎上面吧，具体问题还描述不清楚。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="nodejs" scheme="https://12tall.github.io/categories/nodejs/"/>
+    
+    
+    <category term="ThreeJS" scheme="https://12tall.github.io/tags/ThreeJS/"/>
+    
+    <category term="3D" scheme="https://12tall.github.io/tags/3D/"/>
+    
+    <category term="Simulation" scheme="https://12tall.github.io/tags/Simulation/"/>
+    
+    <category term="HACD" scheme="https://12tall.github.io/tags/HACD/"/>
+    
+    <category term="碰撞检测" scheme="https://12tall.github.io/tags/%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B/"/>
+    
+    <category term="凸分解" scheme="https://12tall.github.io/tags/%E5%87%B8%E5%88%86%E8%A7%A3/"/>
+    
+  </entry>
+  
+  <entry>
     <title>封装自定义Windows 安装镜像</title>
     <link href="https://12tall.github.io/2023/09/05/windows/encapsulate_installer_image/"/>
     <id>https://12tall.github.io/2023/09/05/windows/encapsulate_installer_image/</id>
@@ -162,11 +223,11 @@
     
     <category term="router" scheme="https://12tall.github.io/tags/router/"/>
     
-    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
-    
     <category term="OpenWRT" scheme="https://12tall.github.io/tags/OpenWRT/"/>
     
     <category term="v2raya" scheme="https://12tall.github.io/tags/v2raya/"/>
+    
+    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
     
     <category term="bridge" scheme="https://12tall.github.io/tags/bridge/"/>
     
@@ -225,13 +286,15 @@
     <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
     
     
-    <category term="ssh" scheme="https://12tall.github.io/tags/ssh/"/>
+    <category term="router" scheme="https://12tall.github.io/tags/router/"/>
+    
+    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
+    
+    <category term="pnet-lab" scheme="https://12tall.github.io/tags/pnet-lab/"/>
     
     <category term="cisco" scheme="https://12tall.github.io/tags/cisco/"/>
     
     <category term="switch" scheme="https://12tall.github.io/tags/switch/"/>
-    
-    <category term="router" scheme="https://12tall.github.io/tags/router/"/>
     
     <category term="image" scheme="https://12tall.github.io/tags/image/"/>
     
@@ -239,13 +302,11 @@
     
     <category term="iol" scheme="https://12tall.github.io/tags/iol/"/>
     
+    <category term="ssh" scheme="https://12tall.github.io/tags/ssh/"/>
+    
     <category term="scp" scheme="https://12tall.github.io/tags/scp/"/>
     
-    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
-    
     <category term="chmod" scheme="https://12tall.github.io/tags/chmod/"/>
-    
-    <category term="pnet-lab" scheme="https://12tall.github.io/tags/pnet-lab/"/>
     
     <category term="fortigate" scheme="https://12tall.github.io/tags/fortigate/"/>
     
@@ -295,11 +356,11 @@
     <category term="thoughts" scheme="https://12tall.github.io/categories/thoughts/"/>
     
     
-    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
-    
     <category term="math" scheme="https://12tall.github.io/tags/math/"/>
     
     <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
+    
+    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
     
     <category term="control" scheme="https://12tall.github.io/tags/control/"/>
     
@@ -310,11 +371,53 @@
   </entry>
   
   <entry>
+    <title>Electron 跨域</title>
+    <link href="https://12tall.github.io/2023/04/03/electron/"/>
+    <id>https://12tall.github.io/2023/04/03/electron/</id>
+    <published>2023-04-02T15:00:00.000Z</published>
+    <updated>2025-05-22T05:13:30.179Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;因为Chrome 内核的限制，Electron 不能获取第三方站点的&lt;code&gt;set-cookie&lt;/code&gt; 信息，从而无法保存用户登登录状态。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="nodejs" scheme="https://12tall.github.io/categories/nodejs/"/>
+    
+    
+    <category term="cookie" scheme="https://12tall.github.io/tags/cookie/"/>
+    
+    <category term="跨域" scheme="https://12tall.github.io/tags/%E8%B7%A8%E5%9F%9F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Element-Plus 可编辑单元格的实现</title>
+    <link href="https://12tall.github.io/2023/03/15/editable-cell/"/>
+    <id>https://12tall.github.io/2023/03/15/editable-cell/</id>
+    <published>2023-03-14T15:00:00.000Z</published>
+    <updated>2025-05-22T05:16:57.545Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;在前端开发时，会经常用到&lt;code&gt;table&lt;/code&gt; 元素来展示内容。虽然为每条记录都设置一个编辑的页面，会使项目结构更清晰，但是在一些要求不那么严格的场合，如果能直接编辑表格内容，则无论是对用户、还是对开发来讲，都是更友好的选择。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="nodejs" scheme="https://12tall.github.io/categories/nodejs/"/>
+    
+    
+    <category term="Vue" scheme="https://12tall.github.io/tags/Vue/"/>
+    
+    <category term="Element-Plus" scheme="https://12tall.github.io/tags/Element-Plus/"/>
+    
+  </entry>
+  
+  <entry>
     <title>PID 控制算法</title>
     <link href="https://12tall.github.io/2023/01/04/control/20-pid/"/>
     <id>https://12tall.github.io/2023/01/04/control/20-pid/</id>
     <published>2023-01-03T15:00:00.000Z</published>
-    <updated>2025-05-22T02:07:33.088Z</updated>
+    <updated>2025-05-22T04:51:00.286Z</updated>
     
     
     <summary type="html">&lt;p&gt;对于连续信号来说，PID 控制器的函数形式为：&lt;/p&gt;
@@ -327,13 +430,38 @@
     <category term="math" scheme="https://12tall.github.io/categories/math/"/>
     
     
-    <category term="工程数学" scheme="https://12tall.github.io/tags/%E5%B7%A5%E7%A8%8B%E6%95%B0%E5%AD%A6/"/>
-    
     <category term="python" scheme="https://12tall.github.io/tags/python/"/>
     
     <category term="pid" scheme="https://12tall.github.io/tags/pid/"/>
     
+    <category term="工程数学" scheme="https://12tall.github.io/tags/%E5%B7%A5%E7%A8%8B%E6%95%B0%E5%AD%A6/"/>
+    
     <category term="控制理论" scheme="https://12tall.github.io/tags/%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>简单的壁纸引擎</title>
+    <link href="https://12tall.github.io/2022/12/30/my-wallpaper-engine/"/>
+    <id>https://12tall.github.io/2022/12/30/my-wallpaper-engine/</id>
+    <published>2022-12-29T15:00:00.000Z</published>
+    <updated>2025-05-22T05:13:30.179Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;这个练手的&lt;a href=&quot;https://github.com/12Tall/vite-electron-vue-template/tree/cal&quot;&gt;项目&lt;/a&gt;本来是在21年写的，时间久了就荒废了。今年总结时忽然想到之前自己还做过一个建议的壁纸引擎。发现里面有些东西还是值得记录一下的。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="nodejs" scheme="https://12tall.github.io/categories/nodejs/"/>
+    
+    
+    <category term="Win32" scheme="https://12tall.github.io/tags/Win32/"/>
+    
+    <category term="NAPI" scheme="https://12tall.github.io/tags/NAPI/"/>
+    
+    <category term="Electron" scheme="https://12tall.github.io/tags/Electron/"/>
+    
+    <category term="壁纸引擎" scheme="https://12tall.github.io/tags/%E5%A3%81%E7%BA%B8%E5%BC%95%E6%93%8E/"/>
     
   </entry>
   
@@ -354,9 +482,36 @@
     
     <category term="OpenModelica" scheme="https://12tall.github.io/tags/OpenModelica/"/>
     
+    <category term="OpenHydrualics" scheme="https://12tall.github.io/tags/OpenHydrualics/"/>
+    
     <category term="建模" scheme="https://12tall.github.io/tags/%E5%BB%BA%E6%A8%A1/"/>
     
-    <category term="OpenHydrualics" scheme="https://12tall.github.io/tags/OpenHydrualics/"/>
+  </entry>
+  
+  <entry>
+    <title>新龙格-库塔算法求微分方程（组）的实现</title>
+    <link href="https://12tall.github.io/2022/12/18/new_ruge-kutta/"/>
+    <id>https://12tall.github.io/2022/12/18/new_ruge-kutta/</id>
+    <published>2022-12-17T15:00:00.000Z</published>
+    <updated>2025-05-22T04:51:00.283Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;有关数学原理部分，请参考&lt;a href=&quot;./README.md&quot;&gt;龙格-库塔算法求微分方程（组）&lt;/a&gt;，本文着重描述&lt;code&gt;RK4&lt;/code&gt; 的Python 实现。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="math" scheme="https://12tall.github.io/categories/math/"/>
+    
+    
+    <category term="数值分析" scheme="https://12tall.github.io/tags/%E6%95%B0%E5%80%BC%E5%88%86%E6%9E%90/"/>
+    
+    <category term="微分方程" scheme="https://12tall.github.io/tags/%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B/"/>
+    
+    <category term="Python" scheme="https://12tall.github.io/tags/Python/"/>
+    
+    <category term="微分代数方程" scheme="https://12tall.github.io/tags/%E5%BE%AE%E5%88%86%E4%BB%A3%E6%95%B0%E6%96%B9%E7%A8%8B/"/>
     
   </entry>
   
@@ -377,192 +532,34 @@
     <category term="thoughts" scheme="https://12tall.github.io/categories/thoughts/"/>
     
     
-    <category term="modeling" scheme="https://12tall.github.io/tags/modeling/"/>
-    
     <category term="math" scheme="https://12tall.github.io/tags/math/"/>
     
     <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
+    
+    <category term="modeling" scheme="https://12tall.github.io/tags/modeling/"/>
     
     <category term="simulation" scheme="https://12tall.github.io/tags/simulation/"/>
     
   </entry>
   
   <entry>
-    <title>MariaDB 运维</title>
-    <link href="https://12tall.github.io/2022/11/26/linux/mariadb/"/>
-    <id>https://12tall.github.io/2022/11/26/linux/mariadb/</id>
+    <title>LDAP 认证</title>
+    <link href="https://12tall.github.io/2022/11/26/ldap/"/>
+    <id>https://12tall.github.io/2022/11/26/ldap/</id>
     <published>2022-11-25T15:00:00.000Z</published>
-    <updated>2025-05-22T01:44:25.696Z</updated>
+    <updated>2025-05-22T05:10:44.202Z</updated>
     
     
-    <summary type="html">&lt;h2 id=&quot;安装与登录&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#安装与登录&quot;&gt;&lt;/a&gt; 安装与登录&lt;/h2&gt;
-&lt;pre class=&quot;line-numbers language-shell-session&quot; data-language=&quot;shell-session&quot;&gt;&lt;code class=&quot;language-shell-session&quot;&gt;&lt;span class=&quot;token command&quot;&gt;&lt;span class=&quot;token shell-symbol important&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;token bash language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apt&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; mariadb-server mariadb-common mariadb-client mariadb-backup  &lt;/span&gt;&lt;/span&gt;
-&lt;span class=&quot;token output&quot;&gt;mariadb-common 是所有MariaDB 所需的配置文件    
-mariadb-backup 是备份与恢复的工具  
-
-&lt;/span&gt;&lt;span class=&quot;token command&quot;&gt;&lt;span class=&quot;token shell-symbol important&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;token bash language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; systemctl &lt;span class=&quot;token builtin class-name&quot;&gt;enable&lt;/span&gt; mariadb&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&quot;token command&quot;&gt;&lt;span class=&quot;token shell-symbol important&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;token bash language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; systemctl start mariadb&lt;/span&gt;&lt;/span&gt;
-
-&lt;span class=&quot;token command&quot;&gt;&lt;span class=&quot;token shell-symbol important&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;token bash language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; mysql  &lt;span class=&quot;token comment&quot;&gt;# 匿名登陆，但是这样不够安全  &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&quot;token output&quot;&gt;MariaDB [(none)]&gt; quit
-Bye&lt;/span&gt;&lt;span aria-hidden=&quot;true&quot; class=&quot;line-numbers-rows&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;</summary>
+    <summary type="html">&lt;p&gt;通过阅读&lt;a href=&quot;https://github.com/shaozi/ldap-authentication&quot;&gt;shaozi/ldap-authentication&lt;/a&gt; 仓库的源码，来记录一下通过&lt;a href=&quot;http://ldapjs.org/index.html&quot;&gt;ldapjs&lt;/a&gt; 的过程。&lt;/p&gt;</summary>
     
     
     
-    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
+    <category term="nodejs" scheme="https://12tall.github.io/categories/nodejs/"/>
     
     
-    <category term="linux" scheme="https://12tall.github.io/tags/linux/"/>
+    <category term="ldap" scheme="https://12tall.github.io/tags/ldap/"/>
     
-    <category term="数据库" scheme="https://12tall.github.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-    <category term="MariaDB" scheme="https://12tall.github.io/tags/MariaDB/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>斯特里贝克曲线</title>
-    <link href="https://12tall.github.io/2022/11/24/stribeck-curve/"/>
-    <id>https://12tall.github.io/2022/11/24/stribeck-curve/</id>
-    <published>2022-11-23T15:00:00.000Z</published>
-    <updated>2025-05-22T01:39:47.385Z</updated>
-    
-    
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;因为帮同事进行Modelica 建模仿真时看到，感觉挺好玩的&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;斯特里贝克曲线(Stribeck Curve) 表示流体润华时摩擦系数&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;μ&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;&#92;mu&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.625em;vertical-align:-0.19444em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;μ&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 与接触负载&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;N&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;N&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.68333em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.10903em;&quot;&gt;N&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;、润滑剂粘度&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;η&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;&#92;eta&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.625em;vertical-align:-0.19444em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03588em;&quot;&gt;η&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 以及流体夹带速率&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;v&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;v&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.43056em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03588em;&quot;&gt;v&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 之间的非线性关系。一般由下图表示：&lt;br /&gt;
-&lt;img src=&quot;Curva_di_Stribeck.svg.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="math" scheme="https://12tall.github.io/categories/math/"/>
-    
-    
-    <category term="摩擦学" scheme="https://12tall.github.io/tags/%E6%91%A9%E6%93%A6%E5%AD%A6/"/>
-    
-    <category term="modeling" scheme="https://12tall.github.io/tags/modeling/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>我理解的神经网络</title>
-    <link href="https://12tall.github.io/2022/10/07/neural-network/"/>
-    <id>https://12tall.github.io/2022/10/07/neural-network/</id>
-    <published>2022-10-07T06:26:23.000Z</published>
-    <updated>2025-05-21T07:33:03.920Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;我一直希望，能不能有一种非常非常简单、形象的方式，来向人们解释复杂的理论。最好是能用生动的比喻、连同它的历史一起、娓娓道来。这种方式一定非常适合人们对事物的理解的习惯吧。&lt;/p&gt;
-&lt;p&gt;也许这是一个死胡同，走到某一步便走不下去了。也许这也是前人走过无数遍的道路，只不过谁也不曾注意到路边的野花。我更愿意说这是一种思维方式，中间掺杂着我大学以来学习、思考的结果。边走边看吧。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="thoughts" scheme="https://12tall.github.io/categories/thoughts/"/>
-    
-    
-    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
-    
-    <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
-    
-    <category term="neural network" scheme="https://12tall.github.io/tags/neural-network/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>反馈</title>
-    <link href="https://12tall.github.io/2022/10/07/feedback/"/>
-    <id>https://12tall.github.io/2022/10/07/feedback/</id>
-    <published>2022-10-07T05:59:46.000Z</published>
-    <updated>2025-05-22T02:11:47.096Z</updated>
-    
-    
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;想到以前解证明题：条件推导下，结论推导下，中间一凑，解决战斗~&lt;/p&gt;
-&lt;/blockquote&gt;</summary>
-    
-    
-    
-    <category term="thoughts" scheme="https://12tall.github.io/categories/thoughts/"/>
-    
-    
-    <category term="math" scheme="https://12tall.github.io/tags/math/"/>
-    
-    <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
-    
-    <category term="circuit" scheme="https://12tall.github.io/tags/circuit/"/>
-    
-    <category term="control" scheme="https://12tall.github.io/tags/control/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>滞回曲线 Hysteresis</title>
-    <link href="https://12tall.github.io/2022/09/06/hystersis/"/>
-    <id>https://12tall.github.io/2022/09/06/hystersis/</id>
-    <published>2022-09-05T15:00:00.000Z</published>
-    <updated>2025-05-22T02:11:12.214Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;滞回现象表现在，在函数的输入/输入到达某一阈值之后，便不会再按照原先的路径返回。最常见的的有铁磁材料的磁滞现象。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="math" scheme="https://12tall.github.io/categories/math/"/>
-    
-    
-    <category term="工程数学" scheme="https://12tall.github.io/tags/%E5%B7%A5%E7%A8%8B%E6%95%B0%E5%AD%A6/"/>
-    
-    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
-    
-    <category term="电磁学" scheme="https://12tall.github.io/tags/%E7%94%B5%E7%A3%81%E5%AD%A6/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>状态空间</title>
-    <link href="https://12tall.github.io/2022/08/25/control/01-state-space-equation/"/>
-    <id>https://12tall.github.io/2022/08/25/control/01-state-space-equation/</id>
-    <published>2022-08-24T15:00:00.000Z</published>
-    <updated>2025-05-22T02:08:22.131Z</updated>
-    
-    
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;看&lt;a href=&quot;https://www.bilibili.com/video/BV1fx41137dA&quot;&gt;状态空间&lt;/a&gt; 的笔记&lt;/p&gt;
-&lt;/blockquote&gt;</summary>
-    
-    
-    
-    <category term="math" scheme="https://12tall.github.io/categories/math/"/>
-    
-    
-    <category term="控制理论" scheme="https://12tall.github.io/tags/%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA/"/>
-    
-    <category term="线性定常系统" scheme="https://12tall.github.io/tags/%E7%BA%BF%E6%80%A7%E5%AE%9A%E5%B8%B8%E7%B3%BB%E7%BB%9F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>相轨迹图/Phase Portrait</title>
-    <link href="https://12tall.github.io/2022/08/25/control/02-phase-portrait/"/>
-    <id>https://12tall.github.io/2022/08/25/control/02-phase-portrait/</id>
-    <published>2022-08-24T15:00:00.000Z</published>
-    <updated>2025-05-22T02:10:17.346Z</updated>
-    
-    
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;看&lt;a href=&quot;https://www.bilibili.com/video/BV1ex411g7t3&quot;&gt;相图_相轨迹&lt;/a&gt; 的笔记&lt;br /&gt;
-需要注意的是，下文中所有的&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo separator=&quot;true&quot;&gt;,&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo separator=&quot;true&quot;&gt;,&lt;/mo&gt;&lt;mi&gt;X&lt;/mi&gt;&lt;mo separator=&quot;true&quot;&gt;,&lt;/mo&gt;&lt;mi&gt;Y&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;x,y,X,Y&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.8777699999999999em;vertical-align:-0.19444em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;mpunct&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.16666666666666666em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03588em;&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;mpunct&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.16666666666666666em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.07847em;&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;mpunct&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.16666666666666666em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.22222em;&quot;&gt;Y&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 都是关于时&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;t&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.61508em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 的变量，而这里的&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo separator=&quot;true&quot;&gt;,&lt;/mo&gt;&lt;mi&gt;Y&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;y, Y&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.8777699999999999em;vertical-align:-0.19444em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03588em;&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;mpunct&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.16666666666666666em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.22222em;&quot;&gt;Y&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 也不是状态空间方程里的&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;Y&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;Y&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.68333em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.22222em;&quot;&gt;Y&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;/blockquote&gt;</summary>
-    
-    
-    
-    <category term="math" scheme="https://12tall.github.io/categories/math/"/>
-    
-    
-    <category term="控制理论" scheme="https://12tall.github.io/tags/%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA/"/>
-    
-    <category term="线性定常系统" scheme="https://12tall.github.io/tags/%E7%BA%BF%E6%80%A7%E5%AE%9A%E5%B8%B8%E7%B3%BB%E7%BB%9F/"/>
+    <category term="认证" scheme="https://12tall.github.io/tags/%E8%AE%A4%E8%AF%81/"/>
     
   </entry>
   
