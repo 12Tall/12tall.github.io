@@ -54,6 +54,8 @@
     <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
     
     
+    <category term="domain" scheme="https://12tall.github.io/tags/domain/"/>
+    
     <category term="certificate" scheme="https://12tall.github.io/tags/certificate/"/>
     
     <category term="acme" scheme="https://12tall.github.io/tags/acme/"/>
@@ -61,8 +63,6 @@
     <category term="ssl" scheme="https://12tall.github.io/tags/ssl/"/>
     
     <category term="https" scheme="https://12tall.github.io/tags/https/"/>
-    
-    <category term="domain" scheme="https://12tall.github.io/tags/domain/"/>
     
     <category term="Let&#39;s Encrypt" scheme="https://12tall.github.io/tags/Let-s-Encrypt/"/>
     
@@ -162,11 +162,11 @@
     
     <category term="router" scheme="https://12tall.github.io/tags/router/"/>
     
+    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
+    
     <category term="OpenWRT" scheme="https://12tall.github.io/tags/OpenWRT/"/>
     
     <category term="v2raya" scheme="https://12tall.github.io/tags/v2raya/"/>
-    
-    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
     
     <category term="bridge" scheme="https://12tall.github.io/tags/bridge/"/>
     
@@ -189,6 +189,8 @@
     <category term="math" scheme="https://12tall.github.io/categories/math/"/>
     
     
+    <category term="电磁学" scheme="https://12tall.github.io/tags/%E7%94%B5%E7%A3%81%E5%AD%A6/"/>
+    
     <category term="电机" scheme="https://12tall.github.io/tags/%E7%94%B5%E6%9C%BA/"/>
     
     <category term="仿真" scheme="https://12tall.github.io/tags/%E4%BB%BF%E7%9C%9F/"/>
@@ -196,8 +198,6 @@
     <category term="CAE" scheme="https://12tall.github.io/tags/CAE/"/>
     
     <category term="有限元" scheme="https://12tall.github.io/tags/%E6%9C%89%E9%99%90%E5%85%83/"/>
-    
-    <category term="电磁学" scheme="https://12tall.github.io/tags/%E7%94%B5%E7%A3%81%E5%AD%A6/"/>
     
   </entry>
   
@@ -225,15 +225,13 @@
     <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
     
     
-    <category term="router" scheme="https://12tall.github.io/tags/router/"/>
-    
-    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
-    
-    <category term="pnet-lab" scheme="https://12tall.github.io/tags/pnet-lab/"/>
+    <category term="ssh" scheme="https://12tall.github.io/tags/ssh/"/>
     
     <category term="cisco" scheme="https://12tall.github.io/tags/cisco/"/>
     
     <category term="switch" scheme="https://12tall.github.io/tags/switch/"/>
+    
+    <category term="router" scheme="https://12tall.github.io/tags/router/"/>
     
     <category term="image" scheme="https://12tall.github.io/tags/image/"/>
     
@@ -241,11 +239,13 @@
     
     <category term="iol" scheme="https://12tall.github.io/tags/iol/"/>
     
-    <category term="ssh" scheme="https://12tall.github.io/tags/ssh/"/>
-    
     <category term="scp" scheme="https://12tall.github.io/tags/scp/"/>
     
+    <category term="vmware" scheme="https://12tall.github.io/tags/vmware/"/>
+    
     <category term="chmod" scheme="https://12tall.github.io/tags/chmod/"/>
+    
+    <category term="pnet-lab" scheme="https://12tall.github.io/tags/pnet-lab/"/>
     
     <category term="fortigate" scheme="https://12tall.github.io/tags/fortigate/"/>
     
@@ -268,6 +268,8 @@
     <category term="math" scheme="https://12tall.github.io/categories/math/"/>
     
     
+    <category term="电磁学" scheme="https://12tall.github.io/tags/%E7%94%B5%E7%A3%81%E5%AD%A6/"/>
+    
     <category term="电机" scheme="https://12tall.github.io/tags/%E7%94%B5%E6%9C%BA/"/>
     
     <category term="仿真" scheme="https://12tall.github.io/tags/%E4%BB%BF%E7%9C%9F/"/>
@@ -275,8 +277,6 @@
     <category term="CAE" scheme="https://12tall.github.io/tags/CAE/"/>
     
     <category term="有限元" scheme="https://12tall.github.io/tags/%E6%9C%89%E9%99%90%E5%85%83/"/>
-    
-    <category term="电磁学" scheme="https://12tall.github.io/tags/%E7%94%B5%E7%A3%81%E5%AD%A6/"/>
     
   </entry>
   
@@ -295,11 +295,11 @@
     <category term="thoughts" scheme="https://12tall.github.io/categories/thoughts/"/>
     
     
+    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
+    
     <category term="math" scheme="https://12tall.github.io/tags/math/"/>
     
     <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
-    
-    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
     
     <category term="control" scheme="https://12tall.github.io/tags/control/"/>
     
@@ -327,13 +327,13 @@
     <category term="math" scheme="https://12tall.github.io/categories/math/"/>
     
     
+    <category term="工程数学" scheme="https://12tall.github.io/tags/%E5%B7%A5%E7%A8%8B%E6%95%B0%E5%AD%A6/"/>
+    
     <category term="python" scheme="https://12tall.github.io/tags/python/"/>
     
     <category term="pid" scheme="https://12tall.github.io/tags/pid/"/>
     
     <category term="控制理论" scheme="https://12tall.github.io/tags/%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA/"/>
-    
-    <category term="工程数学" scheme="https://12tall.github.io/tags/%E5%B7%A5%E7%A8%8B%E6%95%B0%E5%AD%A6/"/>
     
   </entry>
   
@@ -354,9 +354,9 @@
     
     <category term="OpenModelica" scheme="https://12tall.github.io/tags/OpenModelica/"/>
     
-    <category term="OpenHydrualics" scheme="https://12tall.github.io/tags/OpenHydrualics/"/>
-    
     <category term="建模" scheme="https://12tall.github.io/tags/%E5%BB%BA%E6%A8%A1/"/>
+    
+    <category term="OpenHydrualics" scheme="https://12tall.github.io/tags/OpenHydrualics/"/>
     
   </entry>
   
@@ -377,13 +377,13 @@
     <category term="thoughts" scheme="https://12tall.github.io/categories/thoughts/"/>
     
     
+    <category term="modeling" scheme="https://12tall.github.io/tags/modeling/"/>
+    
     <category term="math" scheme="https://12tall.github.io/tags/math/"/>
     
     <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
     
     <category term="simulation" scheme="https://12tall.github.io/tags/simulation/"/>
-    
-    <category term="modeling" scheme="https://12tall.github.io/tags/modeling/"/>
     
   </entry>
   
@@ -421,6 +421,31 @@ Bye&lt;/span&gt;&lt;span aria-hidden=&quot;true&quot; class=&quot;line-numbers-r
   </entry>
   
   <entry>
+    <title>斯特里贝克曲线</title>
+    <link href="https://12tall.github.io/2022/11/24/stribeck-curve/"/>
+    <id>https://12tall.github.io/2022/11/24/stribeck-curve/</id>
+    <published>2022-11-23T15:00:00.000Z</published>
+    <updated>2025-05-22T01:39:47.385Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;因为帮同事进行Modelica 建模仿真时看到，感觉挺好玩的&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;斯特里贝克曲线(Stribeck Curve) 表示流体润华时摩擦系数&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;μ&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;&#92;mu&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.625em;vertical-align:-0.19444em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;μ&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 与接触负载&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;N&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;N&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.68333em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.10903em;&quot;&gt;N&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;、润滑剂粘度&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;η&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;&#92;eta&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.625em;vertical-align:-0.19444em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03588em;&quot;&gt;η&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 以及流体夹带速率&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;v&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;v&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.43056em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03588em;&quot;&gt;v&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 之间的非线性关系。一般由下图表示：&lt;br /&gt;
+&lt;img src=&quot;Curva_di_Stribeck.svg.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="math" scheme="https://12tall.github.io/categories/math/"/>
+    
+    
+    <category term="摩擦学" scheme="https://12tall.github.io/tags/%E6%91%A9%E6%93%A6%E5%AD%A6/"/>
+    
+    <category term="modeling" scheme="https://12tall.github.io/tags/modeling/"/>
+    
+  </entry>
+  
+  <entry>
     <title>我理解的神经网络</title>
     <link href="https://12tall.github.io/2022/10/07/neural-network/"/>
     <id>https://12tall.github.io/2022/10/07/neural-network/</id>
@@ -436,9 +461,9 @@ Bye&lt;/span&gt;&lt;span aria-hidden=&quot;true&quot; class=&quot;line-numbers-r
     <category term="thoughts" scheme="https://12tall.github.io/categories/thoughts/"/>
     
     
-    <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
-    
     <category term="python" scheme="https://12tall.github.io/tags/python/"/>
+    
+    <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
     
     <category term="neural network" scheme="https://12tall.github.io/tags/neural-network/"/>
     
@@ -465,9 +490,32 @@ Bye&lt;/span&gt;&lt;span aria-hidden=&quot;true&quot; class=&quot;line-numbers-r
     
     <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
     
+    <category term="circuit" scheme="https://12tall.github.io/tags/circuit/"/>
+    
     <category term="control" scheme="https://12tall.github.io/tags/control/"/>
     
-    <category term="circuit" scheme="https://12tall.github.io/tags/circuit/"/>
+  </entry>
+  
+  <entry>
+    <title>滞回曲线 Hysteresis</title>
+    <link href="https://12tall.github.io/2022/09/06/hystersis/"/>
+    <id>https://12tall.github.io/2022/09/06/hystersis/</id>
+    <published>2022-09-05T15:00:00.000Z</published>
+    <updated>2025-05-22T02:11:12.214Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;滞回现象表现在，在函数的输入/输入到达某一阈值之后，便不会再按照原先的路径返回。最常见的的有铁磁材料的磁滞现象。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="math" scheme="https://12tall.github.io/categories/math/"/>
+    
+    
+    <category term="工程数学" scheme="https://12tall.github.io/tags/%E5%B7%A5%E7%A8%8B%E6%95%B0%E5%AD%A6/"/>
+    
+    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
+    
+    <category term="电磁学" scheme="https://12tall.github.io/tags/%E7%94%B5%E7%A3%81%E5%AD%A6/"/>
     
   </entry>
   
@@ -505,52 +553,6 @@ Bye&lt;/span&gt;&lt;span aria-hidden=&quot;true&quot; class=&quot;line-numbers-r
     <summary type="html">&lt;blockquote&gt;
 &lt;p&gt;看&lt;a href=&quot;https://www.bilibili.com/video/BV1ex411g7t3&quot;&gt;相图_相轨迹&lt;/a&gt; 的笔记&lt;br /&gt;
 需要注意的是，下文中所有的&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo separator=&quot;true&quot;&gt;,&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo separator=&quot;true&quot;&gt;,&lt;/mo&gt;&lt;mi&gt;X&lt;/mi&gt;&lt;mo separator=&quot;true&quot;&gt;,&lt;/mo&gt;&lt;mi&gt;Y&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;x,y,X,Y&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.8777699999999999em;vertical-align:-0.19444em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;mpunct&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.16666666666666666em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03588em;&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;mpunct&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.16666666666666666em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.07847em;&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;mpunct&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.16666666666666666em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.22222em;&quot;&gt;Y&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 都是关于时&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;t&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.61508em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 的变量，而这里的&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo separator=&quot;true&quot;&gt;,&lt;/mo&gt;&lt;mi&gt;Y&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;y, Y&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.8777699999999999em;vertical-align:-0.19444em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03588em;&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;mpunct&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.16666666666666666em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.22222em;&quot;&gt;Y&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 也不是状态空间方程里的&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;Y&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;Y&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.68333em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.22222em;&quot;&gt;Y&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;/blockquote&gt;</summary>
-    
-    
-    
-    <category term="math" scheme="https://12tall.github.io/categories/math/"/>
-    
-    
-    <category term="控制理论" scheme="https://12tall.github.io/tags/%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA/"/>
-    
-    <category term="线性定常系统" scheme="https://12tall.github.io/tags/%E7%BA%BF%E6%80%A7%E5%AE%9A%E5%B8%B8%E7%B3%BB%E7%BB%9F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>线性时不变系统的可控性</title>
-    <link href="https://12tall.github.io/2022/08/25/control/03-controllability/"/>
-    <id>https://12tall.github.io/2022/08/25/control/03-controllability/</id>
-    <published>2022-08-24T15:00:00.000Z</published>
-    <updated>2025-05-22T02:13:28.976Z</updated>
-    
-    
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;观看&lt;a href=&quot;https://www.bilibili.com/video/BV1vx411j7ah&quot;&gt;系统的可控性_Controllability&lt;/a&gt;的笔记&lt;/p&gt;
-&lt;/blockquote&gt;</summary>
-    
-    
-    
-    <category term="math" scheme="https://12tall.github.io/categories/math/"/>
-    
-    
-    <category term="控制理论" scheme="https://12tall.github.io/tags/%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA/"/>
-    
-    <category term="线性定常系统" scheme="https://12tall.github.io/tags/%E7%BA%BF%E6%80%A7%E5%AE%9A%E5%B8%B8%E7%B3%BB%E7%BB%9F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>线性定常系统的稳定性</title>
-    <link href="https://12tall.github.io/2022/08/25/control/04-stability/"/>
-    <id>https://12tall.github.io/2022/08/25/control/04-stability/</id>
-    <published>2022-08-24T15:00:00.000Z</published>
-    <updated>2025-05-22T02:08:09.017Z</updated>
-    
-    
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;看&lt;a href=&quot;https://www.bilibili.com/video/BV1vx411V7EH&quot;&gt;稳定性_李雅普诺夫_Lyapunov&lt;/a&gt; 的笔记&lt;/p&gt;
 &lt;/blockquote&gt;</summary>
     
     

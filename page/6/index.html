@@ -71,7 +71,7 @@
   <script src="/js/third-party/math/katex.js" defer></script>
 
 
-
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
@@ -177,7 +177,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-count">59</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -188,7 +188,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">87</span>
+        <span class="site-state-item-count">91</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -228,7 +228,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/linux/gogs/">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/ccna/spanning-tree/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/logo.png">
@@ -246,7 +246,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/08/03/linux/gogs/" class="post-title-link" itemprop="url">Gogs</a>
+          <a href="/2022/08/03/ccna/spanning-tree/" class="post-title-link" itemprop="url">Spanning-Tree</a>
         </h2>
 
         <div class="post-meta-container">
@@ -264,7 +264,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-21 16:32:56" itemprop="dateModified" datetime="2025-05-21T16:32:56+09:00">2025-05-21</time>
+      <time title="修改时间：2025-05-22 10:39:47" itemprop="dateModified" datetime="2025-05-22T10:39:47+09:00">2025-05-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -283,14 +283,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>710</span>
+      <span>614</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>3 分钟</span>
+      <span>2 分钟</span>
     </span>
 </div>
 
@@ -301,10 +301,27 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>Gogs 是一款轻量级的私有Git 服务器。满足一般开发需要，且安装部署比较方便。这里记录其作为Windows 服务部署的过程。</p>
+          <h2 id="stp"><a class="markdownIt-Anchor" href="#stp"></a> STP</h2>
+<ul>
+<li>
+<p>网络中常见的问题：</p>
+<ol>
+<li>设备的单点故障。一台设备宕机，所有子设备都会失去连接</li>
+<li>提高网络的稳定性、增加冗余，但是这样可能会造成二层环路</li>
+</ol>
+</li>
+<li>
+<p>解决方案：</p>
+<ol>
+<li>手动冷备份（一台设备宕机之后手工启用备用设备）</li>
+<li>热备（通过生成树协议）</li>
+</ol>
+</li>
+</ul>
+<p>生成树协议会自动阻塞一些接口，来避免环路</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/08/03/linux/gogs/#more" rel="contents">
+              <a class="btn" href="/2022/08/03/ccna/spanning-tree/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -335,7 +352,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/linux/samba/">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/ccna/switch/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/logo.png">
@@ -353,7 +370,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/08/03/linux/samba/" class="post-title-link" itemprop="url">域控制器杂谈</a>
+          <a href="/2022/08/03/ccna/switch/" class="post-title-link" itemprop="url">交换机基础</a>
         </h2>
 
         <div class="post-meta-container">
@@ -371,7 +388,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-22 10:40:02" itemprop="dateModified" datetime="2025-05-22T10:40:02+09:00">2025-05-22</time>
+      <time title="修改时间：2025-05-21 16:14:34" itemprop="dateModified" datetime="2025-05-21T16:14:34+09:00">2025-05-21</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -390,14 +407,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.3k</span>
+      <span>505</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>5 分钟</span>
+      <span>2 分钟</span>
     </span>
 </div>
 
@@ -408,10 +425,360 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>工作以来，最早接触的技术就是计算机加域了。但是对域的概念一直不太清晰，尤其是域控制器的搭建，DNS 服务器的配置。网络上的教程多是基于Windows 的，到了新的部门之后发现要是买正版真的太贵了。好在刚开始的时候可以使用群晖做域控制器，搭建过程傻瓜但是极其好用。不幸的是，群晖在做文件索引时，会导致用户认证的失败。于是想着是否可以用一台Linux 专门做认证、域控服务器。本文没有技术细节，只是泛泛谈一下最直观的认识。</p>
+          <h2 id="交换机"><a class="markdownIt-Anchor" href="#交换机"></a> 交换机</h2>
+<h3 id="二层交换机"><a class="markdownIt-Anchor" href="#二层交换机"></a> 二层交换机</h3>
+<ul>
+<li>二层交换机能且只能配置一个IP（管理用）</li>
+<li>二层交换机也可以配置一条静态路由</li>
+</ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/08/03/linux/samba/#more" rel="contents">
+              <a class="btn" href="/2022/08/03/ccna/switch/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/ccna/switch_intro/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/08/03/ccna/switch_intro/" class="post-title-link" itemprop="url">交换机简介</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-03 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-03T00:00:00+09:00">2022-08-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-22 10:39:47" itemprop="dateModified" datetime="2025-05-22T10:39:47+09:00">2025-05-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/maintenance/" itemprop="url" rel="index"><span itemprop="name">maintenance</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>270</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="硬件结构"><a class="markdownIt-Anchor" href="#硬件结构"></a> 硬件结构</h2>
+<ul>
+<li>Flash:  相当于硬盘。存放系统、vlan 信息等</li>
+<li>Nvram： 存放启动配置文件（华为的配置文件也都在flash，没有此硬件）。</li>
+<li>Ram： 运行内存</li>
+<li>Rom： 相当于BIOS</li>
+<li>新设备基本都是基于x86，可以升级内存</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/03/ccna/switch_intro/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/ccna/trunk/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/08/03/ccna/trunk/" class="post-title-link" itemprop="url">端口聚合</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-03 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-03T00:00:00+09:00">2022-08-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-22 10:39:47" itemprop="dateModified" datetime="2025-05-22T10:39:47+09:00">2025-05-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/maintenance/" itemprop="url" rel="index"><span itemprop="name">maintenance</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>281</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="端口聚合"><a class="markdownIt-Anchor" href="#端口聚合"></a> 端口聚合</h2>
+<p>好处：</p>
+<ul>
+<li>带宽扩容</li>
+<li>线路冗余</li>
+<li>负载均衡</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/03/ccna/trunk/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/ccna/tcp-ip/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/08/03/ccna/tcp-ip/" class="post-title-link" itemprop="url">TCP/IP 基础</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-03 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-03T00:00:00+09:00">2022-08-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-21 16:14:42" itemprop="dateModified" datetime="2025-05-21T16:14:42+09:00">2025-05-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/maintenance/" itemprop="url" rel="index"><span itemprop="name">maintenance</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>904</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="网络协议分层"><a class="markdownIt-Anchor" href="#网络协议分层"></a> 网络协议分层</h2>
+<h3 id="osi-分层标准"><a class="markdownIt-Anchor" href="#osi-分层标准"></a> OSI 分层标准</h3>
+<p>自上而下分为七层：</p>
+<ul>
+<li>应用层：QQ、Edge</li>
+<li>表示层：对上层数据进行转码、压缩</li>
+<li>会话层：控制发送速率（下载限速）</li>
+<li>传输层：TCP/UDP（防火墙）</li>
+<li>网络层：IP（路由，以IP 地址为目的）</li>
+<li>链路层：tracert（交换，以MAC 为目的）</li>
+<li>物理层：电缆等等</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/03/ccna/tcp-ip/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -912,13 +1279,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">57k</span>
+    <span title="站点总字数">59k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">3:26</span>
+    <span title="站点阅读时长">3:35</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
