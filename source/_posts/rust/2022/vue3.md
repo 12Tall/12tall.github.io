@@ -39,14 +39,14 @@ Done. Now run:
   cd project_name
   npm install
   npm run dev
-```    
+```
 
 ### 创建Rocket 项目   
 ```console-session  
 > cd project_name  
 > cargo new src-rocket --bin
 > cd src-rocket
-```  
+```
 在创建Rocket 项目后，我们需要做一些配置：  
 1. 在`Cargo.toml` 中添加依赖：`rocket = "0.5.0-rc.2"`  
 2. 在rust 项目根目录下新建`Rocket.toml`，并[配置默认启动参数](https://rocket.rs/v0.5-rc/guide/configuration/#rockettoml)（可选）  
@@ -65,7 +65,7 @@ fn index() -> &'static str {
 fn rocket() -> _ {
     rocket::build().mount("/", routes![index])
 }
-```  
+```
 
 ## 开发调试  
 为了开发调试方便，我们需要分别对vue3 和rocket 项目修改一些配置。  
@@ -101,7 +101,7 @@ export default defineConfig({
     }    
 }
 })
-```  
+```
 
 关于代理的更多配置，可以参考[详细配置说明](https://vitejs.dev/config/server-options.html#server-proxy)。
 
@@ -123,7 +123,7 @@ export default defineConfig({
     "vite": "^3.0.9"
   }
 }
-```  
+```
 
 其中：  
 1. 参数`-k` 表示在有一个程序退出时，会停止所有进程  

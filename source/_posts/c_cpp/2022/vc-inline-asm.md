@@ -169,7 +169,7 @@ build_c: build_cpp c_code.c
 cs := C.CString("PN")
 // ...
 C.free(unsafe.Pointer(cs))
-```  
+```
 
 ### 示例代码  
 示例包含两个文件：trj.go 和main.c。
@@ -407,7 +407,7 @@ BOOL APIENTRY DllMain(
 }
 // 执行`gcc ./my_dll.c -shared -o my_dll.dll`，
 // 将会在当前目录生成生成`my_dll.dll`。  
-```  
+```
 </CodeGroupItem>
 <CodeGroupItem title="调用">
 

@@ -554,7 +554,7 @@ static napi_value CreateFunction(napi_env env, napi_callback_info info) {
 
   return fn;
 }
-```  
+```
 
 ## 晋级C++  
 前面我们基本上已经了解了`C` 语言插件的开发，特点就是代码很长。于是我们可以采用面向对象的方式来封装代码。于是，以后将开始引入`C++`，将JS 对象与CPP 对象一一对应起来。然鹅对于不熟悉`C++` 的我来说，看代码果然还是太难了些。  

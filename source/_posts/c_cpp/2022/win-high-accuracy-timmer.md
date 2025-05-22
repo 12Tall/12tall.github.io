@@ -53,7 +53,7 @@ int main()
 
     return 0;
 }
-```  
+```
 
 ### QueryPerformanceFrequency 
 此方法可以实现微秒级延时，但是代码看起来要复杂一点：  
@@ -90,7 +90,7 @@ MMRESULT timeSetEvent（ UINT uDelay,   // 时间间隔
                         WORD dwUser, // 用户提供的回调数据，会被传入到回调函数
                         UINT fuEvent  // 定时器类型：TIME_ONESHOT 一次性；TIME_PERIODIC 周期性
                     ）// 返回定时器Id
-```  
+```
 - `timeSetEvent` 的最长时间不能超过1000 秒  
 - `timeSetEvent` 会创建一个独立的线程  
 - 可以通过`timeKillEvent` 根据Id 关闭定时器  
@@ -128,7 +128,7 @@ for i in range(100):
     b = getCounter().value  # /
     res = 1.*(b-a)/freq
     print(b - a, res)
-```  
+```
 
 也可以封装成一个专门的函数:  
 ```python

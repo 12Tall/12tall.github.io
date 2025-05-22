@@ -39,7 +39,7 @@ features = [
     "Win32_System_Threading",
     "Win32_UI_WindowsAndMessaging",
 ]
-```  
+```
 
 ## lib.rs 源码    
 生成普通的动态链接库很简单，但是我们在做项目时，有时会需要在动态链接库加载时就执行某些动作，例如弹出对话框、开启子线程等。这时候我们需要为DLL 添加入口函数：  
@@ -67,7 +67,7 @@ pub extern "system" fn DllMain(_inst: isize, reason: u32, _: *const u8) -> u32 {
     1
 }
 
-```  
+```
 需要注意的是，DllMain 方法并不是必须的，很多情况下也不会用到。  
 
 ## 在Python 中调用  
@@ -78,7 +78,7 @@ from ctypes import*
 mydll = cdll.LoadLibrary("..\\native_dll\\native_dll.dll")  # 自动执行DllMain 方法  
 
 print(mydll.add(1,2))  # 打印3   
-```  
+```
 
 > 注意：  
 > 如果Python 的与DLL 的位数不一致，则会报`OSError: [WinError 193] %1 不是有效的 Win32 应用程序。` 的错误。  
