@@ -19,7 +19,7 @@ async function editTeam(ctx, next) {
     let body = ctx.request.body
     ctx.body = Msg.success(team)
 }
-```  
+```
 
 于是可以封装一个新的函数，并通过JSDoc 注释来让VSCode 能够解析参数类型：  
 ```js{5}
