@@ -3,7 +3,7 @@ title: 初识Modelica
 date: 2022-08-25   
 tags:   
     - OpenModelica  
-    - 建模
+    - modeling
 ---
 
 

@@ -4,7 +4,7 @@ date: 2022-12-27
 tags:   
     - OpenModelica    
     - OpenHydrualics  
-    - 建模
+    - modeling
 ---
 
 Openhydraulics 中的液压油位于Fluids 包下面，液压油是所有液压组件的基础。在OpenHydraulics 中，预设了两种液压油模型，二者均以`PartialFluid` 为基类。  

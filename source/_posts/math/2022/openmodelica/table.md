@@ -3,7 +3,7 @@ title: 表格插值 table
 date: 2022-08-25 
 tags:   
     - OpenModelica  
-    - 建模
+    - modeling
 ---
 
 在实际生产中，会经常用到插值而不是数学函数来获取数据，而Modelica 语言则内置了一维、二维的插值模块供我们调用：  

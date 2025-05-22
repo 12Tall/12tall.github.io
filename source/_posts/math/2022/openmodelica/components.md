@@ -3,7 +3,7 @@ title: 组件 components
 date: 2022-08-25      
 tags:   
     - OpenModelica  
-    - 建模
+    - modeling
 ---
 
 

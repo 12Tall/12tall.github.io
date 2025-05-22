@@ -5,7 +5,7 @@ tags:
     - math  
     - 我理解的  
     - python  
-    - control  
+    - 控制理论  
     - pid  
     - 数值分析  
 ---

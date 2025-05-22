@@ -3,7 +3,7 @@ title: 电机与驱动读书笔记（预备知识）
 date: 2023-03-03  
 tags:  
     - 电机  
-    - 控制  
+    - 控制理论  
 ---   
 
 > 《Electric Motors and Drives: Fundamentals, Types and Applications. 3rd Edition》的读书笔记。与其他的教材不同，这本书更偏向于工程实践，能让人对电机有更加直观的印象。笔记中的图片如无特殊说明均截自本书。

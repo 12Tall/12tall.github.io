@@ -3,7 +3,7 @@ title: Package 包
 date: 2022-08-25 
 tags:   
     - OpenModelica  
-    - 建模
+    - modeling
 ---
 
 以个人经验，任何Modelica 项目最好保存为包的形式，且不应把所有代码保存在同一文件。

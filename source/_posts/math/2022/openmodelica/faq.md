@@ -3,7 +3,7 @@ title: 常见问题
 date: 2022-08-25     
 tags:   
     - OpenModelica  
-    - 建模
+    - modeling
 ---
 
 

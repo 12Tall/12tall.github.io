@@ -3,7 +3,7 @@ title: 向量与数组 vector
 date: 2022-08-25
 tags:   
     - OpenModelica  
-    - 建模
+    - modeling
 ---
 
 > 简单的用法：可以把向量或数组当成一次声明许多个变量，并且向量和矩阵的运算在`Modelica` 语言中也已经封装的非常完善了。  

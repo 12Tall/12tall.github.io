@@ -3,7 +3,7 @@ title: 变量 variable
 date: 2022-08-25
 tags:   
     - OpenModelica  
-    - 建模
+    - modeling
 ---
 
 > 模式包含一系列的变量作为其特征。  
