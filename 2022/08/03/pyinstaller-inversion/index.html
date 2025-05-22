@@ -26,18 +26,18 @@
 <meta property="og:site_name" content="12Tall">
 <meta property="og:description" content="在网络上看到一个神经网络将图片转动漫风格的库，但是作者并没有公布最新版的源码。下载试用后发现软件功能挺好，但是在图片转换时会卡死主界面。看Issues 时，网友提到可以通过逆向工程提取*.onxx.zip 文件的解压密码。在提取密码的同时，发现也能看到部分源码，于是想着也许可以自己动手修复一下。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://12tall.github.io/2022/08/03/pyinstaller-inversion/img/pyinstxtractor-with-py38.png">
-<meta property="og:image" content="https://12tall.github.io/2022/08/03/pyinstaller-inversion/img/pyinstxtractor-with-py37.png">
-<meta property="og:image" content="https://12tall.github.io/2022/08/03/pyinstaller-inversion/img/PYX-00.pyz_extracted.png">
-<meta property="og:image" content="https://12tall.github.io/2022/08/03/pyinstaller-inversion/img/new-app.png">
+<meta property="og:image" content="https://12tall.github.io/2022/08/03/pyinstaller-inversion/pyinstxtractor-with-py38.png">
+<meta property="og:image" content="https://12tall.github.io/2022/08/03/pyinstaller-inversion/pyinstxtractor-with-py37.png">
+<meta property="og:image" content="https://12tall.github.io/2022/08/03/pyinstaller-inversion/PYX-00.pyz_extracted.png">
+<meta property="og:image" content="https://12tall.github.io/2022/08/03/pyinstaller-inversion/new-app.png">
 <meta property="article:published_time" content="2022-08-02T15:00:00.000Z">
-<meta property="article:modified_time" content="2025-05-22T07:08:53.839Z">
+<meta property="article:modified_time" content="2025-05-22T07:21:13.711Z">
 <meta property="article:author" content="12Tall">
 <meta property="article:tag" content="python">
 <meta property="article:tag" content="逆向">
 <meta property="article:tag" content="pyinstaller">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://12tall.github.io/2022/08/03/pyinstaller-inversion/img/pyinstxtractor-with-py38.png">
+<meta name="twitter:image" content="https://12tall.github.io/2022/08/03/pyinstaller-inversion/pyinstxtractor-with-py38.png">
 
 
 <link rel="canonical" href="https://12tall.github.io/2022/08/03/pyinstaller-inversion/">
@@ -276,7 +276,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-22 16:08:53" itemprop="dateModified" datetime="2025-05-22T16:08:53+09:00">2025-05-22</time>
+      <time title="修改时间：2025-05-22 16:21:13" itemprop="dateModified" datetime="2025-05-22T16:21:13+09:00">2025-05-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -336,7 +336,7 @@
 
 You can now use a python decompiler on the pyc files within the extracted directory<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>需要注意的是，<strong>解包的Python 版本应该与打包时的Python 版本一致</strong>，如Python 3.7 打包的程序，就应该使用Python 3.7 解包。不然会发现解包后<code>PYZ-00.pyz_extracted</code> 文件夹内没有文件：<br />
-<img src="./img/pyinstxtractor-with-py38.png" alt="" /></p>
+<img src="pyinstxtractor-with-py38.png" alt="" /></p>
 <p>因为<code>pyinstxtractor.py</code> 不依赖外部包，所以可以直接下载免安装版的Python 3.7 解包：</p>
 <pre class="line-numbers language-shell-session&#123;1&#125;" data-language="shell-session&#123;1&#125;"><code class="language-shell-session&#123;1&#125;">&gt; .\python\python37.exe .\pyinstxtractor.py .\A___.exe
 [+] Processing .\A___.exe
@@ -355,12 +355,12 @@ You can now use a python decompiler on the pyc files within the extracted direct
 
 You can now use a python decompiler on the pyc files within the extracted directory<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>以Python 3.7 解包，可以发现<code>PYZ-00.pyz_extracted</code> 内部有了很多条目，其中就包含许多<code>.pyc</code> 文件，其中就包含关键逻辑的代码：<br />
-<img src="./img/pyinstxtractor-with-py37.png" alt="" /></p>
+<img src="pyinstxtractor-with-py37.png" alt="" /></p>
 <h2 id="通过uncompyle6-逆向pyc-文件"><a class="markdownIt-Anchor" href="#通过uncompyle6-逆向pyc-文件"></a> 通过uncompyle6 逆向.pyc 文件</h2>
 <p><code>uncompyle6</code> 无需指定Python 的版本，但是需要提前安装：</p>
 <pre class="line-numbers language-shell-session" data-language="shell-session"><code class="language-shell-session"><span class="token output">> pip install uncompyle6</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>下图中，红框中的内容就是我们所需要逆向的代码逻辑和图片资源，至于怎么找到的（目前我还是看名字猜的）：<br />
-<img src="./img/PYX-00.pyz_extracted.png" alt="" /></p>
+<img src="PYX-00.pyz_extracted.png" alt="" /></p>
 <h3 id="逆向代码逻辑"><a class="markdownIt-Anchor" href="#逆向代码逻辑"></a> 逆向代码逻辑</h3>
 <pre class="line-numbers language-shell-session" data-language="shell-session"><code class="language-shell-session"><span class="token output">> uncompyle6.exe \
 > .\A___.exe_extracted\PYZ-00.pyz_extracted\pb_and_ONNX_model\video_test_by_onnxZIP.pyc \
@@ -405,7 +405,7 @@ a3__ico<span class="token punctuation">.</span>GetImage<span class="token punctu
 <ol>
 <li>日志滚动条样式优化。</li>
 </ol>
-<p><img src="./img/new-app.png" alt="" /></p>
+<p><img src="new-app.png" alt="" /></p>
 <h2 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h2>
 <ol>
 <li><a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-271253.htm">Python逆向——Pyinstaller逆向</a></li>

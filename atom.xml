@@ -241,9 +241,9 @@
     <category term="raspi" scheme="https://12tall.github.io/categories/raspi/"/>
     
     
-    <category term="asm" scheme="https://12tall.github.io/tags/asm/"/>
-    
     <category term="c" scheme="https://12tall.github.io/tags/c/"/>
+    
+    <category term="asm" scheme="https://12tall.github.io/tags/asm/"/>
     
     <category term="arm" scheme="https://12tall.github.io/tags/arm/"/>
     
@@ -252,29 +252,6 @@
     <category term="os" scheme="https://12tall.github.io/tags/os/"/>
     
     <category term="boot" scheme="https://12tall.github.io/tags/boot/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python 状态机</title>
-    <link href="https://12tall.github.io/2023/10/19/state-machine/"/>
-    <id>https://12tall.github.io/2023/10/19/state-machine/</id>
-    <published>2023-10-18T15:00:00.000Z</published>
-    <updated>2025-05-22T06:48:17.751Z</updated>
-    
-    
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;还是在做fmu 时引出的问题，需要用到&lt;a href=&quot;https://python-statemachine.readthedocs.io/en/latest/index.html&quot;&gt;Python State Machine&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
-    
-    
-    <category term="Python" scheme="https://12tall.github.io/tags/Python/"/>
-    
-    <category term="StateMachine" scheme="https://12tall.github.io/tags/StateMachine/"/>
     
   </entry>
   
@@ -300,6 +277,29 @@
     <category term="pip" scheme="https://12tall.github.io/tags/pip/"/>
     
     <category term="npm" scheme="https://12tall.github.io/tags/npm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python 状态机</title>
+    <link href="https://12tall.github.io/2023/10/19/state-machine/"/>
+    <id>https://12tall.github.io/2023/10/19/state-machine/</id>
+    <published>2023-10-18T15:00:00.000Z</published>
+    <updated>2025-05-22T06:48:17.751Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;还是在做fmu 时引出的问题，需要用到&lt;a href=&quot;https://python-statemachine.readthedocs.io/en/latest/index.html&quot;&gt;Python State Machine&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
+    
+    
+    <category term="Python" scheme="https://12tall.github.io/tags/Python/"/>
+    
+    <category term="StateMachine" scheme="https://12tall.github.io/tags/StateMachine/"/>
     
   </entry>
   
@@ -351,11 +351,11 @@
     
     <category term="python" scheme="https://12tall.github.io/tags/python/"/>
     
-    <category term="simulation" scheme="https://12tall.github.io/tags/simulation/"/>
-    
     <category term="fmi" scheme="https://12tall.github.io/tags/fmi/"/>
     
     <category term="fmu" scheme="https://12tall.github.io/tags/fmu/"/>
+    
+    <category term="simulation" scheme="https://12tall.github.io/tags/simulation/"/>
     
     <category term="modelica" scheme="https://12tall.github.io/tags/modelica/"/>
     
@@ -446,17 +446,19 @@
     
     <category term="python" scheme="https://12tall.github.io/tags/python/"/>
     
-    <category term="math" scheme="https://12tall.github.io/tags/math/"/>
+    <category term="multiprocessing" scheme="https://12tall.github.io/tags/multiprocessing/"/>
+    
+    <category term="多进程" scheme="https://12tall.github.io/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
     
     <category term="pymoo" scheme="https://12tall.github.io/tags/pymoo/"/>
+    
+    <category term="math" scheme="https://12tall.github.io/tags/math/"/>
     
     <category term="optimization" scheme="https://12tall.github.io/tags/optimization/"/>
     
     <category term="multiple object" scheme="https://12tall.github.io/tags/multiple-object/"/>
     
     <category term="pareto" scheme="https://12tall.github.io/tags/pareto/"/>
-    
-    <category term="multiprocessing" scheme="https://12tall.github.io/tags/multiprocessing/"/>
     
     <category term="BaseManager" scheme="https://12tall.github.io/tags/BaseManager/"/>
     
@@ -465,8 +467,6 @@
     <category term="parallelization" scheme="https://12tall.github.io/tags/parallelization/"/>
     
     <category term="多线程" scheme="https://12tall.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
-    
-    <category term="多进程" scheme="https://12tall.github.io/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
     
   </entry>
   
@@ -490,9 +490,9 @@
     
     <category term="python" scheme="https://12tall.github.io/tags/python/"/>
     
-    <category term="math" scheme="https://12tall.github.io/tags/math/"/>
-    
     <category term="pymoo" scheme="https://12tall.github.io/tags/pymoo/"/>
+    
+    <category term="math" scheme="https://12tall.github.io/tags/math/"/>
     
     <category term="optimization" scheme="https://12tall.github.io/tags/optimization/"/>
     
