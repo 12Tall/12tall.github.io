@@ -1,2 +1,2 @@
 
-`hexo new post -p 2025/python/***.md`
+`hexo new post -p python/2025/***.md`
