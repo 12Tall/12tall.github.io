@@ -54,6 +54,8 @@
     <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
     
     
+    <category term="pm2" scheme="https://12tall.github.io/tags/pm2/"/>
+    
     <category term="domain" scheme="https://12tall.github.io/tags/domain/"/>
     
     <category term="certificate" scheme="https://12tall.github.io/tags/certificate/"/>
@@ -71,8 +73,6 @@
     <category term="fnm" scheme="https://12tall.github.io/tags/fnm/"/>
     
     <category term="nodejs" scheme="https://12tall.github.io/tags/nodejs/"/>
-    
-    <category term="pm2" scheme="https://12tall.github.io/tags/pm2/"/>
     
   </entry>
   
@@ -109,7 +109,7 @@
     
     
     
-    <category term="cpp" scheme="https://12tall.github.io/categories/cpp/"/>
+    <category term="c_cpp" scheme="https://12tall.github.io/categories/c-cpp/"/>
     
     
     <category term="gettext" scheme="https://12tall.github.io/tags/gettext/"/>
@@ -117,6 +117,56 @@
     <category term="多语言" scheme="https://12tall.github.io/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/"/>
     
     <category term="国际化" scheme="https://12tall.github.io/tags/%E5%9B%BD%E9%99%85%E5%8C%96/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>简单PM2 使用笔记</title>
+    <link href="https://12tall.github.io/2024/03/20/pm2/"/>
+    <id>https://12tall.github.io/2024/03/20/pm2/</id>
+    <published>2024-03-19T15:00:00.000Z</published>
+    <updated>2025-05-22T05:44:49.984Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;以前简单了解过&lt;code&gt;PM2&lt;/code&gt;，但是没有太多的使用经验。现在因为手头上要部署各种类型的脚本或者服务，所以还是记一下常用的指令，尤其是开机自启动与定时任务这一块。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="nodejs" scheme="https://12tall.github.io/categories/nodejs/"/>
+    
+    
+    <category term="pm2" scheme="https://12tall.github.io/tags/pm2/"/>
+    
+    <category term="服务" scheme="https://12tall.github.io/tags/%E6%9C%8D%E5%8A%A1/"/>
+    
+    <category term="node" scheme="https://12tall.github.io/tags/node/"/>
+    
+    <category term="集群" scheme="https://12tall.github.io/tags/%E9%9B%86%E7%BE%A4/"/>
+    
+    <category term="均衡负载" scheme="https://12tall.github.io/tags/%E5%9D%87%E8%A1%A1%E8%B4%9F%E8%BD%BD/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>一些简单的制作Cheatsheet 的技巧</title>
+    <link href="https://12tall.github.io/2024/01/28/cheat-sheet/"/>
+    <id>https://12tall.github.io/2024/01/28/cheat-sheet/</id>
+    <published>2024-01-27T15:00:00.000Z</published>
+    <updated>2025-05-22T05:39:38.850Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;工作中发现时常做一些&lt;code&gt;Cheatsheet&lt;/code&gt; 还是比较有用的，下面是一些小&lt;code&gt;Latex&lt;/code&gt;的技巧：&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="notation" scheme="https://12tall.github.io/categories/notation/"/>
+    
+    
+    <category term="latex" scheme="https://12tall.github.io/tags/latex/"/>
+    
+    <category term="cheatsheet" scheme="https://12tall.github.io/tags/cheatsheet/"/>
     
   </entry>
   
@@ -147,6 +197,58 @@
     <category term="postgresql" scheme="https://12tall.github.io/tags/postgresql/"/>
     
     <category term="art-template" scheme="https://12tall.github.io/tags/art-template/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>树莓派开发参考</title>
+    <link href="https://12tall.github.io/2023/11/03/00_ref/"/>
+    <id>https://12tall.github.io/2023/11/03/00_ref/</id>
+    <published>2023-11-02T15:00:00.000Z</published>
+    <updated>2025-05-22T05:48:29.284Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;链接器脚本&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#链接器脚本&quot;&gt;&lt;/a&gt; 链接器脚本&lt;/h2&gt;</summary>
+    
+    
+    
+    <category term="raspi" scheme="https://12tall.github.io/categories/raspi/"/>
+    
+    
+    <category term="c" scheme="https://12tall.github.io/tags/c/"/>
+    
+    <category term="asm" scheme="https://12tall.github.io/tags/asm/"/>
+    
+    <category term="arm" scheme="https://12tall.github.io/tags/arm/"/>
+    
+    <category term="raspberrypi" scheme="https://12tall.github.io/tags/raspberrypi/"/>
+    
+    <category term="os" scheme="https://12tall.github.io/tags/os/"/>
+    
+    <category term="boot" scheme="https://12tall.github.io/tags/boot/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>通过Cheat Engine 爆破注册码</title>
+    <link href="https://12tall.github.io/2023/09/15/ce/"/>
+    <id>https://12tall.github.io/2023/09/15/ce/</id>
+    <published>2023-09-14T15:00:00.000Z</published>
+    <updated>2025-05-22T05:35:11.529Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;玩《植物大战僵尸》时学过一点点CE，想着是不是可以用来追软件的注册码？谷歌了一下，果然还是有&lt;a href=&quot;https://www.youtube.com/watch?v=Emiuht3YSXA&quot;&gt;教程&lt;/a&gt;的。而且CE 上手要比OD 简单感觉。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="notation" scheme="https://12tall.github.io/categories/notation/"/>
+    
+    
+    <category term="Cheat Engine" scheme="https://12tall.github.io/tags/Cheat-Engine/"/>
+    
+    <category term="爆破" scheme="https://12tall.github.io/tags/%E7%88%86%E7%A0%B4/"/>
     
   </entry>
   
@@ -234,6 +336,35 @@
   </entry>
   
   <entry>
+    <title>通过Github Actions 下载转存Youtube 视频</title>
+    <link href="https://12tall.github.io/2023/07/11/github-action-ytb-dl/"/>
+    <id>https://12tall.github.io/2023/07/11/github-action-ytb-dl/</id>
+    <published>2023-07-10T15:00:00.000Z</published>
+    <updated>2025-05-22T05:40:39.046Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;昨天发哥给我看了他的Github 爬虫，能够实现&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="notation" scheme="https://12tall.github.io/categories/notation/"/>
+    
+    
+    <category term="Github Actions" scheme="https://12tall.github.io/tags/Github-Actions/"/>
+    
+    <category term="Youtube" scheme="https://12tall.github.io/tags/Youtube/"/>
+    
+    <category term="Video" scheme="https://12tall.github.io/tags/Video/"/>
+    
+  </entry>
+  
+  <entry>
     <title>一维静电场有限元例子</title>
     <link href="https://12tall.github.io/2023/07/10/fem/1-D_FEM/"/>
     <id>https://12tall.github.io/2023/07/10/fem/1-D_FEM/</id>
@@ -313,6 +444,36 @@
   </entry>
   
   <entry>
+    <title>HeidiSQL 工具</title>
+    <link href="https://12tall.github.io/2023/07/05/heidisql/"/>
+    <id>https://12tall.github.io/2023/07/05/heidisql/</id>
+    <published>2023-07-04T15:00:00.000Z</published>
+    <updated>2025-05-22T05:42:57.615Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;通过ssh-连接数据库&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#通过ssh-连接数据库&quot;&gt;&lt;/a&gt; 通过SSH 连接数据库&lt;/h2&gt;
+&lt;p&gt;服务器上的数据库不能直连，有时候又需要简单调试一下。可以试试HeidiSQL</summary>
+        
+      
+    
+    
+    
+    <category term="notation" scheme="https://12tall.github.io/categories/notation/"/>
+    
+    
+    <category term="ssh" scheme="https://12tall.github.io/tags/ssh/"/>
+    
+    <category term="MariaDB" scheme="https://12tall.github.io/tags/MariaDB/"/>
+    
+    <category term="MySQL" scheme="https://12tall.github.io/tags/MySQL/"/>
+    
+  </entry>
+  
+  <entry>
     <title>有限元计算电磁场</title>
     <link href="https://12tall.github.io/2023/06/15/fem/intro/"/>
     <id>https://12tall.github.io/2023/06/15/fem/intro/</id>
@@ -346,7 +507,7 @@
     <link href="https://12tall.github.io/2023/06/09/experiences/"/>
     <id>https://12tall.github.io/2023/06/09/experiences/</id>
     <published>2023-06-08T15:00:00.000Z</published>
-    <updated>2025-05-22T05:22:02.590Z</updated>
+    <updated>2025-05-22T06:05:28.555Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;复杂功能简单化&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#复杂功能简单化&quot;&gt;&lt;/a&gt; 复杂功能简单化&lt;/h2&gt;
@@ -379,12 +540,12 @@
     
     
     
-    <category term="thoughts" scheme="https://12tall.github.io/categories/thoughts/"/>
+    <category term="thought" scheme="https://12tall.github.io/categories/thought/"/>
     
-    
-    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
     
     <category term="数值分析" scheme="https://12tall.github.io/tags/%E6%95%B0%E5%80%BC%E5%88%86%E6%9E%90/"/>
+    
+    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
     
     <category term="math" scheme="https://12tall.github.io/tags/math/"/>
     
@@ -397,174 +558,25 @@
   </entry>
   
   <entry>
-    <title>Electron 跨域</title>
-    <link href="https://12tall.github.io/2023/04/03/electron/"/>
-    <id>https://12tall.github.io/2023/04/03/electron/</id>
-    <published>2023-04-02T15:00:00.000Z</published>
-    <updated>2025-05-22T05:13:30.179Z</updated>
+    <title>Golang 编译Win32 程序</title>
+    <link href="https://12tall.github.io/2023/04/08/app/"/>
+    <id>https://12tall.github.io/2023/04/08/app/</id>
+    <published>2023-04-07T15:00:00.000Z</published>
+    <updated>2025-05-22T06:05:28.555Z</updated>
     
     
-    <summary type="html">&lt;p&gt;因为Chrome 内核的限制，Electron 不能获取第三方站点的&lt;code&gt;set-cookie&lt;/code&gt; 信息，从而无法保存用户登登录状态。&lt;/p&gt;</summary>
+    <summary type="html">&lt;p&gt;因为工作中需要给某些&lt;code&gt;.dll&lt;/code&gt; 文件设置所有者为&lt;code&gt;everyone&lt;/code&gt;，需要请求&lt;code&gt;UAC&lt;/code&gt; 权限，故做笔记备忘。&lt;/p&gt;</summary>
     
     
     
-    <category term="nodejs" scheme="https://12tall.github.io/categories/nodejs/"/>
+    <category term="golang" scheme="https://12tall.github.io/categories/golang/"/>
     
     
-    <category term="cookie" scheme="https://12tall.github.io/tags/cookie/"/>
+    <category term="win32" scheme="https://12tall.github.io/tags/win32/"/>
     
-    <category term="跨域" scheme="https://12tall.github.io/tags/%E8%B7%A8%E5%9F%9F/"/>
+    <category term="go" scheme="https://12tall.github.io/tags/go/"/>
     
-  </entry>
-  
-  <entry>
-    <title>Element-Plus 可编辑单元格的实现</title>
-    <link href="https://12tall.github.io/2023/03/15/editable-cell/"/>
-    <id>https://12tall.github.io/2023/03/15/editable-cell/</id>
-    <published>2023-03-14T15:00:00.000Z</published>
-    <updated>2025-05-22T05:16:57.545Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;在前端开发时，会经常用到&lt;code&gt;table&lt;/code&gt; 元素来展示内容。虽然为每条记录都设置一个编辑的页面，会使项目结构更清晰，但是在一些要求不那么严格的场合，如果能直接编辑表格内容，则无论是对用户、还是对开发来讲，都是更友好的选择。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="nodejs" scheme="https://12tall.github.io/categories/nodejs/"/>
-    
-    
-    <category term="Vue" scheme="https://12tall.github.io/tags/Vue/"/>
-    
-    <category term="Element-Plus" scheme="https://12tall.github.io/tags/Element-Plus/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PID 控制算法</title>
-    <link href="https://12tall.github.io/2023/01/04/control/20-pid/"/>
-    <id>https://12tall.github.io/2023/01/04/control/20-pid/</id>
-    <published>2023-01-03T15:00:00.000Z</published>
-    <updated>2025-05-22T04:51:00.286Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;对于连续信号来说，PID 控制器的函数形式为：&lt;/p&gt;
-&lt;p class=&#39;katex-block&#39;&gt;&lt;span class=&quot;katex-display&quot;&gt;&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;u&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;msub&gt;&lt;mi&gt;K&lt;/mi&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;/msub&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;msub&gt;&lt;mi&gt;K&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;/msub&gt;&lt;msubsup&gt;&lt;mo&gt;∫&lt;/mo&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;/msubsup&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;msub&gt;&lt;mi&gt;K&lt;/mi&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;/msub&gt;&lt;mfrac&gt;&lt;mrow&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;/mrow&gt;&lt;/mfrac&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;u(t) = K_pe(t) + K_i&#92;int^t_0e(t)dt + K_d&#92;frac{de(t)}{dt}
-&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:1em;vertical-align:-0.25em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;mopen&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;mclose&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mrel&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:1.036108em;vertical-align:-0.286108em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.07153em;&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;msupsub&quot;&gt;&lt;span class=&quot;vlist-t vlist-t2&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.15139200000000003em;&quot;&gt;&lt;span style=&quot;top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mathnormal mtight&quot;&gt;p&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-s&quot;&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.286108em;&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mopen&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;mclose&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:2.455406em;vertical-align:-0.9119499999999999em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.07153em;&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;msupsub&quot;&gt;&lt;span class=&quot;vlist-t vlist-t2&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.31166399999999994em;&quot;&gt;&lt;span style=&quot;top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mathnormal mtight&quot;&gt;i&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-s&quot;&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.15em;&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.16666666666666666em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mop&quot;&gt;&lt;span class=&quot;mop op-symbol large-op&quot; style=&quot;margin-right:0.44445em;position:relative;top:-0.0011249999999999316em;&quot;&gt;∫&lt;/span&gt;&lt;span class=&quot;msupsub&quot;&gt;&lt;span class=&quot;vlist-t vlist-t2&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:1.5434560000000002em;&quot;&gt;&lt;span style=&quot;top:-1.7880500000000001em;margin-left:-0.44445em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mtight&quot;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;top:-3.8129000000000004em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mathnormal mtight&quot;&gt;t&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-s&quot;&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.9119499999999999em;&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.16666666666666666em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mopen&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;mclose&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:2.113em;vertical-align:-0.686em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.07153em;&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;msupsub&quot;&gt;&lt;span class=&quot;vlist-t vlist-t2&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.33610799999999996em;&quot;&gt;&lt;span style=&quot;top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mathnormal mtight&quot;&gt;d&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-s&quot;&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.15em;&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mopen nulldelimiter&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mfrac&quot;&gt;&lt;span class=&quot;vlist-t vlist-t2&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:1.427em;&quot;&gt;&lt;span style=&quot;top:-2.314em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:3em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;top:-3.23em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:3em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;frac-line&quot; style=&quot;border-bottom-width:0.04em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;top:-3.677em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:3em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mopen&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;mclose&quot;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-s&quot;&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.686em;&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mclose nulldelimiter&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;其中&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mi&gt;r&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;e(t) = r(t) - c(t)&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:1em;vertical-align:-0.25em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mopen&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;mclose&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mrel&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:1em;vertical-align:-0.25em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.02778em;&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;mopen&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;mclose&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:1em;vertical-align:-0.25em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;mopen&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;mclose&quot;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 表示系统反馈与输入直接按的误差。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="math" scheme="https://12tall.github.io/categories/math/"/>
-    
-    
-    <category term="工程数学" scheme="https://12tall.github.io/tags/%E5%B7%A5%E7%A8%8B%E6%95%B0%E5%AD%A6/"/>
-    
-    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
-    
-    <category term="pid" scheme="https://12tall.github.io/tags/pid/"/>
-    
-    <category term="控制理论" scheme="https://12tall.github.io/tags/%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>简单的壁纸引擎</title>
-    <link href="https://12tall.github.io/2022/12/30/my-wallpaper-engine/"/>
-    <id>https://12tall.github.io/2022/12/30/my-wallpaper-engine/</id>
-    <published>2022-12-29T15:00:00.000Z</published>
-    <updated>2025-05-22T05:13:30.179Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;这个练手的&lt;a href=&quot;https://github.com/12Tall/vite-electron-vue-template/tree/cal&quot;&gt;项目&lt;/a&gt;本来是在21年写的，时间久了就荒废了。今年总结时忽然想到之前自己还做过一个建议的壁纸引擎。发现里面有些东西还是值得记录一下的。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="nodejs" scheme="https://12tall.github.io/categories/nodejs/"/>
-    
-    
-    <category term="Win32" scheme="https://12tall.github.io/tags/Win32/"/>
-    
-    <category term="NAPI" scheme="https://12tall.github.io/tags/NAPI/"/>
-    
-    <category term="Electron" scheme="https://12tall.github.io/tags/Electron/"/>
-    
-    <category term="壁纸引擎" scheme="https://12tall.github.io/tags/%E5%A3%81%E7%BA%B8%E5%BC%95%E6%93%8E/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>液压油 Oil</title>
-    <link href="https://12tall.github.io/2022/12/27/openhydraulics/oil/"/>
-    <id>https://12tall.github.io/2022/12/27/openhydraulics/oil/</id>
-    <published>2022-12-26T15:00:00.000Z</published>
-    <updated>2025-05-22T01:45:10.827Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;Openhydraulics 中的液压油位于Fluids 包下面，液压油是所有液压组件的基础。在OpenHydraulics 中，预设了两种液压油模型，二者均以&lt;code&gt;PartialFluid&lt;/code&gt; 为基类。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="math" scheme="https://12tall.github.io/categories/math/"/>
-    
-    
-    <category term="OpenModelica" scheme="https://12tall.github.io/tags/OpenModelica/"/>
-    
-    <category term="OpenHydrualics" scheme="https://12tall.github.io/tags/OpenHydrualics/"/>
-    
-    <category term="建模" scheme="https://12tall.github.io/tags/%E5%BB%BA%E6%A8%A1/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>新龙格-库塔算法求微分方程（组）的实现</title>
-    <link href="https://12tall.github.io/2022/12/18/new_ruge-kutta/"/>
-    <id>https://12tall.github.io/2022/12/18/new_ruge-kutta/</id>
-    <published>2022-12-17T15:00:00.000Z</published>
-    <updated>2025-05-22T04:51:00.283Z</updated>
-    
-    
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;有关数学原理部分，请参考&lt;a href=&quot;./README.md&quot;&gt;龙格-库塔算法求微分方程（组）&lt;/a&gt;，本文着重描述&lt;code&gt;RK4&lt;/code&gt; 的Python 实现。&lt;/p&gt;
-&lt;/blockquote&gt;</summary>
-    
-    
-    
-    <category term="math" scheme="https://12tall.github.io/categories/math/"/>
-    
-    
-    <category term="微分方程" scheme="https://12tall.github.io/tags/%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B/"/>
-    
-    <category term="数值分析" scheme="https://12tall.github.io/tags/%E6%95%B0%E5%80%BC%E5%88%86%E6%9E%90/"/>
-    
-    <category term="Python" scheme="https://12tall.github.io/tags/Python/"/>
-    
-    <category term="微分代数方程" scheme="https://12tall.github.io/tags/%E5%BE%AE%E5%88%86%E4%BB%A3%E6%95%B0%E6%96%B9%E7%A8%8B/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>方程的思想</title>
-    <link href="https://12tall.github.io/2022/12/06/equation/"/>
-    <id>https://12tall.github.io/2022/12/06/equation/</id>
-    <published>2022-12-06T05:58:06.000Z</published>
-    <updated>2025-05-22T01:39:47.390Z</updated>
-    
-    
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;吾见其难为，怵然为戒，视为止，行为迟。动刀甚微，謋然已解，如土委地。提刀而立，为之四顾，为之踌躇满志，善刀而藏之。——《庖丁解牛》&lt;/p&gt;
-&lt;/blockquote&gt;</summary>
-    
-    
-    
-    <category term="thoughts" scheme="https://12tall.github.io/categories/thoughts/"/>
-    
-    
-    <category term="modeling" scheme="https://12tall.github.io/tags/modeling/"/>
-    
-    <category term="math" scheme="https://12tall.github.io/tags/math/"/>
-    
-    <category term="我理解的" scheme="https://12tall.github.io/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/"/>
-    
-    <category term="simulation" scheme="https://12tall.github.io/tags/simulation/"/>
+    <category term="UAC" scheme="https://12tall.github.io/tags/UAC/"/>
     
   </entry>
   

@@ -1,0 +1,111 @@
+\documentclass{article}  
+\usepackage[UTF8]{ctex}
+\usepackage{minted}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{multicol}
+\usepackage{xcolor}
+\geometry{
+    a4paper,
+    % landscape,
+    margin=1cm,
+}
+\begin{document}
+\pagestyle{empty}
+% \title{Cheatsheet for cheatsheet}
+% \maketitle
+
+\setlength{\columnsep}{30pt}
+\begin{multicols}{2}
+
+    \begin{minipage}{0.45\textwidth}
+        \raggedright
+        \begin{tcolorbox}[colback=orange!30, colframe=orange!60, title=Document]
+            \begin{minted}[gobble=16]{tex}
+                \documentclass{article} 
+                \usepackage{geometry} 
+                \geometry{
+                    a4paper, landscape, margin=2cm,
+                }
+                % A4, Horizontal          
+
+                \usepackage[UTF8]{ctex}
+                % Chinese Charactor Support
+
+                \pagestyle{empty} 
+                % no page No.
+            \end{minted}
+        \end{tcolorbox}
+        \begin{tcolorbox}[colback=cyan!30, colframe=cyan!60, title=Multi-columns]
+            \begin{minted}[gobble=16]{tex}
+                \usepackage{multicol}        
+                \begin{multicols}{3}
+                    % 3 cols, auto arrange, 
+                    % or insert minipages  
+                    \begin{minipage}{0.3\textwidth}  
+                        % ...
+                    \end{minipage}\hfill
+                    % ...
+                \end{multicols}                
+            \end{minted}
+        \end{tcolorbox}
+    \end{minipage}\hfill
+    \begin{minipage}{0.45\textwidth}
+        \begin{tcolorbox}[colback=cyan!30, colframe=cyan!60, title=Colorful-text-box]
+            \begin{minted}[gobble=16]{tex}
+                \begin{tcolorbox}[colback=blue!30, 
+                    colframe=blue!60, 
+                    title=Title]
+                    % content
+                \end{tcolorbox}
+        \end{minted}
+        \end{tcolorbox}
+        \begin{tcolorbox}[colback=violet!30, colframe=violet!60, title=Code-block]
+            \begin{minted}[gobble=16]{tex}
+                \begin{minted}[gobble=16]{tex}
+                    % DO NOT support minited recursive
+                    % or refer an input.tex  
+                    % or use `\textbackslash`
+                    % to replace `\`
+                \end{ minted}  
+                % here I put a white space 
+            \end{minted}
+        \end{tcolorbox}
+        \begin{tcolorbox}[colback=orange!30, colframe=orange!60, title=Custom-color]
+            \begin{minted}[gobble=16]{tex}
+                \usepackage{xcolor}  
+                \color{pink}  
+                % or  
+                \definecolor{mycolor}{RGB}{255,0,0}
+                \definecolor{mycolor}{HTML}{FF0000}
+                \definecolor{mycolor}{cmyk}{0,1,1,0}
+                \color{mycolor}
+            \end{minted}
+        \end{tcolorbox}
+        \begin{tcolorbox}[colback=magenta!30, colframe=magenta!60, title=Color]
+            \begin{tabular}{llll}
+                \textcolor{red}{red}         & \textcolor{green}{green}         & \textcolor{blue}{blue}   & \textcolor{cyan}{cyan}   \\
+                \textcolor{magenta}{magenta} & \textcolor{yellow}{yellow}       & \textcolor{black}{black} & \textcolor{white}{white} \\
+                \textcolor{orange}{orange}   & \textcolor{violet}{violet}       & \textcolor{brown}{brown} & \textcolor{pink}{pink}   \\
+                \textcolor{purple}{purple}   & \textcolor{teal}{teal}           & \textcolor{olive}{olive} & \textcolor{lime}{lime}   \\
+                \textcolor{gray}{gray}       & \textcolor{lightgray}{lightgray} &                          &                          \\
+            \end{tabular}
+        \end{tcolorbox}
+        \begin{tcolorbox}[colback=cyan!30, colframe=cyan!60, title=.gitignore]
+            \begin{tabular}{llll}
+                *\_minted-* &  &  & \\
+                *.log      &  &  & \\
+                *.aux      &  &  & \\
+                *.bbl      &  &  & \\
+                *.synctex* &  &  &
+            \end{tabular}
+        \end{tcolorbox}
+
+        \begin{tcolorbox}[colback=pink!30, colframe=pink!60, title=Others]
+            1. add `--shell-escape` to VSCode `Latex Workshop`  \\
+            2. how to solve `Underfull \textbackslash{hbox} (badness 10000)` warning.
+        \end{tcolorbox}
+    \end{minipage}
+\end{multicols}
+
+\end{document}
