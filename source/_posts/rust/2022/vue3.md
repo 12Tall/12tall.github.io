@@ -131,7 +131,7 @@ export default defineConfig({
 3. `--prefix-colors "bgBlue.bold,bgMagenta.bold"` 用来表示进程名的显示样式  
 
 可以看到，参数的值可以是以逗号分隔的列表的形式。更多详细配置可以参考[官方说明文档](https://github.com/open-cli-tools/concurrently#usage)。配置完成后效果如下图所示：  
-![](./img/concurrent-task.png)
+![](concurrent-task.png)
 
 
 ## 打包编译  

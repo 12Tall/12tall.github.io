@@ -100,7 +100,7 @@ NAPI_MODULE(NODE_GYP_MODULE_NAME, Init)
 ## 主要代码逻辑  
 在Windows 中，桌面、壁纸、甚至图标都是以窗口的形式渲染的。就壁纸而言，其窗口存在于一个包含有`SHELLDLL_DefView` 窗口的`WorkerW` 窗口。Windows 自带的窗口我们无法操作，但是我们可以新建一个新的窗口将壁纸窗口遮蔽掉。然后在该窗口中，我们就可以设置视频、动画等效果。随心所欲。  
 具体可参见：[最近很火的 Wallpaper Engine 的实现原理是怎样的？](https://www.zhihu.com/question/54246843/answer/1053268179)。练手项目中还包含开机启动和一个简单的日历效果，大致如下：  
-![](./img/result.png)    
+![](result.png)    
 
 
 ## Win32 编程  

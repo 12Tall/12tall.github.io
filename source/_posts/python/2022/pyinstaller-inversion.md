@@ -34,7 +34,7 @@ tags:
 You can now use a python decompiler on the pyc files within the extracted directory
 ```
 需要注意的是，**解包的Python 版本应该与打包时的Python 版本一致**，如Python 3.7 打包的程序，就应该使用Python 3.7 解包。不然会发现解包后`PYZ-00.pyz_extracted` 文件夹内没有文件：  
-![](./img/pyinstxtractor-with-py38.png)
+![](pyinstxtractor-with-py38.png)
 
 因为`pyinstxtractor.py` 不依赖外部包，所以可以直接下载免安装版的Python 3.7 解包：  
 ```shell-session{1}  
@@ -57,7 +57,7 @@ You can now use a python decompiler on the pyc files within the extracted direct
 ```
 
 以Python 3.7 解包，可以发现`PYZ-00.pyz_extracted` 内部有了很多条目，其中就包含许多`.pyc` 文件，其中就包含关键逻辑的代码：  
-![](./img/pyinstxtractor-with-py37.png)  
+![](pyinstxtractor-with-py37.png)  
 
 ## 通过uncompyle6 逆向.pyc 文件  
 `uncompyle6` 无需指定Python 的版本，但是需要提前安装：  
@@ -66,7 +66,7 @@ You can now use a python decompiler on the pyc files within the extracted direct
 ```
 
 下图中，红框中的内容就是我们所需要逆向的代码逻辑和图片资源，至于怎么找到的（目前我还是看名字猜的）：  
-![](./img/PYX-00.pyz_extracted.png)
+![](PYX-00.pyz_extracted.png)
 
 ### 逆向代码逻辑    
 
@@ -128,7 +128,7 @@ a3__ico.GetImage().SaveFile('ico.jpg')
 待提高的部分：  
 1. 日志滚动条样式优化。    
 
-![](./img/new-app.png)
+![](new-app.png)
 
 ## 参考资料  
 1. [Python逆向——Pyinstaller逆向](https://bbs.pediy.com/thread-271253.htm)

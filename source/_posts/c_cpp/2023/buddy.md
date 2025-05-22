@@ -12,7 +12,7 @@ tags:
 
 ### 右手定则
 磁场在电机中扮演举足轻重的角色，了解矢量在右手坐标系中的叉乘，将有助于对磁场、磁通量和安培力的理解与学习。如下图所示，如果矢量$\vec{z}=\vec{x}\times\vec{y}$，那么并拢右手四指指向$\vec{x}$，掌心朝向$\vec{y}$，则拇指竖起便是$\vec{z}$ 的方向。   
-![](./img/right-hand-rule.svg)
+![](right-hand-rule.svg)
 
 通过右手定则，可以快速判断各类矢量的方向，如磁通量、安培力等。  
 
@@ -31,7 +31,7 @@ $$\boldsymbol{R} = \frac{l}{\boldsymbol{A}\mu} \tag{2}$$
 磁通密度，也叫磁感应强度，表示单位面积上的磁通量，符号是$\boldsymbol{B}$，单位是特斯拉$T$。可以理解为磁感线在介质中的密度。  
 $$\boldsymbol{B} = \frac{\boldsymbol{\Phi}}{\boldsymbol{A}} \tag{3}$$  
 在均匀（磁导率处处相同）介质中，磁感线是均匀分布的，于是截面积越小的地方，磁通密度越大。如下图中$\boldsymbol{B}_a = 2\boldsymbol{B}_b$  
-![](./img/magnetic-flux-density.png)  
+![](magnetic-flux-density.png)  
 
 考虑$(1)(2)(3)$式，可以得出，在如下图所示的气隙内，其平均磁通密度：  
 $$\boldsymbol{B} = \frac{\mu_0N\boldsymbol{I}}{L_{gap}} \tag{4}$$  
@@ -64,7 +64,7 @@ $$\boldsymbol{F} = \boldsymbol{I}\boldsymbol{B}l \tag{5}$$
 ### 电机的转矩  
 > 电机的输出转矩一般决定于电机的尺寸  
 
-![](./img/average_B_A_density.png)  
+![](average_B_A_density.png)  
 
 **平局磁通密度$\bar{B}$**：在一个磁极下，近似认为转子是平滑的，气隙的平均磁通密度。    
 **平均电流密度$\bar{A}$**：在一个磁极下，其通过电流的总和除以磁极的弧长。  
@@ -93,15 +93,15 @@ $$\boldsymbol{U_{in} + IR + vBl = 0} \tag{9}$$
 
 ### 电机的输出特性  
 由方程$(6),(9)$ 可以看出，电机的转速与负载相关。在空载时，其电流与转速随时间的变化如下图所示：  
-![](./img/current_without_load.png)  
+![](current_without_load.png)  
 而由于励磁影响电机的反电动势，所以电机空载转速会随着励磁的增加而减小，如下图所示：  
-![](./img/speed_in_different_flux.png)  
+![](speed_in_different_flux.png)  
 
 由$(6)$ 可知，电机的输出扭矩与电枢电流正相关，所以负载越大，电枢电流就会越大。而电枢电流的增大会导致铜耗增加，唯有反电动势减小才能使得回路电压平衡。于是转速会迅速降低。关系大致如下：  
 $$\boldsymbol{U_{in}=a_1TR+a_2B\omega} \tag{10}$$  
 在电枢电阻为0时，电机转速不受负载影响。而电枢电阻越大，电机降速就会越快，如下图：  
-![](./img/speed_torque.png)  
+![](speed_torque.png)  
 当然，励磁也会对电机速度有影响，具体表现为：励磁越强，电机转速降低越不明显：  
-![](./img/speed_torque_in_different_flux.png)  
+![](speed_torque_in_different_flux.png)  
 
 上面两幅图其实横纵坐标对调一下就更容易看懂了。当然，上面的分析需要引申一下才能用到电机的暂态过程。  

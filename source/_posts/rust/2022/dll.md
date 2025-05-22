@@ -12,7 +12,7 @@ tags:
 > 指定目标平台：`cargo build --target=i686-pc-windows-msvc [--release]`
 <!-- more -->
 项目结构如下图所示：  
-![](./img/project-structure.png)  
+![](project-structure.png)  
 
 ## 添加依赖项  
 因为是编译为DLL 文件，这里仅添加最基本的`windows-rs` 依赖：  
