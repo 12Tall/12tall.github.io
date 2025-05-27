@@ -1,0 +1,6 @@
+__pycache__
+app.dist
+app.build
+app.onefile-build
+app.bin
+app.exe
