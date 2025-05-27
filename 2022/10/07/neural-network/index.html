@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="我一直希望，能不能有一种非常非常简单、形象的方式，来向人们解释复杂的理论。最好是能用生动的比喻、连同它的历史一起、娓娓道来。这种方式一定非常适合人们对事物的理解的习惯吧。 也许这是一个死胡同，走到某一步便走不下去了。也许这也是前人走过无数遍的道路，只不过谁也不曾注意到路边的野花。我更愿意说这是一种思维方式，中间掺杂着我大学以来学习、思考的结果。边走边看吧。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我理解的神经网络">
+<meta property="og:url" content="https://12tall.github.io/2022/10/07/neural-network/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="我一直希望，能不能有一种非常非常简单、形象的方式，来向人们解释复杂的理论。最好是能用生动的比喻、连同它的历史一起、娓娓道来。这种方式一定非常适合人们对事物的理解的习惯吧。 也许这是一个死胡同，走到某一步便走不下去了。也许这也是前人走过无数遍的道路，只不过谁也不曾注意到路边的野花。我更愿意说这是一种思维方式，中间掺杂着我大学以来学习、思考的结果。边走边看吧。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/01_function/1in1out.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/01_function/2in2out.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/02_statistic/scatter-plot.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/02_statistic/linear-interpolation.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/02_statistic/least-squares-method.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/02_statistic/min-value-of-lsm.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/02_statistic/gradient-descent.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/02_statistic/gradient.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/03_lsm/high-dim-lsm.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/03_lsm/scatter-ln.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/03_lsm/composite-function.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/03_lsm/composite-function2.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/03_lsm/composite-function-gradient.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/03_lsm/diff-function.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/04_matrix/vector.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/04_matrix/std-vector.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/04_matrix/mul.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/04_matrix/polynomial.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/02_statistic/least-squares-method.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/05_single_nerual_network/lsm-function-structure.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/05_single_nerual_network/sigmoid.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/05_single_nerual_network/function-structure.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/06_deep_learning/composite-func.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/06_deep_learning/matrix-dimension.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/06_deep_learning/planar-scatter.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/06_deep_learning/logistic-regression.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/06_deep_learning/single-hidden-layer.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/06_deep_learning/single-hidden-layer-3-nodes.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/07_my_dl_structure/loss.svg">
+<meta property="article:published_time" content="2022-10-07T07:26:23.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.274Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="我理解的">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="neural network">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://12tall.github.io/2022/10/07/neural-network/01_function/1in1out.svg">
+
+
+<link rel="canonical" href="https://12tall.github.io/2022/10/07/neural-network/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2022/10/07/neural-network/","path":"2022/10/07/neural-network/","title":"我理解的神经网络"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>我理解的神经网络 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E4%B8%8E%E9%BB%91%E7%9B%92%E5%AD%90"><span class="nav-number">1.</span> <span class="nav-text"> 函数与黑盒子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E8%BE%93%E5%85%A5%E5%8D%95%E8%BE%93%E5%87%BA%E5%87%BD%E6%95%B0"><span class="nav-number">1.1.</span> <span class="nav-text"> 单输入单输出函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E8%BE%93%E5%85%A5%E5%A4%9A%E8%BE%93%E5%87%BA%E5%87%BD%E6%95%B0"><span class="nav-number">1.2.</span> <span class="nav-text"> 多输入多输出函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%9F%E8%AE%A1%E4%B8%8E%E6%8B%9F%E5%90%88"><span class="nav-number">2.</span> <span class="nav-text"> 统计与拟合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%A3%E7%82%B9%E5%9B%BE"><span class="nav-number">2.1.</span> <span class="nav-text"> 散点图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%92%E5%80%BC%E6%B3%95"><span class="nav-number">2.2.</span> <span class="nav-text"> 插值法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95"><span class="nav-number">2.3.</span> <span class="nav-text"> 最小二乘法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-number">2.4.</span> <span class="nav-text"> 梯度下降</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E7%9A%84%E6%89%A9%E5%B1%95"><span class="nav-number">3.</span> <span class="nav-text"> 最小二乘法的扩展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E7%BB%B4%E5%BD%A2%E5%BC%8F"><span class="nav-number">3.1.</span> <span class="nav-text"> 高维形式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%9F%E5%90%88%E6%9B%B2%E7%BA%BF"><span class="nav-number">3.2.</span> <span class="nav-text"> 拟合曲线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%8D%E5%90%88%E5%87%BD%E6%95%B0"><span class="nav-number">3.3.</span> <span class="nav-text"> 复合函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%8D%E5%90%88%E5%87%BD%E6%95%B0%E6%B1%82%E5%AF%BC"><span class="nav-number">3.3.1.</span> <span class="nav-text"> 复合函数求导</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AF%E5%B7%AE%E5%87%BD%E6%95%B0"><span class="nav-number">3.4.</span> <span class="nav-text"> 误差函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E4%B8%8E%E7%9F%A9%E9%98%B5"><span class="nav-number">4.</span> <span class="nav-text"> 向量与矩阵</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E4%B8%8E%E5%90%91%E9%87%8F"><span class="nav-number">4.1.</span> <span class="nav-text"> 特征与向量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E4%B8%8E%E8%A1%8C%E5%88%97%E5%BC%8F"><span class="nav-number">4.2.</span> <span class="nav-text"> 矩阵与行列式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#numpy%E4%B8%AD%E7%9A%84%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97"><span class="nav-number">4.3.</span> <span class="nav-text"> Numpy中的矩阵运算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E7%A5%9E%E7%BB%8F%E5%85%83%E7%BD%91%E7%BB%9C"><span class="nav-number">5.</span> <span class="nav-text"> 单神经元网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E7%9A%84%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95"><span class="nav-number">5.1.</span> <span class="nav-text"> 梯度下降的最小二乘法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E7%89%87%E4%B8%AD%E6%98%AF%E5%90%A6%E6%9C%89%E7%8C%AB"><span class="nav-number">5.2.</span> <span class="nav-text"> 图片中是否有猫</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="nav-number">5.3.</span> <span class="nav-text"> 实用工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="nav-number">6.</span> <span class="nav-text"> 深度学习神经网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E7%9A%84%E5%BE%AE%E5%88%86"><span class="nav-number">6.1.</span> <span class="nav-text"> 矩阵的微分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92"><span class="nav-number">6.2.</span> <span class="nav-text"> 逻辑回归</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E4%B8%AA%E9%9A%90%E8%97%8F%E5%B1%82"><span class="nav-number">6.3.</span> <span class="nav-text"> 单个隐藏层</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="nav-number">7.</span> <span class="nav-text"> 构造自己的神经网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E7%89%87%E4%B8%AD%E6%98%AF%E5%90%A6%E6%9C%89%E7%8C%AB%E4%BA%8C"><span class="nav-number">7.1.</span> <span class="nav-text"> 图片中是否有猫（二）</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/10/07/neural-network/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="我理解的神经网络 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          我理解的神经网络
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-10-07 15:26:23" itemprop="dateCreated datePublished" datetime="2022-10-07T15:26:23+08:00">2022-10-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/thought/" itemprop="url" rel="index"><span itemprop="name">thought</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>8.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>31 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>我一直希望，能不能有一种非常非常简单、形象的方式，来向人们解释复杂的理论。最好是能用生动的比喻、连同它的历史一起、娓娓道来。这种方式一定非常适合人们对事物的理解的习惯吧。</p>
+<p>也许这是一个死胡同，走到某一步便走不下去了。也许这也是前人走过无数遍的道路，只不过谁也不曾注意到路边的野花。我更愿意说这是一种思维方式，中间掺杂着我大学以来学习、思考的结果。边走边看吧。</p>
+<span id="more"></span>
+<h2 id="函数与黑盒子"><a class="markdownIt-Anchor" href="#函数与黑盒子"></a> 函数与黑盒子</h2>
+<p>让我们回到初中的数学课堂，回忆一下什么是函数。大概的定义是一组数据到另一组数据的映射。但是以一个未知的概念去定义另一个未知的概念是一件很危险的事情：什么是映射呢？</p>
+<h3 id="单输入单输出函数"><a class="markdownIt-Anchor" href="#单输入单输出函数"></a> 单输入单输出函数</h3>
+<p>不妨让我们将函数看作一个黑盒子，包含一个数据入口和一个数据出口的黑盒子。盒子内部会进行一系列的加工处理工作，比如：将输入的数据值增加1，并输出到外界。那我们就可以将这个函数的功能用数学公式表示：对于输入<code>x</code>，经过函数的处理后会输出<code>y=x+1</code>。好巧不巧，函数的英文名字是<code>function</code>，也刚好有“功能”的意思。<br />
+<img src="01_function/1in1out.svg" alt="单输入单输出函数" /></p>
+<h3 id="多输入多输出函数"><a class="markdownIt-Anchor" href="#多输入多输出函数"></a> 多输入多输出函数</h3>
+<p>更进一步，我们可以定义另一个盒子，包含两个输入<code>x,y</code>和两个输出<code>z1,z2</code>，其中<code>z1=x+y; z2=x-y</code>。当<code>y</code> 的值被锁定为<code>1</code> 时，<code>z1=x+1</code> 退化为上文提到的<a href="#%E5%8D%95%E8%BE%93%E5%85%A5%E5%8D%95%E8%BE%93%E5%87%BA%E5%87%BD%E6%95%B0">单输入单输出函数</a>。<br />
+<img src="01_function/2in2out.svg" alt="多输入多输出函数" /><br />
+多输入单输出的函数在生活中也比较常见，比如：安全要求比较高的门禁系统，要同时插入两把钥匙才能打开；计算机中的调色板通过设置<code>R,G,B</code> 的值来唯一确定一种颜色；听到下课铃并且到饭点了才能去食堂吃饭。想一想，现实生活中可以总结出规律的事情，基本都能用一个多输入的黑盒子模块表示。</p>
+<p>一般来说我们设计系统时，要求尽量做到模块化，新增的模块（黑盒子）对原有的系统不要有侵入（即不要影响本来系统的函数式），这样的模块能够做到即插即用。对于每一个模块而言，需要尽量做到输出对于输入没有影响，就算有，我们也能通过传递函数化简（概念取自于自动控制原理），将系统在概念层面化简为新的独立的模块构成。</p>
+<h2 id="统计与拟合"><a class="markdownIt-Anchor" href="#统计与拟合"></a> 统计与拟合</h2>
+<p>自然界中一般会存在两种函数：已知的和未知的。像电压-电流关系<code>U=I*R</code>、牛顿第二定律<code>F=ma</code>、单位圆上的点（与角/弧度相关）到<code>x</code> 轴的投影<code>y=cos(x)</code>是已知的函数，我们能直接写出它们的函数式；另一种如股票价格变动、声音的波形、汽车油耗随速度的变化，不排除它们按某些规律变化，但是由于影响的因素过多，我们难以找到一个精确的函数式来表示他们的变化。
+对于不知道确切函数式的函数，如果我们想知道某一段输入对应着输出变化的规律则需要用到统计学的方法了。这里的统计学并不包括概率，因为概率的概念还是太抽象了点。</p>
+<h3 id="散点图"><a class="markdownIt-Anchor" href="#散点图"></a> 散点图</h3>
+<p>如果我们想要看到某段输入内，输出的变化趋势。我们可以将所有的输入输出点记录下来，如果记录的点足够多、分布足够均匀，就能得到较为精确的函数图像。实际上计算机作图也是通过这个原理，当离散的点足够密集时，就可以看成一条连续的线了。<br />
+<img src="02_statistic/scatter-plot.svg" alt="散点图" /></p>
+<h3 id="插值法"><a class="markdownIt-Anchor" href="#插值法"></a> 插值法</h3>
+<p>自然界中的信号，一般都是连续变化的，不会突然产生跳变。这就说明，对于两次间隔比较小的输入，其输出一般也差距较小。于是，对于某一个输入值<code>x1</code>，可以说其对应的输出取<code>y1=(y0+y2)/2</code>。这便是最简单的插值法。
+<img src="02_statistic/linear-interpolation.svg" alt="一元线性插值" /></p>
+<h3 id="最小二乘法"><a class="markdownIt-Anchor" href="#最小二乘法"></a> 最小二乘法</h3>
+<p>插值法可以较快地求取某一点的函数值，但是其受采样点的影响比较大，对多输入函数的效果不理想。最重要的是，我们想要一个通用的函数式来表示某个模块的功能。这时候我们就可以根据<a href="#%E6%95%A3%E7%82%B9%E5%9B%BE">散点图</a>中的函数图像，来假设一个近似的函数方程<code>f(x)</code>：参数的系数不固定，通过计算采样点到<code>f(x)</code>的竖直（比较好算）距离的最小值，来唯一确定一组系数，进而得到一条相对比较理想的曲线来拟合模块的函数式。这便是最小二乘法。<br />
+<img src="02_statistic/least-squares-method.svg" alt="最小二乘法" /></p>
+<p>以上图为例，采样点分别为：<code>(x,y)∈&#123;(0,1),(2,2.5),(3,4.5),(4,5),(5,6)&#125;</code>，我们需要假设直线<code>y=kx+b</code>。则某一个采样点<code>(xi,yi)</code>到该直线的竖直距离就是<code>di=|yi-y(xi)|</code>。为了便于计算，我们可以用平方去掉绝对值符号，求所有<code>di²</code>的和<code>D</code>的最小值。这里我们可以用<code>Python</code>的<code>Sympy</code>库来帮助求解得到<code>D</code>关于<code>(k,b)</code>变化的函数；或者直接利用<code>Matlab</code>求出相应的<code>(k,b)</code>。</p>
+<CodeGroup>
+<CodeGroupItem title="Python">
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># pip install Sympy</span>
+<span class="token keyword">from</span> sympy <span class="token keyword">import</span> <span class="token operator">*</span>  
+k<span class="token punctuation">,</span>b <span class="token operator">=</span> symbols<span class="token punctuation">(</span><span class="token string">'k b'</span><span class="token punctuation">)</span>  <span class="token comment"># 定义符号变量  </span>
+<span class="token builtin">sum</span> <span class="token operator">=</span> simplify<span class="token punctuation">(</span>
+    <span class="token punctuation">(</span><span class="token number">1.0</span> <span class="token operator">-</span> <span class="token punctuation">(</span><span class="token number">0.0</span><span class="token operator">*</span>k<span class="token operator">+</span>b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">**</span><span class="token number">2</span> <span class="token operator">+</span>  <span class="token comment"># (0,1)</span>
+    <span class="token punctuation">(</span><span class="token number">2.5</span> <span class="token operator">-</span> <span class="token punctuation">(</span><span class="token number">2.0</span><span class="token operator">*</span>k<span class="token operator">+</span>b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">**</span><span class="token number">2</span> <span class="token operator">+</span>  <span class="token comment"># (2,2.5)</span>
+    <span class="token punctuation">(</span><span class="token number">4.5</span> <span class="token operator">-</span> <span class="token punctuation">(</span><span class="token number">3.0</span><span class="token operator">*</span>k<span class="token operator">+</span>b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">**</span><span class="token number">2</span> <span class="token operator">+</span>  <span class="token comment"># (3,4.5)</span>
+    <span class="token punctuation">(</span><span class="token number">5.0</span> <span class="token operator">-</span> <span class="token punctuation">(</span><span class="token number">4.0</span><span class="token operator">*</span>k<span class="token operator">+</span>b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">**</span><span class="token number">2</span> <span class="token operator">+</span>  <span class="token comment"># (4,5)</span>
+    <span class="token punctuation">(</span><span class="token number">6.0</span> <span class="token operator">-</span> <span class="token punctuation">(</span><span class="token number">5.0</span><span class="token operator">*</span>k<span class="token operator">+</span>b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">**</span><span class="token number">2</span>    <span class="token comment"># (5,6)</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>latex<span class="token punctuation">(</span><span class="token builtin">sum</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment"># 5.0 b^&#123;2&#125; + 28.0 b k - 38.0 b + 54.0 k^&#123;2&#125; - 137.0 k + 88.5</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+<CodeGroupItem title="Matlab">
+<pre class="line-numbers language-matlab" data-language="matlab"><code class="language-matlab">x<span class="token operator">=</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">]</span>
+y<span class="token operator">=</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2.5</span><span class="token punctuation">,</span><span class="token number">4.5</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">6</span><span class="token punctuation">]</span>
+<span class="token function">plot</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span>y<span class="token punctuation">,</span><span class="token string">'o'</span><span class="token punctuation">)</span>  <span class="token comment">%% 作散点图</span>
+k_b<span class="token operator">=</span><span class="token function">polyfit</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span>y<span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span>
+<span class="token comment">%% k_b = 1.0338    0.9054</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+</CodeGroup>
+<p><code>D</code>关于<code>(k,b)</code>变化的函数图像如下：<br />
+<img src="02_statistic/min-value-of-lsm.svg" alt="最小二乘法最小值" /></p>
+<p>最终曲线的方程为<code>y=1.0338x+0.9054</code>，和想象中稍微有些出入，但是随着采样点的增多，该数值会越来越准确。</p>
+<h3 id="梯度下降"><a class="markdownIt-Anchor" href="#梯度下降"></a> 梯度下降</h3>
+<p>除了使用<code>Matlab</code> 等工具外，还有没有其他办法可以求<code>D</code>的最小值呢？分别求<code>D</code>关于<code>k,b</code>的偏导数，对于这个例子，偏导数全部为<code>0</code>时，<code>D</code>取到最小值。<br />
+然而对于计算机来说，求数值解要比求解析解更加简单，毕竟计算机就是用来计算的、而不是用来思考的。</p>
+<p>如何求数值解？我们先假设上图中有任意一点<code>(ki,bi)</code>，只要让这个点始终沿着<code>D</code>减小的方向移动一点点<code>𝛿</code>就好了。也就是说应该始终沿着偏导数<code>&lt;∂k,∂b&gt;</code>向量相反的方向移动。<br />
+<img src="02_statistic/gradient-descent.svg" alt="梯度下降法" /><br />
+其中，<code>&lt;∂k,∂b&gt;</code>被称作梯度，完整的写法如下：<br />
+<img src="02_statistic/gradient.svg" alt="梯度" /><br />
+这种通过梯度迭代的方法也就叫做<strong>梯度下降法</strong>。也是神经网络中最重要的概念之一。</p>
+<h2 id="最小二乘法的扩展"><a class="markdownIt-Anchor" href="#最小二乘法的扩展"></a> 最小二乘法的扩展</h2>
+<p>上面的例子中，我们只对单输入单输出的函数进行了拟合，最终得到了一组系数<code>(k,b)</code>来确定了一条直线。那么如果是多输入单输出、或者是非直线的函数应该怎么拟合呢？</p>
+<h3 id="高维形式"><a class="markdownIt-Anchor" href="#高维形式"></a> 高维形式</h3>
+<p>对于二维平面中的点我们可以用一维的线取拟合；对于三维空间中的点我们可以用二维的平面去拟合；对于<code>n</code> 维空间中的点，我们则可以用<code>n-1</code> 维的超平面去拟合。形式如下：<br />
+<img src="03_lsm/high-dim-lsm.svg" alt="最小二乘法的高维形式" /><br />
+其中<code>xi</code>作为输入项的集合 ，一般取<code>k0*x0=k0</code>作为常数项。</p>
+<h3 id="拟合曲线"><a class="markdownIt-Anchor" href="#拟合曲线"></a> 拟合曲线</h3>
+<p>即使是高维最小二乘法也只能拟合直线、平面。如果函数的输出并不是分布在一条直线、平面上（如下图），该怎么办呢？
+<img src="03_lsm/scatter-ln.svg" alt="对数函数散点图" /></p>
+<p>这里用<code>线性</code>一词来表示直线变化的情形。我们假设（构造）另一个函数<code>g(x)=ln(x)</code>，那么<code>y~g</code> 就是线性变化的了。所以对于非线性的数据，我们可以根据数据变化的规律，来构造一个函数，使其非线性化。相当于加了一个线性-非线性转换的环节，然后再进行最小二乘法处理。</p>
+<p>这里的非线性函数一般被称为<strong>激活函数</strong>。人类的神经元一般当外界的信号打到某一个值的时候才会被激活，而且输出与输入并不一定是线性关系。这里看来的话叫做激活函数还是挺形象的。</p>
+<h3 id="复合函数"><a class="markdownIt-Anchor" href="#复合函数"></a> 复合函数</h3>
+<p>再者，如果函数图像比较复杂，那我们可以通过用一组或者多组简单的函数图像叠加来进行拟合。这里很容易想到级数的概念，事实上道理是一样的。例如：<code>y=tanh(2sin(x)+1)-tanh(sin(x+1))+1</code>的图像是下图中最粗的蓝色曲线，它是由一系列简单函数依次传递组成的。<br />
+<img src="03_lsm/composite-function.svg" alt="复合函数图像" /><br />
+而对应的函数间的传递方式如下：<br />
+<img src="03_lsm/composite-function2.svg" alt="复合函数分解" /></p>
+<h4 id="复合函数求导"><a class="markdownIt-Anchor" href="#复合函数求导"></a> 复合函数求导</h4>
+<p>对于复合函数的求导过程，我们有公式：
+<img src="03_lsm/composite-function-gradient.svg" alt="复合函数求导" /><br />
+偏导数的求法也是一样，分别求出每一步的导数，最后乘起来就是最终的导数。</p>
+<h3 id="误差函数"><a class="markdownIt-Anchor" href="#误差函数"></a> 误差函数</h3>
+<p>前面我们使用了平均值，数值距离的最小值来表示拟合的程度。其实我们还可以选择其他的函数作为误差函数。例如：我们可以选择点到直线的距离、点到平面的距离等等。但是只要保证一条：最终的误差函数在定义域内应该有且只有一个最小值。否则在使用梯度下降时可能会陷入某一个局部最优解。也就是说误差函数<code>D</code> 最好像下图的左边而不是右边：
+<img src="03_lsm/diff-function.svg" alt="误差函数" /></p>
+<h2 id="向量与矩阵"><a class="markdownIt-Anchor" href="#向量与矩阵"></a> 向量与矩阵</h2>
+<p>来看一个鸡兔同笼问题：今有鸡兔同笼，共有头36，脚48，问鸡、兔各几何？易得兔12、鸡24；再问：今笼有俩鸡仨兔，问有头、脚各几何？</p>
+<h3 id="特征与向量"><a class="markdownIt-Anchor" href="#特征与向量"></a> 特征与向量</h3>
+<p>在此例中，我们可以分别用一组数据来代表鸡和兔的特征：<code>1（头），2（脚）；1（头），4（脚）</code>。我们一般管这样一组数据叫做<strong>特征向量</strong>。顾名思义，表示特征的有方向的量。<br />
+<img src="04_matrix/vector.svg" alt="向量" /></p>
+<p>对于两个向量张成的空间，我们一般称为面积；三维的叫做体积。面积可以表示空间的大小，也可以表示为两个向量平行的程度。因为<code>S=|a||b|sin(α)</code>，<code>α</code>表示向量<code>a,b</code>之间的夹角。向量正确的写法应该是字母上面有一个箭头，但是<code>markdown</code> 内似乎不支持这种写法：<img src="04_matrix/std-vector.svg" alt="向量的写法" /></p>
+<h3 id="矩阵与行列式"><a class="markdownIt-Anchor" href="#矩阵与行列式"></a> 矩阵与行列式</h3>
+<p>回到最初的问题，我们可以列一个表格A 来表示鸡兔两个特征向量的组合；用另一个表格表示笼的特征向量<code>2（鸡）3（兔）</code>。然后问题就变成了，我们需要用<code>头，脚</code>来表示笼的特征。</p>
+<p><img src="04_matrix/mul.svg" alt="矩阵乘法" /></p>
+<p>先计算头的特征<code>h=1x2+1x3=5</code>，再计算脚的特征<code>f=2x2+4x3=16</code>。可以总结出，A 的每一行与B 的每一列的对应项相乘之和就是最后的结果，记作矩阵的乘法<code>C=AB</code>。<br />
+看到这里是不是觉得特熟悉。矩阵乘法里面每一行的运算和多项式的运算形式一模一样：<img src="04_matrix/polynomial.svg" alt="多项式" /><br />
+提示：把<code>x</code> 看作行、把<code>k</code> 看作列。</p>
+<h3 id="numpy中的矩阵运算"><a class="markdownIt-Anchor" href="#numpy中的矩阵运算"></a> Numpy中的矩阵运算</h3>
+<p>在<code>numpy</code> 中定义了一系列的矩阵运算函数，这里简单整理几个常用的，后续再慢慢增加。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np  
+x <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment"># 定义行向量</span>
+<span class="token comment"># [1, 2, 3]</span>
+
+x <span class="token operator">=</span> x<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># 重新排列元素  </span>
+<span class="token comment"># 重新排列为3 行矩阵，列数`-1`表示由函数计算决定有多少列  </span>
+
+y<span class="token operator">=</span><span class="token number">0.5</span>
+y<span class="token operator">=</span>x<span class="token operator">*</span>y  <span class="token comment"># 矩阵A*B 表示对应元素相乘</span>
+<span class="token comment"># y 会被自动扩展为尺寸同x，元素全部为0.5 的矩阵  </span>
+<span class="token comment"># 此操作成为广播</span>
+<span class="token comment"># +,-,*,/,power,log,sqrt,log 等运算均适用  </span>
+
+z<span class="token operator">=</span>x<span class="token punctuation">.</span>dot<span class="token punctuation">(</span>y<span class="token punctuation">.</span>T<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># 矩阵乘法  </span>
+<span class="token comment"># 即上面鸡兔同笼问题推导出来的矩阵乘法 </span>
+<span class="token comment"># .T 表示矩阵的转置  </span>
+<span class="token triple-quoted-string string">'''z=
+[[1.5 2.  2.5]
+ [3.  4.  5. ]
+ [4.5 6.  7.5]]
+'''</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span>z<span class="token punctuation">.</span>mean<span class="token punctuation">(</span>axis<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 输出平均值  </span>
+<span class="token comment"># axis 表示矩阵的维度序号</span>
+<span class="token comment"># [3. 4. 5.]</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>z<span class="token punctuation">.</span>mean<span class="token punctuation">(</span>axis<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 对照z 的值理解</span>
+<span class="token comment"># [2. 4. 6.]</span>
+<span class="token comment"># 不是太好理解，大致表示对第n 层的元素求平均值</span>
+
+np<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span><span class="token punctuation">(</span>row<span class="token punctuation">,</span> col<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 初始化0 矩阵</span>
+np<span class="token punctuation">.</span>around<span class="token punctuation">(</span>z<span class="token punctuation">)</span>  <span class="token comment"># 四舍五入  </span>
+z<span class="token punctuation">.</span>flatten<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 平坦化，按某种顺序转化为行向量，一般是按C 数组的方式  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="单神经元网络"><a class="markdownIt-Anchor" href="#单神经元网络"></a> 单神经元网络</h2>
+<p>其实神经网络要做的，也只是构造一个函数，去拟合一段数据的变化情况罢了。只不过我们让电脑利用<a href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D">梯度下降</a>的办法逐渐调整最优系数组合。下面我们还是以<a href="#%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95">最小二乘法</a>中的数据为例，来看看神经网络的构造过程与工作原理。</p>
+<h3 id="梯度下降的最小二乘法"><a class="markdownIt-Anchor" href="#梯度下降的最小二乘法"></a> 梯度下降的最小二乘法</h3>
+<p><img src="02_statistic/least-squares-method.svg" alt="最小二乘法" /><br />
+首先提取计算需要用到的信息：</p>
+<ul>
+<li>采样次数<code>n</code>：5</li>
+<li>输入特征向量的维度<code>m</code>：1</li>
+<li>输入数据<code>X</code>：<code>[0, 2, 3, 4, 5]</code></li>
+<li>输出数据的维度：1</li>
+<li>输出数据<code>Y</code>：<code>[1, 2.5, 4.5, 5, 6]</code></li>
+</ul>
+<p>然后针对<strong>某一次采样数据</strong>构造函数传递的过程，这里因为输出结果也是线性的，所以激活函数可以取<code>a(z)=z</code>，即不做任何处理，相当于一个透明环节。其导数值恒为<code>1</code><br />
+<img src="05_single_nerual_network/lsm-function-structure.svg" alt="最小二乘法函数传递" /><br />
+而我们的样本数量为5，这样每次计算会得到5 个误差值。一般我们取其平均值作为最终的误差。</p>
+<p>下面是是<code>Python</code> 的代码，可以看到随着迭代次数的增加，误差逐渐减小。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+
+<span class="token comment"># 初始化参数  </span>
+x <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+y <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2.5</span><span class="token punctuation">,</span> <span class="token number">4.5</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+k<span class="token punctuation">,</span>b<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span>
+delta<span class="token operator">=</span><span class="token number">0.01</span>  <span class="token comment"># 步长不宜过大，否则递归下降的过程会产生震荡</span>
+
+<span class="token comment"># 线性过程：z=kx+b</span>
+<span class="token keyword">def</span> <span class="token function">Z</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>      
+    <span class="token keyword">return</span> k<span class="token operator">*</span>x<span class="token operator">+</span>b
+<span class="token keyword">def</span> <span class="token function">dz_dk</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># z对k 的偏导</span>
+    <span class="token keyword">return</span> x
+<span class="token keyword">def</span> <span class="token function">dz_db</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># z对b 的偏导</span>
+    <span class="token keyword">return</span> <span class="token number">1</span>
+
+<span class="token comment"># 激活函数：a=z 由散点图可设激活函数是线性的</span>
+<span class="token keyword">def</span> <span class="token function">Act</span><span class="token punctuation">(</span>z<span class="token punctuation">)</span><span class="token punctuation">:</span>    
+    <span class="token keyword">return</span> z
+<span class="token keyword">def</span> <span class="token function">dAct</span><span class="token punctuation">(</span>z<span class="token punctuation">)</span><span class="token punctuation">:</span>   <span class="token comment"># 激活函数的偏微分</span>
+    <span class="token keyword">return</span> <span class="token number">1</span>
+
+<span class="token comment"># 误差函数：(y-a)^2，最小二乘法</span>
+<span class="token keyword">def</span> <span class="token function">Diff</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>    
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>y<span class="token operator">-</span>a<span class="token punctuation">)</span><span class="token operator">*</span><span class="token punctuation">(</span>y<span class="token operator">-</span>a<span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">dDiff</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">2</span><span class="token operator">*</span><span class="token punctuation">(</span>y<span class="token operator">-</span>a<span class="token punctuation">)</span>
+
+<span class="token comment"># 反复迭代梯度下降过程</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">10000</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    z <span class="token operator">=</span> Z<span class="token punctuation">(</span>x<span class="token punctuation">)</span>       <span class="token comment"># 求取每一个节点的计算结果</span>
+    a <span class="token operator">=</span> Act<span class="token punctuation">(</span>z<span class="token punctuation">)</span>
+    d <span class="token operator">=</span> Diff<span class="token punctuation">(</span>a<span class="token punctuation">,</span> y<span class="token punctuation">)</span>
+    <span class="token comment"># 求取误差函数对k,b 的偏微分，每次采样都是不同的</span>
+    dd_dk <span class="token operator">=</span> dDiff<span class="token punctuation">(</span>a<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token operator">*</span>dAct<span class="token punctuation">(</span>z<span class="token punctuation">)</span><span class="token operator">*</span>dz_dk<span class="token punctuation">(</span>x<span class="token punctuation">)</span>  
+    dd_db <span class="token operator">=</span> dDiff<span class="token punctuation">(</span>a<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token operator">*</span>dAct<span class="token punctuation">(</span>z<span class="token punctuation">)</span><span class="token operator">*</span>dz_db<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    <span class="token comment"># 梯度下降：每次迭代都会计算四次采样下的平均值</span>
+    k <span class="token operator">=</span> k<span class="token operator">-</span>delta<span class="token operator">*</span>dd_dk<span class="token punctuation">.</span>mean<span class="token punctuation">(</span>axis<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
+    b <span class="token operator">=</span> b<span class="token operator">-</span>delta<span class="token operator">*</span>dd_db<span class="token punctuation">.</span>mean<span class="token punctuation">(</span>axis<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token comment"># 输出第i 次迭代的结果</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span>k<span class="token punctuation">,</span> b<span class="token punctuation">,</span> d<span class="token punctuation">.</span>mean<span class="token punctuation">(</span>axis<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment"># [1.03378378] [0.90540541] [0.09662162]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="图片中是否有猫"><a class="markdownIt-Anchor" href="#图片中是否有猫"></a> 图片中是否有猫</h3>
+<p>此题为吴恩达深度学习的课后编程题<a target="_blank" rel="noopener" href="https://github.com/Kulbear/deep-learning-coursera/blob/master/Neural%20Networks%20and%20Deep%20Learning/Logistic%20Regression%20with%20a%20Neural%20Network%20mindset.ipynb">Logistic Regression with a Neural Network mindset</a>。根据图片中的像素信息来判断图片中是否有猫。</p>
+<p>首先还是梳理关键信息：</p>
+<ul>
+<li>从图片中读取数据，每张图片包含<code>3*64*64</code> 字节数据，也就是有<code>3*64*64</code>个维度</li>
+<li>用来训练的图片有<code>209</code>张；测试用的<code>50</code>张</li>
+<li>输出是真假，是非线性的，所以需要一个非线性话函数，这里我们用<code>sigmoid</code>函数。为了便于计算，一般我们采用<code>D(a,y)=-(yln(a)-(1-y)ln(1-a))</code>作为误差函数。</li>
+</ul>
+<p><img src="05_single_nerual_network/sigmoid.svg" alt="Sigmoid函数图像" /></p>
+<p>下面是函数传递的示意图，仅以二维输入示意，实际输入应该是<code>3*64*64</code>维：<br />
+<img src="05_single_nerual_network/function-structure.svg" alt="函数结构" /></p>
+<p>除了修改数据初始化、激活函数与误差函数外，我们可以几乎照搬<a href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E7%9A%84%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95">梯度下降的最小二乘法</a>里面的代码。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+<span class="token keyword">from</span> PIL <span class="token keyword">import</span> Image
+<span class="token keyword">from</span> lr_utils <span class="token keyword">import</span> load_dataset
+
+<span class="token comment"># 数据加载过程题目已经给出 </span>
+delta<span class="token operator">=</span><span class="token number">0.1</span>  
+dim <span class="token operator">=</span> <span class="token number">3</span><span class="token operator">*</span><span class="token number">64</span><span class="token operator">*</span><span class="token number">64</span>  <span class="token comment"># 图片数据维度  </span>
+k <span class="token operator">=</span> np<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span><span class="token punctuation">(</span>dim<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+b <span class="token operator">=</span> np<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+len_train <span class="token operator">=</span> <span class="token number">209</span>
+len_test <span class="token operator">=</span> <span class="token number">50</span>
+
+<span class="token comment"># 将输入数据归一化，更有利于避免指数运算中的数据溢出</span>
+x <span class="token operator">=</span> <span class="token punctuation">(</span>train_set_x_orig<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> dim<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">255</span><span class="token operator">-</span><span class="token number">0.5</span>
+y <span class="token operator">=</span> train_set_y<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+<span class="token comment"># 测试数据  </span>
+tx <span class="token operator">=</span> <span class="token punctuation">(</span>test_set_x_orig<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> dim<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">255</span><span class="token operator">-</span><span class="token number">0.5</span>
+ty <span class="token operator">=</span> test_set_y<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 线性过程：z=kx+b</span>
+<span class="token keyword">def</span> <span class="token function">Z</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>      
+    <span class="token keyword">return</span> k<span class="token operator">*</span>x<span class="token operator">+</span>b
+<span class="token keyword">def</span> <span class="token function">dz_dk</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># z对k 的偏导</span>
+    <span class="token keyword">return</span> x
+<span class="token keyword">def</span> <span class="token function">dz_db</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># z对b 的偏导</span>
+    <span class="token keyword">return</span> <span class="token number">1</span>
+
+<span class="token comment"># 激活函数进行非线性化</span>
+<span class="token keyword">def</span> <span class="token function">Act</span><span class="token punctuation">(</span>z<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> <span class="token number">1</span><span class="token operator">/</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">+</span>np<span class="token punctuation">.</span>exp<span class="token punctuation">(</span><span class="token operator">-</span>z<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">dAct</span><span class="token punctuation">(</span>z<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 激活函数求导</span>
+    a <span class="token operator">=</span> Act<span class="token punctuation">(</span>z<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> a<span class="token operator">*</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">-</span>a<span class="token punctuation">)</span>
+
+<span class="token comment"># 对数误差函数及其导数</span>
+<span class="token keyword">def</span> <span class="token function">Diff</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> <span class="token operator">-</span><span class="token punctuation">(</span>y<span class="token operator">*</span>np<span class="token punctuation">.</span>log<span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token operator">+</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">-</span>y<span class="token punctuation">)</span><span class="token operator">*</span>np<span class="token punctuation">.</span>log<span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">-</span>a<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">dDiff</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>a<span class="token operator">-</span>y<span class="token punctuation">)</span><span class="token operator">/</span>a<span class="token operator">/</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">-</span>a<span class="token punctuation">)</span>
+
+<span class="token comment"># 反复迭代梯度下降过程</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">2000</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    z <span class="token operator">=</span> Z<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    a <span class="token operator">=</span> Act<span class="token punctuation">(</span>z<span class="token punctuation">)</span>
+    d <span class="token operator">=</span> Diff<span class="token punctuation">(</span>a<span class="token punctuation">,</span> y<span class="token punctuation">)</span>
+
+    <span class="token comment"># 这里除以一个较大的数，也是为了避免指数运算时的数据爆炸</span>
+    dk <span class="token operator">=</span> np<span class="token punctuation">.</span>dot<span class="token punctuation">(</span>dZ_dk<span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">.</span>T<span class="token punctuation">,</span> dDiff<span class="token punctuation">(</span>a<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token operator">*</span>dAct<span class="token punctuation">(</span>z<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">/</span>len_train
+    db <span class="token operator">=</span> <span class="token punctuation">(</span>dDiff<span class="token punctuation">(</span>a<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token operator">*</span>dAct<span class="token punctuation">(</span>z<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">/</span>len_train
+    k <span class="token operator">=</span> k<span class="token operator">-</span>delta<span class="token operator">*</span>dk
+    b <span class="token operator">=</span> b<span class="token operator">-</span>delta<span class="token operator">*</span>db
+
+<span class="token comment"># 以下代码仅作结果分析只用，并不影响神经网络本身的计算</span>
+<span class="token keyword">def</span> <span class="token function">Res</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    z <span class="token operator">=</span> Z<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    a <span class="token operator">=</span> Act<span class="token punctuation">(</span>z<span class="token punctuation">)</span>
+    diff <span class="token operator">=</span> np<span class="token punctuation">.</span>around<span class="token punctuation">(</span>np<span class="token punctuation">.</span><span class="token builtin">abs</span><span class="token punctuation">(</span>a<span class="token operator">-</span>y<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token comment"># 输出准确率</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">-</span>diff<span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">/</span><span class="token builtin">len</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> diff
+
+diff <span class="token operator">=</span> Res<span class="token punctuation">(</span>tx<span class="token punctuation">,</span> ty<span class="token punctuation">)</span><span class="token punctuation">.</span>flatten<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>ty<span class="token punctuation">)</span>
+
+<span class="token comment"># 绘制识别错误的图像</span>
+plt<span class="token punctuation">.</span>figure<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>diff<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> diff<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">></span> <span class="token number">0.5</span><span class="token punctuation">:</span>
+        plt<span class="token punctuation">.</span>subplot<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">10</span><span class="token punctuation">,</span>i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span>
+        plt<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span>test_set_x_orig<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">64</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>通过代码结果可以看出来，模型对训练集的拟合非常好，而对于测试集的准确度最高只有68%，并且像是对训练集过度拟合，以至于只能识别范围比较窄的区域，这可能已经是单个神经元能达到的极限了。</p>
+<h3 id="实用工具"><a class="markdownIt-Anchor" href="#实用工具"></a> 实用工具</h3>
+<p>在上文代码中，我们可以通过修改某些参数，例如学习率<code>δ</code>，来用更少的训练次数得到更好的结果。那么我们还可以通过让机器在一个范围内调整某几个参数、记录并绘制误差随迭代次数的关系图，来帮助我们选择更合适的模型参数。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 1. 显示图形</span>
+<span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+<span class="token comment"># 1.1 显示单张图片</span>
+plt<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span>img<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> h<span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment"># RGB 图像的宽和高</span>
+<span class="token comment"># 1.2 显示多张图片</span>
+<span class="token comment"># 绘制识别错误的图像</span>
+plt<span class="token punctuation">.</span>figure<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> img <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>imgData<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        plt<span class="token punctuation">.</span>subplot<span class="token punctuation">(</span>n<span class="token punctuation">,</span>m<span class="token punctuation">,</span>i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># 显示在nxm 张图片的第i 个位置</span>
+        plt<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span>img<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> h<span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment"># RGB 图像的宽和高</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 2. 绘制曲线图</span>
+data <span class="token operator">=</span> np<span class="token punctuation">.</span>squeeze<span class="token punctuation">(</span>orgData<span class="token punctuation">)</span>  <span class="token comment"># 删除无关的维度</span>
+plt<span class="token punctuation">.</span>plot<span class="token punctuation">(</span>data<span class="token punctuation">)</span>              <span class="token comment"># 绘图</span>
+plt<span class="token punctuation">.</span>ylabel<span class="token punctuation">(</span><span class="token string">'y'</span><span class="token punctuation">)</span>             <span class="token comment"># 添加图片信息</span>
+plt<span class="token punctuation">.</span>xlabel<span class="token punctuation">(</span><span class="token string">'x'</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>title<span class="token punctuation">(</span><span class="token string">"title"</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 3. 读取图片信息</span>
+<span class="token keyword">from</span> PIL <span class="token keyword">import</span> Image
+image <span class="token operator">=</span> Image<span class="token punctuation">.</span><span class="token builtin">open</span><span class="token punctuation">(</span>my_file<span class="token punctuation">)</span><span class="token punctuation">.</span>convert<span class="token punctuation">(</span><span class="token string">'RGB'</span><span class="token punctuation">)</span>
+image <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>image<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>Python 不难学，难的是掌握相关的库函数与基础的理论知识。知其所以然后才能用好Python，所以Python 是一个让人讨厌的强大的工具。</p>
+<h2 id="深度学习神经网络"><a class="markdownIt-Anchor" href="#深度学习神经网络"></a> 深度学习神经网络</h2>
+<p>正如<a href="#%E5%A4%8D%E5%90%88%E5%87%BD%E6%95%B0">复合函数</a>中所展示的，我们可以通过组合不同的线性、非线性函数一步步得到复杂的函数图像。而对于神经网络来说，每一个线性+非线性的函数对就相当于一个神经元节点。通过反复迭代来修改每一个节点的系数，就能得到一组最优系数，让我们的函数模型何以尽可能精确地拟合实际的采样信息。</p>
+<p>对于刚入门的我来说，最难的地方除了Python 之外，还有就是找不到练手的例子与数据。于是只能用吴恩达老师的例题<a target="_blank" rel="noopener" href="https://github.com/Kulbear/deep-learning-coursera/blob/master/Neural%20Networks%20and%20Deep%20Learning/Planar%20data%20classification%20with%20one%20hidden%20layer.ipynb">Planar data classification with one hidden layer</a>做笔记了。为了减少与现有常用符号的冲突，我们将在以后把斜率k，写作权重w。</p>
+<h3 id="矩阵的微分"><a class="markdownIt-Anchor" href="#矩阵的微分"></a> 矩阵的微分</h3>
+<p>在正式开始之前，让我们再最后学习一遍求微分（导数）的过程。因为对于计算机来说，每一级函数都是有数据输入的，所以在函数正向过程中，就能把对应输入输出的偏微分求解出来。然后再利用复合函数的微分法则，来构造最终的结果即可。</p>
+<ul>
+<li>复合函数求导：<img src="06_deep_learning/composite-func.svg" alt="复合函数求导" /></li>
+<li>矩阵的求导：见下图<br />
+<img src="06_deep_learning/matrix-dimension.svg" alt="矩阵的微分" /></li>
+</ul>
+<h3 id="逻辑回归"><a class="markdownIt-Anchor" href="#逻辑回归"></a> 逻辑回归</h3>
+<p>给定的一组数据包含三个维度<code>(x,y,z)</code>，其中<code>z</code>作为输出。各个数据点之间错综分布，没有明显的分界线。所以通过平面、或者简单的曲面无法拟合这么复杂的关系。所以我们考虑添加一层神经元，看能否得到比较准确的模型。<br />
+<img src="06_deep_learning/planar-scatter.svg" alt="平面数据分布" /></p>
+<p>我们可以得到输入输出数据大小分别是<code>X=2x400</code>、<code>Y=1x400</code>。在深入之前，我们可以先用<code>sklearn</code>内置的逻辑回归来尝试拟合以下。逻辑回归也就是前面所提到的<a href="#%E5%9B%BE%E7%89%87%E4%B8%AD%E6%98%AF%E5%90%A6%E6%9C%89%E7%8C%AB">图片中是否有猫</a>问题。与吴恩达老师处理数据的方式不同，我更习惯将数据按行向量的方式存储而非列向量，即需将<code>X,Y</code> 分别进行转置处理。</p>
+<CodeGroup>
+<CodeGroupItem title="Logistic">
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 代码抄自GitHub</span>
+<span class="token comment"># 省略导入包的过程</span>
+
+np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>seed<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># 初始化随机数</span>
+
+X<span class="token punctuation">,</span> Y <span class="token operator">=</span> load_planar_dataset<span class="token punctuation">(</span><span class="token punctuation">)</span>
+X<span class="token punctuation">,</span> Y <span class="token operator">=</span> X<span class="token punctuation">.</span>T<span class="token punctuation">,</span> Y<span class="token punctuation">.</span>T  <span class="token comment"># 行列转置</span>
+
+<span class="token comment"># 训练逻辑回归的分类器</span>
+clf <span class="token operator">=</span> sklearn<span class="token punctuation">.</span>linear_model<span class="token punctuation">.</span>LogisticRegressionCV<span class="token punctuation">(</span><span class="token punctuation">)</span>
+clf<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>X<span class="token punctuation">,</span> Y<span class="token punctuation">)</span>
+
+<span class="token comment"># 绘制逻辑分类的边界</span>
+plot_decision_boundary2<span class="token punctuation">(</span><span class="token keyword">lambda</span> x<span class="token punctuation">:</span> clf<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">,</span> X<span class="token punctuation">,</span> Y<span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>title<span class="token punctuation">(</span><span class="token string">"Logistic Regression"</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 打印准确度</span>
+LR_predictions <span class="token operator">=</span> clf<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>X<span class="token punctuation">)</span>
+<span class="token keyword">print</span> <span class="token punctuation">(</span><span class="token string">'Accuracy of logistic regression: %d '</span> 
+  <span class="token operator">%</span> <span class="token builtin">float</span><span class="token punctuation">(</span><span class="token punctuation">(</span>np<span class="token punctuation">.</span>dot<span class="token punctuation">(</span>Y<span class="token punctuation">.</span>T<span class="token punctuation">,</span> LR_predictions<span class="token punctuation">)</span> 
+  <span class="token operator">+</span> np<span class="token punctuation">.</span>dot<span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">-</span> Y<span class="token punctuation">.</span>T<span class="token punctuation">,</span><span class="token number">1</span> <span class="token operator">-</span> LR_predictions<span class="token punctuation">)</span><span class="token punctuation">)</span> 
+  <span class="token operator">/</span> <span class="token builtin">float</span><span class="token punctuation">(</span>Y<span class="token punctuation">.</span>T<span class="token punctuation">.</span>size<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">100</span><span class="token punctuation">)</span> 
+  <span class="token operator">+</span> <span class="token string">'% '</span> <span class="token operator">+</span> <span class="token string">"(percentage of correctly labelled datapoints)"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+<CodeGroupItem title="Plot_Boundary">
+<pre class="line-numbers language-python&#123;8-14&#125;" data-language="python&#123;8-14&#125;"><code class="language-python&#123;8-14&#125;"># 吴恩达老师的例题中采样数据按列横向分布
+# 而一般按行纵向分布更好理解，下面是按行分布时绘制边界的代码
+def plot_decision_boundary2(model, X, y):  # 这里的模型其实是一个分类器函数
+    # 设置绘图范围
+    x_min, x_max &#x3D; X[:, 0].min() - 1, X[:, 0].max() + 1  # x 轴
+    y_min, y_max &#x3D; X[:, 1].min() - 1, X[:, 1].max() + 1  # y 轴
+    h &#x3D; 0.01  # 步长
+    # 生成绘图区域网格
+    xx, yy &#x3D; np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+    # 预测值
+    Z &#x3D; model(np.c_[xx.ravel(), yy.ravel()])
+    Z &#x3D; Z.reshape(xx.shape)    
+    # 绘制等高线图
+    plt.contourf(xx, yy, Z, cmap&#x3D;plt.cm.Spectral)
+    plt.ylabel(&#39;x2&#39;)
+    plt.xlabel(&#39;x1&#39;)
+    plt.scatter(X[:, 0], X[:, 1], c&#x3D;y, cmap&#x3D;plt.cm.Spectral)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+</CodeGroup>
+<p>这里之所以把这段代码单独拿出来分析，是因为作图也是数据分析中非常重要的部分。学知识的同时还要掌握与之匹配的测试的方法，不然学的对不对都不知道。有了直观的图示，可以让我们更快地分析出问题所在，磨刀不误砍柴功。最终生成的图像如下，一目了然：<br />
+<img src="06_deep_learning/logistic-regression.svg" alt="逻辑回归" /></p>
+<h3 id="单个隐藏层"><a class="markdownIt-Anchor" href="#单个隐藏层"></a> 单个隐藏层</h3>
+<p>具有单个隐藏层的神经网络结构如下（以两次采样数据为例，隐藏层有三个神经元）：<br />
+<img src="06_deep_learning/single-hidden-layer.svg" alt="单个隐藏层" /></p>
+<p>代码上面与逻辑回归的变化不大，唯一需要注意的是在层与层之间导数传递时的计算，见<a href="#%E7%9F%A9%E9%98%B5%E7%9A%84%E5%BE%AE%E5%88%86">矩阵的微分</a></p>
+<CodeGroup>
+<CodeGroupItem title="单隐藏层">
+<pre class="line-numbers language-python&#123;5,26&#125;" data-language="python&#123;5,26&#125;"><code class="language-python&#123;5,26&#125;"># 省略数据导入的过程
+np.random.seed(2)
+
+# 初始化参数
+dim &#x3D; 40  # 隐藏层的神经元个数，
+# 也是第一个权重矩阵的列数
+W1 &#x3D; np.random.randn(2, dim) * 0.01
+b1 &#x3D; np.zeros(shape&#x3D;(1, dim))
+# 由图像可知，上一层权重的列数，等于下一层权重的行数
+W2 &#x3D; np.random.randn(dim, 1) * 0.01
+b2 &#x3D; np.zeros(shape&#x3D;(1, 1))
+learning_rate &#x3D; 0.1  # 学习率，也是梯度下降的步长
+
+for i in range(10000):
+    # 正向过程：隐藏层
+    Z1 &#x3D; np.dot(X, W1)+b1
+    A1 &#x3D; np.tanh(Z1)    
+    # 正向过程：输出层
+    Z2 &#x3D; np.dot(A1, W2)+b2
+    A2 &#x3D; sigmoid(Z2)
+    lost &#x3D; np.multiply(np.log(A2), Y) + np.multiply((1 - Y), np.log(1 - A2))
+    
+    # 反向过程：输出层
+    dZ2 &#x3D; A2-Y
+    dW2 &#x3D; np.dot(A1.T, dZ2)&#x2F;len(dZ2)
+    dA2 &#x3D; np.dot(dZ2, W2.T)  # 层间导数传递
+    db2 &#x3D; dZ2.mean(axis&#x3D;0)&#x2F;len(dZ2)
+    # 反向过程：隐藏层
+    dZ1 &#x3D; np.multiply(dA2, 1 - np.power(A1, 2))
+    dW1 &#x3D; np.dot(X.T, dZ1)&#x2F;len(dZ1)
+    db1 &#x3D; dZ1.mean(axis&#x3D;0)&#x2F;len(dZ1)
+
+    # 更正系数
+    W1 &#x3D; W1 - learning_rate * dW1
+    b1 &#x3D; b1 - learning_rate * db1
+    W2 &#x3D; W2 - learning_rate * dW2
+    b2 &#x3D; b2 - learning_rate * db2
+
+
+# 最终的神经网络模型
+def model(X):
+    Z1 &#x3D; np.dot(X, W1)+b1
+    A1 &#x3D; np.tanh(Z1)
+    Z2 &#x3D; np.dot(A1, W2)+b2
+    A2 &#x3D; sigmoid(Z2)
+    return np.around(A2)
+
+# 输出准确率
+c &#x3D; (1-np.sum(np.abs(Y-model(X)))&#x2F;len(X))*100
+# 绘制边界图
+plot_decision_boundary2(lambda x: model(x), X, Y)
+plt.title(&#39;Single Hidden Layer with %s nodes(%s%%)&#39;%(dim,c))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+<CodeGroupItem  title="双隐藏层">
+<pre class="line-numbers language-python&#123;4-10,16-19,21-24,26-29,39-40,46-50&#125;" data-language="python&#123;4-10,16-19,21-24,26-29,39-40,46-50&#125;"><code class="language-python&#123;4-10,16-19,21-24,26-29,39-40,46-50&#125;"># 仅标出与单隐藏层改动的部分
+np.random.seed(2)
+
+d1, d2 &#x3D; 10, 10
+W1 &#x3D; np.random.randn(2, d1) * 0.01
+b1 &#x3D; np.zeros(shape&#x3D;(1, d1))
+W2 &#x3D; np.random.randn(d1, d2) * 0.01
+b2 &#x3D; np.zeros(shape&#x3D;(1, d2))
+W3 &#x3D; np.random.randn(d2, 1) * 0.01
+b3 &#x3D; np.zeros(shape&#x3D;(1, 1))
+learning_rate &#x3D; 0.1
+
+for i in range(40000):
+    Z1 &#x3D; np.dot(X, W1)+b1
+    A1 &#x3D; np.tanh(Z1)
+    Z2 &#x3D; np.dot(A1, W2)+b2
+    A2 &#x3D; np.tanh(Z2)
+    Z3 &#x3D; np.dot(A2, W3)+b3
+    A3 &#x3D; sigmoid(Z3)
+    # lost &#x3D; np.multiply(np.log(A2), Y) + np.multiply((1 - Y), np.log(1 - A2))
+    dZ3 &#x3D; A3-Y
+    dW3 &#x3D; np.dot(A2.T, dZ3)&#x2F;len(dZ3)
+    dA3 &#x3D; np.dot(dZ3, W3.T)
+    db3 &#x3D; dZ3.mean(axis&#x3D;0)&#x2F;len(dZ3)
+    
+    dZ2 &#x3D; np.multiply(dA3, 1 - np.power(A2, 2))
+    dW2 &#x3D; np.dot(A1.T, dZ2)&#x2F;len(dZ2)
+    db2 &#x3D; dZ2.mean(axis&#x3D;0)&#x2F;len(dZ2)
+    dA2 &#x3D; np.dot(dZ2, W2.T)
+
+    dZ1 &#x3D; np.multiply(dA2, 1 - np.power(A1, 2))
+    dW1 &#x3D; np.dot(X.T, dZ1)&#x2F;len(dZ1)
+    db1 &#x3D; dZ1.mean(axis&#x3D;0)&#x2F;len(dZ1)
+
+    W1 &#x3D; W1 - learning_rate * dW1
+    b1 &#x3D; b1 - learning_rate * db1
+    W2 &#x3D; W2 - learning_rate * dW2
+    b2 &#x3D; b2 - learning_rate * db2
+    W3 &#x3D; W3 - learning_rate * dW3
+    b3 &#x3D; b3 - learning_rate * db3
+
+
+def model(X):
+    Z1 &#x3D; np.dot(X, W1)+b1
+    A1 &#x3D; np.tanh(Z1)
+    Z2 &#x3D; np.dot(A1, W2)+b2
+    A2 &#x3D; np.tanh(Z2)
+    Z3 &#x3D; np.dot(A2, W3)+b3
+    A3 &#x3D; sigmoid(Z3)
+    return np.around(A3)
+
+pdb(lambda x: model(x), X, Y)
+c &#x3D; (1-np.sum(np.abs(Y-model(X)))&#x2F;len(X))*100
+plt.title(&#39;2 Hidden Layer with %s-%s nodes(%s%%)&#39; % (d1,d2, c))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+</CodeGroup>
+<p>通过测试不同的神经元数量，可以得到不同的边界图，如下：<br />
+<img src="06_deep_learning/single-hidden-layer-3-nodes.svg" alt="单隐藏层包含三个神经元" /></p>
+<h2 id="构造自己的神经网络"><a class="markdownIt-Anchor" href="#构造自己的神经网络"></a> 构造自己的神经网络</h2>
+<p>根据之前的学习经验，我们很容易将神经网络模型划分为<code>3</code>种层：输入层、隐藏层、输出层。其中：</p>
+<ul>
+<li>输入层：只是将采集到的数据原封不动地输出给隐藏层</li>
+<li>隐藏层：进行正向过程与反向过程运算</li>
+<li>输出层：计算误差函数，及其导数</li>
+</ul>
+<p>每一层的输出就是下一层的输入。于是我们就能抽象出一个通用的“层”的概念矩阵：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">层-属性</th>
+<th style="text-align:center">dim/维度</th>
+<th style="text-align:center">in/输入</th>
+<th style="text-align:center">prev/上一级</th>
+<th style="text-align:center">w/权重</th>
+<th style="text-align:center">b/常数</th>
+<th style="text-align:center">actv/激活函数</th>
+<th style="text-align:center">grad/导数</th>
+<th style="text-align:center">l_r/学习率</th>
+<th style="text-align:center">loss/误差函数</th>
+<th style="text-align:center">out/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">输入层</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">√</td>
+</tr>
+<tr>
+<td style="text-align:center">隐藏层</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">√</td>
+</tr>
+<tr>
+<td style="text-align:center">输出层</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">√</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+</tr>
+</tbody>
+</table>
+<CodeGroup>
+<CodeGroupItem title="Layer">
+<pre class="line-numbers language-python&#123;45-47,60,73,89,94&#125;" data-language="python&#123;45-47,60,73,89,94&#125;"><code class="language-python&#123;45-47,60,73,89,94&#125;">import numpy as np
+###############################################################
+# Layers                                                      #
+#  - Base                                                     #
+#    - InputLayer                                             #
+#    - HiddenLayer                                            #
+#    - OutputLayer                                            #
+###############################################################
+
+
+class Layer(object):
+    def __init__(self):
+        pass
+
+    def forward(self):
+        pass
+
+    def backward(self, grad: np.array):
+        pass
+
+
+class InputLayer(Layer):  
+    def __init__(self, dataIn: np.array):
+        super().__init__()
+        self.dim &#x3D; dataIn.shape[1]
+        self.dataIn &#x3D; dataIn
+
+    def setDataIn(self, dataIn: np.array):
+        self.dataIn &#x3D; dataIn
+
+    def forward(self):
+        return self.dataIn
+
+    def backward(self, grad: np.array):
+        return
+
+
+class HiddenLayer(Layer):  # 每一层都可以独立设置学习率
+    def __init__(self, prevLayer: Layer, dim: int, learning_rate&#x3D;0.01):
+        assert(isinstance(prevLayer, Layer))
+        super().__init__()
+        self.prev &#x3D; prevLayer
+        self.dim &#x3D; dim
+        self.learning_rate &#x3D; learning_rate
+        # 上一节点的维度与本节点的维度共同确定参数矩阵的维度
+        self.w &#x3D; np.random.randn(prevLayer.dim, self.dim) * 0.01
+        self.b &#x3D; np.zeros(shape&#x3D;(1, self.dim))
+        self.actv &#x3D; X()  # 默认无线性化环节
+
+    def setActivation(self, activation: Activation):
+        self.actv &#x3D; activation
+
+    def regenWeight(self, method):
+        self.w &#x3D; method(self.prev.dim, self.dim)
+
+    def regenB(self, method):
+        self.w &#x3D; method(self.dim)
+
+    def forward(self):
+        self.dataIn &#x3D; self.prev.forward()  # 递归调用上一层的正向过程
+        self.z &#x3D; np.dot(self.dataIn, self.w)+self.b
+        self.a &#x3D; self.actv(self.z)
+        return self.a
+
+    def backward(self, grad: np.array):
+        self.dA &#x3D; grad
+        self.dZ &#x3D; np.multiply(self.dA, self.actv.gradient(self.z))
+        self.dW &#x3D; np.dot(self.dataIn.T, self.dZ)&#x2F;len(self.dZ)
+        self.db &#x3D; self.dZ.mean(axis&#x3D;0)
+        dDataIn &#x3D; np.dot(self.dZ, self.w.T)
+        self.w &#x3D; self.w - self.learning_rate * self.dW
+        self.b &#x3D; self.b - self.learning_rate * self.db
+        self.prev.backward(dDataIn)  # 递归调用上一层的反向过程
+        return
+
+
+class OutputLayer(Layer):
+    def __init__(self, prevLayer: Layer, dataOut: np.array, loss&#x3D;Sigmoid_Loss):
+        assert(isinstance(prevLayer, Layer))
+        super().__init__()
+        self.prev &#x3D; prevLayer
+        self.dataOut &#x3D; dataOut
+        self.setLoss(loss)
+
+    def setLoss(self, loss: Loss):  # 设置误差函数
+        self.loss &#x3D; loss(self.dataOut)
+
+    def forward(self):
+        loss &#x3D; self.loss(self.prev.forward())
+        return loss
+
+    def backward(self):
+        dLoss &#x3D; self.loss.gradient(self.prev.forward())
+        self.prev.backward(dLoss)
+
+    def predict(self):  # 预测值，其实就是最后一个隐藏层的输出
+        return self.prev.forward()<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+<CodeGroupItem title="Activation">
+<pre class="line-numbers language-python&#123;12-13,24,27&#125;" data-language="python&#123;12-13,24,27&#125;"><code class="language-python&#123;12-13,24,27&#125;">import numpy as np
+###############################################################
+# Activations                                                 #
+#  - Sigmoid                                                  #
+#  - Tanh                                                     #
+#  - ReLU                                                     #
+#  - LeakyReLU                                                #
+###############################################################
+
+# 每一个激活函数都会有其导函数的定义
+class Activation(object):
+    def __call__(self, z: np.array) -&gt; np.array:
+        pass
+
+    def gradient(self, z: np.array) -&gt; np.array:
+        pass
+
+
+class LeakyReLU(Activation):
+    def __init__(self, alpha&#x3D;0.01) -&gt; None:
+        self.alpha &#x3D; alpha
+
+    def __call__(self, z: np.array) -&gt; np.array:
+        return np.where(z &gt; 0, z, self.alpha)
+
+    def gradient(self, z: np.array) -&gt; np.array:
+        return np.where(z &gt; 0, 1, self.alpha)
+
+
+class ReLU(LeakyReLU):
+    def __init__(self) -&gt; None:
+        super().__init__(alpha&#x3D;0)
+
+
+class Tanh(Activation):
+    def __init__(self) -&gt; None:
+        pass
+
+    def __call__(self, z: np.array) -&gt; np.array:
+        return np.tanh(z)
+
+    def gradient(self, z: np.array) -&gt; np.array:
+        a &#x3D; self.__call__(z)
+        return 1 - np.power(a, 2)
+
+
+class Sigmoid(Activation):
+    def __init__(self) -&gt; None:
+        return
+
+    def __call__(self, z: np.array) -&gt; np.array:
+        return 1&#x2F;(1+np.exp(-z))
+
+    def gradient(self, z: np.array) -&gt; np.array:
+        a &#x3D; self.__call__(z)
+        return a*(1-a)
+
+class X(Activation):  # 什么都不做，无非线性化环节
+    def __init__(self) -&gt; None:
+        return
+
+    def __call__(self, z: np.array) -&gt; np.array:
+        return z
+
+    def gradient(self, z: np.array) -&gt; np.array:
+        return 1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+<CodeGroupItem title="Loss">
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token comment">###############################################################</span>
+<span class="token comment"># Loss                                                        #</span>
+<span class="token comment">#  - Sigmoid_Loss                                             #</span>
+<span class="token comment">#  - SoftMax(todo)                                            #</span>
+<span class="token comment">###############################################################</span>
+
+
+<span class="token keyword">class</span> <span class="token class-name">Loss</span><span class="token punctuation">(</span><span class="token builtin">object</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> dataOut<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>dataOut <span class="token operator">=</span> dataOut
+
+    <span class="token keyword">def</span> <span class="token function">__call__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> a<span class="token punctuation">:</span> np<span class="token punctuation">.</span>array<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> np<span class="token punctuation">.</span>array<span class="token punctuation">:</span>
+        <span class="token keyword">pass</span>
+
+    <span class="token keyword">def</span> <span class="token function">gradient</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> a<span class="token punctuation">:</span> np<span class="token punctuation">.</span>array<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> np<span class="token punctuation">.</span>array<span class="token punctuation">:</span>
+        <span class="token keyword">pass</span>
+
+
+<span class="token keyword">class</span> <span class="token class-name">Sigmoid_Loss</span><span class="token punctuation">(</span>Loss<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> dataOut<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>__init__<span class="token punctuation">(</span>dataOut<span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">__call__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> a<span class="token punctuation">:</span> np<span class="token punctuation">.</span>array<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> np<span class="token punctuation">.</span>array<span class="token punctuation">:</span>
+        y <span class="token operator">=</span> self<span class="token punctuation">.</span>dataOut
+        <span class="token keyword">return</span> <span class="token operator">-</span><span class="token punctuation">(</span>y<span class="token operator">*</span>np<span class="token punctuation">.</span>log<span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token operator">+</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">-</span>y<span class="token punctuation">)</span><span class="token operator">*</span>np<span class="token punctuation">.</span>log<span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">-</span>a<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">gradient</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> a<span class="token punctuation">:</span> np<span class="token punctuation">.</span>array<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> np<span class="token punctuation">.</span>array<span class="token punctuation">:</span>
+        y <span class="token operator">=</span> self<span class="token punctuation">.</span>dataOut
+        <span class="token keyword">return</span> <span class="token punctuation">(</span>a<span class="token operator">-</span>y<span class="token punctuation">)</span><span class="token operator">/</span>a<span class="token operator">/</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">-</span>a<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+<CodeGroupItem title="Usage">
+<pre class="line-numbers language-python&#123;10-16,18-21,23-25&#125;" data-language="python&#123;10-16,18-21,23-25&#125;"><code class="language-python&#123;10-16,18-21,23-25&#125;">import numpy as np
+import matplotlib.pyplot as plt
+from testCases import *
+from planar_utils import plot_decision_boundary, sigmoid, load_planar_dataset, load_extra_datasets
+
+np.random.seed(1)  # 初始化随机数
+X, Y &#x3D; load_planar_dataset()
+X, Y &#x3D; X.T, Y.T  # 行列转置
+
+# 构建神经网络模型
+layerIn &#x3D; InputLayer(X)
+layerHidden1 &#x3D; HiddenLayer(layerIn, 4)
+layerHidden1.setActivation(Tanh())
+layerHidden2 &#x3D; HiddenLayer(layerHidden1, 1)
+layerHidden2.setActivation(Sigmoid())
+layerOut &#x3D; OutputLayer(layerHidden2, Y)
+
+# 循环正向过程与反向过程
+for i in range(40000):
+    layerOut.forward()
+    layerOut.backward()
+
+# 更换测试数据集，并输出预测值（这里用的还是训练集）
+layerIn.setDataIn(X)
+res &#x3D; np.around(layerOut.predict())
+
+# 验证正确率
+c &#x3D; 1-np.sum(np.abs(Y-res))&#x2F;len(X)
+
+# 绘图 #
+# 设置绘图范围
+x_min, x_max &#x3D; X[:, 0].min() - 1, X[:, 0].max() + 1
+y_min, y_max &#x3D; X[:, 1].min() - 1, X[:, 1].max() + 1
+h &#x3D; 0.01  # 步长
+# 生成绘图区域网格
+xx, yy &#x3D; np.meshgrid(np.arange(x_min, x_max, h),
+                     np.arange(y_min, y_max, h))
+# 将网格坐标设置为目标数据集，并生成预测值
+layerIn.setDataIn(np.c_[xx.ravel(), yy.ravel()])
+Z &#x3D; np.around(layerOut.predict())
+Z &#x3D; Z.reshape(xx.shape)
+# 绘制等高线图
+plt.contourf(xx, yy, Z, cmap&#x3D;plt.cm.Spectral)
+plt.ylabel(&#39;x2&#39;)
+plt.xlabel(&#39;x1&#39;)
+plt.scatter(X[:, 0], X[:, 1], c&#x3D;Y, cmap&#x3D;plt.cm.Spectral)
+plt.title(&#39;My NN model[accuracy&#x3D;%s%%]&#39; % ( c))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+<CodeGroupItem title="Initialization">
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">###############################################################</span>
+<span class="token comment"># Initialization                                              #</span>
+<span class="token comment">#  - HeInitialization                                         #</span>
+<span class="token comment">###############################################################</span>
+
+
+<span class="token keyword">class</span> <span class="token class-name">HeInitialization</span><span class="token punctuation">(</span><span class="token builtin">object</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> alpha<span class="token punctuation">:</span> <span class="token builtin">float</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>__init__<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>alpha <span class="token operator">=</span> alpha
+
+    <span class="token keyword">def</span> <span class="token function">__call__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> prevDim<span class="token punctuation">:</span> <span class="token builtin">int</span><span class="token punctuation">,</span> dim<span class="token punctuation">:</span> <span class="token builtin">int</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>randn<span class="token punctuation">(</span>dim<span class="token punctuation">,</span> prevDim<span class="token punctuation">)</span><span class="token punctuation">.</span>T <span class="token operator">*</span> np<span class="token punctuation">.</span>sqrt<span class="token punctuation">(</span><span class="token number">2</span><span class="token operator">/</span>prevDim<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+</CodeGroup>
+<p>这一节的代码缺少注释，但仔细阅读发现并不复杂，也算是给自己的一份<code>6.1🎁</code>吧~</p>
+<h3 id="图片中是否有猫二"><a class="markdownIt-Anchor" href="#图片中是否有猫二"></a> 图片中是否有猫（二）</h3>
+<p>依然是采用<a href="#%E5%9B%BE%E7%89%87%E4%B8%AD%E6%98%AF%E5%90%A6%E6%9C%89%E7%8C%AB">图片中是否有猫</a>中的数据集，只不过这次要搭建层数更多的网络</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">from</span> layer <span class="token keyword">import</span> InputLayer<span class="token punctuation">,</span> HiddenLayer<span class="token punctuation">,</span> OutputLayer<span class="token punctuation">,</span> Sigmoid<span class="token punctuation">,</span> LeakyReLU<span class="token punctuation">,</span> ReLU<span class="token punctuation">,</span> Tanh<span class="token punctuation">,</span> Sigmoid_Loss
+<span class="token keyword">from</span> lr_utils <span class="token keyword">import</span> load_dataset
+
+train_set_x_orig<span class="token punctuation">,</span> train_set_y_orig<span class="token punctuation">,</span> test_set_x_orig<span class="token punctuation">,</span> test_set_y_orig<span class="token punctuation">,</span> classes <span class="token operator">=</span> load_dataset<span class="token punctuation">(</span><span class="token punctuation">)</span>
+trX <span class="token operator">=</span> train_set_x_orig<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span>train_set_x_orig<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">255</span>
+trY <span class="token operator">=</span> train_set_y_orig<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span>train_set_x_orig<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+teX <span class="token operator">=</span> test_set_x_orig<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span>test_set_x_orig<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">255</span>
+teY <span class="token operator">=</span> test_set_y_orig<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span>test_set_x_orig<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+
+np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>seed<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+
+lIn <span class="token operator">=</span> InputLayer<span class="token punctuation">(</span>trX<span class="token punctuation">)</span>
+lHi1 <span class="token operator">=</span> HiddenLayer<span class="token punctuation">(</span>lIn<span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">,</span> <span class="token number">0.0075</span><span class="token punctuation">)</span>
+lHi1<span class="token punctuation">.</span>setActivation<span class="token punctuation">(</span>ReLU<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+lHi2 <span class="token operator">=</span> HiddenLayer<span class="token punctuation">(</span>lHi1<span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span>  <span class="token number">0.0075</span><span class="token punctuation">)</span>
+lHi2<span class="token punctuation">.</span>setActivation<span class="token punctuation">(</span>ReLU<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+lHi3 <span class="token operator">=</span> HiddenLayer<span class="token punctuation">(</span>lHi2<span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span>  <span class="token number">0.0075</span><span class="token punctuation">)</span>
+lHi3<span class="token punctuation">.</span>setActivation<span class="token punctuation">(</span>ReLU<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+lHi4 <span class="token operator">=</span> HiddenLayer<span class="token punctuation">(</span>lHi3<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span>  <span class="token number">0.0075</span><span class="token punctuation">)</span>
+lHi4<span class="token punctuation">.</span>setActivation<span class="token punctuation">(</span>Sigmoid<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+lOut <span class="token operator">=</span> OutputLayer<span class="token punctuation">(</span>lHi4<span class="token punctuation">,</span> trY<span class="token punctuation">)</span>
+
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">2500</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    loss <span class="token operator">=</span> lOut<span class="token punctuation">.</span>forward<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    lOut<span class="token punctuation">.</span>backward<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> i <span class="token operator">%</span> <span class="token number">100</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> loss<span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">/</span><span class="token builtin">len</span><span class="token punctuation">(</span>loss<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+veriTrain <span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">-</span> np<span class="token punctuation">.</span><span class="token builtin">abs</span><span class="token punctuation">(</span><span class="token punctuation">(</span>np<span class="token punctuation">.</span>around<span class="token punctuation">(</span>lOut<span class="token punctuation">.</span>predict<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">-</span>trY<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">/</span><span class="token builtin">len</span><span class="token punctuation">(</span>trY<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>veriTrain<span class="token punctuation">)</span>
+
+lIn<span class="token punctuation">.</span>setDataIn<span class="token punctuation">(</span>teX<span class="token punctuation">)</span>
+veriTest <span class="token operator">=</span> <span class="token number">1</span><span class="token operator">-</span>np<span class="token punctuation">.</span><span class="token builtin">abs</span><span class="token punctuation">(</span><span class="token punctuation">(</span>np<span class="token punctuation">.</span>around<span class="token punctuation">(</span>lOut<span class="token punctuation">.</span>predict<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">-</span>teY<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">/</span><span class="token builtin">len</span><span class="token punctuation">(</span>teY<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>veriTest<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上面代码在只有两个隐藏层时对训练集和测试集的精度分别为<code>1,0.72</code>，然而在增加隐藏层数量后，模型的精度却并未如预期一样增加，主要表现在随着层数的增加，梯度下降的速度变慢了。问题出在权重初始化。</p>
+<pre class="line-numbers language-diff" data-language="diff"><code class="language-diff">class HiddenLayer(Layer):  # 每一层都可以独立设置学习率
+<span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   def __init__(self, prevLayer: Layer, dim: int, learning_rate=0.01):
+</span><span class="token prefix unchanged"> </span><span class="token line">       #...
+</span><span class="token prefix unchanged"> </span><span class="token line">       # 上一节点的维度与本节点的维度共同确定参数矩阵的维度
+</span></span><span class="token deleted-sign deleted"><span class="token prefix deleted">-</span><span class="token line">        self.w = np.random.randn(prevLayer.dim, self.dim) * 0.01
+</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">        self.w = np.random.randn(prevLayer.dim, self.dim) / np.sqrt(prevLayer.dim)
+</span></span><span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">       # ...</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>权重的大小会影响梯度下降的速度：如果权重过大，就会导致模型梯度下降速度变慢，也就是上面提到的问题；如果权重设置过小，则会导致模型过于简单，失去深度学习的意义。所以上文采用了<code>Xavier Initialization</code>：<code>随机数*1/sqrt(上一层维度)</code>。而对于<code>ReLU</code>激活函数，更推荐<code>He Initialization</code>：<code>随机数*sqrt(2/上一层维度)</code>，并且此方法在其他激活函数也相当好使。顺便提一句，我们给每一层预留了重置初始值的接口。只需修改简单的代码即可让我们的模型顺畅地跑起来：</p>
+<pre class="line-numbers language-python&#123;5,8,11,14,17,24,27-31&#125;" data-language="python&#123;5,8,11,14,17,24,27-31&#125;"><code class="language-python&#123;5,8,11,14,17,24,27-31&#125;"># 仅记录修改的部分
+lIn &#x3D; InputLayer(trX)
+lHi1 &#x3D; HiddenLayer(lIn, 20, 0.0075)
+lHi1.setActivation(ReLU())
+lHi1.regenWeight(HeInitialization(2))  # 重新初始化权重
+lHi2 &#x3D; HiddenLayer(lHi1, 7,  0.0075)
+lHi2.setActivation(ReLU())
+lHi2.regenWeight(HeInitialization(2))  # 重新初始化权重
+lHi3 &#x3D; HiddenLayer(lHi2, 5,  0.0075)
+lHi3.setActivation(ReLU())
+lHi3.regenWeight(HeInitialization(2))  # 重新初始化权重
+lHi4 &#x3D; HiddenLayer(lHi3, 1,  0.0075)
+lHi4.setActivation(Sigmoid())
+lHi4.regenWeight(HeInitialization(1))  # 重新初始化权重
+lOut &#x3D; OutputLayer(lHi4, trY)
+
+costs&#x3D;[]
+
+for i in range(2500):
+    loss &#x3D; lOut.forward()
+    lOut.backward()
+    if i % 100 &#x3D;&#x3D; 0:
+        print(i, loss.sum()&#x2F;len(loss))
+        costs.append(loss.sum()&#x2F;len(loss))
+
+# 绘制误差变化曲线
+plt.plot(np.squeeze(costs))
+plt.ylabel(&#39;cost&#39;)
+plt.xlabel(&#39;iterations (per tens)&#39;)
+plt.title(&quot;Learning rate &#x3D;&quot; + str(0.0075))
+plt.show()<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>得到结果如下：<br />
+<img src="07_my_dl_structure/loss.svg" alt="误差下降图" /></p>
+<p>之所以把这一节单独列出来，是因为这一节是对前面所有笔记的一个系统化总结，也是一个可以直接拿来用的成果。更多层的神经网络也是以此类推，这便是深度学习神经网络的基本原理。至于以后，基本是基于此原理的扩展与修补。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2022/10/07/neural-network/" title="我理解的神经网络">https://12tall.github.io/2022/10/07/neural-network/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E6%88%91%E7%90%86%E8%A7%A3%E7%9A%84/" rel="tag"># 我理解的</a>
+              <a href="/tags/python/" rel="tag"># python</a>
+              <a href="/tags/neural-network/" rel="tag"># neural network</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/07/feedback/" rel="prev" title="反馈">
+                  <i class="fa fa-angle-left"></i> 反馈
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/11/24/stribeck-curve/" rel="next" title="斯特里贝克曲线">
+                  斯特里贝克曲线 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="仅记录对N-api 的使用方法以及函数签名。在Windows 平台下，如果我们安装的是32 位的Nodejs，N-api 应该是生成32 位的.node 文件，而且并没有启用UNICODE 的支持，即所有_WIN64, UNICODE 下的宏定义都是无效的。所以在Winodws 版本下的API 函数最好都调用A 结尾的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="N-api">
+<meta property="og:url" content="https://12tall.github.io/2022/08/03/napi/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="仅记录对N-api 的使用方法以及函数签名。在Windows 平台下，如果我们安装的是32 位的Nodejs，N-api 应该是生成32 位的.node 文件，而且并没有启用UNICODE 的支持，即所有_WIN64, UNICODE 下的宏定义都是无效的。所以在Winodws 版本下的API 函数最好都调用A 结尾的。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.203Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="c&#x2F;cpp">
+<meta property="article:tag" content="nodeJS">
+<meta property="article:tag" content="N-api">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://12tall.github.io/2022/08/03/napi/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2022/08/03/napi/","path":"2022/08/03/napi/","title":"N-api"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>N-api | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text"> 一般函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E6%95%B0%E6%8D%AE"><span class="nav-number">2.</span> <span class="nav-text"> 一般数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B7%E4%BD%93%E7%BB%86%E8%8A%82"><span class="nav-number">3.</span> <span class="nav-text"> 具体细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0"><span class="nav-number">3.1.</span> <span class="nav-text"> 获取函数的参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E7%94%A8%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0"><span class="nav-number">3.2.</span> <span class="nav-text"> 调用（回调）函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%B7%A5%E5%8E%82"><span class="nav-number">3.3.</span> <span class="nav-text"> 对象工厂</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%B7%A5%E5%8E%82"><span class="nav-number">3.4.</span> <span class="nav-text"> 函数工厂</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%99%8B%E7%BA%A7c"><span class="nav-number">4.</span> <span class="nav-text"> 晋级C++</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B0%81%E8%A3%85"><span class="nav-number">4.1.</span> <span class="nav-text"> 对象的封装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E5%8E%82%E5%B0%81%E8%A3%85"><span class="nav-number">4.2.</span> <span class="nav-text"> 工厂封装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#passing_wraoed"><span class="nav-number">4.3.</span> <span class="nav-text"> Passing_Wraoed</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-addon-api"><span class="nav-number">5.</span> <span class="nav-text"> node-addon-api</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6"><span class="nav-number">5.1.</span> <span class="nav-text"> 前提条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="nav-number">5.2.</span> <span class="nav-text"> 安装和使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%AC%AC%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE"><span class="nav-number">5.3.</span> <span class="nav-text"> 创建第一个项目</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E8%B5%84%E6%96%99"><span class="nav-number">6.</span> <span class="nav-text"> 相关资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/napi/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="N-api | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          N-api
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-03 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-03T00:00:00+08:00">2022-08-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/nodejs/" itemprop="url" rel="index"><span itemprop="name">nodejs</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>21 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>仅记录对<code>N-api</code> 的使用方法以及函数签名。<em><strong>在<code>Windows</code> 平台下，如果我们安装的是32 位的Nodejs，<code>N-api</code> 应该是生成<code>32</code> 位的<code>.node</code> 文件，而且并没有启用<code>UNICODE</code> 的支持，即所有<code>_WIN64, UNICODE</code> 下的宏定义都是无效的</strong></em>。所以在Winodws 版本下的API 函数最好都调用<code>A</code> 结尾的。</p>
+<span id="more"></span>
+<CodeGroup>
+<CodeGroupItem title=".node 位宽验证">
+<pre class="line-numbers language-c&#123;7,13-14&#125;" data-language="c&#123;7,13-14&#125;"><code class="language-c&#123;7,13-14&#125;">&#x2F;&#x2F; 在Windows 系统下编译程序时，会针对目标平台改变某些宏定义。
+&#x2F;&#x2F; 据此，我们可以输出这些结果，来判断编译结果的目标位宽
+#ifndef SIZE_MAX
+  #ifdef _WIN64
+ #define SIZE_MAX 0xffffffffffffffffui64
+  #else
+ #define SIZE_MAX 0xffffffffui32
+  #endif
+#endif
+
+&#x2F;&#x2F; 而napi 自身的宏定义中，也只有关于_WIN32 的声明
+#ifndef NAPI_EXTERN
+  #ifdef _WIN32
+  #define NAPI_EXTERN __declspec(dllexport)
+  #elif defined(__wasm32__)
+  #define NAPI_EXTERN __attribute__((visibility(&quot;default&quot;)))  \  __attribute__((__import_module__(&quot;napi&quot;)))
+  #else
+  #define NAPI_EXTERN __attribute__((visibility(&quot;default&quot;)))
+  #endif
+#endif<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+</CodeGroup>
+<h2 id="一般函数"><a class="markdownIt-Anchor" href="#一般函数"></a> 一般函数</h2>
+<p>最原始的<code>N-api</code> 的代码是<code>C</code> 风格的。所以函数的调用也都是面向过程的风格，写起来会比较啰嗦。</p>
+<CodeGroup>
+<CodeGroupItem title="代码模板">
+<pre class="line-numbers language-c&#123;15-16&#125;" data-language="c&#123;15-16&#125;"><code class="language-c&#123;15-16&#125;">#include &lt;assert.h&gt;
+#include &lt;node_api.h&gt;
+&#x2F;**
+* 函数：n-api 的函数一般由五部分组成  
+* - 函数名。一般用static 修饰符
+* - 形参1：napi_env。用于获取函数调用时的环境
+* - 形参2：napi_callback_info。用于传递函数调用时的实参
+* - 返回值：napi_value。napi 中所有的数据都使用napi_value 封装 
+* - 运行状态：napi_status。通过assert 断言函数运行状态
+*&#x2F;
+static napi_value Method(napi_env env, napi_callback_info info) &#123;
+  napi_status status;
+  napi_value world;
+  &#x2F;&#x2F; 这里我修改了示例代码，用来验证编译的目标平台是32 位的
+  &#x2F;&#x2F; status &#x3D; napi_create_string_utf8(env, &quot;world&quot;, 5, &amp;world);
+  status &#x3D; napi_create_bigint_int64(env, NAPI_AUTO_LENGTH, &amp;world);
+  assert(status &#x3D;&#x3D; napi_ok);  &#x2F;&#x2F; 运行结果断言
+  return world;
+&#125;
+
+&#x2F;** 对象属性的描述符，这条宏命令最终被解释为下面结构体：
+* typedef struct &#123;
+*  &#x2F;&#x2F; utf8name or name 应该至少有一个为空.
+*  const char* utf8name;  &#x2F;&#x2F; name
+*  napi_value name;  &#x2F;&#x2F; 0:NULL
+*
+*  napi_callback method;  &#x2F;&#x2F; func 函数的指针
+*  napi_callback getter;  &#x2F;&#x2F; 0:NULL
+*  napi_callback setter;  &#x2F;&#x2F; 0:NULL
+*  napi_value value; &#x2F;&#x2F; 0:NULL
+*
+*  napi_property_attributes attributes;  &#x2F;&#x2F; 对应默认、可写、可枚举、可配置的属性
+*  void* data; &#x2F;&#x2F; 0:NULL
+*&#125; napi_property_descriptor;
+*&#x2F;
+#define DECLARE_NAPI_METHOD(name, func) \
+  &#123; name, 0, func, 0, 0, 0, napi_default, 0 &#125;
+&#x2F;&#x2F; 一个普通函数描述符的结构体
+
+&#x2F;**
+* 初始化函数。需要接收exports 对象，进行修改后再返回
+*
+* 定义JS 对象属性：
+* napi_define_properties(napi_env env, &#x2F;&#x2F; 
+* napi_value object, &#x2F;&#x2F; 被操作的对象
+* size_t property_count, &#x2F;&#x2F; 属性（数组内元素）数量
+* const napi_property_descriptor* properties);  
+* &#x2F;&#x2F; 属性描述符（数组）的指针
+* 其实这里对应的是一个属性数组与其内部元素的数量。
+*&#x2F;
+static napi_value Init(napi_env env, napi_value exports) &#123;
+  napi_status status;
+  napi_property_descriptor desc &#x3D; DECLARE_NAPI_METHOD(&quot;hello&quot;, Method);
+  status &#x3D; napi_define_properties(env, exports, 1, &amp;desc);
+  assert(status &#x3D;&#x3D; napi_ok);
+  return exports;
+&#125;
+
+&#x2F;&#x2F; 最终注册插件的宏命令，一般保持默认即可
+NAPI_MODULE(NODE_GYP_MODULE_NAME, Init)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+<CodeGroupItem title="状态码">
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">enum</span> <span class="token punctuation">&#123;</span>
+  napi_ok<span class="token punctuation">,</span>
+  napi_invalid_arg<span class="token punctuation">,</span>
+  napi_object_expected<span class="token punctuation">,</span>
+  napi_string_expected<span class="token punctuation">,</span>
+  napi_name_expected<span class="token punctuation">,</span>
+  napi_function_expected<span class="token punctuation">,</span>
+  napi_number_expected<span class="token punctuation">,</span>
+  napi_boolean_expected<span class="token punctuation">,</span>
+  napi_array_expected<span class="token punctuation">,</span>
+  napi_generic_failure<span class="token punctuation">,</span>
+  napi_pending_exception<span class="token punctuation">,</span>
+  napi_cancelled<span class="token punctuation">,</span>
+  napi_escape_called_twice<span class="token punctuation">,</span>
+  napi_handle_scope_mismatch<span class="token punctuation">,</span>
+  napi_callback_scope_mismatch<span class="token punctuation">,</span>
+  napi_queue_full<span class="token punctuation">,</span>
+  napi_closing<span class="token punctuation">,</span>
+  napi_bigint_expected<span class="token punctuation">,</span>
+  napi_date_expected<span class="token punctuation">,</span>
+  napi_arraybuffer_expected<span class="token punctuation">,</span>
+  napi_detachable_arraybuffer_expected<span class="token punctuation">,</span>
+  napi_would_deadlock  <span class="token comment">// unused</span>
+<span class="token punctuation">&#125;</span> napi_status<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+</CodeGroup>
+<h2 id="一般数据"><a class="markdownIt-Anchor" href="#一般数据"></a> 一般数据</h2>
+<p>好像我们并不能看到<code>N-api</code> 中关于数据的具体定义，但是这并不影响我们可以通过一系列的函数来构造或者解析<code>JS</code> 数据。虽然下面的代码看起来很多很吓人，但无外乎数据的获取、转换、设置，在JS 中，函数也是一种数据。<br />
+<strong>一般在调用<code>napi</code> 函数时，返回值都是<code>napi_status</code> 类型，所以需要预先声明一个<code>napi_vlaue</code> 用来存储函数返回值，具体操作为在调用函数时将传入返回值的指针</strong></p>
+<p>::: details 数据处理的方法</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// 经过实验得知：</span>
+<span class="token comment">// napi 插件开发是基于32 位的，也就是说_WIN64 下定义的类型是不适用的</span>
+<span class="token comment">//  0xffffffffui32</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">NAPI_AUTO_LENGTH</span> <span class="token expression">SIZE_MAX  </span></span>
+
+<span class="token comment">// 获取更详细的运行数据</span>
+<span class="token function">napi_get_last_error_info</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token keyword">const</span> napi_extended_error_info<span class="token operator">*</span><span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Getters for defined singletons/个人理解为获取预定义的数据类型</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_undefined</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_null</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_global</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_boolean</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> bool value<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 创建原始对象或方法。一般来说是需要传入具体数据的，如果没有传入的话，默认就是空对象</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_object</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_array</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_array_with_length</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token class-name">size_t</span> length<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_double</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token keyword">double</span> value<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_int32</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token class-name">int32_t</span> value<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_uint32</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token class-name">uint32_t</span> value<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_int64</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token class-name">int64_t</span> value<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_string_latin1</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> str<span class="token punctuation">,</span> <span class="token class-name">size_t</span> length<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_string_utf8</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> str<span class="token punctuation">,</span> <span class="token class-name">size_t</span> length<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_string_utf16</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token class-name">char16_t</span><span class="token operator">*</span> str<span class="token punctuation">,</span> <span class="token class-name">size_t</span> length<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_symbol</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value description<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_function</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> utf8name<span class="token punctuation">,</span> <span class="token class-name">size_t</span> length<span class="token punctuation">,</span> napi_callback cb<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span> data<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_error</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value code<span class="token punctuation">,</span> napi_value msg<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_type_error</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value code<span class="token punctuation">,</span> napi_value msg<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_range_error</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value code<span class="token punctuation">,</span> napi_value msg<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+<span class="token comment">/**
+* 获取原始数据类型的方法
+* typedef enum &#123;
+*  // ES6 types (corresponds to typeof)
+*  napi_undefined,
+*  napi_null,
+*  napi_boolean,
+*  napi_number,
+*  napi_string,
+*  napi_symbol,
+*  napi_object,
+*  napi_function,
+*  napi_external,
+*  napi_bigint,
+*&#125; napi_valuetype;
+*/</span>
+NAPI_EXTERN napi_status <span class="token function">napi_typeof</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> napi_valuetype<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 从JS 数据提取C 兼容的数据，也是要预先声明返回值的</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_value_double</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> <span class="token keyword">double</span><span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_value_int32</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> <span class="token class-name">int32_t</span><span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_value_uint32</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> <span class="token class-name">uint32_t</span><span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_value_int64</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> <span class="token class-name">int64_t</span><span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_value_bool</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> bool<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 字符串处理</span>
+<span class="token comment">// 拷贝???? 编码的字符串到缓冲区</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_value_string_latin1</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> <span class="token keyword">char</span><span class="token operator">*</span> buf<span class="token punctuation">,</span> <span class="token class-name">size_t</span> bufsize<span class="token punctuation">,</span> <span class="token class-name">size_t</span><span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_value_string_utf8</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> <span class="token keyword">char</span><span class="token operator">*</span> buf<span class="token punctuation">,</span> <span class="token class-name">size_t</span> bufsize<span class="token punctuation">,</span> <span class="token class-name">size_t</span><span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_value_string_utf16</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> <span class="token class-name">char16_t</span><span class="token operator">*</span> buf<span class="token punctuation">,</span> <span class="token class-name">size_t</span> bufsize<span class="token punctuation">,</span> <span class="token class-name">size_t</span><span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// 强制类型转换？</span>
+<span class="token comment">// Methods to coerce values</span>
+<span class="token comment">// These APIs may execute user scripts</span>
+NAPI_EXTERN napi_status <span class="token function">napi_coerce_to_bool</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_coerce_to_number</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_coerce_to_object</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_coerce_to_string</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 操作对象的方法</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_prototype</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value object<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_property_names</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value object<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_set_property</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value object<span class="token punctuation">,</span> napi_value key<span class="token punctuation">,</span> napi_value value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_has_property</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value object<span class="token punctuation">,</span> napi_value key<span class="token punctuation">,</span> bool<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_property</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value object<span class="token punctuation">,</span> napi_value key<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_delete_property</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value object<span class="token punctuation">,</span> napi_value key<span class="token punctuation">,</span> bool<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_has_own_property</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value object<span class="token punctuation">,</span> napi_value key<span class="token punctuation">,</span> bool<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_set_named_property</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value object<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> utf8name<span class="token punctuation">,</span> napi_value value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_has_named_property</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value object<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> utf8name<span class="token punctuation">,</span> bool<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_named_property</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value object<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> utf8name<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_set_element</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value object<span class="token punctuation">,</span> <span class="token class-name">uint32_t</span> index<span class="token punctuation">,</span> napi_value value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_has_element</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value object<span class="token punctuation">,</span> <span class="token class-name">uint32_t</span> index<span class="token punctuation">,</span> bool<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_element</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value object<span class="token punctuation">,</span> <span class="token class-name">uint32_t</span> index<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_delete_element</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value object<span class="token punctuation">,</span> <span class="token class-name">uint32_t</span> index<span class="token punctuation">,</span> bool<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 定义对象属性</span>
+<span class="token function">napi_define_properties</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value object<span class="token punctuation">,</span> <span class="token class-name">size_t</span> property_count<span class="token punctuation">,</span> <span class="token keyword">const</span> napi_property_descriptor<span class="token operator">*</span> properties<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 操作数组的方法</span>
+NAPI_EXTERN napi_status <span class="token function">napi_is_array</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> bool<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_array_length</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> <span class="token class-name">uint32_t</span><span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 数据比较的方法</span>
+NAPI_EXTERN napi_status <span class="token function">napi_strict_equals</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value lhs<span class="token punctuation">,</span> napi_value rhs<span class="token punctuation">,</span> bool<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 操作函数的方法</span>
+NAPI_EXTERN napi_status <span class="token function">napi_call_function</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value recv<span class="token punctuation">,</span> napi_value func<span class="token punctuation">,</span> <span class="token class-name">size_t</span> argc<span class="token punctuation">,</span> <span class="token keyword">const</span> napi_value<span class="token operator">*</span> argv<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_new_instance</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value constructor<span class="token punctuation">,</span> <span class="token class-name">size_t</span> argc<span class="token punctuation">,</span> <span class="token keyword">const</span> napi_value<span class="token operator">*</span> argv<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_instanceof</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value object<span class="token punctuation">,</span> napi_value constructor<span class="token punctuation">,</span> bool<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+NAPI_EXTERN napi_status <span class="token function">napi_get_new_target</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_callback_info cbinfo<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_define_class</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> utf8name<span class="token punctuation">,</span> <span class="token class-name">size_t</span> length<span class="token punctuation">,</span> napi_callback constructor<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span> data<span class="token punctuation">,</span> <span class="token class-name">size_t</span> property_count<span class="token punctuation">,</span> <span class="token keyword">const</span> napi_property_descriptor<span class="token operator">*</span> properties<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 封装扩展数据类型</span>
+NAPI_EXTERN napi_status <span class="token function">napi_wrap</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value js_object<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span> native_object<span class="token punctuation">,</span> napi_finalize finalize_cb<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span> finalize_hint<span class="token punctuation">,</span> napi_ref<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_unwrap</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value js_object<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_remove_wrap</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value js_object<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_external</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span> data<span class="token punctuation">,</span> napi_finalize finalize_cb<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span> finalize_hint<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_value_external</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 控制对象生命周期</span>
+<span class="token comment">// 这里的操作要比较小心，目测会有内存泄漏的风险</span>
+
+<span class="token comment">// 设置一个对象的引用</span>
+<span class="token comment">// Set initial_refcount to 0 for a weak reference, >0 for a strong reference.</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_reference</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> <span class="token class-name">uint32_t</span> initial_refcount<span class="token punctuation">,</span> napi_ref<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// 删除对象的引用</span>
+<span class="token comment">// Deletes a reference. The referenced value is released, and may</span>
+<span class="token comment">// be GC'd unless there are other references to it.</span>
+NAPI_EXTERN napi_status <span class="token function">napi_delete_reference</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_ref ref<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Increments the reference count, optionally returning the resulting count.</span>
+<span class="token comment">// After this call the  reference will be a strong reference because its</span>
+<span class="token comment">// refcount is >0, and the referenced object is effectively "pinned".</span>
+<span class="token comment">// Calling this when the refcount is 0 and the object is unavailable</span>
+<span class="token comment">// results in an error.</span>
+NAPI_EXTERN napi_status <span class="token function">napi_reference_ref</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_ref ref<span class="token punctuation">,</span> <span class="token class-name">uint32_t</span><span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Decrements the reference count, optionally returning the resulting count.</span>
+<span class="token comment">// If the result is 0 the reference is now weak and the object may be GC'd</span>
+<span class="token comment">// at any time if there are no other references. Calling this when the</span>
+<span class="token comment">// refcount is already 0 results in an error.</span>
+NAPI_EXTERN napi_status <span class="token function">napi_reference_unref</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_ref ref<span class="token punctuation">,</span> <span class="token class-name">uint32_t</span><span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Attempts to get a referenced value. If the reference is weak,</span>
+<span class="token comment">// the value might no longer be available, in that case the call</span>
+<span class="token comment">// is still successful but the result is NULL.</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_reference_value</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_ref ref<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_open_handle_scope</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_handle_scope<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_close_handle_scope</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_handle_scope scope<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_open_escapable_handle_scope</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_escapable_handle_scope<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_close_escapable_handle_scope</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_escapable_handle_scope scope<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_escape_handle</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_escapable_handle_scope scope<span class="token punctuation">,</span> napi_value escapee<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 异常处理</span>
+NAPI_EXTERN napi_status <span class="token function">napi_throw</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value error<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_throw_error</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> code<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_throw_type_error</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> code<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_throw_range_error</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> code<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_is_error</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> bool<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 异常捕获</span>
+NAPI_EXTERN napi_status <span class="token function">napi_is_exception_pending</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> bool<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_and_clear_last_exception</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 数组Buffer 和确定类型的数组</span>
+NAPI_EXTERN napi_status <span class="token function">napi_is_arraybuffer</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> bool<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_arraybuffer</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token class-name">size_t</span> byte_length<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">*</span> data<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_external_arraybuffer</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span> external_data<span class="token punctuation">,</span> <span class="token class-name">size_t</span> byte_length<span class="token punctuation">,</span> napi_finalize finalize_cb<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span> finalize_hint<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_arraybuffer_info</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value arraybuffer<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">*</span> data<span class="token punctuation">,</span> <span class="token class-name">size_t</span><span class="token operator">*</span> byte_length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_is_typedarray</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> bool<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_typedarray</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_typedarray_type type<span class="token punctuation">,</span> <span class="token class-name">size_t</span> length<span class="token punctuation">,</span> napi_value arraybuffer<span class="token punctuation">,</span> <span class="token class-name">size_t</span> byte_offset<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_typedarray_info</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value typedarray<span class="token punctuation">,</span> napi_typedarray_type<span class="token operator">*</span> type<span class="token punctuation">,</span> <span class="token class-name">size_t</span><span class="token operator">*</span> length<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">*</span> data<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> arraybuffer<span class="token punctuation">,</span> <span class="token class-name">size_t</span><span class="token operator">*</span> byte_offset<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+NAPI_EXTERN napi_status <span class="token function">napi_create_dataview</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token class-name">size_t</span> length<span class="token punctuation">,</span> napi_value arraybuffer<span class="token punctuation">,</span> <span class="token class-name">size_t</span> byte_offset<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_is_dataview</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> bool<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_dataview_info</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value dataview<span class="token punctuation">,</span> <span class="token class-name">size_t</span><span class="token operator">*</span> bytelength<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">*</span> data<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> arraybuffer<span class="token punctuation">,</span> <span class="token class-name">size_t</span><span class="token operator">*</span> byte_offset<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Node 版本管理</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_version</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token class-name">uint32_t</span><span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Promises，异步</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_promise</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_deferred<span class="token operator">*</span> deferred<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> promise<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_resolve_deferred</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_deferred deferred<span class="token punctuation">,</span> napi_value resolution<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_reject_deferred</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_deferred deferred<span class="token punctuation">,</span> napi_value rejection<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_is_promise</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> bool<span class="token operator">*</span> is_promise<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Running a script，执行脚本，猜测是evl</span>
+NAPI_EXTERN napi_status <span class="token function">napi_run_script</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value script<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 内存管理</span>
+NAPI_EXTERN napi_status <span class="token function">napi_adjust_external_memory</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token class-name">int64_t</span> change_in_bytes<span class="token punctuation">,</span> <span class="token class-name">int64_t</span><span class="token operator">*</span> adjusted_value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+<span class="token comment">// Dates</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_date</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token keyword">double</span> time<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_is_date</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> bool<span class="token operator">*</span> is_date<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_date_value</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> <span class="token keyword">double</span><span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Add finalizer for pointer</span>
+NAPI_EXTERN napi_status <span class="token function">napi_add_finalizer</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value js_object<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span> native_object<span class="token punctuation">,</span> napi_finalize finalize_cb<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span> finalize_hint<span class="token punctuation">,</span> napi_ref<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// BigInt </span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_bigint_int64</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token class-name">int64_t</span> value<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_bigint_uint64</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token class-name">uint64_t</span> value<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_create_bigint_words</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token keyword">int</span> sign_bit<span class="token punctuation">,</span> <span class="token class-name">size_t</span> word_count<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token class-name">uint64_t</span><span class="token operator">*</span> words<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_value_bigint_int64</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> <span class="token class-name">int64_t</span><span class="token operator">*</span> result<span class="token punctuation">,</span> bool<span class="token operator">*</span> lossless<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_value_bigint_uint64</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> <span class="token class-name">uint64_t</span><span class="token operator">*</span> result<span class="token punctuation">,</span> bool<span class="token operator">*</span> lossless<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_value_bigint_words</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> <span class="token keyword">int</span><span class="token operator">*</span> sign_bit<span class="token punctuation">,</span> <span class="token class-name">size_t</span><span class="token operator">*</span> word_count<span class="token punctuation">,</span> <span class="token class-name">uint64_t</span><span class="token operator">*</span> words<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Object </span>
+<span class="token function">napi_get_all_property_names</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value object<span class="token punctuation">,</span> napi_key_collection_mode key_mode<span class="token punctuation">,</span> napi_key_filter key_filter<span class="token punctuation">,</span> napi_key_conversion key_conversion<span class="token punctuation">,</span> napi_value<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Instance data</span>
+NAPI_EXTERN napi_status <span class="token function">napi_set_instance_data</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span> data<span class="token punctuation">,</span> napi_finalize finalize_cb<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span> finalize_hint<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_get_instance_data</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">*</span> data<span class="token punctuation">)</span><span class="token punctuation">;</span> 
+<span class="token comment">// ArrayBuffer detaching</span>
+NAPI_EXTERN napi_status <span class="token function">napi_detach_arraybuffer</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value arraybuffer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_is_detached_arraybuffer</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> bool<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+<span class="token comment">// Type tagging，类型标签</span>
+NAPI_EXTERN napi_status <span class="token function">napi_type_tag_object</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> <span class="token keyword">const</span> napi_type_tag<span class="token operator">*</span> type_tag<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">napi_check_object_type_tag</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value value<span class="token punctuation">,</span> <span class="token keyword">const</span> napi_type_tag<span class="token operator">*</span> type_tag<span class="token punctuation">,</span> bool<span class="token operator">*</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_object_freeze</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value object<span class="token punctuation">)</span><span class="token punctuation">;</span>
+NAPI_EXTERN napi_status <span class="token function">napi_object_seal</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value object<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>:::</p>
+<h2 id="具体细节"><a class="markdownIt-Anchor" href="#具体细节"></a> 具体细节</h2>
+<h3 id="获取函数的参数"><a class="markdownIt-Anchor" href="#获取函数的参数"></a> 获取函数的参数</h3>
+<p>传入函数的参数被存放在<code>napi_callback_info</code> 中，可以通过<code>napi_get_cb_info</code> 函数来提取。需要注意的是，在自定义插件中定义的函数，参数数量一般来说最好与<code>JS</code> 约定好。</p>
+<pre class="line-numbers language-c&#123;16-19&#125;" data-language="c&#123;16-19&#125;"><code class="language-c&#123;16-19&#125;">&#x2F;**
+* &#x2F;&#x2F; 一次调用获取所有回调函数的信息。(Ugly, but faster.)
+* NAPI_EXTERN napi_status napi_get_cb_info(
+*     napi_env env,               &#x2F;&#x2F; [in] 运行环境
+*     napi_callback_info cbinfo,  &#x2F;&#x2F; [in] 回调函数的参数
+*     size_t* argc,      &#x2F;&#x2F; [in-out] 预设置取参数的数量
+*                        &#x2F;&#x2F; 返回实际取到的参数数量
+*     napi_value* argv,  &#x2F;&#x2F; [out] 参数数组
+*     napi_value* this_arg,  &#x2F;&#x2F; [out] 获取函数调用时this 对象
+*     void** data);          &#x2F;&#x2F; [out] 获取该函数的数据指针（不太懂
+*&#x2F;
+static napi_value Add(napi_env env, napi_callback_info info) &#123;
+  napi_status status;
+
+  &#x2F;&#x2F; 1. 从napi_callback_info 提取参数及其数量
+  size_t argc &#x3D; 2;
+  napi_value args[2];
+  status &#x3D; napi_get_cb_info(env, info, &amp;argc, args, NULL, NULL);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  if (argc &lt; 2) &#123;
+    &#x2F;&#x2F; 抛出异常
+    napi_throw_type_error(env, NULL, &quot;Wrong number of arguments&quot;);
+    return NULL;
+  &#125;
+
+  &#x2F;&#x2F; 2. 获取参数类型
+  napi_valuetype valuetype0;
+  status &#x3D; napi_typeof(env, args[0], &amp;valuetype0);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  napi_valuetype valuetype1;
+  status &#x3D; napi_typeof(env, args[1], &amp;valuetype1);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  &#x2F;&#x2F; 3. 判断参数类型
+  if (valuetype0 !&#x3D; napi_number || valuetype1 !&#x3D; napi_number) &#123;
+    napi_throw_type_error(env, NULL, &quot;Wrong arguments&quot;);
+    return NULL;
+  &#125;
+
+  &#x2F;&#x2F; 4. 获取数据值
+  double value0;
+  status &#x3D; napi_get_value_double(env, args[0], &amp;value0);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  double value1;
+  status &#x3D; napi_get_value_double(env, args[1], &amp;value1);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  napi_value sum;
+  status &#x3D; napi_create_double(env, value0 + value1, &amp;sum);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  return sum;
+  &#x2F;&#x2F; 从上面的代码来看，获取函数参数的部分存在着大量的重复代码（对开发者而言），
+  &#x2F;&#x2F; 当然这些代码在程序执行时都是必须的，但是考虑到开发效率，我们依然需要能提取
+  &#x2F;&#x2F; 代码的冗余部分，进行封装。
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="调用回调函数"><a class="markdownIt-Anchor" href="#调用回调函数"></a> 调用（回调）函数</h3>
+<p>主要用来调用传入的JS 回调函数。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">/**
+* NAPI_EXTERN napi_status napi_call_function(napi_env env,
+*                                           napi_value recv,        // this 对象
+*                             // 非实例函数可以用napi_get_global() 获取global 对象
+*                                           napi_value func,           // 函数体
+*                                           size_t argc,             // 参数数量 
+*                                           const napi_value* argv,  // 传入参数
+*                                           napi_value* result);       // 返回值
+*/</span>
+<span class="token keyword">static</span> napi_value <span class="token function">RunCallback</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> <span class="token keyword">const</span> napi_callback_info info<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  napi_status status<span class="token punctuation">;</span>
+
+  <span class="token class-name">size_t</span> argc <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+  napi_value args<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+  status <span class="token operator">=</span> <span class="token function">napi_get_cb_info</span><span class="token punctuation">(</span>env<span class="token punctuation">,</span> info<span class="token punctuation">,</span> <span class="token operator">&amp;</span>argc<span class="token punctuation">,</span> args<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assert</span><span class="token punctuation">(</span>status <span class="token operator">==</span> napi_ok<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  napi_value cb <span class="token operator">=</span> args<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+  napi_value argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+  status <span class="token operator">=</span> <span class="token function">napi_create_string_utf8</span><span class="token punctuation">(</span>env<span class="token punctuation">,</span> <span class="token string">"hello world"</span><span class="token punctuation">,</span> NAPI_AUTO_LENGTH<span class="token punctuation">,</span> argv<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assert</span><span class="token punctuation">(</span>status <span class="token operator">==</span> napi_ok<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  napi_value global<span class="token punctuation">;</span>
+  status <span class="token operator">=</span> <span class="token function">napi_get_global</span><span class="token punctuation">(</span>env<span class="token punctuation">,</span> <span class="token operator">&amp;</span>global<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assert</span><span class="token punctuation">(</span>status <span class="token operator">==</span> napi_ok<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  napi_value result<span class="token punctuation">;</span>
+  status <span class="token operator">=</span> <span class="token function">napi_call_function</span><span class="token punctuation">(</span>env<span class="token punctuation">,</span> global<span class="token punctuation">,</span> cb<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> argv<span class="token punctuation">,</span> <span class="token operator">&amp;</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assert</span><span class="token punctuation">(</span>status <span class="token operator">==</span> napi_ok<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">static</span> napi_value <span class="token function">Init</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value exports<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  napi_value new_exports<span class="token punctuation">;</span>
+  napi_status status <span class="token operator">=</span> <span class="token function">napi_create_function</span><span class="token punctuation">(</span>
+      env<span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">,</span> NAPI_AUTO_LENGTH<span class="token punctuation">,</span> RunCallback<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>new_exports<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assert</span><span class="token punctuation">(</span>status <span class="token operator">==</span> napi_ok<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// 其实导出的对象也是一个普通的napi_value</span>
+  <span class="token keyword">return</span> new_exports<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">/**
+* 创建函数
+* napi_status napi_create_function(napi_env env,          //
+*                                  const char* utf8name,  // 函数名，留空表示匿名函数？
+*                                  size_t length,         // 函数名长度，或者NAPI_AUTO_LENGTH 
+*                                  napi_callback cb,      // 函数体
+*                                  void* data,            // 用户提供的数据上下文，调用时传递回函数。 
+*                                  napi_value* result);   // 返回值：返回一个函数类型
+*/</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="对象工厂"><a class="markdownIt-Anchor" href="#对象工厂"></a> 对象工厂</h3>
+<p>创建JS 对象的方法。</p>
+<pre class="line-numbers language-c&#123;20&#125;" data-language="c&#123;20&#125;"><code class="language-c&#123;20&#125;">&#x2F;**
+* NAPI_EXTERN napi_status napi_set_named_property(napi_env env,  &#x2F;&#x2F;
+*                                          napi_value object,    &#x2F;&#x2F; 
+*                                          const char* utf8name, &#x2F;&#x2F; 属性名
+*                                          napi_value value);    &#x2F;&#x2F; 属性值
+*&#x2F;
+
+static napi_value CreateObject(napi_env env, const napi_callback_info info) &#123;
+  napi_status status;
+
+  size_t argc &#x3D; 1;
+  napi_value args[1];
+  status &#x3D; napi_get_cb_info(env, info, &amp;argc, args, NULL, NULL);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  napi_value obj;
+  status &#x3D; napi_create_object(env, &amp;obj);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  status &#x3D; napi_set_named_property(env, obj, &quot;msg&quot;, args[0]);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  return obj;
+&#125;
+
+&#x2F;&#x2F; 导出为匿名函数
+static napi_value Init(napi_env env, napi_value exports) &#123;
+  napi_value new_exports;
+  napi_status status &#x3D; napi_create_function(
+      env, &quot;&quot;, NAPI_AUTO_LENGTH, CreateObject, NULL, &amp;new_exports);
+  assert(status &#x3D;&#x3D; napi_ok);
+  return new_exports;
+&#125;
+
+NAPI_MODULE(NODE_GYP_MODULE_NAME, Init)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="函数工厂"><a class="markdownIt-Anchor" href="#函数工厂"></a> 函数工厂</h3>
+<p>函数工厂就是构建JS 函数的方法，前文已经提到过了。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// 返回"hello world"</span>
+<span class="token keyword">static</span> napi_value <span class="token function">MyFunction</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_callback_info info<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  napi_status status<span class="token punctuation">;</span>
+
+  napi_value str<span class="token punctuation">;</span>
+  status <span class="token operator">=</span> <span class="token function">napi_create_string_utf8</span><span class="token punctuation">(</span>env<span class="token punctuation">,</span> <span class="token string">"hello world"</span><span class="token punctuation">,</span> NAPI_AUTO_LENGTH<span class="token punctuation">,</span> <span class="token operator">&amp;</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assert</span><span class="token punctuation">(</span>status <span class="token operator">==</span> napi_ok<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> str<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">static</span> napi_value <span class="token function">CreateFunction</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_callback_info info<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  napi_status status<span class="token punctuation">;</span>
+
+  napi_value fn<span class="token punctuation">;</span>
+  status <span class="token operator">=</span> <span class="token function">napi_create_function</span><span class="token punctuation">(</span>
+      env<span class="token punctuation">,</span> <span class="token string">"theFunction"</span><span class="token punctuation">,</span> NAPI_AUTO_LENGTH<span class="token punctuation">,</span> MyFunction<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>fn<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assert</span><span class="token punctuation">(</span>status <span class="token operator">==</span> napi_ok<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> fn<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="晋级c"><a class="markdownIt-Anchor" href="#晋级c"></a> 晋级C++</h2>
+<p>前面我们基本上已经了解了<code>C</code> 语言插件的开发，特点就是代码很长。于是我们可以采用面向对象的方式来封装代码。于是，以后将开始引入<code>C++</code>，将JS 对象与CPP 对象一一对应起来。然鹅对于不熟悉<code>C++</code> 的我来说，看代码果然还是太难了些。</p>
+<h3 id="对象的封装"><a class="markdownIt-Anchor" href="#对象的封装"></a> 对象的封装</h3>
+<p>封装一个自定义的<code>C++</code> 对象类型，并将函数、属性、初始化的方法，统统写到对象内部。这样就可以只对外保留导出模块的接口了。似乎每一个模块都会有一个实例<code>instance</code>。**而<code>Constructor,New</code> 则应该是约定好的，会被JS 调用的函数名。**看一遍源码只能说能了解个大概，真要是用还需要大量的练习。</p>
+<CodeGroup>
+<CodeGroupItem title="addon.cc">
+<pre class="line-numbers language-c++&#123;4&#125;" data-language="c++&#123;4&#125;"><code class="language-c++&#123;4&#125;">#include &quot;myobject.h&quot;
+
+napi_value Init(napi_env env, napi_value exports) &#123;
+  return MyObject::Init(env, exports);
+&#125;
+
+NAPI_MODULE(NODE_GYP_MODULE_NAME, Init)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+<CodeGroupItem title="myobject.h">
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#ifndef TEST_ADDONS_NAPI_6_OBJECT_WRAP_MYOBJECT_H_
+#define TEST_ADDONS_NAPI_6_OBJECT_WRAP_MYOBJECT_H_
+
+#include &lt;node_api.h&gt;
+
+class MyObject &#123;
+ public:
+  static napi_value Init(napi_env env, napi_value exports);
+  static void Destructor(napi_env env, void* nativeObject, void* finalize_hint);
+
+ private:
+  &#x2F;&#x2F; explicit 拒绝构造函数的隐式调用，总之能用就用
+  explicit MyObject(double value_ &#x3D; 0);
+  ~MyObject();
+
+  static napi_value New(napi_env env, napi_callback_info info);
+  static napi_value GetValue(napi_env env, napi_callback_info info);
+  static napi_value SetValue(napi_env env, napi_callback_info info);
+  static napi_value PlusOne(napi_env env, napi_callback_info info);
+  static napi_value Multiply(napi_env env, napi_callback_info info);
+  static inline napi_value Constructor(napi_env env);
+
+  double value_;
+  napi_env env_;
+  napi_ref wrapper_;
+&#125;;
+
+#endif  &#x2F;&#x2F; TEST_ADDONS_NAPI_6_OBJECT_WRAP_MYOBJECT_H_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+<CodeGroupItem title="myobject.cc">
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &quot;myobject.h&quot;
+#include &lt;assert.h&gt;
+
+&#x2F;&#x2F; 多继承，对象派生自：value_(value), env_(nullptr), wrapper_(nullptr)
+&#x2F;&#x2F; 需要注意的是，对象本身的值存放于value_(value)
+MyObject::MyObject(double value)
+    : value_(value), env_(nullptr), wrapper_(nullptr) &#123;&#125;  
+
+MyObject::~MyObject() &#123;
+  &#x2F;&#x2F; 删除JS 引用
+  napi_delete_reference(env_, wrapper_);
+&#125;
+
+void MyObject::Destructor(napi_env env,
+                          void* nativeObject,
+                          void* &#x2F;*finalize_hint*&#x2F;) &#123;
+  
+  &#x2F;&#x2F; reinterpret_cast 运算符并不会改变括号中运算对象的值，而是对该对象从位模式上进行重新解释
+  reinterpret_cast&lt;MyObject*&gt;(nativeObject)-&gt;~MyObject();
+  &#x2F;&#x2F; 调用析构函数
+&#125;
+
+&#x2F;&#x2F; 定义属性描述符
+#define DECLARE_NAPI_METHOD(name, func)                                        \
+  &#123; name, 0, func, 0, 0, 0, napi_default, 0 &#125;
+
+&#x2F;&#x2F; 用于初始化模块，并返回构造好的.node 模块
+napi_value MyObject::Init(napi_env env, napi_value exports) &#123;
+  napi_status status;
+  &#x2F;&#x2F; 创建属性描述符
+  napi_property_descriptor properties[] &#x3D; &#123;
+      &#x2F;&#x2F; 添加property-&gt;value，同时也包含getter,setter
+      &#123;&quot;value&quot;, 0, 0, GetValue, SetValue, 0, napi_default, 0&#125;,
+      &#x2F;&#x2F; 对象包含两个方法
+      DECLARE_NAPI_METHOD(&quot;plusOne&quot;, PlusOne),
+      DECLARE_NAPI_METHOD(&quot;multiply&quot;, Multiply),
+  &#125;;
+
+  &#x2F;**
+  * 定义JS 类
+  * napi_status napi_define_class(napi_env env,
+  *                             const char* utf8name,      &#x2F;&#x2F; 类名
+  *                             size_t length,             &#x2F;&#x2F; 类名长度
+  *                             napi_callback constructor, &#x2F;&#x2F; 构造函数
+  *                             void* data,                &#x2F;&#x2F; 传入构造函数的data（可选）
+  *                             size_t property_count,     &#x2F;&#x2F; 类属性长度
+  *                             const napi_property_descriptor* properties,
+  *                                                        &#x2F;&#x2F; 类属性数组
+  *                             napi_value* result);       &#x2F;&#x2F; 返回类对象
+  *&#x2F;
+  napi_value cons;
+  status &#x3D; napi_define_class(
+      env, &quot;MyObject&quot;, NAPI_AUTO_LENGTH, New, nullptr, 3, properties, &amp;cons);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  &#x2F;&#x2F; 因为插件的Init 之后，我们还需要调用此构造函数，所以
+  &#x2F;&#x2F; 我们需要创建一个强引用，将其持久化存储。这样我们就能
+  &#x2F;&#x2F; 在插件中任何位置，通过&#96;napi_get_instance_data&#96; 检
+  &#x2F;&#x2F; 索到它。我们不能将其设置为全局的静态变量，因为这样的
+  &#x2F;&#x2F; 话无法支持worker 线程以及单线程的多个上下文。
+  napi_ref* constructor &#x3D; new napi_ref;
+  status &#x3D; napi_create_reference(env, cons, 1, constructor);  &#x2F;&#x2F; 创建强引用
+  assert(status &#x3D;&#x3D; napi_ok);
+  status &#x3D; napi_set_instance_data(  &#x2F;&#x2F; 添加到实例
+      env,          &#x2F;&#x2F; 
+      constructor,  &#x2F;&#x2F; void* data。存入的数据
+      &#x2F;&#x2F; 卸载插件时会调用此lambda 函数，来释放强引用与堆内存
+      [](napi_env env, void* data, void* hint) &#123;
+        napi_ref* constructor &#x3D; static_cast&lt;napi_ref*&gt;(data);
+        napi_status status &#x3D; napi_delete_reference(env, *constructor);
+        assert(status &#x3D;&#x3D; napi_ok);
+        delete constructor;
+      &#125;,            &#x2F;&#x2F; napi_finalize finalize_cb。卸载插件时的回调函数
+      nullptr);     &#x2F;&#x2F; 可选提示
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  status &#x3D; napi_set_named_property(env, exports, &quot;MyObject&quot;, cons);
+  assert(status &#x3D;&#x3D; napi_ok);
+  return exports;
+&#125;
+
+&#x2F;&#x2F; 对应JS 中的构造函数
+napi_value MyObject::Constructor(napi_env env) &#123;
+  &#x2F;&#x2F; 获取存放在示例中的构造函数的引用
+  void* instance_data &#x3D; nullptr;
+  napi_status status &#x3D; napi_get_instance_data(env, &amp;instance_data);
+  assert(status &#x3D;&#x3D; napi_ok);
+  napi_ref* constructor &#x3D; static_cast&lt;napi_ref*&gt;(instance_data);
+
+  napi_value cons;
+  status &#x3D; napi_get_reference_value(env, *constructor, &amp;cons);
+  assert(status &#x3D;&#x3D; napi_ok);
+  return cons;
+&#125;
+
+napi_value MyObject::New(napi_env env, napi_callback_info info) &#123;
+  napi_status status;
+
+  napi_value target;
+  status &#x3D; napi_get_new_target(env, info, &amp;target);  
+  assert(status &#x3D;&#x3D; napi_ok);
+  bool is_constructor &#x3D; target !&#x3D; nullptr;
+  &#x2F;&#x2F; new.target指向被new调用的构造函数，如果该方法不是构造函数，则会返回null
+
+  if (is_constructor) &#123;
+    &#x2F;&#x2F; 被当作构造函数调用
+    &#x2F;&#x2F; Invoked as constructor: &#96;new MyObject(...)&#96;
+    size_t argc &#x3D; 1;
+    napi_value args[1];
+    napi_value jsthis;  &#x2F;&#x2F; 构造函数应有this
+    status &#x3D; napi_get_cb_info(env, info, &amp;argc, args, &amp;jsthis, nullptr);
+    assert(status &#x3D;&#x3D; napi_ok);
+
+    double value &#x3D; 0;
+
+    napi_valuetype valuetype;
+    status &#x3D; napi_typeof(env, args[0], &amp;valuetype);
+    assert(status &#x3D;&#x3D; napi_ok);
+
+    if (valuetype !&#x3D; napi_undefined) &#123;
+      status &#x3D; napi_get_value_double(env, args[0], &amp;value);
+      assert(status &#x3D;&#x3D; napi_ok);
+    &#125;
+
+    MyObject* obj &#x3D; new MyObject(value);
+
+    obj-&gt;env_ &#x3D; env;
+    status &#x3D; napi_wrap(env,
+                       jsthis,  &#x2F;&#x2F; 将obj 包装成this
+                       reinterpret_cast&lt;void*&gt;(obj),  &#x2F;&#x2F; 本地对象
+                       MyObject::Destructor,  &#x2F;&#x2F; 准备垃圾回收时销毁本地对象
+                       nullptr,  &#x2F;&#x2F; finalize_hint，可选提示
+                       &amp;obj-&gt;wrapper_);  &#x2F;&#x2F; 返回值
+    assert(status &#x3D;&#x3D; napi_ok);
+
+    return jsthis;
+  &#125; else &#123;
+    &#x2F;&#x2F; 被当作普通函数调用
+    &#x2F;&#x2F; Invoked as plain function &#96;MyObject(...)&#96;, turn into construct call.
+    size_t argc_ &#x3D; 1;
+    napi_value args[1];
+    status &#x3D; napi_get_cb_info(env, info, &amp;argc_, args, nullptr, nullptr);
+    assert(status &#x3D;&#x3D; napi_ok);
+
+    const size_t argc &#x3D; 1;
+    napi_value argv[argc] &#x3D; &#123;args[0]&#125;;
+
+    napi_value instance;
+    status &#x3D; napi_new_instance(env, Constructor(env), argc, argv, &amp;instance);
+    assert(status &#x3D;&#x3D; napi_ok);
+
+    return instance;
+  &#125;
+&#125;
+
+&#x2F;&#x2F; Getter、Setter
+napi_value MyObject::GetValue(napi_env env, napi_callback_info info) &#123;
+  napi_status status;
+
+  napi_value jsthis;
+  status &#x3D; napi_get_cb_info(env, info, nullptr, nullptr, &amp;jsthis, nullptr);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  MyObject* obj;
+  &#x2F;&#x2F; 解除包装
+  status &#x3D; napi_unwrap(env, jsthis, reinterpret_cast&lt;void**&gt;(&amp;obj));
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  napi_value num;
+  status &#x3D; napi_create_double(env, obj-&gt;value_, &amp;num);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  return num;
+&#125;
+
+napi_value MyObject::SetValue(napi_env env, napi_callback_info info) &#123;
+  napi_status status;
+
+  size_t argc &#x3D; 1;
+  napi_value value;
+  napi_value jsthis;
+  status &#x3D; napi_get_cb_info(env, info, &amp;argc, &amp;value, &amp;jsthis, nullptr);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  MyObject* obj;
+  status &#x3D; napi_unwrap(env, jsthis, reinterpret_cast&lt;void**&gt;(&amp;obj));
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  &#x2F;&#x2F; 虽然是get 函数，但是将传入的值get 到对象属性上面去了。。。
+  status &#x3D; napi_get_value_double(env, value, &amp;obj-&gt;value_);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  return nullptr;
+&#125;
+
+napi_value MyObject::PlusOne(napi_env env, napi_callback_info info) &#123;
+  napi_status status;
+
+  napi_value jsthis;
+  status &#x3D; napi_get_cb_info(env, info, nullptr, nullptr, &amp;jsthis, nullptr);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  MyObject* obj;
+  status &#x3D; napi_unwrap(env, jsthis, reinterpret_cast&lt;void**&gt;(&amp;obj));
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  obj-&gt;value_ +&#x3D; 1;
+
+  napi_value num;
+  status &#x3D; napi_create_double(env, obj-&gt;value_, &amp;num);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  return num;
+&#125;
+
+napi_value MyObject::Multiply(napi_env env, napi_callback_info info) &#123;
+  napi_status status;
+
+  size_t argc &#x3D; 1;
+  napi_value args[1];
+  napi_value jsthis;
+  status &#x3D; napi_get_cb_info(env, info, &amp;argc, args, &amp;jsthis, nullptr);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  napi_valuetype valuetype;
+  status &#x3D; napi_typeof(env, args[0], &amp;valuetype);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  double multiple &#x3D; 1;
+  if (valuetype !&#x3D; napi_undefined) &#123;
+    status &#x3D; napi_get_value_double(env, args[0], &amp;multiple);
+    assert(status &#x3D;&#x3D; napi_ok);
+  &#125;
+
+  MyObject* obj;
+  status &#x3D; napi_unwrap(env, jsthis, reinterpret_cast&lt;void**&gt;(&amp;obj));
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  const int kArgCount &#x3D; 1;
+  napi_value argv[kArgCount];
+  status &#x3D; napi_create_double(env, obj-&gt;value_ * multiple, argv);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  napi_value instance;
+  status &#x3D; napi_new_instance(env, Constructor(env), kArgCount, argv, &amp;instance);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  return instance;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+</CodeGroup>  
+<h3 id="工厂封装"><a class="markdownIt-Anchor" href="#工厂封装"></a> 工厂封装</h3>
+<p>仍然以<code>MyObject</code> 为例，工厂的封装其实就相当于增加了一个调用对象构造函数的层。</p>
+<pre class="line-numbers language-c++&#123;12-14,21-22&#125;" data-language="c++&#123;12-14,21-22&#125;"><code class="language-c++&#123;12-14,21-22&#125;">#include &lt;assert.h&gt;
+#include &quot;myobject.h&quot;
+
+napi_value CreateObject(napi_env env, napi_callback_info info) &#123;
+  napi_status status;
+
+  size_t argc &#x3D; 1;
+  napi_value args[1];
+  status &#x3D; napi_get_cb_info(env, info, &amp;argc, args, nullptr, nullptr);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  napi_value instance;
+  status &#x3D; MyObject::NewInstance(env, args[0], &amp;instance);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  return instance;
+&#125;
+
+napi_value Init(napi_env env, napi_value exports) &#123;
+  &#x2F;&#x2F; 仍然需要在加载插件时初始化MyObject 类
+  napi_status status &#x3D; MyObject::Init(env);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  napi_value new_exports;
+  status &#x3D; napi_create_function(
+      env, &quot;&quot;, NAPI_AUTO_LENGTH, CreateObject, nullptr, &amp;new_exports);
+  assert(status &#x3D;&#x3D; napi_ok);
+  return new_exports;
+&#125;
+
+NAPI_MODULE(NODE_GYP_MODULE_NAME, Init)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="passing_wraoed"><a class="markdownIt-Anchor" href="#passing_wraoed"></a> Passing_Wraoed</h3>
+<p>说实话这一节我不知道该如何翻译，因为内容开起来与前面的东西没有什么不同。无非是增加了一个函数，可以将JS 对象转化为C++ 对象并进行处理。</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;assert.h&gt;
+#include &quot;myobject.h&quot;
+
+&#x2F;&#x2F; 对象工厂
+napi_value CreateObject(napi_env env, napi_callback_info info) &#123;
+  napi_status status;
+
+  size_t argc &#x3D; 1;
+  napi_value args[1];
+  status &#x3D; napi_get_cb_info(env, info, &amp;argc, args, nullptr, nullptr);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  napi_value instance;
+  status &#x3D; MyObject::NewInstance(env, args[0], &amp;instance);
+
+  return instance;
+&#125;
+
+&#x2F;&#x2F; 对象的加法函数
+napi_value Add(napi_env env, napi_callback_info info) &#123;
+  napi_status status;
+
+  size_t argc &#x3D; 2;
+  napi_value args[2];
+  status &#x3D; napi_get_cb_info(env, info, &amp;argc, args, nullptr, nullptr);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  &#x2F;&#x2F; 类型转换
+  MyObject* obj1;
+  status &#x3D; napi_unwrap(env, args[0], reinterpret_cast&lt;void**&gt;(&amp;obj1));
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  MyObject* obj2;
+  status &#x3D; napi_unwrap(env, args[1], reinterpret_cast&lt;void**&gt;(&amp;obj2));
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  napi_value sum;
+  status &#x3D; napi_create_double(env, obj1-&gt;Val() + obj2-&gt;Val(), &amp;sum);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  return sum;
+&#125;
+
+#define DECLARE_NAPI_METHOD(name, func)                                        \
+  &#123; name, 0, func, 0, 0, 0, napi_default, 0 &#125;
+
+napi_value Init(napi_env env, napi_value exports) &#123;
+  napi_status status;
+
+  MyObject::Init(env);
+
+  napi_property_descriptor desc[] &#x3D; &#123;
+      DECLARE_NAPI_METHOD(&quot;createObject&quot;, CreateObject),
+      DECLARE_NAPI_METHOD(&quot;add&quot;, Add),
+  &#125;;
+  status &#x3D;
+      napi_define_properties(env, exports, sizeof(desc) &#x2F; sizeof(*desc), desc);
+  assert(status &#x3D;&#x3D; napi_ok);
+  return exports;
+&#125;
+
+NAPI_MODULE(NODE_GYP_MODULE_NAME, Init)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>看到这里，我们就会发现，虽然可以使用C++ 来封装代码，但是工作量依然好大，能不能再简单一些，让我们可以直接写C++ 代码就行了。幸运的是，官方已经在维护这样的库了：<a target="_blank" rel="noopener" href="https://github.com/nodejs/node-addon-api">node-addon-api</a>。</p>
+<h2 id="node-addon-api"><a class="markdownIt-Anchor" href="#node-addon-api"></a> node-addon-api</h2>
+<p>在理解了上述代码之后，就理清了<code>n-api</code> 插件的工作原理，基于<code>node-addon-api</code> 的开发也就水到渠成了。下面仅记录一下<code>node-addon-api</code> 的安装过程。</p>
+<h3 id="前提条件"><a class="markdownIt-Anchor" href="#前提条件"></a> 前提条件</h3>
+<ul>
+<li>已经安装了NodeJS</li>
+<li>已经安装了node-gyp</li>
+</ul>
+<h3 id="安装和使用"><a class="markdownIt-Anchor" href="#安装和使用"></a> 安装和使用</h3>
+<ol>
+<li>在<code>package.json</code> 中添加依赖项： <pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token comment">// yarn add node-addon-api</span>
+<span class="token property">"dependencies"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+  <span class="token property">"node-addon-api"</span><span class="token operator">:</span> <span class="token string">"*"</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>在<code>binding.gyp</code> 中添加头文件引用 <pre class="line-numbers language-json" data-language="json"><code class="language-json">'include_dirs'<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"&lt;!(node -p \"require('node-addon-api').include_dir\")"</span><span class="token punctuation">]</span><span class="token punctuation">,</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>在<code>binding.gyp</code> 中声明是否启用<code>C++</code> 异常功能。因为基本的C-API 不会抛出或者处理C++ 异常，而C++ 包装器却可以选择启用<a target="_blank" rel="noopener" href="https://github.com/nodejs/node-addon-api/blob/HEAD/doc/error_handling.md">此功能</a> <pre class="line-numbers language-json" data-language="json"><code class="language-json">'cflags!'<span class="token operator">:</span> <span class="token punctuation">[</span> '-fno-exceptions' <span class="token punctuation">]</span><span class="token punctuation">,</span>
+'cflags_cc!'<span class="token operator">:</span> <span class="token punctuation">[</span> '-fno-exceptions' <span class="token punctuation">]</span><span class="token punctuation">,</span>
+'xcode_settings'<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+  'GCC_ENABLE_CPP_EXCEPTIONS'<span class="token operator">:</span> 'YES'<span class="token punctuation">,</span>
+  'CLANG_CXX_LIBRARY'<span class="token operator">:</span> 'libc++'<span class="token punctuation">,</span>
+  'MACOSX_DEPLOYMENT_TARGET'<span class="token operator">:</span> '<span class="token number">10.7</span>'<span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+'msvs_settings'<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+  'VCCLCompilerTool'<span class="token operator">:</span> <span class="token punctuation">&#123;</span> 'ExceptionHandling'<span class="token operator">:</span> <span class="token number">1</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+# 或者干脆禁用掉此功能  
+'defines'<span class="token operator">:</span> <span class="token punctuation">[</span> 'NAPI_DISABLE_CPP_EXCEPTIONS' <span class="token punctuation">]</span><span class="token punctuation">,</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>配置支持<code>OSX</code> <pre class="line-numbers language-json" data-language="json"><code class="language-json">'conditions'<span class="token operator">:</span> <span class="token punctuation">[</span>
+  <span class="token punctuation">[</span>'OS==<span class="token string">"mac"</span>'<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+    'cflags+'<span class="token operator">:</span> <span class="token punctuation">[</span>'-fvisibility=hidden'<span class="token punctuation">]</span><span class="token punctuation">,</span>
+    'xcode_settings'<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      'GCC_SYMBOLS_PRIVATE_EXTERN'<span class="token operator">:</span> 'YES'<span class="token punctuation">,</span> # -fvisibility=hidden
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">]</span>
+<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>在项目代码中引入头文件 <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &quot;napi.h&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+</ol>
+<p>在构建时，只有当目标节点版本没有内置 Node-API 时，才会使用 Node-API back-compat 库代码。</p>
+<p>预处理器指令<code>NODE_ADDON_API_DISABLE_DEPRECATED</code> 可以在编译时定义，然后包含 <code>napi.h</code> 以跳过不推荐使用的API 的定义。<br />
+6. 导入插件，示例中采用<code>node-bindings</code> 库来导入编译好的文件。因为一般编译好的文件会存在于<code>./Release/*</code> 比较深层的目录，比较不好找。</p>
+<h3 id="创建第一个项目"><a class="markdownIt-Anchor" href="#创建第一个项目"></a> 创建第一个项目</h3>
+<p>一般我们采用框架来自动生成代码，这里用到了<code>Yoman</code> 和<code>generator-napi-module</code> 两个库</p>
+<pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell">npm install <span class="token operator">-</span>g yo
+npm install <span class="token operator">-</span>g generator-napi-module
+
+<span class="token comment"># 创建项目文件夹</span>
+mkdir hello-world
+cd hello-world
+yo napi-module
+
+<span class="token comment"># 项目配置选项</span>
+package name: <span class="token punctuation">(</span>hello-world<span class="token punctuation">)</span> 
+version: <span class="token punctuation">(</span>1<span class="token punctuation">.</span>0<span class="token punctuation">.</span>0<span class="token punctuation">)</span> 
+description: A first project<span class="token punctuation">.</span>
+git repository: 
+keywords: 
+author: Your name goes here
+license: <span class="token punctuation">(</span>ISC<span class="token punctuation">)</span>
+Yeoman will display the generated package<span class="token punctuation">.</span>json file here<span class="token punctuation">.</span>
+
+
+Is this OK? <span class="token punctuation">(</span>yes<span class="token punctuation">)</span> yes
+? Choose a template Hello World
+? Would you like to generate TypeScript wrappers <span class="token keyword">for</span> your module? No<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="相关资料"><a class="markdownIt-Anchor" href="#相关资料"></a> 相关资料</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://github.com/nodejs/node-addon-examples">node-addon-examples</a></li>
+<li><a target="_blank" rel="noopener" href="https://nodejs.org/docs/latest/api/n-api.html">C/C++ addons with Node-API</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/nodejs/node-addon-api">node-addon-api</a></li>
+<li><a target="_blank" rel="noopener" href="https://nodejs.github.io/node-addon-examples/">Node-API Resource</a></li>
+<li><a target="_blank" rel="noopener" href="https://napi.inspiredware.com/getting-started/first.html">A first project</a>：主要介绍如何构建一个N-API 项目</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2022/08/03/napi/" title="N-api">https://12tall.github.io/2022/08/03/napi/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/c-cpp/" rel="tag"># c/cpp</a>
+              <a href="/tags/nodeJS/" rel="tag"># nodeJS</a>
+              <a href="/tags/N-api/" rel="tag"># N-api</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/08/03/container/" rel="prev" title="容器技术简介">
+                  <i class="fa fa-angle-left"></i> 容器技术简介
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/08/03/win32/" rel="next" title="Win32 SDK编程">
+                  Win32 SDK编程 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

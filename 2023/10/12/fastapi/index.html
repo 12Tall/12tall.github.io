@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="从asp.NET 到前后分离，到vue+koa2，兜兜转转又到了模板渲染。以前开发看逼格，现在开发看速度。SSR 有啥不好的，又不是不能用只要把内容展示出来就好了呗。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FastAPI 工程化">
+<meta property="og:url" content="https://12tall.github.io/2023/10/12/fastapi/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="从asp.NET 到前后分离，到vue+koa2，兜兜转转又到了模板渲染。以前开发看逼格，现在开发看速度。SSR 有啥不好的，又不是不能用只要把内容展示出来就好了呗。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://12tall.github.io/2023/10/12/fastapi/file-structure.png">
+<meta property="og:image" content="https://12tall.github.io/2023/10/12/fastapi/router.png">
+<meta property="og:image" content="https://12tall.github.io/2023/10/12/fastapi/lulu-ui.png">
+<meta property="og:image" content="https://12tall.github.io/2023/10/12/fastapi/include.png">
+<meta property="og:image" content="https://12tall.github.io/2023/10/12/fastapi/import.png">
+<meta property="og:image" content="https://12tall.github.io/2023/10/12/fastapi/extends.png">
+<meta property="og:image" content="https://12tall.github.io/2023/10/12/fastapi/sqlmodel.png">
+<meta property="og:image" content="https://12tall.github.io/2023/10/12/fastapi/sqlmodel2.png">
+<meta property="article:published_time" content="2023-10-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.240Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="router">
+<meta property="article:tag" content="fastapi">
+<meta property="article:tag" content="asgi">
+<meta property="article:tag" content="jinja2">
+<meta property="article:tag" content="lulu-ui">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://12tall.github.io/2023/10/12/fastapi/file-structure.png">
+
+
+<link rel="canonical" href="https://12tall.github.io/2023/10/12/fastapi/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2023/10/12/fastapi/","path":"2023/10/12/fastapi/","title":"FastAPI 工程化"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>FastAPI 工程化 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#fastapi"><span class="nav-number">1.</span> <span class="nav-text"> FastAPI</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1"><span class="nav-number">1.1.</span> <span class="nav-text"> 路由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-number">1.2.</span> <span class="nav-text"> 中间件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%AB%AF"><span class="nav-number">2.</span> <span class="nav-text"> 前端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jinja2"><span class="nav-number">2.1.</span> <span class="nav-text"> Jinja2</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">3.</span> <span class="nav-text"> 数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5"><span class="nav-number">3.1.</span> <span class="nav-text"> 异步</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">4.</span> <span class="nav-text"> 参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2023/10/12/fastapi/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="FastAPI 工程化 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          FastAPI 工程化
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-10-12 00:00:00" itemprop="dateCreated datePublished" datetime="2023-10-12T00:00:00+08:00">2023-10-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p><a target="_blank" rel="noopener" href="http://xn--asp-8p9d.NET">从asp.NET</a> 到前后分离，到vue+koa2，兜兜转转又到了模板渲染。以前开发看逼格，现在开发看速度。SSR 有啥不好的，又不是不能用只要把内容展示出来就好了呗。</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="fastapi"><a class="markdownIt-Anchor" href="#fastapi"></a> FastAPI</h2>
+<p><code>Koa2</code> 有各种灵活的插件，<code>FastAPI</code> 继承了路由和参数解析的功能，并且还附带了文档的功能，这样省了接口测试的功夫。并且如果配合<code>Jinja2</code> 和<code>lulu-ui</code> 完全能做出不错的页面出来。下面是一个最基本的后端代码：</p>
+<pre class="line-numbers language-python&#123;22&#125;" data-language="python&#123;22&#125;"><code class="language-python&#123;22&#125;">import uvicorn
+from fastapi import FastAPI, Request, templating, staticfiles
+
+app &#x3D; FastAPI()
+
+# 挂载静态资源，前后端的绝对路径能够保持一致
+app.mount(&quot;&#x2F;static&quot;, staticfiles.StaticFiles(directory&#x3D;&quot;static&quot;), name&#x3D;&quot;static&quot;)
+
+# Jinja2 模板的目录
+templates &#x3D; templating.Jinja2Templates(directory&#x3D;&#39;templates&#39;)
+
+
+@app.get(&#39;&#x2F;&#39;)
+# @app.post(&#39;&#x2F;alias&#39;)  ## 多个路由可以匹配同一个处理函数
+def index(request: Request):
+    return templates.TemplateResponse(&#39;index.html&#39;, &#123;
+        &#39;request&#39;: request,
+        &#39;warning_text&#39;: &#39;hello world&#39;
+    &#125;)
+
+if __name__ &#x3D;&#x3D; &quot;__main__&quot;:
+    &quot;&quot;&quot;main 函数与官方写法不一样是为了方便使用Nuitka 打包&quot;&quot;&quot;
+    uvicorn.run(app, port&#x3D;9000, host&#x3D;&#39;0.0.0.0&#39;)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>项目的文件结构如下：<br />
+<img src="file-structure.png" alt="Alt text" /></p>
+<p>这样组织<code>static</code> 文件夹，可以让前后端引用js 的路径一致，便于开发时预览页面效果。</p>
+<h3 id="路由"><a class="markdownIt-Anchor" href="#路由"></a> 路由</h3>
+<p>FastAPI 的路由写法还不算反人类，只是需要很多的<code>import</code>，不过要注意路由匹配顺序是自上而下的</p>
+<blockquote>
+<p><code>from . import ***</code> 这种写法不能用在<code>main</code> 模块中，不然会报错</p>
+</blockquote>
+<p><img src="router.png" alt="Alt text" /></p>
+<h3 id="中间件"><a class="markdownIt-Anchor" href="#中间件"></a> 中间件</h3>
+<blockquote>
+<p>FastAPI 中间件本质上是一个异步函数，包含<code>request, call_next</code> 两个参数。</p>
+</blockquote>
+<p>中间件可以在<code>main</code> 模块定义：</p>
+<pre class="line-numbers language-python&#123;6&#125;" data-language="python&#123;6&#125;"><code class="language-python&#123;6&#125;">@app.middleware(&quot;http&quot;)
+# 必须用 async
+async def add_process_time_header(request: Request, call_next):
+    start_time &#x3D; time.time()
+    # 必须用 await
+    response &#x3D; await call_next(request)
+    process_time &#x3D; time.time() - start_time
+    # 自定义请求头
+    response.headers[&quot;X-Process-Time&quot;] &#x3D; str(process_time)
+    # 返回响应
+    return response<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>也可以在单独的文件中定义（此方法的执行效率似乎更高一些）：</p>
+<pre class="line-numbers language-python&#123;11-20&#125;" data-language="python&#123;11-20&#125;"><code class="language-python&#123;11-20&#125;">import time
+from fastapi import Request
+
+class TimerMiddleware:
+    def __init__(
+            self,
+            attrs
+    ):
+        self.attrs &#x3D; attrs  # 一些可选的属性数据
+
+    async def __call__(self, request: Request, call_next):
+        start_time &#x3D; time.time()
+        # 必须用 await
+        response &#x3D; await call_next(request)
+        process_time &#x3D; time.time() - start_time
+        # 自定义请求头
+        response.headers[&quot;X-Process-Time&quot;] &#x3D; str(process_time)
+        response.headers[&quot;X-Attrs&quot;] &#x3D; self.attrs
+        # 返回响应
+        return response<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>使用<code>app.add_middleware</code> 启用中间件：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> fastapi <span class="token keyword">import</span> FastAPI<span class="token punctuation">,</span> Request<span class="token punctuation">,</span> templating<span class="token punctuation">,</span> staticfiles
+<span class="token keyword">from</span> middleware<span class="token punctuation">.</span>mw <span class="token keyword">import</span> TimerMiddleware
+<span class="token keyword">from</span> starlette<span class="token punctuation">.</span>middleware<span class="token punctuation">.</span>base <span class="token keyword">import</span> BaseHTTPMiddleware
+
+app <span class="token operator">=</span> FastAPI<span class="token punctuation">(</span><span class="token punctuation">)</span>
+app<span class="token punctuation">.</span>add_middleware<span class="token punctuation">(</span>BaseHTTPMiddleware<span class="token punctuation">,</span> dispatch<span class="token operator">=</span>TimerMiddleware<span class="token punctuation">(</span><span class="token string">"attrs"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>也可以让中间件类直接继承<code>BaseHTTPMiddleware</code>，但是这样似乎会存在一些内存泄露的问题。参见<a target="_blank" rel="noopener" href="https://stackoverflow.com/a/71526036">How to write a custom FastAPI middleware class</a>。所以还是有必要像路由一样统一管理中间件。</p>
+<h2 id="前端"><a class="markdownIt-Anchor" href="#前端"></a> 前端</h2>
+<p>前端采用<code>lulu-ui</code>，因为他采用的是<code>is</code> 方法重新定义组件，相比于<code>vue</code> 或者其他框架来说，它的用法更接近于原生的<code>html+js+css</code>。所见即所得：</p>
+<p><img src="lulu-ui.png" alt="Alt text" /></p>
+<p>不太好的地方是后端通过表单获取数据时写法有点复杂，但是可以通过拦截<code>submit</code> 或者其他的手段来曲线救国。</p>
+<h3 id="jinja2"><a class="markdownIt-Anchor" href="#jinja2"></a> Jinja2</h3>
+<p>虽然专业的前端设计很漂亮，但是打包工具未免也太复杂了些。而后端渲染的方式简单粗暴，深得我心。尤其是<code>jinja2</code> 既可以实现继承（<code>extend</code>）又可以实现组件化（<code>import/include</code>）。看起来也还挺方便的，只是还不知道使用起来感觉怎么样。</p>
+<ol>
+<li>通过<code>include</code> 导入模板文件<br />
+<img src="include.png" alt="Alt text" /></li>
+<li>通过<code>import</code> 导入模板文件的部分内容<br />
+<img src="import.png" alt="Alt text" /></li>
+<li>通过<code>extends</code> 继承模板文件<br />
+<img src="extends.png" alt="Alt text" /></li>
+</ol>
+<h2 id="数据库"><a class="markdownIt-Anchor" href="#数据库"></a> 数据库</h2>
+<p>一般的教程都会推荐<code>SQLAlchemy</code>，但是这个框架着实不好理解。好在<code>FastAPI</code> 的作者基于<code>SQLAlchemy</code> 封装了一个新的库<code>SQLModel</code>，和其他静态语言的数据库组件设计思路很像。如果不考虑数据库迁移的的话，模型和引擎可以不定义在同一个文件中。<br />
+<img src="sqlmodel.png" alt="Alt text" /></p>
+<p>并且支持<code>SQLAlchemy</code> 的<a target="_blank" rel="noopener" href="https://docs.sqlalchemy.org/en/14/tutorial/data_select.html#">查询语法</a>：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> sqlmodel <span class="token keyword">import</span> SQLModel<span class="token punctuation">,</span> Session<span class="token punctuation">,</span> select<span class="token punctuation">,</span> func<span class="token punctuation">,</span> desc
+<span class="token keyword">from</span> model<span class="token punctuation">.</span>node <span class="token keyword">import</span> Node
+<span class="token keyword">from</span> model<span class="token punctuation">.</span>db <span class="token keyword">import</span> engine
+
+<span class="token keyword">with</span> Session<span class="token punctuation">(</span>engine<span class="token punctuation">)</span> <span class="token keyword">as</span> s<span class="token punctuation">:</span>
+    statement <span class="token operator">=</span> select<span class="token punctuation">(</span>Node<span class="token punctuation">.</span><span class="token builtin">id</span><span class="token punctuation">,</span> 
+                       Node<span class="token punctuation">.</span>data<span class="token punctuation">,</span>
+                       func<span class="token punctuation">.</span>count<span class="token punctuation">(</span>Node<span class="token punctuation">.</span>parent_id<span class="token punctuation">)</span><span class="token punctuation">.</span>label<span class="token punctuation">(</span><span class="token string">'count'</span><span class="token punctuation">)</span>
+                       <span class="token punctuation">)</span><span class="token punctuation">.</span>group_by<span class="token punctuation">(</span>
+                           Node<span class="token punctuation">.</span>parent_id
+                        <span class="token punctuation">)</span>
+    nodes <span class="token operator">=</span> s<span class="token punctuation">.</span><span class="token keyword">exec</span><span class="token punctuation">(</span>statement<span class="token punctuation">)</span> 
+    <span class="token keyword">print</span><span class="token punctuation">(</span>nodes<span class="token punctuation">.</span><span class="token builtin">all</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    s<span class="token punctuation">.</span>commit<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>定义树状的数据结构：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> typing <span class="token keyword">import</span> Optional
+<span class="token keyword">from</span> sqlmodel <span class="token keyword">import</span> Field<span class="token punctuation">,</span> Relationship<span class="token punctuation">,</span> Session<span class="token punctuation">,</span> SQLModel<span class="token punctuation">,</span> create_engine
+
+
+<span class="token keyword">class</span> <span class="token class-name">Node</span><span class="token punctuation">(</span>SQLModel<span class="token punctuation">,</span> table<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    __tablename__ <span class="token operator">=</span> <span class="token string">'node'</span>  <span class="token comment"># 显式声明数据表</span>
+
+    <span class="token builtin">id</span><span class="token punctuation">:</span> Optional<span class="token punctuation">[</span><span class="token builtin">int</span><span class="token punctuation">]</span> <span class="token operator">=</span> Field<span class="token punctuation">(</span>default<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> primary_key<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+    data<span class="token punctuation">:</span> <span class="token builtin">str</span>
+    parent_id<span class="token punctuation">:</span> Optional<span class="token punctuation">[</span><span class="token builtin">int</span><span class="token punctuation">]</span> <span class="token operator">=</span> Field<span class="token punctuation">(</span>
+        foreign_key<span class="token operator">=</span><span class="token string">'node.id'</span><span class="token punctuation">,</span>  <span class="token comment"># 小写的n 表示外键连</span>
+        default<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span>
+        nullable<span class="token operator">=</span><span class="token boolean">True</span>
+    <span class="token punctuation">)</span>
+    parent<span class="token punctuation">:</span> Optional<span class="token punctuation">[</span><span class="token string">'Node'</span><span class="token punctuation">]</span> <span class="token operator">=</span> Relationship<span class="token punctuation">(</span>
+        back_populates<span class="token operator">=</span><span class="token string">'children'</span><span class="token punctuation">,</span>
+        sa_relationship_kwargs<span class="token operator">=</span><span class="token builtin">dict</span><span class="token punctuation">(</span>
+            remote_side<span class="token operator">=</span><span class="token string">'Node.id'</span>  <span class="token comment"># 大写的N 表示本表中的字段</span>
+        <span class="token punctuation">)</span>
+    <span class="token punctuation">)</span>
+    children<span class="token punctuation">:</span> <span class="token builtin">list</span><span class="token punctuation">[</span><span class="token string">'Node'</span><span class="token punctuation">]</span> <span class="token operator">=</span> Relationship<span class="token punctuation">(</span>back_populates<span class="token operator">=</span><span class="token string">'parent'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>递归查询：可以通过<code>remote_side</code> 来实现自递归，项目结构如下：<br />
+<img src="sqlmodel2.png" alt="Alt text" /></p>
+<h3 id="异步"><a class="markdownIt-Anchor" href="#异步"></a> 异步</h3>
+<p>参考<a target="_blank" rel="noopener" href="https://github.com/tiangolo/sqlmodel/issues/626#issuecomment-1669841104">Add documentation about how to use the async tools (session, etc)</a>。
+或者<a target="_blank" rel="noopener" href="https://testdriven.io/blog/fastapi-sqlmodel/">FastAPI with Async SQLAlchemy, SQLModel, and Alembic</a>：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> os
+
+<span class="token keyword">from</span> sqlmodel <span class="token keyword">import</span> SQLModel<span class="token punctuation">,</span> create_engine
+<span class="token keyword">from</span> sqlmodel<span class="token punctuation">.</span>ext<span class="token punctuation">.</span>asyncio<span class="token punctuation">.</span>session <span class="token keyword">import</span> AsyncSession<span class="token punctuation">,</span> AsyncEngine
+
+<span class="token keyword">from</span> sqlalchemy<span class="token punctuation">.</span>orm <span class="token keyword">import</span> sessionmaker
+
+
+DATABASE_URL <span class="token operator">=</span> os<span class="token punctuation">.</span>environ<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"DATABASE_URL"</span><span class="token punctuation">)</span>
+
+engine <span class="token operator">=</span> AsyncEngine<span class="token punctuation">(</span>create_engine<span class="token punctuation">(</span>DATABASE_URL<span class="token punctuation">,</span> echo<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> future<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">async</span> <span class="token keyword">def</span> <span class="token function">init_db</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">async</span> <span class="token keyword">with</span> engine<span class="token punctuation">.</span>begin<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">as</span> conn<span class="token punctuation">:</span>
+        <span class="token comment"># await conn.run_sync(SQLModel.metadata.drop_all)</span>
+        <span class="token keyword">await</span> conn<span class="token punctuation">.</span>run_sync<span class="token punctuation">(</span>SQLModel<span class="token punctuation">.</span>metadata<span class="token punctuation">.</span>create_all<span class="token punctuation">)</span>
+
+
+<span class="token keyword">async</span> <span class="token keyword">def</span> <span class="token function">get_session</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> AsyncSession<span class="token punctuation">:</span>
+    async_session <span class="token operator">=</span> sessionmaker<span class="token punctuation">(</span>
+        engine<span class="token punctuation">,</span> class_<span class="token operator">=</span>AsyncSession<span class="token punctuation">,</span> expire_on_commit<span class="token operator">=</span><span class="token boolean">False</span>
+    <span class="token punctuation">)</span>
+    <span class="token keyword">async</span> <span class="token keyword">with</span> async_session<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">as</span> session<span class="token punctuation">:</span>
+        <span class="token keyword">yield</span> session
+
+<span class="token comment">################################################################################</span>
+
+<span class="token keyword">from</span> fastapi <span class="token keyword">import</span> Depends<span class="token punctuation">,</span> FastAPI
+<span class="token keyword">from</span> sqlmodel <span class="token keyword">import</span> select
+<span class="token keyword">from</span> sqlmodel<span class="token punctuation">.</span>ext<span class="token punctuation">.</span>asyncio<span class="token punctuation">.</span>session <span class="token keyword">import</span> AsyncSession
+
+<span class="token keyword">from</span> app<span class="token punctuation">.</span>db <span class="token keyword">import</span> get_session<span class="token punctuation">,</span> init_db
+<span class="token keyword">from</span> app<span class="token punctuation">.</span>models <span class="token keyword">import</span> Song<span class="token punctuation">,</span> SongCreate
+
+app <span class="token operator">=</span> FastAPI<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+
+<span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>on_event</span><span class="token punctuation">(</span><span class="token string">"startup"</span><span class="token punctuation">)</span>
+<span class="token keyword">async</span> <span class="token keyword">def</span> <span class="token function">on_startup</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">await</span> init_db<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+
+<span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>get</span><span class="token punctuation">(</span><span class="token string">"/ping"</span><span class="token punctuation">)</span>
+<span class="token keyword">async</span> <span class="token keyword">def</span> <span class="token function">pong</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> <span class="token punctuation">&#123;</span><span class="token string">"ping"</span><span class="token punctuation">:</span> <span class="token string">"pong!"</span><span class="token punctuation">&#125;</span>
+
+
+<span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>get</span><span class="token punctuation">(</span><span class="token string">"/songs"</span><span class="token punctuation">,</span> response_model<span class="token operator">=</span><span class="token builtin">list</span><span class="token punctuation">[</span>Song<span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">async</span> <span class="token keyword">def</span> <span class="token function">get_songs</span><span class="token punctuation">(</span>session<span class="token punctuation">:</span> AsyncSession <span class="token operator">=</span> Depends<span class="token punctuation">(</span>get_session<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    result <span class="token operator">=</span> <span class="token keyword">await</span> session<span class="token punctuation">.</span>execute<span class="token punctuation">(</span>select<span class="token punctuation">(</span>Song<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    songs <span class="token operator">=</span> result<span class="token punctuation">.</span>scalars<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">all</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token punctuation">[</span>Song<span class="token punctuation">(</span>name<span class="token operator">=</span>song<span class="token punctuation">.</span>name<span class="token punctuation">,</span> artist<span class="token operator">=</span>song<span class="token punctuation">.</span>artist<span class="token punctuation">,</span> <span class="token builtin">id</span><span class="token operator">=</span>song<span class="token punctuation">.</span><span class="token builtin">id</span><span class="token punctuation">)</span> <span class="token keyword">for</span> song <span class="token keyword">in</span> songs<span class="token punctuation">]</span>
+
+
+<span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>post</span><span class="token punctuation">(</span><span class="token string">"/songs"</span><span class="token punctuation">)</span>
+<span class="token keyword">async</span> <span class="token keyword">def</span> <span class="token function">add_song</span><span class="token punctuation">(</span>song<span class="token punctuation">:</span> SongCreate<span class="token punctuation">,</span> session<span class="token punctuation">:</span> AsyncSession <span class="token operator">=</span> Depends<span class="token punctuation">(</span>get_session<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    song <span class="token operator">=</span> Song<span class="token punctuation">(</span>name<span class="token operator">=</span>song<span class="token punctuation">.</span>name<span class="token punctuation">,</span> artist<span class="token operator">=</span>song<span class="token punctuation">.</span>artist<span class="token punctuation">)</span>
+    session<span class="token punctuation">.</span>add<span class="token punctuation">(</span>song<span class="token punctuation">)</span>
+    <span class="token keyword">await</span> session<span class="token punctuation">.</span>commit<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">await</span> session<span class="token punctuation">.</span>refresh<span class="token punctuation">(</span>song<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> song        <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>另外，一个好玩的点：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> typing <span class="token keyword">import</span> TYPE_CHECKING  
+
+<span class="token keyword">if</span> TYPE_CHECKING<span class="token punctuation">:</span>  
+    <span class="token triple-quoted-string string">'''
+    代码块里面的代码并不会被执行，但是可以为编辑器提供类型提示
+    '''</span>
+    <span class="token keyword">import</span> libs  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这篇笔记记录的都是一些可行性的问题，具体项目中的代码肯定还需要很多细节性的问题需要解决。</p>
+<h2 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server">Live Preview</a> 实时预览html 的vscode 插件</li>
+<li><a target="_blank" rel="noopener" href="https://www.section.io/engineering-education/how-to-format-form-data-as-json/">How To Format Form Data as JSON</a> 通过监听表单的<code>submit</code> 事件来自定义处理函数</li>
+<li><a target="_blank" rel="noopener" href="https://l-ui.com/">lulu-ui</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/a/45024799">How to use macros in a included file</a></li>
+<li><a target="_blank" rel="noopener" href="https://sqlmodel.tiangolo.com/">SQLModel</a> FastAPI 作者开发的ORM 库，应该是见过的最简洁的Python ORM 库了</li>
+<li><a target="_blank" rel="noopener" href="https://docs.pydantic.dev/latest/">Pydantic</a> 一个比较好用的数据校验工具，尤其是对于JSON 到对象、对象到对象的类型转换非常友好</li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/a/71526036">How to write a custom FastAPI middleware class</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/a/73420019">How do I construct a self-referential/recursive SQLModel</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.sqlalchemy.org/en/14/tutorial/data_select.html#aggregate-functions-with-group-by-having">Aggregate functions with GROUP BY / HAVING</a></li>
+</ol>
+<hr />
+<p>其实有一个问题： <code>ORM</code> 要不要承担创建表和数据迁移的工作呢？如果不要的话，代码的逻辑应该会非常简单；如果要的话，一不小心就会出现循环导入的问题。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2023/10/12/fastapi/" title="FastAPI 工程化">https://12tall.github.io/2023/10/12/fastapi/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/router/" rel="tag"># router</a>
+              <a href="/tags/fastapi/" rel="tag"># fastapi</a>
+              <a href="/tags/asgi/" rel="tag"># asgi</a>
+              <a href="/tags/jinja2/" rel="tag"># jinja2</a>
+              <a href="/tags/lulu-ui/" rel="tag"># lulu-ui</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/10/11/fmu/" rel="prev" title="Python FMU 相关">
+                  <i class="fa fa-angle-left"></i> Python FMU 相关
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/10/19/state-machine/" rel="next" title="Python 状态机">
+                  Python 状态机 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

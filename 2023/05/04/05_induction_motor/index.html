@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="在开始研究感应电机时，我们会尽量简化问题，例如：在研究定子磁场时会忽略转子磁场的存在。最后再将所有的结论综合在一起，而不是一上来就给出复杂的概念。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="电机与驱动读书笔记（感应电机基础）">
+<meta property="og:url" content="https://12tall.github.io/2023/05/04/05_induction_motor/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="在开始研究感应电机时，我们会尽量简化问题，例如：在研究定子磁场时会忽略转子磁场的存在。最后再将所有的结论综合在一起，而不是一上来就给出复杂的概念。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/basic_stator_field.png">
+<meta property="og:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/flux_waves_4_poles.svg">
+<meta property="og:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/single_phase_field.png">
+<meta property="og:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/single_phase_multi-slots_field.png">
+<meta property="og:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/2-layers_winding.png">
+<meta property="og:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/winding_sequence.svg">
+<meta property="og:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/winding_sequence.png">
+<meta property="og:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/resultant_field.png">
+<meta property="og:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/single_phase_equivalent_circuit.png">
+<meta property="og:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/magnetising_current.png">
+<meta property="og:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/cage_rotor.png">
+<meta property="og:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/wound_rotor.png">
+<meta property="og:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/voltage-slip.png">
+<meta property="og:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/rotor_emf_wave.png">
+<meta property="og:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/rotor_current.png">
+<meta property="og:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/rotor_torque_in_small_slip.png">
+<meta property="og:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/torque-slip_in_small_slip.png">
+<meta property="og:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/rotor_current_in_big_slip.png">
+<meta property="og:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/rotor_torque_in_big_slip.png">
+<meta property="og:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/stator_current-speed.png">
+<meta property="og:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/stator_current_from_no-load_to_locked-rotor.png">
+<meta property="og:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/torque-speed_curren-speed.png">
+<meta property="article:published_time" content="2023-05-03T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.080Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="电机">
+<meta property="article:tag" content="控制理论">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://12tall.github.io/2023/05/04/05_induction_motor/basic_stator_field.png">
+
+
+<link rel="canonical" href="https://12tall.github.io/2023/05/04/05_induction_motor/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2023/05/04/05_induction_motor/","path":"2023/05/04/05_induction_motor/","title":"电机与驱动读书笔记（感应电机基础）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>电机与驱动读书笔记（感应电机基础） | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E5%AD%90%E7%BB%95%E7%BB%84%E4%BA%A7%E7%94%9F%E7%9A%84%E6%97%8B%E8%BD%AC%E7%A3%81%E5%9C%BA"><span class="nav-number">1.</span> <span class="nav-text"> 定子绕组产生的旋转磁场</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E7%9B%B8%E7%BB%95%E7%BB%84%E7%9A%84%E7%A3%81%E5%9C%BA"><span class="nav-number">1.1.</span> <span class="nav-text"> 单相绕组的磁场</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E7%9B%B8%E5%8F%A0%E5%8A%A0"><span class="nav-number">1.2.</span> <span class="nav-text"> 三相叠加</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E7%A3%81%E9%80%9A%E4%B8%8E%E6%BC%8F%E7%A3%81%E9%80%9A"><span class="nav-number">1.3.</span> <span class="nav-text"> 主磁通与漏磁通</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E7%A3%81%E9%80%9A%E7%9A%84%E5%B9%85%E5%80%BC"><span class="nav-number">1.4.</span> <span class="nav-text"> 主磁通的幅值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A3%81%E5%8C%96%E7%94%B5%E6%B5%81"><span class="nav-number">1.5.</span> <span class="nav-text"> 磁化电流</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AC%E5%AD%90%E9%83%A8%E5%88%86"><span class="nav-number">2.</span> <span class="nav-text"> 转子部分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BB%91%E5%B7%AE"><span class="nav-number">2.1.</span> <span class="nav-text"> 滑差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%84%9F%E5%BA%94%E7%94%B5%E5%8A%A8%E5%8A%BF"><span class="nav-number">2.2.</span> <span class="nav-text"> 感应电动势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E6%BB%91%E5%B7%AE%E5%88%86%E6%9E%90"><span class="nav-number">2.3.</span> <span class="nav-text"> 小滑差分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E6%BB%91%E5%B7%AE%E5%88%86%E6%9E%90"><span class="nav-number">2.4.</span> <span class="nav-text"> 大滑差分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AC%E5%AD%90%E7%94%B5%E6%B5%81%E5%AF%B9%E7%A3%81%E5%9C%BA%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-number">3.</span> <span class="nav-text"> 转子电流对磁场的影响</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E5%AD%90%E7%9A%84%E7%A3%81%E5%9C%BA"><span class="nav-number">3.1.</span> <span class="nav-text"> 转子的磁场</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E5%AD%90%E7%94%B5%E6%B5%81-%E8%BD%AC%E9%80%9F%E7%89%B9%E6%80%A7"><span class="nav-number">3.2.</span> <span class="nav-text"> 定子电流-转速特性</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2023/05/04/05_induction_motor/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="电机与驱动读书笔记（感应电机基础） | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          电机与驱动读书笔记（感应电机基础）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-05-04 00:00:00" itemprop="dateCreated datePublished" datetime="2023-05-04T00:00:00+08:00">2023-05-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/em/" itemprop="url" rel="index"><span itemprop="name">em</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>10 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>在开始研究感应电机时，我们会尽量简化问题，例如：在研究定子磁场时会忽略转子磁场的存在。最后再将所有的结论综合在一起，而不是一上来就给出复杂的概念。</p>
+</blockquote>
+<span id="more"></span>
+<p>如果给定额定功率和额定转速，感应电机和直流电机的重量和体积没有太大区别，制造所需的材料也基本一致，但是感应电机的制造更加简单，所以成本也更加低廉。感应电机的定子电流不仅要提供励磁，还要提供电机做功所需的能量。除此之外，感应电机和直流电机还有以下区别：</p>
+<ul>
+<li>电源类型不同：交流，直流</li>
+<li>感应电机的励磁磁场是旋转的，而直流电机的励磁是静止的</li>
+<li>感应电机的转子和定子表面光滑，而直流电机则有明显的磁极</li>
+</ul>
+<h2 id="定子绕组产生的旋转磁场"><a class="markdownIt-Anchor" href="#定子绕组产生的旋转磁场"></a> 定子绕组产生的旋转磁场</h2>
+<blockquote>
+<p>首先假设转子对气隙磁场没有影响，电机有两对磁极、输入三相电源。</p>
+</blockquote>
+<p><img src="basic_stator_field.png" alt="" /><br />
+如上图，电机定子绕组产生的磁场随时间变化，这里截取三个时刻磁场的分布：</p>
+<ul>
+<li><code>t=0</code>：</li>
+<li><code>t=5ms</code>：假设电源频率是<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>50</mn><mi>H</mi><mi>z</mi></mrow><annotation encoding="application/x-tex">50Hz</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">5</span><span class="mord">0</span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mord mathnormal" style="margin-right:0.04398em;">z</span></span></span></span>，即磁场旋转<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><msup><mn>5</mn><mo>∘</mo></msup></mrow><annotation encoding="application/x-tex">45^\circ</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.674115em;vertical-align:0em;"></span><span class="mord">4</span><span class="mord"><span class="mord">5</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.674115em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∘</span></span></span></span></span></span></span></span></span></span></span> 所需的时间</li>
+<li><code>t=10ms</code>：磁场旋转<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9</mn><msup><mn>0</mn><mo>∘</mo></msup></mrow><annotation encoding="application/x-tex">90^\circ</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.674115em;vertical-align:0em;"></span><span class="mord">9</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.674115em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∘</span></span></span></span></span></span></span></span></span></span></span> 所需的时间，此时输入电流变化半个周期，磁场极性刚好相反。</li>
+</ul>
+<p>从上图可以看到，磁场变化的规律与电机的极数（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi></mrow><annotation encoding="application/x-tex">P</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span></span></span></span>）相关：<strong>电源变化一个周期，磁场旋转<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi mathvariant="normal">/</mi><mi>P</mi></mrow><annotation encoding="application/x-tex">2/P</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">2</span><span class="mord">/</span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span></span></span></span> 个周期。</strong>，并且与位置有关，在一个圆周上呈现正弦分布，也被称为磁通行波。其幅值随位置的变化如下图所示：<br />
+<img src="flux_waves_4_poles.svg" alt="" /></p>
+<p><strong>极间距</strong>：励磁<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>−</mo><mi>S</mi></mrow><annotation encoding="application/x-tex">N-S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span> 的最小距离。在一个电源周期内，磁场旋转（行波前进）<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi mathvariant="normal">/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">P/2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mord">/</span><span class="mord">2</span></span></span></span> 个极间距。
+于是磁场的转速与电源频率就会有如下关系：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable width="100%"><mtr><mtd width="50%"></mtd><mtd><mrow><msub><mi>N</mi><mi>s</mi></msub><mo>=</mo><mfrac><mrow><mn>120</mn><mi>f</mi></mrow><mi>P</mi></mfrac></mrow></mtd><mtd width="50%"></mtd><mtd><mtext>(1)</mtext></mtd></mtr></mtable><annotation encoding="application/x-tex">N_s = \frac{120f}{P} \tag{1}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.10903em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.0574399999999997em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714399999999998em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span><span class="mord">2</span><span class="mord">0</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span><span class="tag"><span class="strut" style="height:2.0574399999999997em;vertical-align:-0.686em;"></span><span class="mord text"><span class="mord">(</span><span class="mord"><span class="mord">1</span></span><span class="mord">)</span></span></span></span></span></span></p>
+<p>如果我们可以调整电源频率，我们就可以控制定子磁场的转速了，这是一种策略。</p>
+<h3 id="单相绕组的磁场"><a class="markdownIt-Anchor" href="#单相绕组的磁场"></a> 单相绕组的磁场</h3>
+<blockquote>
+<p>简单起见，假设电机有两对极，在其中某一相绕组中取一组绕组（一个槽）分析，如下图：</p>
+</blockquote>
+<p><img src="single_phase_field.png" alt="" /></p>
+<p>由上图可见，单个绕组产生的磁通密度近似于方波，而我们需要接近正弦波的磁通密度，所以可以通过在相邻的槽中增加同相的绕组实现：<br />
+<img src="single_phase_multi-slots_field.png" alt="" /><br />
+由于磁场的叠加（每增加一个入向，磁通就会增加一个台阶，每增加一个回向，就会减少一个台阶），整个磁通的分布在圆周上就类似于正弦波形，如果要得到完美的正弦曲线，则需要绕组的分布也足够平滑。但是这在实际设计中是不可能做到完美的。</p>
+<p>然而，通过双层绕组，我们可以得到较为满意的波形（书上说绕组电流的出发一侧在槽的顶端、回流一侧在其他槽的底端，但是应该是绕组应该是叠着放就好了）。双层绕组的线圈宽度明显小于极间距，而短距绕组则有效增加了磁通密度的阶梯数，使波形更接近于正弦曲线，见下图：<br />
+<img src="2-layers_winding.png" alt="" /></p>
+<h3 id="三相叠加"><a class="markdownIt-Anchor" href="#三相叠加"></a> 三相叠加</h3>
+<p>考虑到三相叠加，就会得到一个频率不变但是幅值更大的磁通密度分布。以后的符号假设绕组垂直纸面向里为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo separator="true">,</mo><mi>B</mi><mo separator="true">,</mo><mi>C</mi></mrow><annotation encoding="application/x-tex">A,B,C</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">A</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span>，向外则为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mi>A</mi><mo>ˉ</mo></mover><mo separator="true">,</mo><mover accent="true"><mi>B</mi><mo>ˉ</mo></mover><mo separator="true">,</mo><mover accent="true"><mi>C</mi><mo>ˉ</mo></mover></mrow><annotation encoding="application/x-tex">\bar{A},\bar{B},\bar{C}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0145499999999998em;vertical-align:-0.19444em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201099999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">A</span></span></span><span style="top:-3.25233em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.11110999999999999em;"><span class="mord">ˉ</span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201099999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span><span style="top:-3.25233em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.16666em;"><span class="mord">ˉ</span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201099999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span><span style="top:-3.25233em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.16666em;"><span class="mord">ˉ</span></span></span></span></span></span></span></span></span></span>。可以得到各相电流的变化情况如下图所示：<br />
+<img src="winding_sequence.svg" alt="" /></p>
+<p>如果要使定子磁通能顺利地旋转起来，则其在槽中的分布顺序也应如上图左侧顺时针（或逆时针）所示。  若按顺时针接线，则黑色的虚线可以表示最终的等效磁通的变化。如果对换某一对电源接线，电机就会反转。</p>
+<p><img src="winding_sequence.png" alt="" /></p>
+<p>需要注意的是，上面六极电机采用了<strong>错槽</strong>设计，这种方案在电机设计中比较常用，具有以下好处：</p>
+<ol>
+<li>抑制电机产生的某些谐波分量，从而减少电机的噪声和振动，</li>
+<li>可以降低电机的铁损耗和铜损耗，提高整个电机的效率</li>
+<li>防止电机出现过电压和欠电压等问题。</li>
+<li>减少相邻线圈之间的漏磁互感系数，从而提高电机的性能和效率。</li>
+</ol>
+<h3 id="主磁通与漏磁通"><a class="markdownIt-Anchor" href="#主磁通与漏磁通"></a> 主磁通与漏磁通</h3>
+<p>通过上面的过程，我们了解到电机气隙中的磁通密度随时间变化情况如下：<br />
+<img src="resultant_field.png" alt="" /></p>
+<p>但并不是所有的磁通都经过<code>定子-气隙-转子-气隙-定子</code>这条回路，会有部分磁通直接在定子（转子磁通也存在）内部形成回路。漏磁过大会影响电机的各项性能指标，但是太小却不利于电机的启动。</p>
+<h3 id="主磁通的幅值"><a class="markdownIt-Anchor" href="#主磁通的幅值"></a> 主磁通的幅值</h3>
+<p>因为主磁通在旋转，定子中的导体也会切割磁感线，从而会产生反电动势。并且某一位置的反电动势的变化趋势滞后于其磁场变化两个极间距。但就一相绕组考虑，其电压平衡方程如下：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>V</mi><mo>=</mo><msub><mi>I</mi><mi>m</mi></msub><mi>R</mi><mo>+</mo><mi>E</mi></mrow><annotation encoding="application/x-tex">V=I_mR+E
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">m</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span></span></span></span></span></p>
+<p>等效电路如下：<br />
+<img src="single_phase_equivalent_circuit.png" alt="" /></p>
+<p>考虑到定子电阻一般很小，可以忽略，定子反电动势近似等于输入电压<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>≈</mo><mi>E</mi></mrow><annotation encoding="application/x-tex">V \approx E</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span></span></span></span>，而反电动势正比于磁通密度和电压频率（磁场转速转速）的乘积<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo>∝</mo><msub><mi>B</mi><mi>m</mi></msub><mi>f</mi></mrow><annotation encoding="application/x-tex">E \propto B_mf</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∝</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.05017em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">m</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span>，由此可知，定子绕组的磁通大概正比于输入电压与频率之商：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable width="100%"><mtr><mtd width="50%"></mtd><mtd><mrow><msub><mi>B</mi><mi>m</mi></msub><mo>=</mo><mi>k</mi><mfrac><mi>V</mi><mi>f</mi></mfrac></mrow></mtd><mtd width="50%"></mtd><mtd><mtext>(3)</mtext></mtd></mtr></mtable><annotation encoding="application/x-tex">B_m = k \frac{V}{f} \tag{3}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.05017em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">m</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.2407700000000004em;vertical-align:-0.8804400000000001em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.36033em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8804400000000001em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span><span class="tag"><span class="strut" style="height:2.2407700000000004em;vertical-align:-0.8804400000000001em;"></span><span class="mord text"><span class="mord">(</span><span class="mord"><span class="mord">3</span></span><span class="mord">)</span></span></span></span></span></span></p>
+<p>其中<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span> 取决于绕组线圈的拓扑结构和分布情况。</p>
+<blockquote>
+<p>目前为止，定子线圈中的电流是比较大的，但是几乎全部用于建立磁场，也就是常说的磁化电流。气隙越小，磁通越小，反电动势越小，磁化电流则越大。</p>
+</blockquote>
+<h3 id="磁化电流"><a class="markdownIt-Anchor" href="#磁化电流"></a> 磁化电流</h3>
+<p>磁化电流与气隙相关，磁化电流不做功，所以一般气隙越小越好。尽管气隙小会使得磁化电流减小，但在四极电机中，磁化电流仍然能达到负载电流的50% 左右（因为绕组电阻很小），在六极或八极的电机中会更高。磁化电流与输入电压的相位关系如下：<br />
+<img src="magnetising_current.png" alt="" /></p>
+<h2 id="转子部分"><a class="markdownIt-Anchor" href="#转子部分"></a> 转子部分</h2>
+<p>常见的转子结构有两种形式：接线式和鼠笼式。其中接线式电机需要额外的电源，而鼠笼式因为制造简单，所以应用更加广泛，下面两幅图分别是鼠笼式的转子和绕线式转子的示意图：<br />
+<img src="cage_rotor.png" alt="" /><br />
+<img src="wound_rotor.png" alt="" /></p>
+<p>后面的笔记均以鼠笼式转子为例分析。</p>
+<h3 id="滑差"><a class="markdownIt-Anchor" href="#滑差"></a> 滑差</h3>
+<p>在鼠笼式电机中，转子中要有电流，则必须要切割磁感线产生感应电动势。于是，转子相对于定子存在一个转速差，我们称之为滑差，表示转子比定子慢的比例：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable width="100%"><mtr><mtd width="50%"></mtd><mtd><mrow><mi>s</mi><mo>=</mo><mfrac><mrow><msub><mi>N</mi><mi>s</mi></msub><mo>−</mo><mi>N</mi></mrow><msub><mi>N</mi><mi>s</mi></msub></mfrac></mrow></mtd><mtd width="50%"></mtd><mtd><mtext>(4)</mtext></mtd></mtr></mtable><annotation encoding="application/x-tex">s=\frac{N_s-N}{N_s} \tag{4}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.19633em;vertical-align:-0.8360000000000001em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.36033em;"><span style="top:-2.3139999999999996em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.10903em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.10903em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8360000000000001em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span><span class="tag"><span class="strut" style="height:2.19633em;vertical-align:-0.8360000000000001em;"></span><span class="mord text"><span class="mord">(</span><span class="mord"><span class="mord">4</span></span><span class="mord">)</span></span></span></span></span></span></p>
+<p>滑差<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>∈</mo><mo stretchy="false">(</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">s \in (0,1]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mclose">]</span></span></span></span>，滑差为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 时表示电机堵转。</p>
+<h3 id="感应电动势"><a class="markdownIt-Anchor" href="#感应电动势"></a> 感应电动势</h3>
+<p>转子导体切割磁感线产生电动势，其幅值正比于滑差（其频率也是）：<br />
+<img src="voltage-slip.png" alt="" /></p>
+<p>由于磁通密度在圆周上按正弦分布，所以转子导体中的电动势大小也是按正弦分布：<br />
+<img src="rotor_emf_wave.png" alt="" /></p>
+<p>因为转子导体两端分别是短接的，所以其中的电流也会按下图分布，其中，比较粗的深色区域表示电流很大：<br />
+<img src="rotor_current.png" alt="" /></p>
+<h3 id="小滑差分析"><a class="markdownIt-Anchor" href="#小滑差分析"></a> 小滑差分析</h3>
+<p>当滑差小于<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>10</mn><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">10\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80556em;vertical-align:-0.05556em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">%</span></span></span></span> 时，因为感生电动势的频率较低，转子电路中的电感可以忽略不计，转子电流与感应电动势与主磁通近似是同相的，其产生的转矩为：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable width="100%"><mtr><mtd width="50%"></mtd><mtd><mrow><mi>T</mi><mo>=</mo><mi>k</mi><mi>B</mi><msub><mi>I</mi><mi>r</mi></msub></mrow></mtd><mtd width="50%"></mtd><mtd><mtext>(5)</mtext></mtd></mtr></mtable><annotation encoding="application/x-tex">T=kBI_r \tag{5}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span><span class="tag"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">(</span><span class="mord"><span class="mord">5</span></span><span class="mord">)</span></span></span></span></span></span></p>
+<p><img src="rotor_torque_in_small_slip.png" alt="" /><br />
+因为磁通是由电源决定的，如果电源的电压和频率不变，则磁通不变，能改变的只有转子电流（也就是转子感应电动势），最终能改变的就只有滑差了。</p>
+<p>大电机的满载滑差一般小于<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">1\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80556em;vertical-align:-0.05556em;"></span><span class="mord">1</span><span class="mord">%</span></span></span></span>，小电机的不超过<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>10</mn><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">10\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80556em;vertical-align:-0.05556em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">%</span></span></span></span>。在下图中<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>−</mo><mi>B</mi></mrow><annotation encoding="application/x-tex">A-B</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span> 间可以近似认为是线性的。<br />
+<img src="torque-slip_in_small_slip.png" alt="" /></p>
+<p>如果滑差总是很大，电机可能会过热。这就要求，在后面，电机虽然有两个相同转矩的工作点，但是只能选择右边的那个。</p>
+<h3 id="大滑差分析"><a class="markdownIt-Anchor" href="#大滑差分析"></a> 大滑差分析</h3>
+<p>随着滑差的增大，转子感应电动势的频率也会增加。于是转子导体的电感（感抗<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>=</mo><mn>2</mn><mi>π</mi><mi>f</mi><mi>L</mi></mrow><annotation encoding="application/x-tex">Z=2\pi fL</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">Z</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mord mathnormal">L</span></span></span></span>）不能再被忽略，导体的阻抗随滑差增加，导致其电流的增速是趋缓的：<br />
+<img src="rotor_current_in_big_slip.png" alt="" /></p>
+<p>同样，因为阻抗的增加，将会导致转子导体中的电流滞后于感应电动势一个角度<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ϕ</mi><mi>r</mi></msub></mrow><annotation encoding="application/x-tex">\phi_r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">ϕ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>。<br />
+<img src="rotor_torque_in_big_slip.png" alt="" /></p>
+<p>于是我们得到一个一般化的方程（磁通与电流的乘积再乘以夹角的余弦表示转矩的有效值）：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable width="100%"><mtr><mtd width="50%"></mtd><mtd><mrow><mi>T</mi><mo>=</mo><mi>k</mi><mi>B</mi><msub><mi>I</mi><mi>r</mi></msub><mi>cos</mi><mo>⁡</mo><msub><mi>ϕ</mi><mi>r</mi></msub></mrow></mtd><mtd width="50%"></mtd><mtd><mtext>(6)</mtext></mtd></mtr></mtable><annotation encoding="application/x-tex">T=kBI_r\cos{\phi_r} \tag{6}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop">cos</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">ϕ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span class="tag"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">(</span><span class="mord"><span class="mord">6</span></span><span class="mord">)</span></span></span></span></span></span></p>
+<p>随着滑差的增加，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>cos</mi><mo>⁡</mo><msub><mi>ϕ</mi><mi>r</mi></msub></mrow><annotation encoding="application/x-tex">\cos{\phi_r}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mop">cos</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">ϕ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 减小的速度逐渐大于<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mi>r</mi></msub></mrow><annotation encoding="application/x-tex">I_r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 增加的速度，于是必然存在一个转矩的最大值。</p>
+<h2 id="转子电流对磁场的影响"><a class="markdownIt-Anchor" href="#转子电流对磁场的影响"></a> 转子电流对磁场的影响</h2>
+<p>在感应电机中，任何主磁通的减小，都会造成定子反电动势的减小，从而增加定子电流，<strong>阻碍磁通继续减小，达到新的平衡</strong>。因为定子绕组阻抗很小，所以电流的变化是比较大的。</p>
+<h3 id="转子的磁场"><a class="markdownIt-Anchor" href="#转子的磁场"></a> 转子的磁场</h3>
+<p>因为转子电流的频率取决于滑差，所以可以认为在转子中，其电流产生的磁场以<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><msub><mi>N</mi><mi>s</mi></msub></mrow><annotation encoding="application/x-tex">sN_s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord mathnormal">s</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.10903em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 的速度旋转，而转子本身以<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>s</mi><mo stretchy="false">)</mo><msub><mi>N</mi><mi>s</mi></msub></mrow><annotation encoding="application/x-tex">(1-s)N_s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">s</span><span class="mclose">)</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.10903em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>的速度旋转，所以转子电流产生的磁场相对于定子其实也是以<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>N</mi><mi>s</mi></msub></mrow><annotation encoding="application/x-tex">N_s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.10903em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 的速度进行旋转的，方向刚好与主磁通相反（肯定是阻碍主磁通变化了）。<br />
+因此，一旦考虑转子的因素，定子中的主磁通势必会减小，从而造成定子电流的增加，而变化多少却决于滑差的大小。在电机起动时，因为滑差很大，其主磁通一般只有额定转速时的<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>50</mn><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">50\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80556em;vertical-align:-0.05556em;"></span><span class="mord">5</span><span class="mord">0</span><span class="mord">%</span></span></span></span>。</p>
+<h3 id="定子电流-转速特性"><a class="markdownIt-Anchor" href="#定子电流-转速特性"></a> 定子电流-转速特性</h3>
+<p>在电机空载时，除了小部分的铜耗和铁耗以外，大部分定子电流都不会做功，所以其电流与电压的相位差别近<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9</mn><msup><mn>0</mn><mo>∘</mo></msup></mrow><annotation encoding="application/x-tex">90^\circ</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.674115em;vertical-align:0em;"></span><span class="mord">9</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.674115em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∘</span></span></span></span></span></span></span></span></span></span></span>，主要是磁化电流。而随着负载的增加，磁化电流近似不变，做功的电流分量持续增加，于是电压与电流之间的相角差减小：<br />
+<img src="stator_current-speed.png" alt="" /><br />
+当然，上图在小滑差时比较准确。在大滑差（启动、堵转）时定子电流能达到额定负载时的五倍。高启动电流也是鼠笼式电机的缺点之一，因为高启动电流并未产生相应的高转矩。下图表示电机从空载逐渐增加负载到堵转时，其定子电流的变化情况。<br />
+<img src="stator_current_from_no-load_to_locked-rotor.png" alt="" /></p>
+<p>合并<code>转矩-转速</code>和<code>电流-转速</code>的特性曲线，可以看到，在电机起动时，单位安培所产生的转矩是很低的：<br />
+<img src="torque-speed_curren-speed.png" alt="" /></p>
+<p>关于更多的感应电机特性和等效电路，将会在后面两篇笔记中学习。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2023/05/04/05_induction_motor/" title="电机与驱动读书笔记（感应电机基础）">https://12tall.github.io/2023/05/04/05_induction_motor/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E7%94%B5%E6%9C%BA/" rel="tag"># 电机</a>
+              <a href="/tags/%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA/" rel="tag"># 控制理论</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/04/30/02_dc_motor_driver/" rel="prev" title="电机与驱动读书笔记（直流电机驱动电路）">
+                  <i class="fa fa-angle-left"></i> 电机与驱动读书笔记（直流电机驱动电路）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/05/12/win32com/" rel="next" title="Python 调用COM 组件">
+                  Python 调用COM 组件 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

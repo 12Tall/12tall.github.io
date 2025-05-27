@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="我们想所有的模型都是连续且稳定的，但事实上却不尽然。以牛顿冷却定律为例，如果在自然冷却的过程中，我们开了空调，导致环境温度发生了变化，这个时候应该怎么做呢？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="离散行为 discrete">
+<meta property="og:url" content="https://12tall.github.io/2022/08/25/openmodelica/discrete/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="我们想所有的模型都是连续且稳定的，但事实上却不尽然。以牛顿冷却定律为例，如果在自然冷却的过程中，我们开了空调，导致环境温度发生了变化，这个时候应该怎么做呢？">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://12tall.github.io/2022/08/25/openmodelica/discrete/NewtonCoolingDynamic.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/08/25/openmodelica/discrete/BouncingBall.svg">
+<meta property="og:image" content="https://12tall.github.io/2022/08/25/openmodelica/discrete/BouncingBall_fixed.svg">
+<meta property="article:published_time" content="2022-08-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.179Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="modeling">
+<meta property="article:tag" content="OpenModelica">
+<meta property="article:tag" content="触发器">
+<meta property="article:tag" content="when">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://12tall.github.io/2022/08/25/openmodelica/discrete/NewtonCoolingDynamic.svg">
+
+
+<link rel="canonical" href="https://12tall.github.io/2022/08/25/openmodelica/discrete/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2022/08/25/openmodelica/discrete/","path":"2022/08/25/openmodelica/discrete/","title":"离散行为 discrete"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>离散行为 discrete | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%B9%E8%B7%B3%E7%90%83"><span class="nav-number">1.</span> <span class="nav-text"> 弹跳球</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%B9%E7%90%83%E4%BB%BF%E7%9C%9F%E6%97%B6%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text"> 弹球仿真时的问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E7%8A%B6%E6%80%81%E7%9A%84%E5%A4%84%E7%90%86"><span class="nav-number"></span> <span class="nav-text"> 事件状态的处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%96%E6%8C%AF%E4%B8%8D%E5%B8%B8%E8%A7%81"><span class="nav-number">1.</span> <span class="nav-text"> 抖振（不常见）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%87%E6%A0%B7"><span class="nav-number">2.</span> <span class="nav-text"> 采样</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5"><span class="nav-number">3.</span> <span class="nav-text"> 同步</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6"><span class="nav-number"></span> <span class="nav-text"> 事件</span></a></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/25/openmodelica/discrete/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="离散行为 discrete | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          离散行为 discrete
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-25 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-25T00:00:00+08:00">2022-08-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/math/" itemprop="url" rel="index"><span itemprop="name">math</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>我们想所有的模型都是连续且稳定的，但事实上却不尽然。以牛顿冷却定律为例，如果在自然冷却的过程中，我们开了空调，导致环境温度发生了变化，这个时候应该怎么做呢？</p>
+<span id="more"></span> 
+<pre class="line-numbers language-modelica&#123;23-27,29-30,32-33&#125;" data-language="modelica&#123;23-27,29-30,32-33&#125;"><code class="language-modelica&#123;23-27,29-30,32-33&#125;">model NewtonCoolingDynamic
+  &quot;Cooling example with fluctuating ambient conditions&quot;
+  &#x2F;&#x2F; Types
+  type Temperature&#x3D;Real(unit&#x3D;&quot;K&quot;, min&#x3D;0);
+  type ConvectionCoefficient&#x3D;Real(unit&#x3D;&quot;W&#x2F;(m2.K)&quot;, min&#x3D;0);
+  type Area&#x3D;Real(unit&#x3D;&quot;m2&quot;, min&#x3D;0);
+  type Mass&#x3D;Real(unit&#x3D;&quot;kg&quot;, min&#x3D;0);
+  type SpecificHeat&#x3D;Real(unit&#x3D;&quot;J&#x2F;(K.kg)&quot;, min&#x3D;0);
+
+  &#x2F;&#x2F; Parameters
+  parameter Temperature T0&#x3D;363.15 &quot;Initial temperature&quot;;
+  parameter ConvectionCoefficient h&#x3D;0.7 &quot;Convective cooling coefficient&quot;;
+  parameter Area A&#x3D;1.0 &quot;Surface area&quot;;
+  parameter Mass m&#x3D;0.1 &quot;Mass of thermal capacitance&quot;;
+  parameter SpecificHeat c_p&#x3D;1.2 &quot;Specific heat&quot;;
+
+  &#x2F;&#x2F; Variables
+  Temperature T_inf &quot;Ambient temperature&quot;;
+  Temperature T &quot;Temperature&quot;;
+initial equation
+  T &#x3D; T0 &quot;Specify initial value for T&quot;;
+equation
+  if time&lt;&#x3D;0.5 then
+    T_inf &#x3D; 298.15 &quot;Constant temperature when time&lt;&#x3D;0.5&quot;;
+  else
+    T_inf &#x3D; 298.15-20*(time-0.5) &quot;Otherwise, increasing&quot;;
+  end if;
+
+  &#x2F;&#x2F; 另一种简单写法  
+  &#x2F;&#x2F; T_inf &#x3D; 298.15 - (if time&lt;0.5 then 0 else 20*(time-0.5));  
+
+  &#x2F;&#x2F; 或者  
+  &#x2F;&#x2F; T_inf &#x3D; 298.15 - max(0, 20*(time-0.5));
+
+  m*c_p*der(T) &#x3D; h*A*(T_inf-T) &quot;Newton&#39;s law of cooling&quot;;
+end NewtonCoolingDynamic;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="NewtonCoolingDynamic.svg" alt="" /></p>
+<h3 id="弹跳球"><a class="markdownIt-Anchor" href="#弹跳球"></a> 弹跳球</h3>
+<p>小球在桌子上弹跳，在接触桌子的瞬间，会立刻以下降速度<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mrow><mi>f</mi><mi>i</mi><mi>n</mi><mi>a</mi><mi>l</mi></mrow></msub><mo>=</mo><mo>−</mo><mi>e</mi><msub><mi>v</mi><mrow><mi>i</mi><mi>n</mi><mi>i</mi><mi>t</mi><mi>i</mi><mi>a</mi><mi>l</mi></mrow></msub></mrow><annotation encoding="application/x-tex">v_{final} = -e v_{initial}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.716668em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.73333em;vertical-align:-0.15em;"></span><span class="mord">−</span><span class="mord mathnormal">e</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 弹起，其中<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mrow><mi>i</mi><mi>n</mi><mi>i</mi><mi>t</mi><mi>i</mi><mi>a</mi><mi>l</mi></mrow></msub></mrow><annotation encoding="application/x-tex">v_{initial}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 弹起前一瞬间的速度：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.15999999999999992em" columnalign="left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>v</mi><mo>=</mo><mover accent="true"><mi>h</mi><mo>˙</mo></mover></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mover accent="true"><mi>v</mi><mo>˙</mo></mover><mo>=</mo><mo>−</mo><mn>9.81</mn><mi>m</mi><mi mathvariant="normal">/</mi><msup><mi>s</mi><mn>2</mn></msup></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msub><mi>v</mi><mrow><mi>f</mi><mi>i</mi><mi>n</mi><mi>a</mi><mi>l</mi></mrow></msub><mo>=</mo><mo>−</mo><mi>e</mi><msub><mi>v</mi><mrow><mi>i</mi><mi>n</mi><mi>i</mi><mi>t</mi><mi>i</mi><mi>a</mi><mi>l</mi></mrow></msub></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{array}{l}
+  v = \dot{h} \\
+  \dot{v} = -9.81m/s^2 \\  
+  v_{final} = -e v_{initial}
+\end{array}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.691300000000001em;vertical-align:-1.595650000000001em;"></span><span class="mord"><span class="mtable"><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.09565em;"><span style="top:-4.16435em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9313em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">h</span></span></span><span style="top:-3.26344em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.13889em;"><span class="mord">˙</span></span></span></span></span></span></span></span></span><span style="top:-2.964349999999999em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.66786em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.11111000000000001em;"><span class="mord">˙</span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">−</span><span class="mord">9</span><span class="mord">.</span><span class="mord">8</span><span class="mord">1</span><span class="mord mathnormal">m</span><span class="mord">/</span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span><span style="top:-1.7643499999999992em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">−</span><span class="mord mathnormal">e</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.595650000000001em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span></span></span></span></span></span></span></p>
+<p>这时，我们需要使用<code>reinit()</code> 函数和<code>pre()</code> 函数来重新初始化速度：</p>
+<pre class="line-numbers language-modelica&#123;13-16&#125;" data-language="modelica&#123;13-16&#125;"><code class="language-modelica&#123;13-16&#125;">model BouncingBall &quot;The &#39;classic&#39; bouncing ball model&quot;
+  type Height&#x3D;Real(unit&#x3D;&quot;m&quot;);
+  type Velocity&#x3D;Real(unit&#x3D;&quot;m&#x2F;s&quot;);
+  parameter Real e&#x3D;0.8 &quot;Coefficient of restitution&quot;;
+  parameter Height h0&#x3D;1.0 &quot;Initial height&quot;;
+  Height h;
+  Velocity v;
+initial equation
+  h &#x3D; h0;
+equation
+  v &#x3D; der(h);
+  der(v) &#x3D; -9.81;
+  when h&lt;0 then
+    reinit(v, -e*pre(v));  ·&#x2F;&#x2F; reinit 重新初始化v  
+                            &#x2F;&#x2F; pre(v) 上一个状态值v
+  end when;
+  &#x2F;&#x2F; 如果尝试用if 去代替when，则会报以下错误：
+  &#x2F;&#x2F; Operator reinit may only be used in the body of a when equation.  
+  &#x2F;&#x2F; reinit 只能在when 内使用
+  &#x2F;&#x2F; Argument 1 of pre must be a discrete expression, but v is continuous.
+  &#x2F;&#x2F; pre 的参数应该是离散的，但是v 是连续的（因为我们的模型默认是连续的）
+  &#x2F;&#x2F; 当尝试用&#96;v&#x3D; -e*pre(v);&#96; 代替reinit 时，发现系统依然会报错。因为这与&#96;v &#x3D; der(h);&#96; 冲突了
+end BouncingBall;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以理解为通过<code>when</code> 语句设置了一个<strong>触发器</strong>，当系统到达某一状态时，就会触发并执行内部的过程（以当前状态为初始值，重启积分计算）。但是该触发器不会被持续触发，除非状态变量恢复之后重新满足触发条件，上例中当小球高度满足<code>h&gt;0</code> 后便能重新触发<code>when</code> 语句。这也是导致下面问题的原因。</p>
+<h3 id="弹球仿真时的问题"><a class="markdownIt-Anchor" href="#弹球仿真时的问题"></a> 弹球仿真时的问题</h3>
+<p>如果仿真时间足够长，则会遇到一个神奇的问题：<br />
+<img src="BouncingBall.svg" alt="" /><br />
+小球掉到地平线以下去了。为了解决这个问题，我们需要引入一定量的迟滞（死区）。即当<code>h&lt;0</code>时会触发该事件，但是要该事件再次被触发，需要满足第二个条件<code>h&gt;ε</code>，一个不大的值。</p>
+<pre class="line-numbers language-modelica&#123;17-20&#125;" data-language="modelica&#123;17-20&#125;"><code class="language-modelica&#123;17-20&#125;">model StableBouncingBall
+  &quot;The &#39;classic&#39; bouncing ball model with numerical tolerances&quot;
+  type Height&#x3D;Real(unit&#x3D;&quot;m&quot;);
+  type Velocity&#x3D;Real(unit&#x3D;&quot;m&#x2F;s&quot;);
+  parameter Real e&#x3D;0.8 &quot;Coefficient of restitution&quot;;
+  parameter Height h0&#x3D;1.0 &quot;Initial height&quot;;
+  constant Height eps&#x3D;1e-3 &quot;Small height&quot;;
+  Boolean done;
+  Height h;
+  Velocity v;
+initial equation
+  h &#x3D; h0;
+  done &#x3D; false;
+equation
+  v &#x3D; der(h);
+  der(v) &#x3D; if done then 0 else -9.81;
+  when &#123;h&lt;0,h&lt;-eps&#125; then  &#x2F;&#x2F; 在小球的高度低于某一点时被触发，终止弹跳
+    done &#x3D; h&lt;-eps;
+    reinit(v, -e*(if h&lt;-eps then 0 else pre(v)));
+  end when;
+end StableBouncingBall;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>when</code> 内的代码只有在触发条件为真（只要有一条为真即可）的一瞬间被激活，其他时刻不会受影响，相当与一个触发器。而<code>if</code> 则相当于一个比较器。修复后的小球会稳定在一个极小的负高度<code>-0.001m</code>左右，如下图所示：<br />
+<img src="BouncingBall_fixed.svg" alt="" /></p>
+<h2 id="事件状态的处理"><a class="markdownIt-Anchor" href="#事件状态的处理"></a> 事件状态的处理</h2>
+<p>这一节本应属于离散行为，但是因为牵扯到数值计算的核心问题，我想还是单独记录一下。以基本衰减模型为例：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mover accent="true"><mi>x</mi><mo>˙</mo></mover><mo>=</mo><mo>−</mo><msqrt><mi>x</mi></msqrt></mrow><annotation encoding="application/x-tex">\dot{x} = -\sqrt{x}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66786em;vertical-align:0em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.66786em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">x</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.11111000000000001em;"><span class="mord">˙</span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.04em;vertical-align:-0.190845em;"></span><span class="mord">−</span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8491550000000001em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;"><span class="mord mathnormal">x</span></span></span><span style="top:-2.809155em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.190845em;"><span></span></span></span></span></span></span></span></span></span></p>
+<p>模型代码也很简单：</p>
+<pre class="line-numbers language-modelica" data-language="modelica"><code class="language-modelica">model Decay1
+  Real x;
+initial equation
+  x &#x3D; 1;
+equation
+  der(x) &#x3D; -sqrt(x);
+  annotation(experiment(StopTime &#x3D; 5));
+end Decay1;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>虽然设置的终止时间是5s， 但是在数值积分时在2s 时就混入错误使得x 小于0，提前终止。更神奇的是，下面这种保护表达式根本不起作用。</p>
+<pre class="line-numbers language-modelica" data-language="modelica"><code class="language-modelica">der(x) &#x3D; if x&gt;&#x3D;0 then -sqrt(x) else 0; &#x2F;&#x2F; 因为直到事件发生，行为都不会改变
+&#x2F;&#x2F; 即在x&lt;0 的那一刻，求解器仍然会使用 der(x) &#x3D; - sqrt(x)
+
+&#x2F;&#x2F; der(x) &#x3D; if x&gt;0.000001 then -sqrt(x) else 0;  &#x2F;&#x2F; 此语句则可以很好的工作<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>一般的，我们可以采用<code>noEvent(x&gt;=0)</code> 来抑制过零函数事件。</p>
+<pre class="line-numbers language-modelica" data-language="modelica"><code class="language-modelica">der(x) &#x3D; if noEvent(x&gt;&#x3D;0) then -sqrt(x) else 0;  
+&#x2F;&#x2F; 使用事件抑制只用于行为变化是平滑过渡的时候，否则会带来性能问题<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="抖振不常见"><a class="markdownIt-Anchor" href="#抖振不常见"></a> 抖振（不常见）</h3>
+<p>以下面模型为例：</p>
+<pre class="line-numbers language-modelica" data-language="modelica"><code class="language-modelica">model WithChatter
+  Real x;
+initial equation
+  x &#x3D; 2;
+equation
+  der(x) &#x3D; if x&gt;&#x3D;1 then -1 else 1;
+  annotation(experiment(StopTime &#x3D; 2));
+end WithChatter;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>理论上在函数值接近于1 的时候，它的值都不会再变更。但是因为频繁的斜率变动，将导致x 总在1 上下抖动，进而产生很多事件。仿真速度也会变慢。为了消除这种现象，我们同样需要将<code>x&gt;=1</code> 用<code>noEvent()</code> 包裹起来。最终结果几乎一致，但是性能更好（也没好太多）。</p>
+<p>但是使用<code>noEvent</code> 会影响仿真的精度，所以还是酌情使用。</p>
+<h3 id="采样"><a class="markdownIt-Anchor" href="#采样"></a> 采样</h3>
+<pre class="line-numbers language-modelica" data-language="modelica"><code class="language-modelica">model SampleAndHold &quot;Measure speed and hold&quot;
+  extends BasicEquations.RotationalSMD.SecondOrderSystem;
+  parameter Real sample_time(unit&#x3D;&quot;s&quot;)&#x3D;0.125;
+  discrete Real omega1_measured;   &#x2F;&#x2F; discrete 表示测量值是离散的，但是该关键字并不是必须的。
+equation
+  when sample(0,sample_time) then  &#x2F;&#x2F; 以0.125s 的间隔对omega 进行采样
+    omega1_measured &#x3D; omega1;
+  end when;
+end SampleAndHold;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="同步"><a class="markdownIt-Anchor" href="#同步"></a> 同步</h3>
+<p>因为工作暂时用不到，略。</p>
+<h2 id="事件"><a class="markdownIt-Anchor" href="#事件"></a> 事件</h2>
+<p>事件可以由事件产生，例如所有模型都默认有time 变量；时间也可以由关系运算与逻辑运算产生。此外，当以下函数返回值不连续时，就会产生事件：</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>div(x,y)</td>
+<td>省去小数部分的代数商。</td>
+</tr>
+<tr>
+<td>mod(x,y)</td>
+<td>x/y的模数</td>
+</tr>
+<tr>
+<td>rem(x,y)</td>
+<td>代数除法的余数</td>
+</tr>
+<tr>
+<td>ceil(x)</td>
+<td>不小于x的最小整数</td>
+</tr>
+<tr>
+<td>floor(x)</td>
+<td>不大于x的最大整数（返回Real）</td>
+</tr>
+<tr>
+<td>integer(x)</td>
+<td>不大于x的最大整数（返回Integer）</td>
+</tr>
+<tr>
+<td>initial()</td>
+<td>初始化时为true，否则为false</td>
+</tr>
+<tr>
+<td>terminal()</td>
+<td>仿真结束时为true，否则为false</td>
+</tr>
+<tr>
+<td>sample(t0,dt)</td>
+<td>在t0时刻以及以后的每dt秒生成一个事件</td>
+</tr>
+<tr>
+<td>edge(x)</td>
+<td>仅在x变为true的一瞬间为true</td>
+</tr>
+<tr>
+<td>change(x)</td>
+<td>每当x改变时为true</td>
+</tr>
+</tbody>
+</table>
+<p>不会产生事件的函数：</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>abs(x)</td>
+<td>x的绝对值</td>
+</tr>
+<tr>
+<td>sign(x)</td>
+<td>x的符号（返回-1、0或1 ）</td>
+</tr>
+<tr>
+<td>sqrt(x)</td>
+<td>x的平方根</td>
+</tr>
+<tr>
+<td>min(x,y)</td>
+<td>x和y中的最小值</td>
+</tr>
+<tr>
+<td>max(x,y)</td>
+<td>x和y中的最大值</td>
+</tr>
+</tbody>
+</table>
+<p>与事件相关的操作符：</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pre(x)</td>
+<td>在事件的发生时保存了x在事件前的取值</td>
+</tr>
+<tr>
+<td>previous(x)</td>
+<td>在一个时钟节拍内保存了x在上个时钟节拍的取值</td>
+</tr>
+<tr>
+<td>hold(x)</td>
+<td>任何时间都保存了x在上个时钟节拍的取值</td>
+</tr>
+<tr>
+<td>sample(expr,clock)</td>
+<td>在一个时钟节拍内expr的取值</td>
+</tr>
+<tr>
+<td>noEvent(expr)</td>
+<td>抑制expr内产生的事件</td>
+</tr>
+<tr>
+<td>smooth(expr,p)</td>
+<td>表示expr至少p次可导</td>
+</tr>
+</tbody>
+</table>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2022/08/25/openmodelica/discrete/" title="离散行为 discrete">https://12tall.github.io/2022/08/25/openmodelica/discrete/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/modeling/" rel="tag"># modeling</a>
+              <a href="/tags/OpenModelica/" rel="tag"># OpenModelica</a>
+              <a href="/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" rel="tag"># 触发器</a>
+              <a href="/tags/when/" rel="tag"># when</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/08/25/openmodelica/faq/" rel="prev" title="常见问题">
+                  <i class="fa fa-angle-left"></i> 常见问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/08/25/openmodelica/connector/" rel="next" title="连接器 connector">
+                  连接器 connector <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

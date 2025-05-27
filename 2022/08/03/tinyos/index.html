@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="学习用200行代码写一个超小的操作系统的笔记。开发过程最好还是在Linux 下运行，Windows 下虽然有i686-elf-tools 跨平台编译工具，但是虚拟机QEMU 和GDB 调试工具还是会有版本上的不兼容等问题。笔记重点在于工具链的配置，其中的代码和命令是在OpenSUSE 系统中验证的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="x86 操作系统笔记">
+<meta property="og:url" content="https://12tall.github.io/2022/08/03/tinyos/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="学习用200行代码写一个超小的操作系统的笔记。开发过程最好还是在Linux 下运行，Windows 下虽然有i686-elf-tools 跨平台编译工具，但是虚拟机QEMU 和GDB 调试工具还是会有版本上的不兼容等问题。笔记重点在于工具链的配置，其中的代码和命令是在OpenSUSE 系统中验证的。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://12tall.github.io/2022/08/03/tinyos/ssh-qemu-no-gui.png">
+<meta property="og:image" content="https://12tall.github.io/2022/08/03/tinyos/vscode-breakpoint.png">
+<meta property="article:published_time" content="2022-08-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.045Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="x86">
+<meta property="article:tag" content="asm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://12tall.github.io/2022/08/03/tinyos/ssh-qemu-no-gui.png">
+
+
+<link rel="canonical" href="https://12tall.github.io/2022/08/03/tinyos/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2022/08/03/tinyos/","path":"2022/08/03/tinyos/","title":"x86 操作系统笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>x86 操作系统笔记 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E8%A7%A3%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text"> 命令解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91"><span class="nav-number">1.1.</span> <span class="nav-text"> 编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#qemu"><span class="nav-number">1.2.</span> <span class="nav-text"> QEMU</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B1%87%E7%BC%96%E4%B8%8Ec-%E6%B7%B7%E5%90%88%E7%BC%96%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text"> 汇编与C 混合编程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gas-%E8%AF%AD%E6%B3%95"><span class="nav-number">2.1.</span> <span class="nav-text"> GAS 语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-%E8%AF%AD%E8%A8%80%E4%BB%A3%E7%A0%81"><span class="nav-number">2.2.</span> <span class="nav-text"> C 语言代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B3%E5%9D%A6%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text"> 平坦模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E9%A1%B5%E6%9C%BA%E5%88%B6"><span class="nav-number">3.1.</span> <span class="nav-text"> 分页机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%9D%83%E7%BA%A7%E5%88%87%E6%8D%A2"><span class="nav-number">4.</span> <span class="nav-text"> 特权级切换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%87%E6%8D%A2%E5%88%B0%E4%BD%8E%E7%89%B9%E6%9D%83%E7%BA%A7"><span class="nav-number">4.1.</span> <span class="nav-text"> 切换到低特权级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E5%88%87%E6%8D%A2"><span class="nav-number">4.2.</span> <span class="nav-text"> 任务切换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8"><span class="nav-number">4.3.</span> <span class="nav-text"> 系统调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8Eldt"><span class="nav-number">4.4.</span> <span class="nav-text"> 关于LDT</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7%E7%9B%B8%E5%85%B3"><span class="nav-number">5.</span> <span class="nav-text"> 工具相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#vscode-%E8%B0%83%E8%AF%95%E9%85%8D%E7%BD%AE"><span class="nav-number">5.1.</span> <span class="nav-text"> VSCode 调试配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">5.1.1.</span> <span class="nav-text"> 配置文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vscode-%E6%B1%87%E7%BC%96%E6%96%AD%E7%82%B9%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">5.2.</span> <span class="nav-text"> VSCode 汇编断点的问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">6.</span> <span class="nav-text"> 参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/tinyos/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="x86 操作系统笔记 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          x86 操作系统笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-03 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-03T00:00:00+08:00">2022-08-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/c-cpp/" itemprop="url" rel="index"><span itemprop="name">c_cpp</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>13 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>学习<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1fB4y1J7LL">用200行代码写一个超小的操作系统</a>的笔记。开发过程最好还是在Linux 下运行，Windows 下虽然有<a target="_blank" rel="noopener" href="https://github.com/lordmilko/i686-elf-tools">i686-elf-tools 跨平台编译工具</a>，但是<a target="_blank" rel="noopener" href="https://www.qemu.org/download/">虚拟机QEMU</a> 和<code>GDB</code> 调试工具还是会有版本上的不兼容等问题。<strong>笔记重点在于工具链的配置</strong>，其中的代码和命令是在OpenSUSE 系统中验证的。</p>
+<span id="more"></span>
+<h2 id="命令解析"><a class="markdownIt-Anchor" href="#命令解析"></a> 命令解析</h2>
+<p>为调试方便起见，笔记中的命令只适用于Linux/OpenSUSE 平台，Windows 平台上的指令名称不同，但是作用与步骤是一样的。</p>
+<h3 id="编译"><a class="markdownIt-Anchor" href="#编译"></a> 编译</h3>
+<p>因为我们的代码需要在裸机上运行，不能包含任何平台相关的标准库代码，所以在编译时需要指定专门的<code>flag</code>。</p>
+<pre class="line-numbers language-makefile" data-language="makefile"><code class="language-makefile">CFLAGS <span class="token operator">=</span> -g -c -O0 -m32 -fno-pie -fno-stack-protector -nostdlib -nostdinc  
+<span class="token comment"># -g    在目标文件中添加调试信息，便于gdb 调试或者objdump 反汇编  </span>
+<span class="token comment"># -c    进行预编译、编译、汇编，但是不进行链接的工作</span>
+<span class="token comment"># -O0   优化等级为0，不优化！</span>
+<span class="token comment"># -m32  生成x86 32位代码</span>
+<span class="token comment"># -fno-pie 禁止生成位置无关的代码，因为代码是运行在裸机上的</span>
+<span class="token comment"># -fno-stack-protector 禁用堆栈保护</span>
+<span class="token comment"># -nostdlib 禁用标准链接库</span>
+<span class="token comment"># -nostdinc 禁用包含标准文件    </span>
+
+<span class="token target symbol">all</span><span class="token punctuation">:</span> src/os.c src/os.h src/start.S  <span class="token comment"># make all 前提需要三个源文件的存在  </span>
+    <span class="token comment"># $(var_name) 获取变量值</span>
+	gcc <span class="token variable">$</span><span class="token punctuation">(</span>CFLAGS<span class="token punctuation">)</span> src/start.S  
+    <span class="token comment"># 编译gcc 汇编代码，主要是完成一些C 语言所不能涉及的代码  </span>
+	gcc <span class="token variable">$</span><span class="token punctuation">(</span>CFLAGS<span class="token punctuation">)</span> src/os.c 
+    <span class="token comment"># 编译C 代码</span>
+
+    <span class="token comment"># 链接汇编结果文件</span>
+	ld -m elf_i386 -Ttext<span class="token operator">=</span>0x7c00 start.o os.o -o os.elf  
+    <span class="token comment"># -m 目标平台文件  </span>
+    <span class="token comment"># -Ttext=0x7c00 .text 段的起始位置为0x7c00  </span>
+    <span class="token comment"># -o 输出文件  </span>
+
+	objcopy -O binary os.elf os.bin
+    <span class="token comment"># 文件格式转换  </span>
+    <span class="token comment"># -O 指定文件格式为二进制文件  </span>
+
+	objdump -x -d -S  os.elf > os_dis.txt	  
+    <span class="token comment"># 查看反汇编信息  </span>
+	readelf -a  os.elf > os_elf.txt         
+    <span class="token comment"># 查看elf 文件信息  </span>
+
+	dd if<span class="token operator">=</span>os.bin of<span class="token operator">=</span>disk.img conv<span class="token operator">=</span>notrunc  
+    <span class="token comment"># 将二进制文件写入（创建）虚拟磁盘文件 </span>
+
+<span class="token comment"># 清理编译结果文件和中间文件</span>
+<span class="token target symbol">clean</span><span class="token punctuation">:</span>
+	rm -f *.elf *.o     <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="qemu"><a class="markdownIt-Anchor" href="#qemu"></a> QEMU</h3>
+<p>在远程开发的前提下，我们可以以另一种形式看到QEMU 的图形界面，那就是设置<code>-display</code> 选项。此选项能将QEMU 的界面转发至终端。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">qemu-system-i386 <span class="token parameter variable">-m</span> 128M <span class="token parameter variable">-s</span> <span class="token parameter variable">-S</span>  <span class="token parameter variable">-drive</span> <span class="token assign-left variable">file</span><span class="token operator">=</span>./image/disk.img,index<span class="token operator">=</span><span class="token number">0</span>,media<span class="token operator">=</span>disk,format<span class="token operator">=</span>raw <span class="token parameter variable">-display</span> curses  
+<span class="token comment"># -m 128M 内存  </span>
+<span class="token comment"># -s 打开调试的简写/shorthand for -gdb tcp::1234</span>
+<span class="token comment"># -S 启动后停止，等待调试信息/freeze CPU at startup (use 'c' to start execution)  </span>
+<span class="token comment"># -drive file=./image/disk.img,index=0,media=disk,format=raw 启动镜像  </span>
+<span class="token comment"># -display curses </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="ssh-qemu-no-gui.png" alt="" /></p>
+<p>在终端中按<code>alt+2(1/2/3/...)</code> 可以切换到<code>QEMU</code>的控制台，输入<code>quit</code> 可以终止进程。更过<a target="_blank" rel="noopener" href="https://web.archive.org/web/20200304204518/https://qemu.weilnetz.de/doc/qemu-doc.html#Display-options">Display 选项</a></p>
+<h2 id="汇编与c-混合编程"><a class="markdownIt-Anchor" href="#汇编与c-混合编程"></a> 汇编与C 混合编程</h2>
+<p>虽然操作系统可以用C/C++ 开发，但是启动引导部分还是要由汇编来完成，这里简单记一下阅读源码时比较重要的知识点：</p>
+<h3 id="gas-语法"><a class="markdownIt-Anchor" href="#gas-语法"></a> GAS 语法</h3>
+<p>GAS 使用<code>AT&amp;T</code> 语法，对于习惯了<code>Intel</code> 语法的我们来说，有些难记，这里以简短的代码为例：</p>
+<pre class="line-numbers language-nasm" data-language="nasm"><code class="language-nasm"><span class="token comment">; 一下代码粘贴自：https://gitee.com/lishutong-01ketang/diy-x86os/blob/master/diy-200lines-os/b00.04/source/start.S</span>
+	#include <span class="token string">"os.h"</span>    <span class="token comment">; 引入头文件</span>
+	
+	.<span class="token keyword">global _start     </span><span class="token comment">; 声明_start符号是全局的，在其它代码源文件中可以访问</span>
+
+  	.code16            <span class="token comment">; 以下代码将会被编译为16 位机器码，在实模式下运行</span>
+
+ 	.text              <span class="token comment">; 代码段</span>
+<span class="token label function">_start:</span>
+	<span class="token operator">/</span><span class="token operator">/</span> 平坦模式，预设各段寄存器起始地址均为<span class="token number">0x0000</span>
+	mov <span class="token number">$0</span>, <span class="token operator">%</span><span class="token register variable">ax</span>	       <span class="token comment">; 1 立即数前要加%</span>
+	mov <span class="token operator">%</span><span class="token register variable">ax</span>, <span class="token operator">%</span><span class="token register variable">ds</span>       <span class="token comment">; 2 寄存器前要加%</span>
+	mov <span class="token operator">%</span><span class="token register variable">ax</span>, <span class="token operator">%</span><span class="token register variable">es</span>       <span class="token comment">; 3 指令从左往右依次为：操作 源操作数 目的操作数</span>
+	mov <span class="token operator">%</span><span class="token register variable">ax</span>, <span class="token operator">%</span><span class="token register variable">ss</span>
+    <span class="token comment">; 栈顶指针为_start 所在的地址，即编译后的0x7c00 </span>
+	mov <span class="token operator">$</span>_start, <span class="token operator">%</span><span class="token register variable">esp</span>  <span class="token comment">; 4 符号前加$ 表示该符号所在的地址，相当于mov 一个立即数常量	 </span>
+                       <span class="token comment">; 5 符号前不加$ 表示该符号所在地址的内容</span>
+                       <span class="token comment">; 可以看出下面两条指令编译出来的机器码是不同的！</span>
+    <span class="token comment">; mov $_start, %esp </span>
+    <span class="token comment">; 7c09:	66 bc 00 7c          	mov    $0x7c00,%sp  </span>
+    <span class="token comment">; 7c0d:	00 00                	add    %al,(%eax)</span>
+	<span class="token comment">; mov _start, %esp</span>
+    <span class="token comment">; 7c0f:	66 8b 26             	mov    (%esi),%sp</span>
+    <span class="token comment">; 7c12:	00                   	.byte 0x0</span>
+    <span class="token comment">; 7c13:	7c                   	.byte 0x7c  </span>
+
+
+<span class="token label function">read_self_all:</span>         <span class="token comment">; 利用13 号BIOS 中断读取硬盘，加载剩余的代码</span>
+	mov <span class="token operator">$</span>_start_32, <span class="token operator">%</span><span class="token register variable">bx</span>	<span class="token comment">; 待写入的目标地址</span>
+	mov <span class="token operator">$</span><span class="token number">0x2</span>, <span class="token operator">%</span><span class="token register variable">cx</span>		<span class="token comment">; ch:磁道号，cl起始扇区号</span>
+	mov <span class="token operator">$</span><span class="token number">0x0240</span>, <span class="token operator">%</span><span class="token register variable">ax</span>	<span class="token comment">; ah: 0x42读磁盘命令, al=0x40 64个扇区，多读一些, 32KB</span>
+	mov <span class="token operator">$</span><span class="token number">0x80</span>, <span class="token operator">%</span><span class="token register variable">dx</span>		<span class="token comment">; dh: 磁头号，dl驱动器号0x80(磁盘1)</span>
+	int <span class="token operator">$</span><span class="token number">0x0013</span>
+	jc read_self_all	<span class="token comment">; 读取失败，则重复</span>
+
+	<span class="token comment">; 进入保护模式，详解看教程</span>
+	cli					<span class="token comment">; 关中断</span>
+	lgdt <span class="token operator">[</span>gdt_desc<span class="token operator">]</span>		<span class="token comment">; 6 [label] 操作符表示 相对于DS 的偏移地址，因为这里需要加载的是地址</span>
+                        <span class="token comment">;   所以不能用$，但是不加任何修饰符也可以使用</span>
+	mov <span class="token number">$1</span>, <span class="token operator">%</span><span class="token register variable">eax</span>
+	lmsw <span class="token operator">%</span><span class="token register variable">ax</span>			<span class="token comment">; 设置PE位，进入保护模式</span>
+	jmp <span class="token operator">$</span>KERNEL_CODE_SEG, <span class="token operator">$</span>_start_32	<span class="token comment">; 长跳转，段选择子+偏移</span>
+                                        <span class="token comment">; 进入32位保护模式代码，可以运行32位指令</span>
+
+	<span class="token operator">/</span><span class="token operator">/</span> 跳到引导标志, 由bios在上电后检查
+	.org <span class="token number">0x1fe</span>			<span class="token operator">/</span><span class="token operator">/</span> 引导标志
+	.byte <span class="token number">0x55</span>, <span class="token number">0xaa</span>
+
+	<span class="token comment">; 32 位代码</span>
+	.code32
+	.text
+<span class="token label function">_start_32:</span>
+	<span class="token comment">; 重新加载数据段寄存器</span>
+	mov <span class="token operator">$</span>KERNEL_DATA_SEG, <span class="token operator">%</span><span class="token register variable">ax</span>
+	mov <span class="token operator">%</span><span class="token register variable">ax</span>, <span class="token operator">%</span><span class="token register variable">ds</span>
+	mov <span class="token operator">%</span><span class="token register variable">ax</span>, <span class="token operator">%</span><span class="token register variable">es</span>
+	mov <span class="token operator">%</span><span class="token register variable">ax</span>, <span class="token operator">%</span><span class="token register variable">ss</span>
+	mov <span class="token operator">$</span>_start, <span class="token operator">%</span><span class="token register variable">esp</span>
+	jmp .
+
+<span class="token comment">; gdt描述符，由lgdt加载</span>
+<span class="token label function">gdt_desc:</span> .word (<span class="token number">256</span><span class="token operator">*</span><span class="token number">8</span>) <span class="token operator">-</span> <span class="token number">1</span>  <span class="token comment">; 见规则4、5</span>
+	.long gdt_table<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="c-语言代码"><a class="markdownIt-Anchor" href="#c-语言代码"></a> C 语言代码</h3>
+<p>C 语言中全局的变量、结构、函数都会被编译为类似于<code>gdt_desc</code> 的符号，但是宏中定义的常数可以以立即数的形式在汇编语言中调用。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"os.h"</span></span>
+
+<span class="token comment">// 类型定义</span>
+<span class="token keyword">typedef</span> <span class="token keyword">unsigned</span> <span class="token keyword">char</span> <span class="token class-name">uint8_t</span><span class="token punctuation">;</span>
+<span class="token keyword">typedef</span> <span class="token keyword">unsigned</span> <span class="token keyword">short</span> <span class="token class-name">uint16_t</span><span class="token punctuation">;</span>
+<span class="token keyword">typedef</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> <span class="token class-name">uint32_t</span><span class="token punctuation">;</span>
+
+<span class="token keyword">struct</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token class-name">uint16_t</span> limit_l<span class="token punctuation">,</span> base_l<span class="token punctuation">,</span> basehl_attr<span class="token punctuation">,</span> base_limit<span class="token punctuation">;</span>    <span class="token comment">// 1. 内存地址从左到右递增</span>
+<span class="token punctuation">&#125;</span> gdt_table<span class="token punctuation">[</span><span class="token number">256</span><span class="token punctuation">]</span> <span class="token keyword">__attribute__</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">aligned</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>          <span class="token comment">// 2. 在内存中以8 字节对齐，实际编译结果，编译器会创建一个砖妹的数据段来存放</span>
+    <span class="token comment">// 0x00cf9a000000ffff - 从0地址开始，P存在，DPL=0，Type=非系统段，32位代码段（非一致代码段），界限4G，</span>
+    <span class="token punctuation">[</span>KERNEL_CODE_SEG <span class="token operator">/</span> <span class="token number">8</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token number">0xffff</span><span class="token punctuation">,</span> <span class="token number">0x0000</span><span class="token punctuation">,</span> <span class="token number">0x9a00</span><span class="token punctuation">,</span> <span class="token number">0x00cf</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token comment">// 0x00cf93000000ffff - 从0地址开始，P存在，DPL=0，Type=非系统段，数据段，界限4G，可读写</span>
+    <span class="token punctuation">[</span>KERNEL_DATA_SEG <span class="token operator">/</span> <span class="token number">8</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token number">0xffff</span><span class="token punctuation">,</span> <span class="token number">0x0000</span><span class="token punctuation">,</span> <span class="token number">0x9200</span><span class="token punctuation">,</span> <span class="token number">0x00cf</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="平坦模型"><a class="markdownIt-Anchor" href="#平坦模型"></a> 平坦模型</h2>
+<p>x86 芯片是支持分段内存模型的，这样可以让代码不一定在内存上连续，比较灵活。然而，这样的灵活性会导致开发人员疲于管理段寄存器，尤其是引入内存分页的概念之后，并且<strong>其他平台的芯片并不一定会提供分段的机制</strong>。于是我们可以将物理内存只划分为一个很大的段，而在这个很大的段的基础上，再去使用其他的手段去管理内存。这就是最简单的平台模型的概念。</p>
+<ul>
+<li>在实模式与保护模式切换过程中，我们采取平坦模式可以让这个过程变得自然且流畅；</li>
+<li>因为系统调用很多的地址都应该时固定的，所以采用平坦模型的话也减少了任务切换时段寄存器的管理了。甚至在x64 长模式下还取消了分段寻址的机制（<a target="_blank" rel="noopener" href="https://www.yuque.com/lishutong-docs/diyx86os/efpo1i">为什么会有段寄存器的存在？</a>）。</li>
+</ul>
+<h3 id="分页机制"><a class="markdownIt-Anchor" href="#分页机制"></a> 分页机制</h3>
+<p>采用分页机制可以让程序访问到实际上并不存在的物理地址，如果物理内存已经被完全占用，操作系统可以负责将部分未使用的内存页暂存到硬盘上。这样对于我们的用户程序来说，每个进程都可以独享<code>4GB</code> 的空间。</p>
+<ul>
+<li>恒等映射，对于部分公用的代码和数据，例如系统调用，可以将物理内存与虚拟内存一对一映射。</li>
+</ul>
+<h2 id="特权级切换"><a class="markdownIt-Anchor" href="#特权级切换"></a> 特权级切换</h2>
+<p>x86 提供了<code>0,1,2,3</code> 四个特权级，编号越小、特权越高。高特权级的的代码可以执行关中断、调用低特权级的代码和数据；而低特权级的代码只能执行普通的指令、访问低特权级的数据。操作系统一般运行在特权级<code>0</code>，用户程序一般运行在特权级<code>3</code>。</p>
+<h3 id="切换到低特权级"><a class="markdownIt-Anchor" href="#切换到低特权级"></a> 切换到低特权级</h3>
+<p>系统可以通过中断返回指令<code>iret</code> 调用低特权级的指令。只需要在<code>iret</code> 之前，将低特权级代码的<code>ss:esp</code> 和<code>cs:eip</code> 等信息压栈就好了。</p>
+<blockquote>
+<p>只有<code>RPL</code> 字段的值大于<code>CPL</code> 的时候才可以使用<code>iret</code></p>
+</blockquote>
+<pre class="line-numbers language-nasm" data-language="nasm"><code class="language-nasm"><span class="token comment">; 下面模拟中断返回，从而实现从特权级0到特权级3的变化</span>
+<span class="token comment">; 中断发生时，会自动压入原SS, ESP, EFLAGS, CS, EIP到栈中</span>
+push <span class="token operator">$</span>APP_DATA_SEG
+push <span class="token operator">$</span>task0_dpl3_stack <span class="token operator">+</span> <span class="token number">1024</span>	<span class="token comment">; 特权级3时的栈，因为栈是向下增长的</span>
+push <span class="token number">$0</span>			<span class="token comment">; 中断暂时关掉 0x202						// EFLAGS</span>
+push <span class="token operator">$</span>APP_CODE_SEG				<span class="token comment">; CPL=3时的选择子</span>
+push <span class="token operator">$</span>task_0_entry					<span class="token comment">; eip</span>
+iret		
+
+
+<span class="token label function">task_0_entry:</span>
+	<span class="token comment">; 进入任务0时，需要重设其数据段寄存器为特权级3的</span>
+	mov <span class="token operator">%</span><span class="token register variable">ss</span>, <span class="token operator">%</span><span class="token register variable">ax</span>
+	mov <span class="token operator">%</span><span class="token register variable">ax</span>, <span class="token operator">%</span><span class="token register variable">ds</span>
+	mov <span class="token operator">%</span><span class="token register variable">ax</span>, <span class="token operator">%</span><span class="token register variable">es</span>
+	jmp task_0			<span class="token comment">; 跳转到C 代码的task_0运行</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1fB4y1J7LL?p=20">视频教程</a>。但是这样有一个问题，我们的高特权级代码也映射在了低特权级的任务空间，这样是不安全的吧。</p>
+<h3 id="任务切换"><a class="markdownIt-Anchor" href="#任务切换"></a> 任务切换</h3>
+<p>x86 提供了对任务切换的硬件支持<code>TSS</code> 寄存器，可以保存任务所需的各种寄存器和描述符的。但实际上我们也可以通过栈操作完成，而不必使用TSS 寄存器。虽然使用寄存器会比较快一些。</p>
+<blockquote>
+<p>例如：Linux 就是使用task_struct 存储任务状态的。详见<a target="_blank" rel="noopener" href="http://bbs.chinaunix.net/thread-2054471-1-1.html">Linux进程：Linux切换机制主流程</a>，虽然不用很多TSS 保存任务信息，但还是得利用这个机制实现任务的切换。</p>
+</blockquote>
+<p>关于任务切换这一部分，最重要的点应该在于，什么时候保存任务的状态、谁负责保存任务运行的状态。</p>
+<blockquote>
+<p>任务状态段(Task State Segment)是保存一个任务重要信息的特殊段。任务状态段描述符用于描述这样的系统段。任务状态段寄存器TR的可见部分含有当前任务的任务状态段描述符的选择子，TR的不可见的高速缓冲寄存器部分含有当前任务状态段的段基地址和段界限等信息。
+TSS在任务切换过程中起着重要作用，通过它实现任务的挂起和恢复。所谓任务切换是指，挂起当前正在执行的任务，恢复或启动另一任务的执行。在任务切换过程中，首先，处理器中各寄存器的当前值被自动保存到TR所指定的TSS中；然后，下一任务的TSS的选择子被装入TR；最后，从TR所指定的TSS中取出各寄存器的值送到处理器的各寄存器中。由此可见，通过在TSS中保存任务现场各寄存器状态的完整映象，实现任务的切换。<br />
+<a target="_blank" rel="noopener" href="https://www.cnblogs.com/guanlaiy/archive/2012/10/25/2738355.html">《任务状态段》</a></p>
+</blockquote>
+<p>如何将<code>EIP</code> 压栈？中断机制可以完成！</p>
+<h3 id="系统调用"><a class="markdownIt-Anchor" href="#系统调用"></a> 系统调用</h3>
+<p>低特权级的代码无法访问高特权级的代码或数据，但是我们又需要时不时用到一些系统调用。这时候就需要用到调用门的概念。调用门主要包含一下信息：</p>
+<ul>
+<li>系统服务函数所在代码段的选择子</li>
+<li>系统服务函数在代码段选择子中的偏移</li>
+<li>系统调用接口传递的参数</li>
+<li>段是否存在、以及访问时所需的权限</li>
+</ul>
+<p>当然，如果系统调用时目标段不存在于内存上，则会触发中断，用于将所需代码、数据读取到内存中。</p>
+<blockquote>
+<p>除了调用门之外，也可以通过<code>INT 0x??</code> 来触发软中断，继而通过寄存器传参来进行系统调用。</p>
+</blockquote>
+<h3 id="关于ldt"><a class="markdownIt-Anchor" href="#关于ldt"></a> 关于LDT</h3>
+<p>x86 芯片实现了很多机制，但是在实际应用中并不一定会用到。考虑到代码的可移植性，也可能会通过其他方法和机制来实现相似的功能。特性太多反而加重了开发者的负担。</p>
+<h2 id="工具相关"><a class="markdownIt-Anchor" href="#工具相关"></a> 工具相关</h2>
+<p>如果只注重于工具的话，就偏离了学习的目标；但是离开了工具，我们又失去了开发的便利。先熟悉命令，然后再配置工具。</p>
+<h3 id="vscode-调试配置"><a class="markdownIt-Anchor" href="#vscode-调试配置"></a> VSCode 调试配置</h3>
+<p>因为调试任务需要历经编译、加载虚拟机、加载调试器三个大的步骤，编译我们可以用<code>make</code> 命令完成，而加载虚拟机会导致进程阻塞，于是我们把它放在一个单独的脚本进行。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># ./script/start_qemu.sh</span>
+qemu-system-i386 <span class="token parameter variable">-m</span> 128M <span class="token parameter variable">-s</span> <span class="token parameter variable">-S</span>  <span class="token parameter variable">-drive</span> <span class="token assign-left variable">file</span><span class="token operator">=</span>disk.img,index<span class="token operator">=</span><span class="token number">0</span>,media<span class="token operator">=</span>disk,format<span class="token operator">=</span>raw <span class="token parameter variable">-display</span> none <span class="token parameter variable">-daemonize</span>   
+<span class="token comment"># 不能使用shell 中的&amp;，不然可能会启动任务失败 </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h4 id="配置文件"><a class="markdownIt-Anchor" href="#配置文件"></a> 配置文件</h4>
+<p>我们主要通过<code>tasks.json</code> 来执行编译、启动虚拟机的任务；<code>launch.json</code> 用于启动调试操作：</p>
+<CodeGroup>
+<CodeGroupItem title="tasks.json">
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+    <span class="token property">"tasks"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"shell"</span><span class="token punctuation">,</span>
+            <span class="token property">"label"</span><span class="token operator">:</span> <span class="token string">"make_all"</span><span class="token punctuation">,</span>
+            <span class="token property">"linux"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+                <span class="token property">"command"</span><span class="token operator">:</span> <span class="token string">"make all"</span>  <span class="token comment">// 编译、链接等一系列操作</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"shell"</span><span class="token punctuation">,</span>
+            <span class="token property">"label"</span><span class="token operator">:</span> <span class="token string">"start_qemu"</span><span class="token punctuation">,</span>
+            <span class="token property">"linux"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+                <span class="token property">"command"</span><span class="token operator">:</span> <span class="token string">"bash $&#123;workspaceRoot&#125;/script/start_qemu.sh"</span>
+                <span class="token comment">// 启动qemu 虚拟机</span>
+            <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+            <span class="token property">"options"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+                <span class="token property">"cwd"</span><span class="token operator">:</span> <span class="token string">"$&#123;workspaceRoot&#125;/image/"</span>
+                <span class="token comment">// 指定start_qemu.sh 的启动目录</span>
+            <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>  
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"shell"</span><span class="token punctuation">,</span> 
+            <span class="token property">"label"</span><span class="token operator">:</span> <span class="token string">"run"</span><span class="token punctuation">,</span>
+            <span class="token property">"dependsOrder"</span><span class="token operator">:</span> <span class="token string">"sequence"</span><span class="token punctuation">,</span>
+            <span class="token property">"dependsOn"</span><span class="token operator">:</span><span class="token punctuation">[</span>  <span class="token comment">// 顺序执行以上两条命令</span>
+                <span class="token string">"make_all"</span><span class="token punctuation">,</span>
+                <span class="token string">"start_qemu"</span>
+            <span class="token punctuation">]</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"version"</span><span class="token operator">:</span> <span class="token string">"2.0.0"</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+<CodeGroupItem title="launch.json">
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+    <span class="token property">"version"</span><span class="token operator">:</span> <span class="token string">"0.2.0"</span><span class="token punctuation">,</span>
+    <span class="token property">"configurations"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"GDB Debug"</span><span class="token punctuation">,</span>
+            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"cppdbg"</span><span class="token punctuation">,</span>
+            <span class="token property">"request"</span><span class="token operator">:</span> <span class="token string">"launch"</span><span class="token punctuation">,</span>
+            <span class="token property">"program"</span><span class="token operator">:</span> <span class="token string">"$&#123;workspaceRoot&#125;/os.elf"</span><span class="token punctuation">,</span>  <span class="token comment">// 参考的可执行文件，包含调试信息</span>
+            <span class="token property">"args"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token property">"stopAtEntry"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+            <span class="token property">"cwd"</span><span class="token operator">:</span> <span class="token string">"$&#123;workspaceRoot&#125;"</span><span class="token punctuation">,</span>
+            <span class="token property">"environment"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token property">"externalConsole"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+            <span class="token property">"MIMode"</span><span class="token operator">:</span> <span class="token string">"gdb"</span><span class="token punctuation">,</span>
+            <span class="token property">"miDebuggerServerAddress"</span><span class="token operator">:</span> <span class="token string">"127.0.0.1:1234"</span><span class="token punctuation">,</span>
+            <span class="token property">"targetArchitecture"</span><span class="token operator">:</span> <span class="token string">"x86"</span><span class="token punctuation">,</span>
+            <span class="token property">"stopAtConnect"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+            <span class="token property">"linux"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+                <span class="token property">"miDebuggerPath"</span><span class="token operator">:</span> <span class="token string">"gdb"</span><span class="token punctuation">,</span>
+                <span class="token property">"preLaunchTask"</span><span class="token operator">:</span> <span class="token string">"start_qemu"</span>     <span class="token comment">// 预执行的任务</span>
+            <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+            <span class="token property">"setupCommands"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+                <span class="token punctuation">&#123;</span>
+                    <span class="token property">"description"</span><span class="token operator">:</span> <span class="token string">"为 gdb 启用整齐打印"</span><span class="token punctuation">,</span>
+                    <span class="token property">"text"</span><span class="token operator">:</span> <span class="token string">"-enable pretty-printing"</span><span class="token punctuation">,</span>
+                    <span class="token property">"ignoreFailures"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+                <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+                <span class="token punctuation">&#123;</span>
+                    <span class="token property">"description"</span><span class="token operator">:</span> <span class="token string">"将反汇编风格设置为 Intel"</span><span class="token punctuation">,</span>
+                    <span class="token property">"text"</span><span class="token operator">:</span> <span class="token string">"-gdb-set disassembly-flavor intel"</span><span class="token punctuation">,</span>
+                    <span class="token property">"ignoreFailures"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+                <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+                <span class="token punctuation">&#123;</span>
+                    <span class="token property">"description"</span><span class="token operator">:</span> <span class="token string">"设置体系结构"</span><span class="token punctuation">,</span>   <span class="token comment">// 方便以16位方式进行反汇编</span>
+                    <span class="token property">"text"</span><span class="token operator">:</span> <span class="token string">"-gdb-set arch i8086"</span><span class="token punctuation">,</span>
+                    <span class="token property">"ignoreFailures"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+                <span class="token punctuation">&#125;</span>
+            <span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token comment">// gdb连接后的设置</span>
+            <span class="token property">"postRemoteConnectCommands"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+                <span class="token punctuation">&#123;</span>
+                    <span class="token property">"description"</span><span class="token operator">:</span> <span class="token string">"运行至0x7c00"</span><span class="token punctuation">,</span>
+                    <span class="token property">"text"</span><span class="token operator">:</span> <span class="token string">"-exec-until *0x7c00"</span><span class="token punctuation">,</span>
+                    <span class="token property">"ignoreFailures"</span><span class="token operator">:</span> <span class="token boolean">false</span>
+                <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+            <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>因为VSCode 的原因，各种<code>GDB Command</code> 不能以原本的形式设置，上面出现了三种形式，复制粘贴就好了：</p>
+<table>
+<thead>
+<tr>
+<th>gdb 命令</th>
+<th>vscode 中的形式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>set</td>
+<td>-gdb-set</td>
+</tr>
+<tr>
+<td>enable</td>
+<td>-enable-</td>
+</tr>
+<tr>
+<td>until</td>
+<td>-exec-until</td>
+</tr>
+</tbody>
+</table>
+</CodeGroupItem>
+</CodeGroup>
+<h3 id="vscode-汇编断点的问题"><a class="markdownIt-Anchor" href="#vscode-汇编断点的问题"></a> VSCode 汇编断点的问题</h3>
+<p>某些情况下，VSCode 中的<code>.S</code> 文件中不能设置断点，这是我们需要在<code>首选项--设置</code>中设置在所有文件中启用断点。<a target="_blank" rel="noopener" href="https://github.com/microsoft/vscode/issues/112288#issuecomment-743456329">详情参考</a><br />
+<img src="vscode-breakpoint.png" alt="" /></p>
+<h2 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://ref.x86asm.net/coder32.html">x86 机器码</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/microsoft/vscode-cpptools/issues/106">[Feature Request] Execute GDB commands without typing “-exec”</a></li>
+<li><a target="_blank" rel="noopener" href="https://cs.lmu.edu/~ray/notes/gasexamples/">GNU Assembler Examples</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2022/08/03/tinyos/" title="x86 操作系统笔记">https://12tall.github.io/2022/08/03/tinyos/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/OS/" rel="tag"># OS</a>
+              <a href="/tags/x86/" rel="tag"># x86</a>
+              <a href="/tags/asm/" rel="tag"># asm</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/08/03/win-high-accuracy-timmer/" rel="prev" title="Windows 平台上的高精度定时器">
+                  <i class="fa fa-angle-left"></i> Windows 平台上的高精度定时器
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/08/03/mem-mgmt/" rel="next" title="C 语言内存管理">
+                  C 语言内存管理 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

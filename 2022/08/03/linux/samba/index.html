@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="工作以来，最早接触的技术就是计算机加域了。但是对域的概念一直不太清晰，尤其是域控制器的搭建，DNS 服务器的配置。网络上的教程多是基于Windows 的，到了新的部门之后发现要是买正版真的太贵了。好在刚开始的时候可以使用群晖做域控制器，搭建过程傻瓜但是极其好用。不幸的是，群晖在做文件索引时，会导致用户认证的失败。于是想着是否可以用一台Linux 专门做认证、域控服务器。本文没有技术细节，只是泛泛谈">
+<meta property="og:type" content="article">
+<meta property="og:title" content="域控制器杂谈">
+<meta property="og:url" content="https://12tall.github.io/2022/08/03/linux/samba/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="工作以来，最早接触的技术就是计算机加域了。但是对域的概念一直不太清晰，尤其是域控制器的搭建，DNS 服务器的配置。网络上的教程多是基于Windows 的，到了新的部门之后发现要是买正版真的太贵了。好在刚开始的时候可以使用群晖做域控制器，搭建过程傻瓜但是极其好用。不幸的是，群晖在做文件索引时，会导致用户认证的失败。于是想着是否可以用一台Linux 专门做认证、域控服务器。本文没有技术细节，只是泛泛谈">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.116Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="samba">
+<meta property="article:tag" content="dns">
+<meta property="article:tag" content="domain">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://12tall.github.io/2022/08/03/linux/samba/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2022/08/03/linux/samba/","path":"2022/08/03/linux/samba/","title":"域控制器杂谈"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>域控制器杂谈 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8Esamba"><span class="nav-number">1.</span> <span class="nav-text"> 关于Samba</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8Ebind9"><span class="nav-number">2.</span> <span class="nav-text"> 关于BIND9</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text"> 参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/linux/samba/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="域控制器杂谈 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          域控制器杂谈
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-03 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-03T00:00:00+08:00">2022-08-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/maintenance/" itemprop="url" rel="index"><span itemprop="name">maintenance</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>工作以来，最早接触的技术就是计算机加域了。但是对域的概念一直不太清晰，尤其是域控制器的搭建，DNS 服务器的配置。网络上的教程多是基于Windows 的，到了新的部门之后发现要是买正版真的太贵了。好在刚开始的时候可以使用群晖做域控制器，搭建过程傻瓜但是极其好用。不幸的是，群晖在做文件索引时，会导致用户认证的失败。于是想着是否可以用一台Linux 专门做认证、域控服务器。本文没有技术细节，只是泛泛谈一下最直观的认识。</p>
+<span id="more"></span>
+<p>最早是想搭建一个LDAP 认证服务器的，因为我对Samba 的印象仅仅停留在它是一个文件共享的协议的层面上。但是随着检索的深入，逐渐了解到Samba 除了共享文件和打印机之外，还可以做域控制器，并且内置了DNS 服务器和LDAP 服务，并且还可以<a target="_blank" rel="noopener" href="https://wiki.samba.org/index.php/VPN_Single_SignOn_with_Samba_AD">配置<code>FreeRadius</code> 服务</a>，简直满足了我的所有需求。于是想着重点学习一下。</p>
+<p>如果粗略地看一下官方的<a target="_blank" rel="noopener" href="https://wiki.samba.org/index.php/Main_Page">说明文档</a>，你会发现教程非常细致，细致到根本看不下去。因为对很多技术细节都没有概念，比如<code>Kerberos</code> 是什么、<code>BIND9_DLZ</code> 又是干啥的、为什么需要安装<code>winbind</code>？了解这些东西没啥用，但是不了解的话不管做什么都不踏实。于是照着示例和教程配置了三四遍，最终心里还是没太有底。想着先把目前的想法记下来，不然脑袋里太多乱七八糟的细节，根本学不进其他东西了。</p>
+<h2 id="关于samba"><a class="markdownIt-Anchor" href="#关于samba"></a> 关于Samba</h2>
+<p><code>Samba</code> 是一个为网域内所有客户端提供文件和打印机共享服务的软件，支持Linux、Unix 和Windows（服务端需要<code>winbind</code> 服务组件）作为客户端。<code>Samba</code> 的一些特性、以及和其他软件系统的关系：</p>
+<ul>
+<li>内置<code>LDAP</code> 服务用于管理成员，但并不支持<code>OpenLdap</code> 作为后端。<a target="_blank" rel="noopener" href="https://wiki.samba.org/index.php/FAQ#LDAP">https://wiki.samba.org/index.php/FAQ#LDAP</a></li>
+<li>内置<code>DNS</code> 服务器作为域名解析，支持通过<code>DLZ</code> 模块将<code>BIND9</code> 绑定为后端域名解析服务。但内置的服务器已基本够用。</li>
+<li>采用<code>Kerberos</code> 加密用于身份认证。需要进行稍许的配置。</li>
+<li>可以作为<code>FreeRadius</code> 单点登录的后端。<a target="_blank" rel="noopener" href="https://wiki.samba.org/index.php/VPN_Single_SignOn_with_Samba_AD">https://wiki.samba.org/index.php/VPN_Single_SignOn_with_Samba_AD</a></li>
+<li>利用<code>samba-tool</code> 工具可以重新配置Samba 服务，以及管理用户和DNS 记录等资源。</li>
+</ul>
+<h2 id="关于bind9"><a class="markdownIt-Anchor" href="#关于bind9"></a> 关于BIND9</h2>
+<p><code>bind9</code> 是一个网路地址解析的服务，如果要详细学习的话，需要了解许多关于DNS 协议的支持，可以参考《鸟哥Linux 私房菜–服务器》相关的章节。这里主要记一下BIND9 与Samba 如何协同工作的，尽管一般情况下我们用不着很复杂的功能。<br />
+一般我们架设DNS 服务器时，总是需要有一个地方存放域名和IP 的对应关系，默认情况下BIND9 会从文本文件中读取这些信息，例如：<code>name.conf</code> 文件。但是这样做不够灵活，尤其是当我们想更新DNS 记录的时候。这时就有大神开发了<code>BIND9_DLZ</code> 模块，这个东西就相当于一个数据库驱动服务，让我们的BIND9 程序可以从数据库中读取数据，这样我们的DNS 记录就可以实时更新，并且可以做出漂亮的Web UI 来管理。网络上有很多关于BIND9 与MySQL 配合使用的案例与教程。<br />
+因为我们的Samba 内的机器资源也是通过FQDN 唯一确定的，并且可以通过LDAP 的协议和语法进程增删改查，于是通过配置<code>BIND9_DLZ</code> 模块就可以让BIND9 解析到我们Samba 中的主机名。需要注意的是数据库文件是由Samba 提供的，BIND9 只有使用权，所以一切DNS 记录的更细还是要通过samba 工具来完成。<br />
+Samba 内置有一个DNS 服务器，不支持多个域、且在域名解析转移时有BUG。但是一般小企业也不会有多个网域，倒也足够。</p>
+<p>如此以来，就简单的理解了几个服务组件之间的关系，这样再去看配置命令时目的性就会更强一些。当然，关于域控的许多技术细节，还是要结合实际慢慢啃的。</p>
+<h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/15893eece2ee">SAMBA</a></li>
+<li><a target="_blank" rel="noopener" href="http://biroinfotek.com/installing-samba-as-active-directory-domain-controller-using-internal-dns-on-ubuntu-18-04/">Installing Samba as Active Directory Domain Controller Using Internal DNS on Ubuntu 18.04</a>：在新版Ubuntu 中依然可用</li>
+<li><a target="_blank" rel="noopener" href="http://biroinfotek.com/install-samba-4-7-6-ad-dc-ubuntu-18-04-bind-9-11-dns-backend-ad-rfc2307/">Install Samba 4.7.6 AD DC – Ubuntu 18.04 – Bind 9.11 DNS – Backend AD RFC2307</a>：在新版Ubuntu 中依然可用</li>
+<li><a target="_blank" rel="noopener" href="https://wiki.samba.org/index.php/VPN_Single_SignOn_with_Samba_AD">VPN Single SignOn with Samba AD</a>：主要是Radius 服务器配置</li>
+<li><a target="_blank" rel="noopener" href="https://www.kombitz.com/2019/07/08/how-to-compile-samba-4-10-5-on-ubuntu-16-04/">How to Compile Samba 4.10.5 on Ubuntu 16.04</a> 在Ubuntu 22.04+Samba 4.17.2 依然可用。编译前配置如下：  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">./configure <span class="token punctuation">\</span>
+--with-systemd <span class="token punctuation">\</span>
+--systemd-install-services <span class="token punctuation">\</span>
+--with-systemddir<span class="token operator">=</span>/etc/systemd/system <span class="token punctuation">\</span>
+<span class="token parameter variable">--sysconfdir</span><span class="token operator">=</span>/etc <span class="token punctuation">\</span>
+<span class="token parameter variable">--localstatedir</span><span class="token operator">=</span>/var <span class="token punctuation">\</span>
+--enable-selftest <span class="token punctuation">\</span>
+--with-smbpasswd-file<span class="token operator">=</span>/etc/samba/smbpasswd <span class="token punctuation">\</span>
+--enable-fhs<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2022/08/03/linux/samba/" title="域控制器杂谈">https://12tall.github.io/2022/08/03/linux/samba/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># linux</a>
+              <a href="/tags/samba/" rel="tag"># samba</a>
+              <a href="/tags/dns/" rel="tag"># dns</a>
+              <a href="/tags/domain/" rel="tag"># domain</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/08/03/windows/01_dns/" rel="prev" title="DNS 服务器">
+                  <i class="fa fa-angle-left"></i> DNS 服务器
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/08/03/linux/gogs/" rel="next" title="Gogs">
+                  Gogs <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

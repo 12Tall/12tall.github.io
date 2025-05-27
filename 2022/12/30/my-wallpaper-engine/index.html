@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="这个练手的项目本来是在21年写的，时间久了就荒废了。今年总结时忽然想到之前自己还做过一个建议的壁纸引擎。发现里面有些东西还是值得记录一下的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="简单的壁纸引擎">
+<meta property="og:url" content="https://12tall.github.io/2022/12/30/my-wallpaper-engine/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="这个练手的项目本来是在21年写的，时间久了就荒废了。今年总结时忽然想到之前自己还做过一个建议的壁纸引擎。发现里面有些东西还是值得记录一下的。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://12tall.github.io/2022/12/30/my-wallpaper-engine/result.png">
+<meta property="article:published_time" content="2022-12-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.196Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="Win32">
+<meta property="article:tag" content="NAPI">
+<meta property="article:tag" content="Electron">
+<meta property="article:tag" content="壁纸引擎">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://12tall.github.io/2022/12/30/my-wallpaper-engine/result.png">
+
+
+<link rel="canonical" href="https://12tall.github.io/2022/12/30/my-wallpaper-engine/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2022/12/30/my-wallpaper-engine/","path":"2022/12/30/my-wallpaper-engine/","title":"简单的壁纸引擎"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>简单的壁纸引擎 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#napi-%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text"> NAPI 项目结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E4%BB%A3%E7%A0%81%E9%80%BB%E8%BE%91"><span class="nav-number">2.</span> <span class="nav-text"> 主要代码逻辑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#win32-%E7%BC%96%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text"> Win32 编程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B"><span class="nav-number">4.</span> <span class="nav-text"> 编译过程</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/12/30/my-wallpaper-engine/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="简单的壁纸引擎 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          简单的壁纸引擎
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-12-30 00:00:00" itemprop="dateCreated datePublished" datetime="2022-12-30T00:00:00+08:00">2022-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/nodejs/" itemprop="url" rel="index"><span itemprop="name">nodejs</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>这个练手的<a target="_blank" rel="noopener" href="https://github.com/12Tall/vite-electron-vue-template/tree/cal">项目</a>本来是在21年写的，时间久了就荒废了。今年总结时忽然想到之前自己还做过一个建议的壁纸引擎。发现里面有些东西还是值得记录一下的。</p>
+<span id="more"></span>
+<h2 id="napi-项目结构"><a class="markdownIt-Anchor" href="#napi-项目结构"></a> NAPI 项目结构</h2>
+<p>一般我们需要新建一个空白文件夹，如：<code>user32-napi</code>，里面包含：</p>
+<ul>
+<li><code>package.json</code> 用于包含项目信息和入口文件</li>
+<li><code>src/</code> 文件夹下包含C++ 代码</li>
+<li><code>index.js</code> 入口文件</li>
+<li><code>binding.gyp</code> C++编译配置项</li>
+<li>依赖项<code>bindings</code> 可以简化<code>index.js</code></li>
+</ul>
+<p>以下是详细代码：</p>
+<p>::: code-tabs</p>
+<p>@tab package.json</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+  <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"user32-napi"</span><span class="token punctuation">,</span>
+  <span class="token property">"version"</span><span class="token operator">:</span> <span class="token string">"1.0.0"</span><span class="token punctuation">,</span>
+  <span class="token property">"main"</span><span class="token operator">:</span> <span class="token string">"index.js"</span><span class="token punctuation">,</span>
+  <span class="token property">"repository"</span><span class="token operator">:</span> <span class="token string">"git@github.com:12Tall/user32-napi.git"</span><span class="token punctuation">,</span>
+  <span class="token property">"author"</span><span class="token operator">:</span> <span class="token string">"12tall &lt;fb.ouyang@outlook.com>"</span><span class="token punctuation">,</span>
+  <span class="token property">"license"</span><span class="token operator">:</span> <span class="token string">"MIT"</span><span class="token punctuation">,</span>
+  <span class="token property">"dependencies"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"bindings"</span><span class="token operator">:</span> <span class="token string">"^1.5.0"</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>@tab index.js</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// 导出二进制文件user32 中的所有接口  </span>
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"bindings"</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token string">"user32"</span><span class="token punctuation">)</span>  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>@tab binding.gyp</p>
+<pre class="line-numbers language-gyp" data-language="gyp"><code class="language-gyp">&#123;
+    &quot;targets&quot;: [
+        &#123;
+            &quot;target_name&quot;: &quot;user32&quot;,  # 此文件会被生成到build&#x2F;release&#x2F; 文件夹下
+            &quot;sources&quot;: [&quot;.&#x2F;src&#x2F;user32.cc&quot;]  # 指定C++ 源码文件  
+            # 后面还可以跟环境变量、编译器选项、平台选择等配置项，可以参考：  
+            # https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;448490760
+        &#125;
+    ]
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>@tab src/user32.cc</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">/** 本节只包含代码结构，具体工作代码见下文 **/</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;assert.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;node_api.h></span>  <span class="token comment">// 这里最好在IDE 中也指定相关路径，这样的话代码高亮提示更方便</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;windows.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;winuser.h></span></span>
+
+<span class="token comment">// 简化NAPI 方法声明的宏</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">DECLARE_NAPI_METHOD</span><span class="token expression"><span class="token punctuation">(</span>name<span class="token punctuation">,</span> func<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> name<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> func<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> napi_default<span class="token punctuation">,</span> <span class="token number">0</span> <span class="token punctuation">&#125;</span></span></span>
+
+<span class="token comment">// NAPI 方法：设置窗口透明</span>
+<span class="token keyword">static</span> napi_value <span class="token function">setWindowTransparent</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_callback_info info<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  napi_status status<span class="token punctuation">;</span>
+  napi_value res<span class="token punctuation">;</span>
+  <span class="token comment">// ...  </span>
+  <span class="token keyword">return</span> res<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// ...</span>
+
+<span class="token comment">// 固定模式，可以在内部暴露更多的方法在外面</span>
+<span class="token keyword">static</span> napi_value <span class="token function">Init</span><span class="token punctuation">(</span>napi_env env<span class="token punctuation">,</span> napi_value exports<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  napi_status status<span class="token punctuation">;</span>
+  napi_property_descriptor desc<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 在该数组中添加更多的方法</span>
+    <span class="token function">DECLARE_NAPI_METHOD</span><span class="token punctuation">(</span><span class="token string">"setWindowTransparent"</span><span class="token punctuation">,</span> setWindowTransparent<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+  status <span class="token operator">=</span> <span class="token function">napi_define_properties</span><span class="token punctuation">(</span>env<span class="token punctuation">,</span> exports<span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> desc<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assert</span><span class="token punctuation">(</span>status <span class="token operator">==</span> napi_ok<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> exports<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 固定模式代码</span>
+<span class="token function">NAPI_MODULE</span><span class="token punctuation">(</span>NODE_GYP_MODULE_NAME<span class="token punctuation">,</span> Init<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>:::</p>
+<h2 id="主要代码逻辑"><a class="markdownIt-Anchor" href="#主要代码逻辑"></a> 主要代码逻辑</h2>
+<p>在Windows 中，桌面、壁纸、甚至图标都是以窗口的形式渲染的。就壁纸而言，其窗口存在于一个包含有<code>SHELLDLL_DefView</code> 窗口的<code>WorkerW</code> 窗口。Windows 自带的窗口我们无法操作，但是我们可以新建一个新的窗口将壁纸窗口遮蔽掉。然后在该窗口中，我们就可以设置视频、动画等效果。随心所欲。<br />
+具体可参见：<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/54246843/answer/1053268179">最近很火的 Wallpaper Engine 的实现原理是怎样的？</a>。练手项目中还包含开机启动和一个简单的日历效果，大致如下：<br />
+<img src="result.png" alt="" /></p>
+<h2 id="win32-编程"><a class="markdownIt-Anchor" href="#win32-编程"></a> Win32 编程</h2>
+<p>操作Windows 窗口需要调用Win32 API 这里仅列举用到的部分API：</p>
+<pre class="line-numbers language-cpp&#123;25-27,57,95,115-127,132-157&#125;" data-language="cpp&#123;25-27,57,95,115-127,132-157&#125;"><code class="language-cpp&#123;25-27,57,95,115-127,132-157&#125;">static napi_value setWindowTransparent(napi_env env, napi_callback_info info) &#123;
+  napi_status status;
+  napi_value res;
+
+  size_t argc &#x3D; 1;
+  napi_value argv[1];
+  status &#x3D; napi_get_cb_info(env, info, &amp;argc, argv, NULL, NULL);
+  assert(status &#x3D;&#x3D; napi_ok);
+  if (argc &lt; 1) &#123;
+    napi_throw_type_error(env, NULL, &quot;FindWoindow takes only 2 parameters&quot;);
+    return NULL;
+  &#125;
+
+  int32_t handle &#x3D; 0;
+  napi_valuetype valType;
+  status &#x3D; napi_typeof(env, argv[0], &amp;valType);
+  assert(status &#x3D;&#x3D; napi_ok);
+  if (valType &#x3D;&#x3D; napi_number) &#123;
+    status &#x3D; napi_get_value_int32(env, argv[0], &amp;handle);
+    assert(status &#x3D;&#x3D; napi_ok);
+  &#125;
+
+  &#x2F;&#x2F; https:&#x2F;&#x2F;blog.csdn.net&#x2F;u011822516&#x2F;article&#x2F;details&#x2F;41946631
+  &#x2F;&#x2F; 一种实现窗口透明的方式
+  bool result &#x3D; SetWindowLongA((HWND)handle, GWL_EXSTYLE,
+                               GetWindowLongA((HWND)handle, GWL_EXSTYLE) |
+                                   WS_EX_LAYERED) !&#x3D; 0;
+
+  status &#x3D; napi_get_boolean(env, result, &amp;res);
+  assert(status &#x3D;&#x3D; napi_ok);
+  return res;
+&#125;
+
+&#x2F;&#x2F; NAPI 方法：更新窗口
+static napi_value updateWindow(napi_env env, napi_callback_info info) &#123;
+  napi_status status;
+  napi_value res;
+
+  size_t argc &#x3D; 1;
+  napi_value argv[1];
+  status &#x3D; napi_get_cb_info(env, info, &amp;argc, argv, NULL, NULL);
+  assert(status &#x3D;&#x3D; napi_ok);
+  if (argc &lt; 1) &#123;
+    napi_throw_type_error(env, NULL, &quot;FindWoindow takes only 2 parameters&quot;);
+    return NULL;
+  &#125;
+
+  int32_t handle &#x3D; 0;
+  napi_valuetype valType;
+  status &#x3D; napi_typeof(env, argv[0], &amp;valType);
+  assert(status &#x3D;&#x3D; napi_ok);
+  if (valType &#x3D;&#x3D; napi_number) &#123;
+    status &#x3D; napi_get_value_int32(env, argv[0], &amp;handle);
+    assert(status &#x3D;&#x3D; napi_ok);
+  &#125;
+
+  bool result &#x3D; UpdateWindow((HWND)handle);
+
+  status &#x3D; napi_get_boolean(env, result, &amp;res);
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  return res;
+&#125;
+
+&#x2F;&#x2F; 为窗口指定父窗口，用于遮蔽原有的壁纸
+static napi_value setParent(napi_env env, napi_callback_info info) &#123;
+  napi_status status;
+  napi_value res;
+
+  size_t argc &#x3D; 2;
+  napi_value argv[2];
+  status &#x3D; napi_get_cb_info(env, info, &amp;argc, argv, NULL, NULL);
+  assert(status &#x3D;&#x3D; napi_ok);
+  if (argc &lt; 2) &#123;
+    napi_throw_type_error(env, NULL, &quot;FindWoindow takes only 2 parameters&quot;);
+    return NULL;
+  &#125;
+
+  int32_t child &#x3D; 0, parent &#x3D; 0;
+  napi_valuetype valType;
+  status &#x3D; napi_typeof(env, argv[0], &amp;valType);
+  assert(status &#x3D;&#x3D; napi_ok);
+  if (valType &#x3D;&#x3D; napi_number) &#123;
+    status &#x3D; napi_get_value_int32(env, argv[0], &amp;child);
+    assert(status &#x3D;&#x3D; napi_ok);
+  &#125;
+
+  status &#x3D; napi_typeof(env, argv[1], &amp;valType);
+  assert(status &#x3D;&#x3D; napi_ok);
+  if (valType &#x3D;&#x3D; napi_number) &#123;
+    status &#x3D; napi_get_value_int32(env, argv[1], &amp;parent);
+    assert(status &#x3D;&#x3D; napi_ok);
+  &#125;
+
+  HWND hwnd &#x3D; SetParent((HWND)child, (HWND)parent);
+
+  if (hwnd &#x3D;&#x3D; NULL) &#123;
+    status &#x3D; napi_get_null(env, &amp;res);
+  &#125; else &#123;
+    status &#x3D; napi_create_int32(env, (int32_t)hwnd, &amp;res);
+  &#125;
+  assert(status &#x3D;&#x3D; napi_ok);
+
+  return res;
+&#125;
+
+&#x2F;**
+  *  HWND FindWindowExA(
+  *  HWND   hWndParent,      &#x2F;&#x2F; 父窗口，NULL 表示从Desktop 窗口开始查找
+  *  HWND   hWndChildAfter,  &#x2F;&#x2F; 起始子窗口，NULL 表示从第一个子窗口开始
+  *  LPCSTR lpszClass,
+  *  LPCSTR lpszWindow
+  );
+  *&#x2F;
+BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam) &#123;
+  &#x2F;&#x2F; 1. 查找包含&#39;SHELLDLL_DefView&#39; 子窗口的WorkerW 窗口
+  HWND p &#x3D; FindWindowExA(hwnd, NULL, &quot;SHELLDLL_DefView&quot;, NULL);
+  HWND* ret &#x3D; (HWND*)lParam;  &#x2F;&#x2F; 传入的wallpaper_hwnd 指针
+
+  if (p) &#123;
+    &#x2F;&#x2F; 将指针指向下一个WorkerW
+    &#x2F;&#x2F; 还有一种判断方法，就是下一个WorkerW 的Handle
+    &#x2F;&#x2F; 要比包含&#96;SHELLDLL_DefView&#96;的WorkerW 的Handle 大2
+    *ret &#x3D; FindWindowExA(NULL, hwnd, &quot;WorkerW&quot;, NULL);
+  &#125;
+  return true;
+&#125;
+
+&#x2F;**
+ * https:&#x2F;&#x2F;stackoverflow.com&#x2F;questions&#x2F;56132584&#x2F;draw-on-windows-10-wallpaper-in-c
+ *&#x2F;
+static napi_value getWallpaperWindow(napi_env env, napi_callback_info info) &#123;
+  napi_status status;
+  napi_value res;
+  &#x2F;&#x2F; 1. 查找最底层的窗口
+  HWND progman &#x3D; FindWindowA(&quot;ProgMan&quot;, NULL);
+
+  &#x2F;&#x2F; 2. 向最底层窗口创建两个WorkerW 窗口，如果已存在则什么都不会发生
+  &#x2F;&#x2F; 网络上大部分代码发送的消息参数都是0x00,0x00。但这会造成一旦WorkerW
+  &#x2F;&#x2F; 窗口被不小心销毁，就再也找不到了
+  &#x2F;&#x2F; https:&#x2F;&#x2F;gitlab.com&#x2F;kelteseth&#x2F;ScreenPlay&#x2F;-&#x2F;blob&#x2F;master&#x2F;ScreenPlayWallpaper&#x2F;src&#x2F;winwindow.cpp#L387
+  &#x2F;&#x2F; 而相应的，在监视窗口消息时，应使用对应版本的spy++，否则是拦截不到消息的
+  &#x2F;&#x2F; 需要注意的是，在程序异常退出时会有边框遗留在壁纸上
+  SendMessageTimeout(progman, 0x052C, 0x0D, 0x01, SMTO_BLOCK, 1000, nullptr);
+  &#x2F;&#x2F; SendMessage(progman, 0x052C, 0x0D, 0x01);
+
+  &#x2F;&#x2F; 3. 枚举所有窗口，直到发现包含&#39;SHELLDLL_DefView&#39;
+  &#x2F;&#x2F; 子窗口的WorkerW，他下面的WorkerW 就是我们需要的WorkerW
+  HWND wallpaper_hwnd &#x3D; nullptr;
+  EnumWindows(EnumWindowsProc,
+              (LPARAM)&amp;wallpaper_hwnd  &#x2F;&#x2F; 被传入回调函数的参数
+  );
+
+  status &#x3D; napi_create_int32(env, (int32_t)wallpaper_hwnd, &amp;res);
+  assert(status &#x3D;&#x3D; napi_ok);
+  return res;
+&#125;
+
+&#x2F;&#x2F; string|NULL, string|NULL
+static napi_value findWindow(napi_env env, napi_callback_info info) &#123;
+  napi_status status;
+  napi_value res;
+
+  size_t argc &#x3D; 2;
+  napi_value argv[2];
+  status &#x3D; napi_get_cb_info(env, info, &amp;argc, argv, NULL, NULL);
+  assert(status &#x3D;&#x3D; napi_ok);
+  if (argc &lt; 2) &#123;
+    napi_throw_type_error(env, NULL, &quot;FindWoindow takes only 2 parameters&quot;);
+    return NULL;
+  &#125;
+
+  size_t len &#x3D; 0;
+  char *className &#x3D; NULL, *windowName &#x3D; NULL;
+  napi_valuetype valType;
+  status &#x3D; napi_typeof(env, argv[0], &amp;valType);
+  assert(status &#x3D;&#x3D; napi_ok);
+  if (valType &#x3D;&#x3D; napi_string) &#123;
+    &#x2F;&#x2F; 获取字符串长度
+    status &#x3D; napi_get_value_string_utf8(env, argv[0], NULL, 0, &amp;len);
+    assert(status &#x3D;&#x3D; napi_ok);
+    className &#x3D; (char*)calloc(++len, sizeof(char));
+    status &#x3D; napi_get_value_string_utf8(env, argv[0], className, len, &amp;len);
+    assert(status &#x3D;&#x3D; napi_ok);
+  &#125;
+
+  status &#x3D; napi_typeof(env, argv[1], &amp;valType);
+  assert(status &#x3D;&#x3D; napi_ok);
+  if (valType &#x3D;&#x3D; napi_string) &#123;
+    status &#x3D; napi_get_value_string_utf8(env, argv[1], NULL, 0, &amp;len);
+    assert(status &#x3D;&#x3D; napi_ok);
+    windowName &#x3D; (char*)calloc(++len, sizeof(char));
+    status &#x3D; napi_get_value_string_utf8(env, argv[1], windowName, len, &amp;len);
+    assert(status &#x3D;&#x3D; napi_ok);
+  &#125;
+
+  HWND hWnd &#x3D; FindWindowA((LPCSTR)className, (LPCSTR)windowName);
+  status &#x3D; napi_create_int32(env, (int32_t)hWnd, &amp;res);
+  assert(status &#x3D;&#x3D; napi_ok);
+  free(className);
+  free(windowName);
+  return res;
+&#125;
+
+static napi_value Init(napi_env env, napi_value exports) &#123;
+  napi_status status;
+  napi_property_descriptor desc[] &#x3D; &#123;
+      DECLARE_NAPI_METHOD(&quot;findWindow&quot;, findWindow),
+      DECLARE_NAPI_METHOD(&quot;getWallpaperWindow&quot;, getWallpaperWindow),
+      DECLARE_NAPI_METHOD(&quot;setParent&quot;, setParent),
+      DECLARE_NAPI_METHOD(&quot;updateWindow&quot;, updateWindow),
+      DECLARE_NAPI_METHOD(&quot;setWindowTransparent&quot;, setWindowTransparent),
+  &#125;;
+  status &#x3D; napi_define_properties(env, exports, 5, desc);
+  assert(status &#x3D;&#x3D; napi_ok);
+  return exports;
+&#125;
+
+NAPI_MODULE(NODE_GYP_MODULE_NAME, Init)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="编译过程"><a class="markdownIt-Anchor" href="#编译过程"></a> 编译过程</h2>
+<p>编译过程要在子项目<code>user32-napi</code> 中完成，首先要安装配置<code>node-gyp</code>：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> user32-napi  
+<span class="token function">npm</span> <span class="token function">install</span> <span class="token parameter variable">-g</span> node-gyp  
+node-gyp <span class="token function">install</span> <span class="token comment"># 安装头文件和静态库，否则可能会包依赖库损坏    </span>
+node-gyp configure <span class="token comment"># 生成编译配置项  </span>
+node-gyp build  <span class="token comment"># 编译项目    </span>
+
+<span class="token builtin class-name">cd</span> <span class="token punctuation">..</span>  
+<span class="token function">npm</span> <span class="token function">install</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>需要注意的是，在项目打包或者编译时，要注意目标平台的选择，比如在x64 编译下的<code>.node</code> 文件是不能被32 位的应用程序调用的。这里附一条编译的指令解析</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">vite build  <span class="token comment"># 构建前端</span>
+<span class="token comment"># 构建后端，在64 位平台下、或者默认可以省略掉--arch=ia32， 否则有可能会报.node 文件的异常</span>
+electron-packager <span class="token builtin class-name">.</span> vite-electron-vue-template <span class="token parameter variable">--platform</span><span class="token operator">=</span>win32 <span class="token parameter variable">--arch</span><span class="token operator">=</span>ia32 <span class="token parameter variable">--icon</span><span class="token operator">=</span>./app.ico <span class="token parameter variable">--out</span><span class="token operator">=</span>./out <span class="token parameter variable">--asar</span> --app-version<span class="token operator">=</span><span class="token number">0.0</span>.1 <span class="token parameter variable">--overwrite</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<hr />
+<p>2022-12-30 山东</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2022/12/30/my-wallpaper-engine/" title="简单的壁纸引擎">https://12tall.github.io/2022/12/30/my-wallpaper-engine/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Win32/" rel="tag"># Win32</a>
+              <a href="/tags/NAPI/" rel="tag"># NAPI</a>
+              <a href="/tags/Electron/" rel="tag"># Electron</a>
+              <a href="/tags/%E5%A3%81%E7%BA%B8%E5%BC%95%E6%93%8E/" rel="tag"># 壁纸引擎</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/12/27/openhydraulics/oil/" rel="prev" title="液压油 Oil">
+                  <i class="fa fa-angle-left"></i> 液压油 Oil
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/01/04/control/20-pid/" rel="next" title="PID 控制算法">
+                  PID 控制算法 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

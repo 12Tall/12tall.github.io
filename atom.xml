@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>12Tall</title>
+  <icon>https://12tall.github.io/icon.png</icon>
+  <subtitle>12Tall&#39;s blog</subtitle>
+  <link href="https://12tall.github.io/atom.xml" rel="self"/>
+  
+  <link href="https://12tall.github.io/"/>
+  <updated>2025-05-27T14:24:17.526Z</updated>
+  <id>https://12tall.github.io/</id>
+  
+  <author>
+    <name>12Tall</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>wxFormBuilder 使用笔记</title>
+    <link href="https://12tall.github.io/2025/05/27/wxformbuilder/"/>
+    <id>https://12tall.github.io/2025/05/27/wxformbuilder/</id>
+    <published>2025-05-27T12:51:03.000Z</published>
+    <updated>2025-05-27T14:24:17.526Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;一直想找一个比较轻量、易用的Python GUI 库，同时又能比较好的兼容Nuitka 打包。常见的GUI 库多多少少有些问题：&lt;br /&gt;
+- PyQt、PySide 有点太重了，不好打包；&lt;br /&gt;
+- Tkinter/TCL 使用不方便，开发效率不高；&lt;br /&gt;
+- 基于WebView2 的虽然表现能力很强，但是需要额外学习JS。&lt;/p&gt;
+&lt;p&gt;综上所述，选择了&lt;code&gt;wxpython&lt;/code&gt; 作为小工具软件开发的GUI 库，其有以下优点：&lt;br /&gt;
+1. 原生跨平台；&lt;br /&gt;
+2. 打包后体积小，下文详细说明；&lt;br /&gt;
+3. 具有窗口设计器&lt;a href=&quot;https://github.com/wxFormBuilder/wxFormBuilder&quot;&gt;wxFormBuilder&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;本文仅记录&lt;code&gt;wxFormBuilder&lt;/code&gt; 在使用中的一些技巧，并不会特别详尽。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
+    
+    
+    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
+    
+    <category term="nuitka" scheme="https://12tall.github.io/tags/nuitka/"/>
+    
+    <category term="wxpython" scheme="https://12tall.github.io/tags/wxpython/"/>
+    
+    <category term="wxFormBuilder" scheme="https://12tall.github.io/tags/wxFormBuilder/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>迁移通知</title>
+    <link href="https://12tall.github.io/2025/05/22/info/"/>
+    <id>https://12tall.github.io/2025/05/22/info/</id>
+    <published>2025-05-22T07:50:23.000Z</published>
+    <updated>2025-05-27T12:49:31.219Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;该博客通过&lt;code&gt;Hexo Next&lt;/code&gt; 重构完成！之前数据&lt;a href=&quot;https://github.com/12Tall/12tall.github.io/commit/8f9a6e3f0581906e216e364eb09616b3e13b4365&quot;&gt;Tag&lt;/a&gt;。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="post" scheme="https://12tall.github.io/categories/post/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>acme 证书管理</title>
+    <link href="https://12tall.github.io/2025/05/22/linux/acme/"/>
+    <id>https://12tall.github.io/2025/05/22/linux/acme/</id>
+    <published>2025-05-22T00:30:26.000Z</published>
+    <updated>2025-05-27T12:49:31.145Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;通过&lt;code&gt;acme.sh&lt;/code&gt; 安装并更新Let’s Encrypt 证书。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="maintenance" scheme="https://12tall.github.io/categories/maintenance/"/>
+    
+    
+    <category term="pm2" scheme="https://12tall.github.io/tags/pm2/"/>
+    
+    <category term="domain" scheme="https://12tall.github.io/tags/domain/"/>
+    
+    <category term="certificate" scheme="https://12tall.github.io/tags/certificate/"/>
+    
+    <category term="acme" scheme="https://12tall.github.io/tags/acme/"/>
+    
+    <category term="ssl" scheme="https://12tall.github.io/tags/ssl/"/>
+    
+    <category term="https" scheme="https://12tall.github.io/tags/https/"/>
+    
+    <category term="Let&#39;s Encrypt" scheme="https://12tall.github.io/tags/Let-s-Encrypt/"/>
+    
+    <category term="nginx" scheme="https://12tall.github.io/tags/nginx/"/>
+    
+    <category term="fnm" scheme="https://12tall.github.io/tags/fnm/"/>
+    
+    <category term="nodejs" scheme="https://12tall.github.io/tags/nodejs/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python 实现动态链接库效果</title>
+    <link href="https://12tall.github.io/2025/05/21/pseudo-dll/"/>
+    <id>https://12tall.github.io/2025/05/21/pseudo-dll/</id>
+    <published>2025-05-21T05:56:55.000Z</published>
+    <updated>2025-05-27T12:49:31.268Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;需求来源是做&lt;code&gt;OSM&lt;/code&gt; 编辑项目中要用Python 对&lt;code&gt;.osm&lt;/code&gt; 文件进行校验，但是嘞，我的Python 代码
+是需要用Nuitka 打包成二进制的，而校验规则又可能会随时调整，每次增减规则都要重新打包的话非常浪费时间。因此，便想能否通过类似与调用&lt;code&gt;.dll&lt;/code&gt; 一样来动态加载&lt;code&gt;.py&lt;/code&gt; 文件（伪动态链接库）。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
+    
+    
+    <category term="编程技巧" scheme="https://12tall.github.io/tags/%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用gettext 进行国际化</title>
+    <link href="https://12tall.github.io/2025/05/15/gettext/"/>
+    <id>https://12tall.github.io/2025/05/15/gettext/</id>
+    <published>2025-05-15T06:27:44.000Z</published>
+    <updated>2025-05-27T12:49:31.055Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;一般来说，使用&lt;code&gt;gettext&lt;/code&gt; 为程序添加多语言支持时，需要遵循一些标准的步骤。另外就是，对于在&lt;code&gt;main()&lt;/code&gt; 函数之前就初始化的变量需要特殊处理。
+为此，特整理笔记备忘。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="c_cpp" scheme="https://12tall.github.io/categories/c-cpp/"/>
+    
+    
+    <category term="gettext" scheme="https://12tall.github.io/tags/gettext/"/>
+    
+    <category term="多语言" scheme="https://12tall.github.io/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/"/>
+    
+    <category term="国际化" scheme="https://12tall.github.io/tags/%E5%9B%BD%E9%99%85%E5%8C%96/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>简单PM2 使用笔记</title>
+    <link href="https://12tall.github.io/2024/03/20/pm2/"/>
+    <id>https://12tall.github.io/2024/03/20/pm2/</id>
+    <published>2024-03-19T16:00:00.000Z</published>
+    <updated>2025-05-27T12:49:31.205Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;以前简单了解过&lt;code&gt;PM2&lt;/code&gt;，但是没有太多的使用经验。现在因为手头上要部署各种类型的脚本或者服务，所以还是记一下常用的指令，尤其是开机自启动与定时任务这一块。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="nodejs" scheme="https://12tall.github.io/categories/nodejs/"/>
+    
+    
+    <category term="pm2" scheme="https://12tall.github.io/tags/pm2/"/>
+    
+    <category term="服务" scheme="https://12tall.github.io/tags/%E6%9C%8D%E5%8A%A1/"/>
+    
+    <category term="node" scheme="https://12tall.github.io/tags/node/"/>
+    
+    <category term="集群" scheme="https://12tall.github.io/tags/%E9%9B%86%E7%BE%A4/"/>
+    
+    <category term="均衡负载" scheme="https://12tall.github.io/tags/%E5%9D%87%E8%A1%A1%E8%B4%9F%E8%BD%BD/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Matplotlib 绘制等高线图</title>
+    <link href="https://12tall.github.io/2024/03/03/contour/"/>
+    <id>https://12tall.github.io/2024/03/03/contour/</id>
+    <published>2024-03-02T16:00:00.000Z</published>
+    <updated>2025-05-27T12:49:31.267Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;帮老婆绘制科研中的图像，因为接触绘图工具较少，所以跟ChatGPT 聊了好久才调整出满意的图像。于是记录下源码：&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;预设参数&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
+    
+    
+    <category term="pandas" scheme="https://12tall.github.io/tags/pandas/"/>
+    
+    <category term="matplotlib" scheme="https://12tall.github.io/tags/matplotlib/"/>
+    
+    <category term="contour" scheme="https://12tall.github.io/tags/contour/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>一些简单的制作Cheatsheet 的技巧</title>
+    <link href="https://12tall.github.io/2024/01/28/cheat-sheet/"/>
+    <id>https://12tall.github.io/2024/01/28/cheat-sheet/</id>
+    <published>2024-01-27T16:00:00.000Z</published>
+    <updated>2025-05-27T12:49:31.216Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;工作中发现时常做一些&lt;code&gt;Cheatsheet&lt;/code&gt; 还是比较有用的，下面是一些小&lt;code&gt;Latex&lt;/code&gt;的技巧：&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="notation" scheme="https://12tall.github.io/categories/notation/"/>
+    
+    
+    <category term="latex" scheme="https://12tall.github.io/tags/latex/"/>
+    
+    <category term="cheatsheet" scheme="https://12tall.github.io/tags/cheatsheet/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>基于Node JS 的代码生成工具</title>
+    <link href="https://12tall.github.io/2024/01/20/code-generator/"/>
+    <id>https://12tall.github.io/2024/01/20/code-generator/</id>
+    <published>2024-01-19T16:00:00.000Z</published>
+    <updated>2025-05-27T12:49:31.205Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;之前见过一个用Jinja2 生成C 代码的例子，联想到刚入职时师傅介绍的CodeSmith，又结合当下在用Art-Template 生成前端页面。瞬间有一种实现自己的代码生成器的冲动。&lt;br /&gt;
+于是考虑从postgresql 生成对应的数据模型，重要的SQL 语句只有两条：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;SELECT * from information_schema.tables WHERE table_schema = &#39;public&#39;&lt;/code&gt; 选取数据表&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;select * from information_schema.columns where table_name = :table_name;&lt;/code&gt; 选取每个数据表的字段。这里用到了&lt;code&gt;yesql&lt;/code&gt; 库&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="nodejs" scheme="https://12tall.github.io/categories/nodejs/"/>
+    
+    
+    <category term="JavaScript" scheme="https://12tall.github.io/tags/JavaScript/"/>
+    
+    <category term="postgresql" scheme="https://12tall.github.io/tags/postgresql/"/>
+    
+    <category term="art-template" scheme="https://12tall.github.io/tags/art-template/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>树莓派开发参考</title>
+    <link href="https://12tall.github.io/2023/11/03/00_ref/"/>
+    <id>https://12tall.github.io/2023/11/03/00_ref/</id>
+    <published>2023-11-02T16:00:00.000Z</published>
+    <updated>2025-05-27T12:49:31.268Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;链接器脚本&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#链接器脚本&quot;&gt;&lt;/a&gt; 链接器脚本&lt;/h2&gt;</summary>
+    
+    
+    
+    <category term="raspi" scheme="https://12tall.github.io/categories/raspi/"/>
+    
+    
+    <category term="asm" scheme="https://12tall.github.io/tags/asm/"/>
+    
+    <category term="c" scheme="https://12tall.github.io/tags/c/"/>
+    
+    <category term="arm" scheme="https://12tall.github.io/tags/arm/"/>
+    
+    <category term="raspberrypi" scheme="https://12tall.github.io/tags/raspberrypi/"/>
+    
+    <category term="os" scheme="https://12tall.github.io/tags/os/"/>
+    
+    <category term="boot" scheme="https://12tall.github.io/tags/boot/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Poetry 简介</title>
+    <link href="https://12tall.github.io/2023/10/19/poetry/"/>
+    <id>https://12tall.github.io/2023/10/19/poetry/</id>
+    <published>2023-10-18T16:00:00.000Z</published>
+    <updated>2025-05-27T12:49:31.221Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;类似于&lt;code&gt;venv&lt;/code&gt;，&lt;code&gt;poetry&lt;/code&gt; 可以提供一个干净的依赖环境。因为&lt;code&gt;pip&lt;/code&gt; 是全局安装，如果项目比较多则不可避免地会出现依赖冲突。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
+    
+    
+    <category term="poetry" scheme="https://12tall.github.io/tags/poetry/"/>
+    
+    <category term="pip" scheme="https://12tall.github.io/tags/pip/"/>
+    
+    <category term="npm" scheme="https://12tall.github.io/tags/npm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python 状态机</title>
+    <link href="https://12tall.github.io/2023/10/19/state-machine/"/>
+    <id>https://12tall.github.io/2023/10/19/state-machine/</id>
+    <published>2023-10-18T16:00:00.000Z</published>
+    <updated>2025-05-27T12:49:31.265Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;还是在做fmu 时引出的问题，需要用到&lt;a href=&quot;https://python-statemachine.readthedocs.io/en/latest/index.html&quot;&gt;Python State Machine&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
+    
+    
+    <category term="Python" scheme="https://12tall.github.io/tags/Python/"/>
+    
+    <category term="StateMachine" scheme="https://12tall.github.io/tags/StateMachine/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>FastAPI 工程化</title>
+    <link href="https://12tall.github.io/2023/10/12/fastapi/"/>
+    <id>https://12tall.github.io/2023/10/12/fastapi/</id>
+    <published>2023-10-11T16:00:00.000Z</published>
+    <updated>2025-05-27T12:49:31.240Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&quot;http://xn--asp-8p9d.NET&quot;&gt;从asp.NET&lt;/a&gt; 到前后分离，到vue+koa2，兜兜转转又到了模板渲染。以前开发看逼格，现在开发看速度。SSR 有啥不好的，又不是不能用只要把内容展示出来就好了呗。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
+    
+    
+    <category term="router" scheme="https://12tall.github.io/tags/router/"/>
+    
+    <category term="fastapi" scheme="https://12tall.github.io/tags/fastapi/"/>
+    
+    <category term="asgi" scheme="https://12tall.github.io/tags/asgi/"/>
+    
+    <category term="jinja2" scheme="https://12tall.github.io/tags/jinja2/"/>
+    
+    <category term="lulu-ui" scheme="https://12tall.github.io/tags/lulu-ui/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python FMU 相关</title>
+    <link href="https://12tall.github.io/2023/10/11/fmu/"/>
+    <id>https://12tall.github.io/2023/10/11/fmu/</id>
+    <published>2023-10-10T16:00:00.000Z</published>
+    <updated>2025-05-27T12:49:31.246Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;同事在需要在Modelica 中使用状态机建模，并且导出FMU 用于在环测试。苦于Modelica 的语法要求方程个数必须等于变量个数，实现起来比较繁琐。于是谷歌一下Python 的解决方案。结果还发现了新大陆：&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
+    
+    
+    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
+    
+    <category term="fmi" scheme="https://12tall.github.io/tags/fmi/"/>
+    
+    <category term="fmu" scheme="https://12tall.github.io/tags/fmu/"/>
+    
+    <category term="simulation" scheme="https://12tall.github.io/tags/simulation/"/>
+    
+    <category term="modelica" scheme="https://12tall.github.io/tags/modelica/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Qt Quick 的学习笔记（二）</title>
+    <link href="https://12tall.github.io/2023/09/29/qt-quick-02/"/>
+    <id>https://12tall.github.io/2023/09/29/qt-quick-02/</id>
+    <published>2023-09-28T16:00:00.000Z</published>
+    <updated>2025-05-27T12:49:31.264Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;和Electron 类似，PyQt 与PySide 也支持向QML 的前端暴露对象以实现前后端的通信；但是呢，似乎QML 可以往任意子元素暴露对象变量&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
+    
+    
+    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
+    
+    <category term="qt" scheme="https://12tall.github.io/tags/qt/"/>
+    
+    <category term="pyside" scheme="https://12tall.github.io/tags/pyside/"/>
+    
+    <category term="qml" scheme="https://12tall.github.io/tags/qml/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Qt Quick 的学习笔记（一）</title>
+    <link href="https://12tall.github.io/2023/09/27/qt-quick-01/"/>
+    <id>https://12tall.github.io/2023/09/27/qt-quick-01/</id>
+    <published>2023-09-26T16:00:00.000Z</published>
+    <updated>2025-05-27T12:49:31.264Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;很难找到集成度高、配置简单、上手又快的GUI 框架，看起来QML 似是不错：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;跨平台&lt;/li&gt;
+&lt;li&gt;语法简单：类似JS+JSON 的语法&lt;/li&gt;
+&lt;li&gt;前后分离：通过信号与槽的机制进行通信，又不用自己定义各种API&lt;/li&gt;
+&lt;li&gt;PySide6 也支持&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
+    
+    
+    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
+    
+    <category term="qt" scheme="https://12tall.github.io/tags/qt/"/>
+    
+    <category term="pyside" scheme="https://12tall.github.io/tags/pyside/"/>
+    
+    <category term="qml" scheme="https://12tall.github.io/tags/qml/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Pymoo 多目标优化笔记（二）</title>
+    <link href="https://12tall.github.io/2023/09/25/pymoo-02/"/>
+    <id>https://12tall.github.io/2023/09/25/pymoo-02/</id>
+    <published>2023-09-24T16:00:00.000Z</published>
+    <updated>2025-05-27T12:49:31.263Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;因为许多任务并不是一个简单的函数调用可以解决的，但是我们可以将&lt;code&gt;pymoo&lt;/code&gt; 问题定义为一个泛函数，下面的点&lt;strong&gt;很重要&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;n_offspring&lt;/code&gt;：每一代产生多少个新个体，如果太小，则会收敛的很慢，如果太大，则会过度探索空间；&lt;/li&gt;
+&lt;li&gt;需要将&lt;code&gt;g&lt;/code&gt; 都写作：&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;g&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;≤&lt;/mo&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;g(x) &#92;le 0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:1em;vertical-align:-0.25em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03588em;&quot;&gt;g&lt;/span&gt;&lt;span class=&quot;mopen&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;mclose&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mrel&quot;&gt;≤&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.64444em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 的形式；&lt;/li&gt;
+&lt;li&gt;并且&lt;code&gt;f&lt;/code&gt; 也都应写作&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;min&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.65952em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;n&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 形式；&lt;/li&gt;
+&lt;li&gt;在Windows 上使用多进程，必须要在&lt;code&gt;__main__&lt;/code&gt; 代码块中才行；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
+    
+    
+    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
+    
+    <category term="multiprocessing" scheme="https://12tall.github.io/tags/multiprocessing/"/>
+    
+    <category term="多进程" scheme="https://12tall.github.io/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
+    
+    <category term="pymoo" scheme="https://12tall.github.io/tags/pymoo/"/>
+    
+    <category term="math" scheme="https://12tall.github.io/tags/math/"/>
+    
+    <category term="optimization" scheme="https://12tall.github.io/tags/optimization/"/>
+    
+    <category term="multiple object" scheme="https://12tall.github.io/tags/multiple-object/"/>
+    
+    <category term="pareto" scheme="https://12tall.github.io/tags/pareto/"/>
+    
+    <category term="BaseManager" scheme="https://12tall.github.io/tags/BaseManager/"/>
+    
+    <category term="分布式" scheme="https://12tall.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+    <category term="parallelization" scheme="https://12tall.github.io/tags/parallelization/"/>
+    
+    <category term="多线程" scheme="https://12tall.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Pymoo 多目标优化笔记（一）</title>
+    <link href="https://12tall.github.io/2023/09/19/pymoo-01/"/>
+    <id>https://12tall.github.io/2023/09/19/pymoo-01/</id>
+    <published>2023-09-18T16:00:00.000Z</published>
+    <updated>2025-05-27T12:49:31.257Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;和小姜一起看电机优化的程序时，听到了一句帕累托前沿。于是……&lt;br /&gt;
+原理固然很重要，但是简单应用的话，套路形式才是开始应该关注的&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
+    
+    
+    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
+    
+    <category term="pymoo" scheme="https://12tall.github.io/tags/pymoo/"/>
+    
+    <category term="math" scheme="https://12tall.github.io/tags/math/"/>
+    
+    <category term="optimization" scheme="https://12tall.github.io/tags/optimization/"/>
+    
+    <category term="multiple object" scheme="https://12tall.github.io/tags/multiple-object/"/>
+    
+    <category term="pareto" scheme="https://12tall.github.io/tags/pareto/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>通过Cheat Engine 爆破注册码</title>
+    <link href="https://12tall.github.io/2023/09/15/ce/"/>
+    <id>https://12tall.github.io/2023/09/15/ce/</id>
+    <published>2023-09-14T16:00:00.000Z</published>
+    <updated>2025-05-27T12:49:31.207Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;玩《植物大战僵尸》时学过一点点CE，想着是不是可以用来追软件的注册码？谷歌了一下，果然还是有&lt;a href=&quot;https://www.youtube.com/watch?v=Emiuht3YSXA&quot;&gt;教程&lt;/a&gt;的。而且CE 上手要比OD 简单感觉。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="notation" scheme="https://12tall.github.io/categories/notation/"/>
+    
+    
+    <category term="Cheat Engine" scheme="https://12tall.github.io/tags/Cheat-Engine/"/>
+    
+    <category term="爆破" scheme="https://12tall.github.io/tags/%E7%88%86%E7%A0%B4/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ThreeJS</title>
+    <link href="https://12tall.github.io/2023/09/11/three-js/"/>
+    <id>https://12tall.github.io/2023/09/11/three-js/</id>
+    <published>2023-09-10T16:00:00.000Z</published>
+    <updated>2025-05-27T12:49:31.203Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;上周看到一个&lt;code&gt;Unity&lt;/code&gt; 的项目，可以在Web 页面中开挖掘机。感觉挺好玩的，于是想着是否可以通过&lt;code&gt;ThreeJS&lt;/code&gt; 实现一个乞丐版的demo。还有一个比较难的点在物理引擎上面吧，具体问题还描述不清楚。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="nodejs" scheme="https://12tall.github.io/categories/nodejs/"/>
+    
+    
+    <category term="ThreeJS" scheme="https://12tall.github.io/tags/ThreeJS/"/>
+    
+    <category term="3D" scheme="https://12tall.github.io/tags/3D/"/>
+    
+    <category term="Simulation" scheme="https://12tall.github.io/tags/Simulation/"/>
+    
+    <category term="HACD" scheme="https://12tall.github.io/tags/HACD/"/>
+    
+    <category term="碰撞检测" scheme="https://12tall.github.io/tags/%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B/"/>
+    
+    <category term="凸分解" scheme="https://12tall.github.io/tags/%E5%87%B8%E5%88%86%E8%A7%A3/"/>
+    
+  </entry>
+  
+</feed>

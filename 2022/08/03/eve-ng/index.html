@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Eve-Ng 的简单使用教程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Eve-Ng使用笔记">
+<meta property="og:url" content="https://12tall.github.io/2022/08/03/eve-ng/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="Eve-Ng 的简单使用教程。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-03T07:57:24.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.111Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="ssh">
+<meta property="article:tag" content="eve">
+<meta property="article:tag" content="cisco">
+<meta property="article:tag" content="switch">
+<meta property="article:tag" content="router">
+<meta property="article:tag" content="image">
+<meta property="article:tag" content="dynamipshe">
+<meta property="article:tag" content="iol">
+<meta property="article:tag" content="scp">
+<meta property="article:tag" content="vmware">
+<meta property="article:tag" content="chmod">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://12tall.github.io/2022/08/03/eve-ng/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2022/08/03/eve-ng/","path":"2022/08/03/eve-ng/","title":"Eve-Ng使用笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Eve-Ng使用笔记 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#vmware"><span class="nav-number">1.</span> <span class="nav-text"> VMware</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#eve-ng"><span class="nav-number">2.</span> <span class="nav-text"> eve-ng</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8"><span class="nav-number">3.</span> <span class="nav-text"> 启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E8%BD%BD%E9%95%9C%E5%83%8F"><span class="nav-number"></span> <span class="nav-text"> 加载镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sshscp-%E8%BF%9E%E6%8E%A5"><span class="nav-number">1.</span> <span class="nav-text"> ssh&#x2F;scp 连接</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-ssh"><span class="nav-number">1.1.</span> <span class="nav-text"> 1. ssh</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-scp"><span class="nav-number">1.2.</span> <span class="nav-text"> 2. scp</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%95%9C%E5%83%8F%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text"> 镜像类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dynamipshe"><span class="nav-number">3.</span> <span class="nav-text"> Dynamipshe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iol"><span class="nav-number">4.</span> <span class="nav-text"> IOL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%85%8D%E7%BD%AE"><span class="nav-number"></span> <span class="nav-text"> 客户端配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number"></span> <span class="nav-text"> 参考</span></a></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/eve-ng/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Eve-Ng使用笔记 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Eve-Ng使用笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-03 15:57:24" itemprop="dateCreated datePublished" datetime="2022-08-03T15:57:24+08:00">2022-08-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/maintenance/" itemprop="url" rel="index"><span itemprop="name">maintenance</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>946</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>Eve-Ng 的简单使用教程。</p>
+<span id="more"></span>
+<h3 id="vmware"><a class="markdownIt-Anchor" href="#vmware"></a> VMware</h3>
+<p>可以选择<code>VMware Workstation</code> 也可以选择<code>VMware Player(免费)</code>。但是在<code>Win10</code> 开启了<code>Hyper-V</code> 功能的机器上，虚拟机可能会报异常：</p>
+<pre class="line-numbers language-none"><code class="language-none">VMware Workstation does not support nested virtualization on this host.  
+
+module &#39;MonitorMode&#39; power on failed.  
+Failed to start the virtual machine.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>最简单的方法就是在虚拟机设置中取消使用虚拟化技术。</p>
+<h3 id="eve-ng"><a class="markdownIt-Anchor" href="#eve-ng"></a> eve-ng</h3>
+<p>直接从<a target="_blank" rel="noopener" href="https://www.eve-ng.net/index.php/download/">官网</a>下载以下两个安装包，<s><code>可能需要梯子</code></s></p>
+<ul>
+<li>社区版（Free EVE Community Edition）</li>
+<li>客户端（Windows Client Side）</li>
+</ul>
+<ol>
+<li>使用<code>VMware</code> 导入<code>*.ovf</code> 文件，并创建虚拟机</li>
+<li>第一次登录。账号<code>root</code> 密码<code>eve</code>。登录后按要求重新设置密码。（输入新密码时文本框不会有任何内容）</li>
+<li>偷个懒，一切按默认设置，直至完成（这里网卡可以选择一个仅主机可用的，避免与其他软件冲突）</li>
+</ol>
+<h3 id="启动"><a class="markdownIt-Anchor" href="#启动"></a> 启动</h3>
+<ul>
+<li>虚拟机每次启动都会显示自己的IP 地址（也可以在虚拟机初始化时设置成固定的）</li>
+<li>需要用浏览器打开上面的IP 就能使用了，登陆时可以选择console 的类型
+<ul>
+<li>默认是：local（需要调用本地客户端）</li>
+<li>可选：html5（在线运行）</li>
+</ul>
+</li>
+</ul>
+<h2 id="加载镜像"><a class="markdownIt-Anchor" href="#加载镜像"></a> 加载镜像</h2>
+<p>本节主要摘自：<a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_37871296/article/details/90906480">EVE-NG镜像导入（Dynamipshe和IOL）</a></p>
+<h3 id="sshscp-连接"><a class="markdownIt-Anchor" href="#sshscp-连接"></a> ssh/scp 连接</h3>
+<h4 id="1-ssh"><a class="markdownIt-Anchor" href="#1-ssh"></a> 1. ssh</h4>
+<p>有时<code>ssh root@&#123;ip&#125;</code> 会报异常：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">ssh</span> root@192.168.1.2
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED<span class="token operator">!</span>     @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY<span class="token operator">!</span>
+Someone could be eavesdropping on you right now <span class="token punctuation">(</span>man-in-the-middle attack<span class="token punctuation">)</span><span class="token operator">!</span>
+It is also possible that a <span class="token function">host</span> key has just been changed.
+The fingerprint <span class="token keyword">for</span> the ECDSA key sent by the remote <span class="token function">host</span> is
+SHA256:HDjXJvu0VYXWF+SKMZjSGn4FQmg/+w6eV9ljJvIXpx0.
+Please contact your system administrator.
+Add correct <span class="token function">host</span> key <span class="token keyword">in</span> /Users/wangdong/.ssh/known_hosts to get rid of this message.
+Offending ECDSA key <span class="token keyword">in</span> /Users/wangdong/.ssh/known_hosts:46
+ECDSA <span class="token function">host</span> key <span class="token keyword">for</span> <span class="token number">192.168</span>.1.2 has changed and you have requested strict checking.
+Host key verification failed.  
+
+<span class="token comment"># 一般重置过服务器之后再次尝试连接会出现这个问题</span>
+<span class="token comment"># 这个时候需要重新执行一下  </span>
+ssh-keygen <span class="token parameter variable">-R</span> <span class="token number">192.168</span>.1.2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="2-scp"><a class="markdownIt-Anchor" href="#2-scp"></a> 2. scp</h4>
+<p>通过ssh 协议进行文件传输</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">scp</span> <span class="token parameter variable">-r</span> ./* root@172.20.10.12:/opt/unetlab/addons/iol/bin
+<span class="token comment"># scp -r &#123;source&#125; &#123;destination&#125;</span>
+<span class="token comment"># -r 遍历所有子文件（夹）</span>
+<span class="token comment"># 远程目录：&#123;user&#125;@&#123;ip&#125;:/&#123;path&#125;  </span>
+<span class="token comment"># 本地目录：就是正常的写法  </span>
+<span class="token comment"># 本地在前是上传；本地在后是下载  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="镜像类型"><a class="markdownIt-Anchor" href="#镜像类型"></a> 镜像类型</h3>
+<p>一般来说，有三种类型的镜像文件可供选择，但是真的是不好下载，有些还要先注册后下载</p>
+<ol>
+<li>Dynamipshe</li>
+<li>IOL</li>
+<li>QEMU 暂不涉及</li>
+</ol>
+<h3 id="dynamipshe"><a class="markdownIt-Anchor" href="#dynamipshe"></a> Dynamipshe</h3>
+<ol>
+<li>下载文件：<code>链接：http://pan.baidu.com/s/1jIFzrWa 密码：gknq</code>，并解压</li>
+<li>将<code>*.image</code> 文件上传至<code>eve-ng</code> 虚拟机<code>/opt/unetlab/addons/dynamips</code> 目录下</li>
+<li>刷新浏览器，测试新增的镜像</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 上传文件  </span>
+<span class="token function">scp</span> <span class="token parameter variable">-r</span> ./* root@172.20.10.12:/opt/unetlab/addons/dynamips  
+
+<span class="token function">ssh</span> root@172.20.10.12
+<span class="token comment"># 修复镜像（必需，否则镜像不能正常工作）</span>
+/opt/unetlab/wrappers/unl_wrapper <span class="token parameter variable">-a</span> fixpermissions  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="iol"><a class="markdownIt-Anchor" href="#iol"></a> IOL</h3>
+<ol>
+<li>下载文件：<code>链接：http://pan.baidu.com/s/1dEHvhHf 密码：dqvm</code>，并解压</li>
+<li>将所有子文件上传至<code>eve-ng</code> 虚拟机<code>/opt/unetlab/addons/iol/bin</code> 目录下</li>
+<li>重新生成<code>iourc</code>文件，然后给予权限</li>
+<li>刷新浏览器，测试新增的镜像</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 上传文件 </span>
+<span class="token function">scp</span> <span class="token parameter variable">-r</span> ./* root@172.20.10.12:/opt/unetlab/addons/iol/bin  
+
+<span class="token function">ssh</span> root@172.20.10.12
+<span class="token comment"># 重新生成iourc 文件，然后给予权限  </span>
+<span class="token function">rm</span> iourc  
+python CiscoIOUKeygen.py <span class="token operator">|</span> <span class="token function">grep</span> <span class="token parameter variable">-A</span> <span class="token number">1</span> <span class="token string">'license'</span> <span class="token operator">></span> iourc
+<span class="token function">chmod</span> <span class="token parameter variable">-R</span> <span class="token number">777</span> *  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="客户端配置"><a class="markdownIt-Anchor" href="#客户端配置"></a> 客户端配置</h2>
+<ul>
+<li>默认安装可以直接打开本地的<code>Putty</code></li>
+<li>但是打开<code>wireshark</code> 时可能会出现异常：<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">The server's <span class="token function">host</span> key is not cached <span class="token keyword">in</span> the registry. You
+have no guarantee that the server is the computer you
+think it is.
+<span class="token punctuation">..</span>.
+
+<span class="token comment"># 这时需要执行以下命令  </span>
+<span class="token builtin class-name">echo</span> y <span class="token operator">|</span> plink <span class="token parameter variable">-ssh</span> root@<span class="token punctuation">&#123;</span>ip<span class="token punctuation">&#125;</span> <span class="token string">"exit"</span>  <span class="token comment"># 向后一条命令输出y</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<p>暂时记录这么多，以后再补充</p>
+<h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/wd2014610/article/details/85639741">解决Host key verification failed.(亲测有效)</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_37871296/article/details/90906480">EVE-NG镜像导入（Dynamipshe和IOL）</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/k_young1997/article/details/90072554">使用ssh上传文件到服务器</a></li>
+<li><a target="_blank" rel="noopener" href="https://serverfault.com/questions/420526/auto-storing-server-host-key-in-cache-with-plink">Auto-storing server host key in cache with plink</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2022/08/03/eve-ng/" title="Eve-Ng使用笔记">https://12tall.github.io/2022/08/03/eve-ng/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/ssh/" rel="tag"># ssh</a>
+              <a href="/tags/eve/" rel="tag"># eve</a>
+              <a href="/tags/cisco/" rel="tag"># cisco</a>
+              <a href="/tags/switch/" rel="tag"># switch</a>
+              <a href="/tags/router/" rel="tag"># router</a>
+              <a href="/tags/image/" rel="tag"># image</a>
+              <a href="/tags/dynamipshe/" rel="tag"># dynamipshe</a>
+              <a href="/tags/iol/" rel="tag"># iol</a>
+              <a href="/tags/scp/" rel="tag"># scp</a>
+              <a href="/tags/vmware/" rel="tag"># vmware</a>
+              <a href="/tags/chmod/" rel="tag"># chmod</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/08/03/dll-injection/" rel="prev" title="DLL 注入相关">
+                  <i class="fa fa-angle-left"></i> DLL 注入相关
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/08/03/fortigate/" rel="next" title="飞塔防火墙">
+                  飞塔防火墙 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

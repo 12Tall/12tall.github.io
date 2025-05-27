@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="基本代码结构 最简单的Qt 应用程序的代码接口，如果需要扩展功能的话，基本上也是增加一些信号和插槽就好了：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PySide2 的学习笔记">
+<meta property="og:url" content="https://12tall.github.io/2022/08/05/pyside2/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="基本代码结构 最简单的Qt 应用程序的代码接口，如果需要扩展功能的话，基本上也是增加一些信号和插槽就好了：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://12tall.github.io/2022/08/05/pyside2/promote.png">
+<meta property="og:image" content="https://12tall.github.io/2022/08/05/pyside2/resources.png">
+<meta property="og:image" content="https://12tall.github.io/2022/08/05/pyside2/add-qrc.png">
+<meta property="og:image" content="https://12tall.github.io/2022/08/05/pyside2/add-style-sheet.png">
+<meta property="og:image" content="https://12tall.github.io/2022/08/05/pyside2/clear-border-image.png">
+<meta property="article:published_time" content="2022-08-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.231Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="qt">
+<meta property="article:tag" content="pyside2">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://12tall.github.io/2022/08/05/pyside2/promote.png">
+
+
+<link rel="canonical" href="https://12tall.github.io/2022/08/05/pyside2/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2022/08/05/pyside2/","path":"2022/08/05/pyside2/","title":"PySide2 的学习笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>PySide2 的学习笔记 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text"> 基本代码结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E7%AE%80%E4%BB%8B"><span class="nav-number">2.</span> <span class="nav-text"> 基本类型简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#application"><span class="nav-number">2.1.</span> <span class="nav-text"> Application</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#widgets"><span class="nav-number">2.2.</span> <span class="nav-text"> Widgets</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#threads"><span class="nav-number">2.3.</span> <span class="nav-text"> Threads</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#signal"><span class="nav-number">2.4.</span> <span class="nav-text"> Signal</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pyqtgraph"><span class="nav-number">3.</span> <span class="nav-text"> PyQtGraph</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E5%8F%8A%E5%B8%83%E5%B1%80"><span class="nav-number">3.1.</span> <span class="nav-text"> 组件及布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E5%BD%A2%E7%94%BB%E7%AC%94%E5%92%8C%E7%94%BB%E5%88%B7"><span class="nav-number">3.2.</span> <span class="nav-text"> 线形（画笔和画刷）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E8%83%8C%E6%99%AF"><span class="nav-number">3.3.</span> <span class="nav-text"> 设置背景</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text"> 资源文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E7%9A%84%E8%BD%AC%E5%8C%96"><span class="nav-number">4.1.</span> <span class="nav-text"> 资源文件的转化</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/05/pyside2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="PySide2 的学习笔记 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PySide2 的学习笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-05 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-05T00:00:00+08:00">2022-08-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="基本代码结构"><a class="markdownIt-Anchor" href="#基本代码结构"></a> 基本代码结构</h2>
+<p>最简单的Qt 应用程序的代码接口，如果需要扩展功能的话，基本上也是增加一些信号和插槽就好了：</p>
+<span id="more"></span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> typing
+<span class="token keyword">import</span> PySide2
+<span class="token keyword">from</span> PySide2 <span class="token keyword">import</span> QtWidgets
+<span class="token keyword">from</span> PySide2<span class="token punctuation">.</span>QtWidgets <span class="token keyword">import</span> QApplication
+<span class="token keyword">from</span> SignalGenerator <span class="token keyword">import</span> Ui_MainWindow
+
+
+<span class="token keyword">class</span> <span class="token class-name">MainWindow</span><span class="token punctuation">(</span>QtWidgets<span class="token punctuation">.</span>QMainWindow<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 自定义一个窗口类，可以继承QMain，也可以继承其他QWidget</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span>MainWindow<span class="token punctuation">,</span> self<span class="token punctuation">)</span><span class="token punctuation">.</span>__init__<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># </span>
+        self<span class="token punctuation">.</span>ui <span class="token operator">=</span> Ui_MainWindow<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 设置ui 属性，即从Qt Designer 中绘制的窗体</span>
+        self<span class="token punctuation">.</span>ui<span class="token punctuation">.</span>setupUi<span class="token punctuation">(</span>self<span class="token punctuation">)</span>  <span class="token comment"># 同上</span>
+        self<span class="token punctuation">.</span>ui<span class="token punctuation">.</span>sg_btn_RefreshCOM<span class="token punctuation">.</span>clicked<span class="token punctuation">.</span>connect<span class="token punctuation">(</span>self<span class="token punctuation">.</span>print_data<span class="token punctuation">)</span>  <span class="token comment"># 在VSCode 中，按钮的clicked 属性并不会自动提示</span>
+    
+    <span class="token keyword">def</span> <span class="token function">print_data</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>ui<span class="token punctuation">.</span>sg_slt_Databit<span class="token punctuation">.</span>currentData<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>  <span class="token comment"># main 方法中的代码基本不用变</span>
+    app <span class="token operator">=</span> QApplication<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    win <span class="token operator">=</span> MainWindow<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    win<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    exit<span class="token punctuation">(</span>app<span class="token punctuation">.</span>exec_<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="基本类型简介"><a class="markdownIt-Anchor" href="#基本类型简介"></a> 基本类型简介</h2>
+<ul>
+<li><code>QObject</code>: Qt 的核心基类，提供了信号与插槽的机制</li>
+</ul>
+<h3 id="application"><a class="markdownIt-Anchor" href="#application"></a> Application</h3>
+<p><code>Application</code> 类主要用于一些App 的初始化工作，其内部应该有一些全局相关的属性。应该在程序入口进行初始化，并在程序结束前调用实例的<code>app.exec()</code> 开启消息循环。</p>
+<ul>
+<li><code>QCoreApplication</code>: 在没有UI 的情况下为Qt 应用建立事件循环机制，适用于无窗口应用。每个app 有且只有一个<code>QCoreApplication</code> 对象</li>
+<li><code>QGuiApplication</code>: 继承<code>QCoreApplication</code>，可以创建基于GUI 的应用程序并提供事件循环机制。同样是全局有且只有一个实例</li>
+<li><code>QApplication</code>: 继承<code>QGuiApplication</code>，并额外提供了<code>QWidget</code> 相关的功能，可以处理widget 组件的初始化、析构等。同样是单例的</li>
+</ul>
+<h3 id="widgets"><a class="markdownIt-Anchor" href="#widgets"></a> Widgets</h3>
+<p><code>QWidget</code> 可以派生出许许多多的子类，包括<code>pyqtgraph</code> 用到的组件最终也是继承到<code>QWidget</code> 类：</p>
+<ul>
+<li><code>QWidget</code>: 所有Qt UI 类的基类，从系统接收鼠标、键盘以及其他类型的事件，并负责绘制响应到屏幕</li>
+<li><code>QMainWindow</code>: 通过组合不同的<code>QWidget</code> 建立一个常用的窗口类，包含菜单栏、状态栏等</li>
+</ul>
+<h3 id="threads"><a class="markdownIt-Anchor" href="#threads"></a> Threads</h3>
+<p>不要在主线程处理耗时操作，否则会造成程序假死；不要在子线程更新GUI，否则会造成意想不到的后果，或者程序崩溃；最好的实践是在子线程中发送信号、并在主线程中通过插槽处理信号并更新GUI。</p>
+<ul>
+<li><code>QThread</code>: 与Python 自带的线程功能区别不大，甚至连GIL 也是一样实现的。但在<code>QThread</code> 中可以方便地调用匿名插槽、消息队列相关的功能：<a target="_blank" rel="noopener" href="https://stackoverflow.com/a/1645666/14791867">https://stackoverflow.com/a/1645666/14791867</a></li>
+</ul>
+<h3 id="signal"><a class="markdownIt-Anchor" href="#signal"></a> Signal</h3>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> PySide2<span class="token punctuation">.</span>QtCore <span class="token keyword">import</span> Signal<span class="token punctuation">,</span> QObject  
+<span class="token keyword">from</span> PySide2<span class="token punctuation">.</span>QWidgets <span class="token keyword">import</span> QMainWindow
+<span class="token keyword">class</span> <span class="token class-name">MySignal</span><span class="token punctuation">(</span>QObject<span class="token punctuation">)</span><span class="token punctuation">:</span>  
+    <span class="token comment"># 定义一个信号量，第一个参数表示接收信号的组件的类型，最后一个是以字符串传递信息，其实中间还有一个参数name</span>
+    <span class="token comment"># 调用emit 方法时的参数必须要符合这里的规定</span>
+    sig_one <span class="token operator">=</span> Signal<span class="token punctuation">(</span>QTextBrowser<span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">)</span>  
+
+    <span class="token comment"># 还可以定义更多的信号  </span>
+    sig_two <span class="token operator">=</span> Signal<span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">)</span>
+
+sig_global <span class="token operator">=</span> MySignal<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 信号可以在全局初始化  </span>
+
+<span class="token keyword">class</span> <span class="token class-name">MyWin</span><span class="token punctuation">(</span>QMainWindow<span class="token punctuation">)</span><span class="token punctuation">:</span>  
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>  
+        sig_local <span class="token operator">=</span> MySignal<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 信号也可以限定在某个元素内部可用 </span>
+        sig_global<span class="token punctuation">.</span>sig_one<span class="token punctuation">.</span>connect<span class="token punctuation">(</span>handler<span class="token punctuation">)</span>  <span class="token comment"># 指定处理函数</span>
+
+        sig_global<span class="token punctuation">.</span>sig_two<span class="token punctuation">.</span>connect<span class="token punctuation">(</span>handler2<span class="token punctuation">)</span>  <span class="token comment"># 指定</span>
+
+    <span class="token keyword">def</span> <span class="token function">handler2</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span>control<span class="token punctuation">:</span>QTextBrowser<span class="token punctuation">,</span> val<span class="token punctuation">:</span><span class="token builtin">str</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  
+        <span class="token comment"># 更新组件 </span>
+        <span class="token keyword">pass</span>
+
+    <span class="token keyword">def</span> <span class="token function">handler2</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> val<span class="token punctuation">:</span><span class="token builtin">str</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  
+        <span class="token comment"># 更新GUI  </span>
+        <span class="token keyword">pass</span>
+
+    <span class="token comment"># 其他函数，例如开启子线程</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="pyqtgraph"><a class="markdownIt-Anchor" href="#pyqtgraph"></a> PyQtGraph</h2>
+<blockquote>
+<p><code>PyQtGraph</code> 在Qt Designer 中使用时，需要通过<code>Graphics View</code> 组件提升（Promote）为相应的子类，如<code>PlotWidget</code> 等，头文件可以直接填<code>pyqtgraph</code>。添加并提升：<br />
+<img src="promote.png" alt="" /></p>
+</blockquote>
+<p><code>PyQtGraph</code> 是一个使用三方组件的绘图库。能够比较方便地实现绘图、选区、交互与数据联动的功能。并且其内置了<code>flowchart</code> 流程图绘制功能，基本能够满足常用的科学制图功能。</p>
+<h3 id="组件及布局"><a class="markdownIt-Anchor" href="#组件及布局"></a> 组件及布局</h3>
+<p><code>PyQtGraph</code> 以<code>QGraphicsView</code> 为基类，分别派生出了：</p>
+<ul>
+<li>绘图类：
+<ul>
+<li><code>PlotCurveItem</code> 折线图</li>
+<li><code>ScatterPlotItem</code> 散点图</li>
+<li><code>PlotDataItem</code> 折线图与散点图的组合</li>
+</ul>
+</li>
+<li>容器类：
+<ul>
+<li><code>PlotItem</code> 包含<code>ViewBox</code>、坐标轴和标签等子组件</li>
+<li><code>GraphicsLayout</code> 栅格布局，用于绘制多个图表</li>
+<li><code>ViewBox</code> 用于展示数据，支持与用户鼠标交互</li>
+<li><code>AxisItem</code> 坐标轴</li>
+<li><code>LabelItem</code> 标签（标题）</li>
+</ul>
+</li>
+<li>容器类（可作为Widget 嵌入App）：
+<ul>
+<li><code>PlotWidget</code> 绘制单个图形</li>
+<li><code>GraphicsLayoutWidget</code> 包含一个<code>GraphicsLayout</code> 组件</li>
+</ul>
+</li>
+</ul>
+<p>其中各种<code>Item</code> 可以在代码中添加到图表中：</p>
+<pre class="line-numbers language-python&#123;7-9&#125;" data-language="python&#123;7-9&#125;"><code class="language-python&#123;7-9&#125;"># 代码节选自官方examples  
+
+x2 &#x3D; np.linspace(-100, 100, 1000)
+data2 &#x3D; np.sin(x2) &#x2F; x2
+p8 &#x3D; win.addPlot(title&#x3D;&quot;Region Selection&quot;)
+p8.plot(data2, pen&#x3D;(255,255,255,200))
+lr &#x3D; pg.LinearRegionItem([400,700])
+lr.setZValue(-10)
+p8.addItem(lr)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="线形画笔和画刷"><a class="markdownIt-Anchor" href="#线形画笔和画刷"></a> 线形（画笔和画刷）</h3>
+<p>可以自定义绘图中的点、线以及填充的样式，基本用法如下：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">pen <span class="token operator">=</span> Qpen<span class="token punctuation">(</span><span class="token string">'y'</span><span class="token punctuation">,</span> width<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">,</span> style<span class="token operator">=</span>QtCore<span class="token punctuation">.</span>Qt<span class="token punctuation">.</span>DashLine<span class="token punctuation">)</span>  
+pg<span class="token punctuation">.</span>plot<span class="token punctuation">(</span>x<span class="token punctuation">,</span>y<span class="token punctuation">,</span>pen<span class="token punctuation">)</span>  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="设置背景"><a class="markdownIt-Anchor" href="#设置背景"></a> 设置背景</h3>
+<p>可以通过调用<code>pg.setConfigOption('option', 'value')</code> 来设置绘图的背景色、前景色、抗锯齿等效果。</p>
+<h2 id="资源文件"><a class="markdownIt-Anchor" href="#资源文件"></a> 资源文件</h2>
+<p>参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dcb3688/p/4206958.html">Qt Designer怎样加入资源文件</a>，我们可以将图片等各种资源转化为<code>*.py</code> 文件，以下图两个图片为例：<br />
+<img src="resources.png" alt="" /></p>
+<p>我们可以在<code>res</code> 文件夹同级目录新建一个<code>res.prc</code> 文件，内容如下：</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>RCC</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>qresource</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>file</span><span class="token punctuation">></span></span>res/bg.jpg<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>file</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>file</span><span class="token punctuation">></span></span>res/ico.ico<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>file</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>qresource</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>RCC</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>通过下图中的步骤可以将资源文件添加到<code>ui</code> 项目：<br />
+<img src="add-qrc.png" alt="" /></p>
+<p>然后在控件中可以通过编辑样式表的形式引用已经添加的资源文件：<br />
+<img src="add-style-sheet.png" alt="" /></p>
+<p>需要注意的是，Qt Designer 中，子控件会自动继承父控件的样式，如果不想这么做，则需要手工修改样式表，以禁止继承背景图片为例：<br />
+<img src="clear-border-image.png" alt="" /></p>
+<h3 id="资源文件的转化"><a class="markdownIt-Anchor" href="#资源文件的转化"></a> 资源文件的转化</h3>
+<p>同<code>ui</code> 文件一样，资源文件也可以转化为<code>.py</code> 文件，供程序调用：</p>
+<pre class="line-numbers language-shell-session" data-language="shell-session"><code class="language-shell-session"><span class="token output">> pyside2-uic .\main.ui > ui_mainwindow.py  # ui 文件转py  
+> pyrcc5.exe .\res.qrc -o .\res_rc.py  # 资源文件转py，注意结果文件的文件名要以_rc 结尾</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>可能是我安装了PyQt5 的原因，资源文件会被转化成下面的内容：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># -*- coding: utf-8 -*-</span>
+
+<span class="token comment"># Resource object code</span>
+<span class="token comment">#</span>
+<span class="token comment"># Created by: The Resource Compiler for PyQt5 (Qt v5.15.2)</span>
+<span class="token comment">#</span>
+<span class="token comment"># WARNING! All changes made in this file will be lost!</span>
+
+<span class="token keyword">from</span> PyQt5 <span class="token keyword">import</span> QtCore  <span class="token comment"># 使用PySide2 的话，需要手工修改一下导入QtCore 的部分</span>
+
+qt_resource_data <span class="token operator">=</span> b"\
+\x00\x16\x00\x00\x00\x89\x50\x4e\x47\x0d\x0a\x1a\x0a\x00\x00\x00\
+\x0d\x49\x48\x44\x52\x00\x00\x00\x97\x00\x00\x00\x97\x08\x06\x00\
+"
+
+qt_resource_name <span class="token operator">=</span> b"\
+\x00\x67\x00\x2e\x00\x6a\x00\x70\x00\x67\
+"
+
+qt_resource_struct_v1 <span class="token operator">=</span> b"\
+\x00\x00\x00\x00\x00\x02\x00\x00\x00\x01\x00\x00\x00\x01\
+"
+
+qt_resource_struct_v2 <span class="token operator">=</span> b"\
+\x00\x00\x00\x00\x00\x02\x00\x00\x00\x01\x00\x00\x00\x01\
+\x00\x00\x01\x82\x7c\x9e\x1c\xe2\
+"
+
+qt_version <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token builtin">int</span><span class="token punctuation">(</span>v<span class="token punctuation">)</span> <span class="token keyword">for</span> v <span class="token keyword">in</span> QtCore<span class="token punctuation">.</span>qVersion<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">'.'</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+<span class="token keyword">if</span> qt_version <span class="token operator">&lt;</span> <span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+    rcc_version <span class="token operator">=</span> <span class="token number">1</span>
+    qt_resource_struct <span class="token operator">=</span> qt_resource_struct_v1
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    rcc_version <span class="token operator">=</span> <span class="token number">2</span>
+    qt_resource_struct <span class="token operator">=</span> qt_resource_struct_v2
+
+<span class="token keyword">def</span> <span class="token function">qInitResources</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    QtCore<span class="token punctuation">.</span>qRegisterResourceData<span class="token punctuation">(</span>rcc_version<span class="token punctuation">,</span> qt_resource_struct<span class="token punctuation">,</span> qt_resource_name<span class="token punctuation">,</span> qt_resource_data<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">qCleanupResources</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    QtCore<span class="token punctuation">.</span>qUnregisterResourceData<span class="token punctuation">(</span>rcc_version<span class="token punctuation">,</span> qt_resource_struct<span class="token punctuation">,</span> qt_resource_name<span class="token punctuation">,</span> qt_resource_data<span class="token punctuation">)</span>
+
+qInitResources<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>资源文件不需要手工导入，它会在<code>ui_mainwindow.py</code> 文件中被自动调用。</p>
+<hr />
+<p>📅2022-08-05 Aachen</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2022/08/05/pyside2/" title="PySide2 的学习笔记">https://12tall.github.io/2022/08/05/pyside2/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"># python</a>
+              <a href="/tags/qt/" rel="tag"># qt</a>
+              <a href="/tags/pyside2/" rel="tag"># pyside2</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/08/03/aruba/" rel="prev" title="aruba 设备">
+                  <i class="fa fa-angle-left"></i> aruba 设备
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/08/10/nabla/" rel="next" title="Nabla算子与梯度、散度、旋度">
+                  Nabla算子与梯度、散度、旋度 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

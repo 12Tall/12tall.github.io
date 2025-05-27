@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="在第一次学习antlr4 时，其实对这个工具的工作机制并不清晰，于是笔记越记越混乱。由于回国准备婚礼中断了学习过程，于是想着从头学习，尽量将笔记做得条理清晰些吧。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="antlr4 笔记">
+<meta property="og:url" content="https://12tall.github.io/2023/08/02/antlr4/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="在第一次学习antlr4 时，其实对这个工具的工作机制并不清晰，于是笔记越记越混乱。由于回国准备婚礼中断了学习过程，于是想着从头学习，尽量将笔记做得条理清晰些吧。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-08-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.240Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="词法分析">
+<meta property="article:tag" content="语法分析">
+<meta property="article:tag" content="antlr4">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://12tall.github.io/2023/08/02/antlr4/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2023/08/02/antlr4/","path":"2023/08/02/antlr4/","title":"antlr4 笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>antlr4 笔记 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%89%8D%E9%9D%A2"><span class="nav-number">1.</span> <span class="nav-text"> 写在最前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#antlr4-%E8%AF%AD%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text"> ANTLR4 语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E9%87%8A"><span class="nav-number">2.1.</span> <span class="nav-text"> 注释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E8%AF%86%E7%AC%A6"><span class="nav-number">2.2.</span> <span class="nav-text"> 标识符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%9C%AC"><span class="nav-number">2.3.</span> <span class="nav-text"> 文本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E4%BD%9C"><span class="nav-number">2.4.</span> <span class="nav-text"> 动作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%9D%E7%95%99%E5%AD%97"><span class="nav-number">2.5.</span> <span class="nav-text"> 保留字</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E7%BB%93%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text"> 语法结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#import"><span class="nav-number">3.1.</span> <span class="nav-text"> Import</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#token"><span class="nav-number">3.2.</span> <span class="nav-text"> Token</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90%E5%99%A8%E8%AF%AD%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text"> 解析器语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="nav-number">4.1.</span> <span class="nav-text"> 异常处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%84%E5%88%99%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="nav-number">4.2.</span> <span class="nav-text"> 规则的属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A5%E5%8F%A3%E8%A7%84%E5%88%99%E5%92%8Ceof"><span class="nav-number">4.3.</span> <span class="nav-text"> 入口规则和EOF</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#action-%E5%92%8C-attribute"><span class="nav-number">5.</span> <span class="nav-text"> Action 和 Attribute</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#token-%E5%B1%9E%E6%80%A7"><span class="nav-number">5.1.</span> <span class="nav-text"> token 属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E5%B1%9E%E6%80%A7"><span class="nav-number">5.2.</span> <span class="nav-text"> 语法属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%B1%9E%E6%80%A7"><span class="nav-number">5.3.</span> <span class="nav-text"> 动态作用域属性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90"><span class="nav-number">6.</span> <span class="nav-text"> 词法分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90%E5%99%A8%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="nav-number">6.1.</span> <span class="nav-text"> 词法分析器的命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A%E7%BC%96%E8%AF%91"><span class="nav-number">7.</span> <span class="nav-text"> 解释编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">8.</span> <span class="nav-text"> 参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2023/08/02/antlr4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="antlr4 笔记 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          antlr4 笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-08-02 00:00:00" itemprop="dateCreated datePublished" datetime="2023-08-02T00:00:00+08:00">2023-08-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>在第一次学习<code>antlr4</code> 时，其实对这个工具的工作机制并不清晰，于是笔记越记越混乱。由于回国准备婚礼中断了学习过程，于是想着从头学习，尽量将笔记做得条理清晰些吧。</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="写在最前面"><a class="markdownIt-Anchor" href="#写在最前面"></a> 写在最前面</h2>
+<p><code>antlr4</code> 是一个编译器前端工具，由Java 语言开发，可以完成词法分析和语法分析，最终生成抽象语法树（AST）。虽然<code>antlr4</code> 起于Java，但是其支持多种目标语言，例如：C++, Python, JavaScript 等。<br />
+现在使用<code>antlr4</code> 也并不一定需要安装Java，官方提供了基于Python3 的工具包：<code>pip install antlr4-tools</code>。该工具包包含两个命令：</p>
+<ul>
+<li><code>antlr4</code> 生成器主程序（首次运行时可能会提示安装jre 环境）。关键参数：
+<ul>
+<li><code>-Dlanguage=[Cpp|JavaScript|Python3|Python2]</code> 目标语言，默认会生成Java 语言的解析器代码。这个目标语言要与语法规则文件中内嵌的<code>action</code> 等语言一致；</li>
+</ul>
+</li>
+<li><code>antlr4-parse</code> 可以用来验证语法规则、并生成可视化的预览。关键参数：
+<ul>
+<li><code>-gui</code> 生成可视化AST 预览</li>
+<li><code>ctrl-D/ctrl-Z</code> 快捷键退出程序</li>
+</ul>
+</li>
+</ul>
+<p>另外，如果要运行生成的Python 目标代码的话，还需要安装运行环境：<code>pip install antlr4-python3-runtime</code>。</p>
+<h2 id="antlr4-语法"><a class="markdownIt-Anchor" href="#antlr4-语法"></a> ANTLR4 语法</h2>
+<p><code>antlr4</code> 的描述语法基本上派生于C 语言，会有少量的扩展。</p>
+<h3 id="注释"><a class="markdownIt-Anchor" href="#注释"></a> 注释</h3>
+<p>同C 语言一样，<code>antlr4</code> 支持两种注释风格：<code>//</code> 和<code>/**/</code>。</p>
+<h3 id="标识符"><a class="markdownIt-Anchor" href="#标识符"></a> 标识符</h3>
+<ul>
+<li><code>token</code> 要求首字母大写，表示词法规则；</li>
+<li><code>grammar</code> 要求首字母小写，表示语法规则；</li>
+<li>特殊的，可以使用<code>Unicode</code> 作为标识符，但是需要嵌入目标语言代码特殊处理。</li>
+</ul>
+<h3 id="文本"><a class="markdownIt-Anchor" href="#文本"></a> 文本</h3>
+<p><code>antlr4</code> 中不区分字符和字符串，所有的内容都包含在单引号中，包括转义字符和<code>Unicode</code>。如：<code>'\''</code>, <code>'\uXXXX'</code> 等。</p>
+<h3 id="动作"><a class="markdownIt-Anchor" href="#动作"></a> 动作</h3>
+<p>动作（Action）是一个用花括号<code>&#123;&#125;</code> 包裹的由目标语言写的代码块，在存在嵌套花括号时，要注意转义。</p>
+<pre class="line-numbers language-antlr4" data-language="antlr4"><code class="language-antlr4"><span class="token keyword">grammar</span> Count<span class="token punctuation">;</span>
+
+<span class="token comment">// action @header: 在文件头引入包</span>
+<span class="token annotation keyword">@header</span> <span class="token action"><span class="token punctuation">&#123;</span><span class="token content">
+    pacakage foo;  
+</span><span class="token punctuation">&#125;</span></span>
+
+<span class="token comment">// action @member: 在文件中定义变量count  </span>
+<span class="token annotation keyword">@members</span><span class="token action"><span class="token punctuation">&#123;</span><span class="token content">
+    int count = 0;
+</span><span class="token punctuation">&#125;</span></span>
+
+<span class="token comment">// action @after：使用变量，执行到花括号时打印count，并依次自增两次。    </span>
+list <span class="token annotation keyword">@after</span><span class="token action"><span class="token punctuation">&#123;</span><span class="token content">System.out.println(count+"ints");</span><span class="token punctuation">&#125;</span></span> <span class="token punctuation">:</span> <span class="token constant">INT</span> <span class="token action"><span class="token punctuation">&#123;</span><span class="token content">count++;</span><span class="token punctuation">&#125;</span></span> <span class="token punctuation">(</span><span class="token string">','</span> <span class="token constant">INT</span> <span class="token action"><span class="token punctuation">&#123;</span><span class="token content">count++</span><span class="token punctuation">&#125;</span></span><span class="token punctuation">)</span><span class="token operator">*</span><span class="token punctuation">;</span>
+
+<span class="token definition token constant">INT</span><span class="token punctuation">:</span> <span class="token character-class regex"><span class="token punctuation">[</span>0<span class="token range punctuation">-</span>9<span class="token punctuation">]</span></span><span class="token operator">+</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="保留字"><a class="markdownIt-Anchor" href="#保留字"></a> 保留字</h3>
+<p><code>antlr4</code> 有一些保留字：</p>
+<pre class="line-numbers language-txt" data-language="txt"><code class="language-txt">import, fragment, lexer, parser, grammar, returns,
+locals, throws, catch, finally, mode, options, tokens<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h2 id="语法结构"><a class="markdownIt-Anchor" href="#语法结构"></a> 语法结构</h2>
+<p>语法文件的结构，一般如下所示：</p>
+<pre class="line-numbers language-antlr4" data-language="antlr4"><code class="language-antlr4"><span class="token comment">/** Optional javadoc style comment */</span>
+<span class="token keyword">grammar</span> Name<span class="token punctuation">;</span> 
+<span class="token keyword">options</span> <span class="token action"><span class="token punctuation">&#123;</span><span class="token content">...</span><span class="token punctuation">&#125;</span></span>
+<span class="token keyword">import</span> <span class="token operator">..</span>. <span class="token punctuation">;</span>
+ 	
+<span class="token keyword">tokens</span> <span class="token action"><span class="token punctuation">&#123;</span><span class="token content">...</span><span class="token punctuation">&#125;</span></span>
+<span class="token keyword">channels</span> <span class="token action"><span class="token punctuation">&#123;</span><span class="token content">...</span><span class="token punctuation">&#125;</span></span> <span class="token comment">// lexer only</span>
+<span class="token annotation keyword">@actionName</span> <span class="token action"><span class="token punctuation">&#123;</span><span class="token content">...</span><span class="token punctuation">&#125;</span></span>
+ 	 
+rule1 <span class="token comment">// parser and lexer rules, possibly intermingled</span>
+<span class="token operator">..</span>.
+ruleN<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>文件名：文件名必须与<code>grammar</code> 的<code>Name</code> 相同，文件的后缀名为<code>.g4</code></li>
+<li><code>token</code>，<code>import</code>，<code>options</code> 元素的顺序可以任意，每种元素每个文件可以有零个或一个</li>
+<li><code>rule</code> 规则应至少有一个，如果不在<code>grammar Name;</code> 前声明规则类型，那么该文件可以同时包含语法规则和词法规则</li>
+<li><code>mode</code> 只有<code>lexer grammar</code> 中存在</li>
+<li><code>channel</code> 也只在<code>lexer grammar</code> 中存在</li>
+</ul>
+<pre class="line-numbers language-antlr4" data-language="antlr4"><code class="language-antlr4"><span class="token keyword">channels</span> <span class="token action"><span class="token punctuation">&#123;</span><span class="token content">
+  WHITESPACE_CHANNEL,
+  COMMENTS_CHANNEL
+</span><span class="token punctuation">&#125;</span></span>
+
+<span class="token definition token constant">WS</span> <span class="token punctuation">:</span> <span class="token character-class regex"><span class="token punctuation">[</span> <span class="token escape">\r</span><span class="token escape">\t</span><span class="token escape">\n</span><span class="token punctuation">]</span></span><span class="token operator">+</span> <span class="token operator">-></span> <span class="token command"><span class="token function">channel</span><span class="token punctuation">(</span>WHITESPACE_CHANNEL<span class="token punctuation">)</span></span> <span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="import"><a class="markdownIt-Anchor" href="#import"></a> Import</h3>
+<p>通过<code>import</code> 指令，可以让语法描述文件拆分成可重用的小块。修改起来也比较方便。主文件会集成源文件所有的规则，并且会覆盖掉源文件中的同名规则。</p>
+<h3 id="token"><a class="markdownIt-Anchor" href="#token"></a> Token</h3>
+<p><code>token</code> 节用来定义没有相关的词法规则的词素。</p>
+<pre class="line-numbers language-antlr4" data-language="antlr4"><code class="language-antlr4"><span class="token comment">// explicitly define keyword token types to avoid implicit definition warnings</span>
+<span class="token keyword">tokens</span> <span class="token action"><span class="token punctuation">&#123;</span><span class="token content"> BEGIN, END, IF, THEN, WHILE </span><span class="token punctuation">&#125;</span></span>
+ 
+<span class="token annotation keyword">@lexer::members</span> <span class="token action"><span class="token punctuation">&#123;</span><span class="token content"> // keywords map used in lexer to assign token types
+Map&lt;String,Integer> keywords = new HashMap&lt;String,Integer>() &#123;&#123;
+	put("begin", KeywordsParser.BEGIN);
+	put("end", KeywordsParser.END);
+	...
+&#125;&#125;;
+</span><span class="token punctuation">&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<hr />
+<h2 id="解析器语法"><a class="markdownIt-Anchor" href="#解析器语法"></a> 解析器语法</h2>
+<p><code>antlr4</code> 的语法基本有以下两种形式：</p>
+<pre class="line-numbers language-antlr4" data-language="antlr4"><code class="language-antlr4"><span class="token comment">/** name : body */</span>
+<span class="token definition rule class-name">retstat</span> <span class="token punctuation">:</span> <span class="token string">'return'</span> expr <span class="token string">';'</span> <span class="token punctuation">;</span>  
+
+<span class="token comment">/** 或者通过 `|` 表示或操作 */</span>
+<span class="token definition rule class-name">operator</span><span class="token punctuation">:</span>
+ 	<span class="token definition rule class-name">stat</span><span class="token punctuation">:</span> retstat  <span class="token comment">// 在规则中定义子规则，新手尽量不要这样用</span>
+ 	<span class="token operator">|</span> <span class="token string">'break'</span> <span class="token string">';'</span>
+ 	<span class="token operator">|</span> <span class="token string">'continue'</span> <span class="token string">';'</span>
+ 	<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>antlr4</code> 会为每条规则都生成一个对象，可以通过<code>=</code> 为规则添加标签，这样在生成的代码上下文中会添加字段。参考<a target="_blank" rel="noopener" href="https://yijun1171.github.io/2015/03/30/ANTLR4%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E8%AF%AD%E6%B3%95%E5%AD%97%E5%85%B8-Grammar-Lexicon/">ANTLR4学习笔记</a></p>
+<p><code>?+*</code> 在规则中同样适用。</p>
+<h3 id="异常处理"><a class="markdownIt-Anchor" href="#异常处理"></a> 异常处理</h3>
+<p>异常处理的形式如下，需要在规则结束后定义：</p>
+<pre class="line-numbers language-antlr4" data-language="antlr4"><code class="language-antlr4"><span class="token definition rule class-name">r</span> <span class="token punctuation">:</span> <span class="token operator">..</span>.
+  <span class="token punctuation">;</span>
+  <span class="token keyword">catch</span><span class="token character-class regex"><span class="token punctuation">[</span>RecognitionException e<span class="token punctuation">]</span></span> <span class="token action"><span class="token punctuation">&#123;</span><span class="token content"> throw e; </span><span class="token punctuation">&#125;</span></span>
+  <span class="token keyword">finally</span> <span class="token action"><span class="token punctuation">&#123;</span><span class="token content"> System.out.println("exit rule r"); </span><span class="token punctuation">&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>异常列表：</p>
+<ul>
+<li><code>RecognitionException</code></li>
+<li><code>NoViableAltException</code></li>
+<li><code>LexerNoViableAltException</code></li>
+<li><code>InputMismatchException</code></li>
+<li><code>FailedPredicateException</code></li>
+</ul>
+<h3 id="规则的属性"><a class="markdownIt-Anchor" href="#规则的属性"></a> 规则的属性</h3>
+<p>暂不涉及。</p>
+<pre class="line-numbers language-antlr4" data-language="antlr4"><code class="language-antlr4"><span class="token comment">// 解析1+2*3，同样新手尽量不要用</span>
+expr<span class="token character-class regex"><span class="token punctuation">[</span>int pr<span class="token punctuation">]</span></span> <span class="token punctuation">:</span> id
+               <span class="token punctuation">(</span> <span class="token action"><span class="token punctuation">&#123;</span><span class="token content">4 >= $pr</span><span class="token punctuation">&#125;</span></span><span class="token operator">?</span> <span class="token string">'*'</span> expr<span class="token character-class regex"><span class="token punctuation">[</span>5<span class="token punctuation">]</span></span>
+               <span class="token operator">|</span> <span class="token action"><span class="token punctuation">&#123;</span><span class="token content">3 >= $pr</span><span class="token punctuation">&#125;</span></span><span class="token operator">?</span> <span class="token string">'+'</span> expr<span class="token character-class regex"><span class="token punctuation">[</span>4<span class="token punctuation">]</span></span>
+               <span class="token operator">|</span> <span class="token action"><span class="token punctuation">&#123;</span><span class="token content">2 >= $pr</span><span class="token punctuation">&#125;</span></span><span class="token operator">?</span> <span class="token string">'('</span> expr<span class="token character-class regex"><span class="token punctuation">[</span>0<span class="token punctuation">]</span></span> <span class="token string">')'</span>
+               <span class="token punctuation">)</span><span class="token operator">*</span>
+             <span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="入口规则和eof"><a class="markdownIt-Anchor" href="#入口规则和eof"></a> 入口规则和EOF</h3>
+<p>需要记住的是<code>EOF</code> 表示文件结尾就是了：</p>
+<pre class="line-numbers language-antlr4" data-language="antlr4"><code class="language-antlr4"><span class="token definition rule class-name">file</span> <span class="token punctuation">:</span> element<span class="token operator">*</span> <span class="token constant">EOF</span><span class="token punctuation">;</span> <span class="token comment">// don't stop early. must match all input</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>一般来说，由上面的只是就能写一个不错的前端了。</p>
+<hr />
+<h2 id="action-和-attribute"><a class="markdownIt-Anchor" href="#action-和-attribute"></a> Action 和 Attribute</h2>
+<p>在前文我们看到了Action 的基本用法，下面的例子会讲到如何在Action 里面访问语法规则的上下文：</p>
+<pre class="line-numbers language-antlr4" data-language="antlr4"><code class="language-antlr4"><span class="token definition rule class-name">decl</span><span class="token punctuation">:</span> type <span class="token constant">ID</span> <span class="token string">';'</span>
+      <span class="token comment">// 通过规则名访问上下文  </span>
+      <span class="token action"><span class="token punctuation">&#123;</span><span class="token content">System.out.println("var "+$ID.text+":"+$type.text+";");</span><span class="token punctuation">&#125;</span></span>
+
+    <span class="token operator">|</span> t<span class="token punctuation">=</span><span class="token constant">ID</span> id<span class="token punctuation">=</span><span class="token constant">ID</span> <span class="token string">';'</span>
+      <span class="token comment">// 通过label 标签访问规则上下文 </span>
+      <span class="token action"><span class="token punctuation">&#123;</span><span class="token content">System.out.println("var "+$id.text+":"+$t.text+";");</span><span class="token punctuation">&#125;</span></span>
+
+    <span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="token-属性"><a class="markdownIt-Anchor" href="#token-属性"></a> token 属性</h3>
+<p>而一条规则全部的属性有以下几种，如无特殊说明，均为<code>int</code> 类型：</p>
+<ul>
+<li><code>text</code>: 字符串</li>
+<li><code>type</code> token 类型</li>
+<li><code>line</code> 行号</li>
+<li><code>pos</code> 列号</li>
+<li><code>index</code> 所在序号</li>
+<li><code>channel</code></li>
+<li><code>int</code> token 的整数值</li>
+</ul>
+<h3 id="语法属性"><a class="markdownIt-Anchor" href="#语法属性"></a> 语法属性</h3>
+<p>同样的，在Action 中可以访问到以下语法规则的上下文：</p>
+<ul>
+<li><code>text</code>: <code>String</code></li>
+<li><code>start</code>: <code>Token</code></li>
+<li><code>stop</code>: <code>Token</code></li>
+<li><code>ctx</code>: <code>ParserRuleContext</code></li>
+<li><code>parser</code>: <code>parser</code></li>
+</ul>
+<h3 id="动态作用域属性"><a class="markdownIt-Anchor" href="#动态作用域属性"></a> 动态作用域属性</h3>
+<p>暂不涉及。</p>
+<h2 id="词法分析"><a class="markdownIt-Anchor" href="#词法分析"></a> 词法分析</h2>
+<p>需要注意的是<code>mode</code> 允许按上下文对词法规则进行分组，看起来还挺抽象的。并且在组合语法中不允许使用<code>mode</code>。</p>
+<p>此外，还有一些常用的词法规则：</p>
+<ul>
+<li><code>T</code>: token 名</li>
+<li><code>'literal'</code>: 文本</li>
+<li><code>[char set]</code>: 或运算</li>
+<li><code>'x'..'y'</code>: 类似于<code>[a-z]</code></li>
+<li><code>.</code>: 任意一个字符串</li>
+<li><code>~x</code>: 不包含运算符</li>
+</ul>
+<p>并且词法分析是支持递归的！</p>
+<h3 id="词法分析器的命令"><a class="markdownIt-Anchor" href="#词法分析器的命令"></a> 词法分析器的命令</h3>
+<ul>
+<li><code>skip</code>: 跳过当前的token</li>
+<li><code>push/popMode</code>，<code>mode()</code>，<code>more()</code>：用于操作模式栈  <pre class="line-numbers language-antlr4" data-language="antlr4"><code class="language-antlr4"><span class="token comment">// Default "mode": Everything OUTSIDE of a tag</span>
+<span class="token definition token constant">COMMENT</span> <span class="token punctuation">:</span> <span class="token string">'&lt;!--'</span> .<span class="token operator">*?</span> <span class="token string">'-->'</span> <span class="token punctuation">;</span>
+<span class="token definition token constant">CDATA</span>   <span class="token punctuation">:</span> <span class="token string">'&lt;![CDATA['</span> .<span class="token operator">*?</span> <span class="token string">']]>'</span> <span class="token punctuation">;</span>
+<span class="token definition token constant">OPEN</span> <span class="token punctuation">:</span> <span class="token string">'&lt;'</span> <span class="token operator">-></span> <span class="token command"><span class="token function">pushMode</span><span class="token punctuation">(</span>INSIDE<span class="token punctuation">)</span></span> <span class="token punctuation">;</span>
+<span class="token operator">..</span>.
+<span class="token definition token constant">XMLDeclOpen</span> <span class="token punctuation">:</span> <span class="token string">'&lt;?xml'</span> <span class="token constant">S</span> <span class="token operator">-></span> <span class="token command"><span class="token function">pushMode</span><span class="token punctuation">(</span>INSIDE<span class="token punctuation">)</span></span> <span class="token punctuation">;</span>
+<span class="token definition token constant">SPECIAL_OPEN</span><span class="token punctuation">:</span> <span class="token string">'&lt;?'</span> Name <span class="token operator">-></span> <span class="token command"><span class="token function">more</span><span class="token punctuation">,</span> <span class="token function">pushMode</span><span class="token punctuation">(</span>PROC_INSTR<span class="token punctuation">)</span></span> <span class="token punctuation">;</span>
+<span class="token comment">// ----------------- Everything INSIDE of a tag ---------------------</span>
+<span class="token keyword">mode</span> <span class="token constant">INSIDE</span><span class="token punctuation">;</span>
+<span class="token definition token constant">CLOSE</span>        <span class="token punctuation">:</span> <span class="token string">'>'</span> <span class="token operator">-></span> <span class="token command"><span class="token function">popMode</span></span> <span class="token punctuation">;</span>
+<span class="token definition token constant">SPECIAL_CLOSE</span><span class="token punctuation">:</span> <span class="token string">'?>'</span> <span class="token operator">-></span> <span class="token command"><span class="token function">popMode</span></span> <span class="token punctuation">;</span> <span class="token comment">// close &lt;?xml...?></span>
+<span class="token definition token constant">SLASH_CLOSE</span>  <span class="token punctuation">:</span> <span class="token string">'/>'</span> <span class="token operator">-></span> <span class="token command"><span class="token function">popMode</span></span> <span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><code>type()</code>：似乎是指定token 内容的类型？</li>
+<li><code>channel()</code>：用于指定channel，但是如何定义channel 呢？</li>
+</ul>
+<p>通过<code>option</code> 指令还可以设置是否大小写敏感，具体可以参考<a target="_blank" rel="noopener" href="https://github.com/antlr/antlr4/blob/master/doc/options.md">Option</a>。</p>
+<hr />
+<h2 id="解释编译"><a class="markdownIt-Anchor" href="#解释编译"></a> 解释编译</h2>
+<p>虽然看起来花里胡哨的用法很多，但是初学者能用到的东西其实很少，最重要的还是语法图部分。以及，如何将<code>antlr4</code> 生成的结果解释并运行，否则写前端就没有了任何意义。</p>
+<p>以<a href=""></a> 中的代码为例，<code>#</code> 后面的标签可以用来生成<code>listener</code> 和<code>visitor</code>：</p>
+<pre class="line-numbers language-antlr4" data-language="antlr4"><code class="language-antlr4"><span class="token keyword">grammar</span> Calc<span class="token punctuation">;</span>
+
+<span class="token definition rule class-name">prog</span>
+    <span class="token punctuation">:</span> stat<span class="token operator">+</span>
+    <span class="token punctuation">;</span>
+
+<span class="token definition rule class-name">stat</span>
+    <span class="token punctuation">:</span> expr                   <span class="token label punctuation"># printExpr</span>
+    <span class="token operator">|</span> <span class="token constant">ID</span> <span class="token string">'='</span> expr            <span class="token label punctuation"># assign</span>
+    <span class="token punctuation">;</span>
+
+<span class="token definition rule class-name">expr</span>
+    <span class="token punctuation">:</span> expr op<span class="token punctuation">=</span><span class="token punctuation">(</span><span class="token constant">MUL</span><span class="token operator">|</span><span class="token constant">DIV</span><span class="token punctuation">)</span> expr <span class="token label punctuation"># MulDiv</span>
+    <span class="token operator">|</span> expr op<span class="token punctuation">=</span><span class="token punctuation">(</span><span class="token constant">ADD</span><span class="token operator">|</span><span class="token constant">SUB</span><span class="token punctuation">)</span> expr <span class="token label punctuation"># AddSub</span>
+    <span class="token operator">|</span> <span class="token constant">INT</span>                    <span class="token label punctuation"># int</span>
+    <span class="token operator">|</span> <span class="token constant">ID</span>                     <span class="token label punctuation"># id</span>
+    <span class="token operator">|</span> <span class="token string">'('</span> expr <span class="token string">')'</span>           <span class="token label punctuation"># parens</span>
+    <span class="token punctuation">;</span>
+
+<span class="token definition token constant">MUL</span> <span class="token punctuation">:</span> <span class="token string">'*'</span> <span class="token punctuation">;</span>
+
+<span class="token definition token constant">DIV</span> <span class="token punctuation">:</span> <span class="token string">'/'</span> <span class="token punctuation">;</span>
+
+<span class="token definition token constant">ADD</span> <span class="token punctuation">:</span> <span class="token string">'+'</span> <span class="token punctuation">;</span>
+
+<span class="token definition token constant">SUB</span> <span class="token punctuation">:</span> <span class="token string">'-'</span> <span class="token punctuation">;</span>
+
+<span class="token definition token constant">ID</span>  <span class="token punctuation">:</span> <span class="token character-class regex"><span class="token punctuation">[</span>a<span class="token range punctuation">-</span>zA<span class="token range punctuation">-</span>Z<span class="token punctuation">]</span></span><span class="token operator">+</span> <span class="token punctuation">;</span>
+
+<span class="token definition token constant">INT</span> <span class="token punctuation">:</span> <span class="token character-class regex"><span class="token punctuation">[</span>0<span class="token range punctuation">-</span>9<span class="token punctuation">]</span></span><span class="token operator">+</span> <span class="token punctuation">;</span>
+
+<span class="token definition token constant">WS</span>  <span class="token punctuation">:</span> <span class="token character-class regex"><span class="token punctuation">[</span> <span class="token escape">\t</span><span class="token escape">\r</span><span class="token escape">\n</span><span class="token punctuation">]</span></span><span class="token operator">+</span> <span class="token operator">-></span> <span class="token command"><span class="token function">skip</span></span> <span class="token punctuation">;</span>    <span class="token comment">// toss out whitespace</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>其中<code>visitor</code> 可以用来实现解释器：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 为所有标签声明一个visitor 接口</span>
+antlr -no-listener <span class="token parameter variable">-visitor</span> Calc.g4  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>而在<code>listener</code> 模式下，我们可以开发编译型的语言。同样的，是通过实现相应的接口方法实现的：</p>
+<ul>
+<li><code>enterXX()</code></li>
+<li><code>exitXX()</code></li>
+</ul>
+<p>下面是python 中执行<code>listener</code> 的代码：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> sys
+<span class="token keyword">from</span> antlr4 <span class="token keyword">import</span> <span class="token operator">*</span>
+<span class="token keyword">from</span> CalcLexer <span class="token keyword">import</span> CalcLexer
+<span class="token keyword">from</span> CalcParser <span class="token keyword">import</span> CalcParser
+<span class="token keyword">from</span> CalcListener <span class="token keyword">import</span> CalcListener 
+ 
+<span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    input_stream <span class="token operator">=</span> InputStream<span class="token punctuation">(</span><span class="token string">'4+5'</span><span class="token punctuation">)</span>
+    lexer <span class="token operator">=</span> CalcLexer<span class="token punctuation">(</span>input_stream<span class="token punctuation">)</span>
+    stream <span class="token operator">=</span> CommonTokenStream<span class="token punctuation">(</span>lexer<span class="token punctuation">)</span>
+    parser <span class="token operator">=</span> CalcParser<span class="token punctuation">(</span>stream<span class="token punctuation">)</span>
+    tree <span class="token operator">=</span> parser<span class="token punctuation">.</span>prog<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 起始规则</span>
+    <span class="token comment"># 需要预先实现Listener 内的方法  </span>
+    printer <span class="token operator">=</span> CalcListener<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    walker <span class="token operator">=</span> ParseTreeWalker<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    walker<span class="token punctuation">.</span>walk<span class="token punctuation">(</span>printer<span class="token punctuation">,</span> tree<span class="token punctuation">)</span>
+
+main<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment"># https://stackoverflow.com/a/53817040 关于antlr4 不能直接读取字符串输入  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>所以说，<code>antlr4</code> 不仅可以做前端用，甚至还为后端设计了一套模板。好帅啊~~~</p>
+<p>另外，有一个语法仓库，包含了很多语言的语法规则，感觉还是蛮有用的：<a target="_blank" rel="noopener" href="https://github.com/antlr/grammars-v4">antlr/grammars-v4</a></p>
+<h2 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://github.com/antlr/antlr4/blob/master/doc/index.md">ANTLR 4 Documentation</a></li>
+<li><a target="_blank" rel="noopener" href="https://wizardforcel.gitbooks.io/antlr4-short-course/content/">ANTLR 4简明教程</a></li>
+<li><a target="_blank" rel="noopener" href="https://yijun1171.github.io/2015/03/30/ANTLR4%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E8%AF%AD%E6%B3%95%E5%AD%97%E5%85%B8-Grammar-Lexicon/">ANTLR4学习笔记</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2023/08/02/antlr4/" title="antlr4 笔记">https://12tall.github.io/2023/08/02/antlr4/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"># python</a>
+              <a href="/tags/%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/" rel="tag"># 词法分析</a>
+              <a href="/tags/%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/" rel="tag"># 语法分析</a>
+              <a href="/tags/antlr4/" rel="tag"># antlr4</a>
+              <a href="/tags/java/" rel="tag"># java</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/07/31/pywinauto/" rel="prev" title="pywinauto 自动化">
+                  <i class="fa fa-angle-left"></i> pywinauto 自动化
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/09/01/openwrt/" rel="next" title="VM 中配置OpenWRT 透明路由">
+                  VM 中配置OpenWRT 透明路由 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

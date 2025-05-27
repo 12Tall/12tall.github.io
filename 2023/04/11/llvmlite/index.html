@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="通过µGo语言实现——从头开发一个迷你Go语言编译器 来学习llvmlite 的使用，以及将IR 编译为可执行程序。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="llvmlite 学习笔记">
+<meta property="og:url" content="https://12tall.github.io/2023/04/11/llvmlite/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="通过µGo语言实现——从头开发一个迷你Go语言编译器 来学习llvmlite 的使用，以及将IR 编译为可执行程序。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-04-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.251Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="llvm">
+<meta property="article:tag" content="llvmlite">
+<meta property="article:tag" content="clang">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://12tall.github.io/2023/04/11/llvmlite/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2023/04/11/llvmlite/","path":"2023/04/11/llvmlite/","title":"llvmlite 学习笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>llvmlite 学习笔记 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#hello-world"><span class="nav-number">1.</span> <span class="nav-text"> Hello World</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90ir"><span class="nav-number">1.1.</span> <span class="nav-text"> 生成IR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91"><span class="nav-number">1.2.</span> <span class="nav-text"> 编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95"><span class="nav-number">1.3.</span> <span class="nav-text"> 测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E7%BB%86%E8%8A%82"><span class="nav-number">2.</span> <span class="nav-text"> 一些细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9D%91"><span class="nav-number">2.1.</span> <span class="nav-text"> 坑</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2023/04/11/llvmlite/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="llvmlite 学习笔记 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          llvmlite 学习笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-04-11 00:00:00" itemprop="dateCreated datePublished" datetime="2023-04-11T00:00:00+08:00">2023-04-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>通过<a target="_blank" rel="noopener" href="https://wa-lang.org/ugo-compiler-book/index.html">µGo语言实现——从头开发一个迷你Go语言编译器</a> 来学习llvmlite 的使用，以及将IR 编译为可执行程序。</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="hello-world"><a class="markdownIt-Anchor" href="#hello-world"></a> Hello World</h2>
+<p>通过llvmlite 构建一个<code>hello world!</code> 程序，来展示代码的基本工作流程。下面是参考的C 代码：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span><span class="token string">&lt;stdio.h></span>  </span>
+
+<span class="token keyword">char</span> <span class="token operator">*</span> fstr<span class="token operator">=</span> <span class="token string">"🦒 hello %s! \n\0"</span><span class="token punctuation">;</span>  
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">char</span> <span class="token operator">*</span> c_str <span class="token operator">=</span> <span class="token string">"world\0"</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span>fstr<span class="token punctuation">,</span> c_str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>但是要通过llvm 的IR 构建，就需要从类型声明开始、中间变量的创建与赋值都要按部就班地完成，调用<code>printf</code>的部分参考自<a target="_blank" rel="noopener" href="https://gist.github.com/alendit/defe3d518cd8f3f3e28cb46708d4c9d6">alendit/call_printf.py</a>：</p>
+<pre class="line-numbers language-python&#123;11,28&#125;" data-language="python&#123;11,28&#125;"><code class="language-python&#123;11,28&#125;">from llvmlite import ir  
+
+# 创建模块，模块名可以为空  
+module &#x3D; ir.Module(name&#x3D;&quot;main&quot;)  
+
+# 创建int32 类型  
+i32 &#x3D; ir.IntType(32)  
+# 创建int8 * 指针类型  
+voidptr_ty &#x3D; ir.IntType(8).as_pointer()  
+
+## 没有函数体的函数在IR 中会被写作declare
+# 创建函数类型 int func(void * ...)，支持可变长参数  
+printf_ty &#x3D; ir.FunctionType(ir.IntType(32), [voidptr_ty], var_arg&#x3D;True)  
+# 声明int printf(void * ...)
+printf &#x3D; ir.Function(module, printf_ty, name&#x3D;&quot;printf&quot;)
+
+# 注释的代码是不支持中文和emoji 的
+# fmt &#x3D; &quot;hello %s!\n\0&quot;
+# c_fmt &#x3D; ir.Constant(ir.ArrayType(ir.IntType(8), len(fmt)), bytearray(fmt.encode(&quot;utf8&quot;)))
+fmt &#x3D; bytearray(&quot;🦒 hello %s! \n\0&quot;.encode(&#39;utf-8&#39;))  # 创建一个可变字节数组对象
+c_fmt &#x3D; ir.Constant(ir.ArrayType(ir.IntType(8), len(fmt)),fmt) # 根据上面的对象创建一个字符串常量
+global_fmt &#x3D; ir.GlobalVariable(module, c_fmt.type, name&#x3D;&quot;fstr&quot;) # 创建全局变量fstr
+global_fmt.linkage &#x3D; &#39;internal&#39;  # 链接方式  
+global_fmt.global_constant &#x3D; True  # 全局常量
+global_fmt.initializer &#x3D; c_fmt  # 通过c_fmt 初始化
+
+
+# 有函数体的函数会被写作define  
+# 创建函数类型int func()，无参数  
+fn_ty &#x3D; ir.FunctionType(i32,())  
+# 创建int main() 函数
+func &#x3D; ir.Function(module, fn_ty, name&#x3D;&#39;main&#39;)  
+# 添加函数体block    
+block &#x3D; func.append_basic_block(name&#x3D;&quot;entry&quot;)  
+# 构建函数体
+builder &#x3D; ir.IRBuilder(block)    
+
+## 创建函数体的局部变量  
+arg &#x3D; &quot;world\0&quot;  # 注意不要忘记\0
+c_arg &#x3D; ir.Constant(ir.ArrayType(ir.IntType(8), len(arg)), bytearray(arg.encode(&quot;utf8&quot;)))
+# 分配空间
+c_str &#x3D; builder.alloca(c_arg.type)
+# 赋值
+builder.store(c_arg, c_str)
+
+# 指针类型转换
+fmt_arg &#x3D; builder.bitcast(global_fmt, voidptr_ty)
+builder.call(printf, [fmt_arg, c_str])
+
+# 创建返回值
+res &#x3D; i32(0)  
+# 添加返回值
+builder.ret(res)  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="生成ir"><a class="markdownIt-Anchor" href="#生成ir"></a> 生成IR</h3>
+<p>所有的代码都包含在<code>module</code> 变量中，可以将其以字符串的形式保存在文本文件中：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'./a.out.ll'</span><span class="token punctuation">,</span> <span class="token string">'w'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
+    f<span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span>module<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>生成的中间代码如下：</p>
+<pre class="line-numbers language-llvm&#123;5&#125;" data-language="llvm&#123;5&#125;"><code class="language-llvm&#123;5&#125;">; ModuleID &#x3D; &quot;main&quot;
+target triple &#x3D; &quot;unknown-unknown-unknown&quot;
+target datalayout &#x3D; &quot;&quot;
+
+declare i32 @&quot;printf&quot;(i8* %&quot;.1&quot;, ...)
+
+@&quot;fstr&quot; &#x3D; internal constant [17 x i8] c&quot;\f0\9f\a6\92 hello %s! \0a\00&quot;
+define i32 @&quot;main&quot;()
+&#123;
+entry:
+  %&quot;.2&quot; &#x3D; alloca [6 x i8]
+  store [6 x i8] c&quot;world\00&quot;, [6 x i8]* %&quot;.2&quot;
+  %&quot;.4&quot; &#x3D; bitcast [17 x i8]* @&quot;fstr&quot; to i8*
+  %&quot;.5&quot; &#x3D; call i32 (i8*, ...) @&quot;printf&quot;(i8* %&quot;.4&quot;, [6 x i8]* %&quot;.2&quot;)
+  ret i32 0
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="编译"><a class="markdownIt-Anchor" href="#编译"></a> 编译</h3>
+<p>因为llvmlite 暂时还没有集成<code>lld</code> 工具，所以只能通过系统命令将生成的<code>.ll</code> 源码或者<code>.obj</code> 文件编译成可执行程序。看Github 上的<a target="_blank" rel="noopener" href="https://github.com/numba/llvmlite/pull/898">PR 898</a> 应该在<code>v4.0</code> 正式版就将集成<code>lld</code> 工具。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> subprocess
+
+p <span class="token operator">=</span> subprocess<span class="token punctuation">.</span>Popen<span class="token punctuation">(</span><span class="token string">"clang ./a.out.ll"</span><span class="token punctuation">,</span> shell<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> stdout<span class="token operator">=</span>subprocess<span class="token punctuation">.</span>PIPE<span class="token punctuation">)</span>
+r <span class="token operator">=</span> p<span class="token punctuation">.</span>stdout<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>r<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="测试"><a class="markdownIt-Anchor" href="#测试"></a> 测试</h3>
+<p>有以下三个命令来查看程序退出时的代码，<code>ipynb</code> 默认用的是<code>cmd</code>。</p>
+<ul>
+<li><code>*nix</code>：<code>echo $?</code></li>
+<li><code>powershell</code>：<code>echo $LASTEXITCODE</code></li>
+<li><code>cmd</code>：<code>echo %errorlevel%</code></li>
+</ul>
+<pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell">> <span class="token punctuation">.</span><span class="token operator">/</span>a<span class="token punctuation">.</span>exe  
+🦒 hello world!  
+> <span class="token function">echo</span> <span class="token variable">$LASTEXITCODE</span>
+0
+
+<span class="token comment"># 编译C 到ir，用于对照代码</span>
+> clang <span class="token operator">-</span>emit-llvm <span class="token operator">-</span>Wimplicit-<span class="token keyword">function</span><span class="token operator">-</span>declaration <span class="token operator">-</span>S <span class="token operator">-</span>c main<span class="token punctuation">.</span>c <span class="token operator">-</span>o main<span class="token punctuation">.</span>ll<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>从上面的实验结果可以得出：通过llvmlite 构建并编辑可执行程序是行得通的。但是真的要设计一门语言还要结合词法分析、语法分析、语义分析以及通过遍历AST 构建IR 的过程。此过程可以想象是比较繁琐的，通过面向对象的设计方法设计AST 节点可能能简化这一过程。但应该也不会太多。</p>
+<h2 id="一些细节"><a class="markdownIt-Anchor" href="#一些细节"></a> 一些细节</h2>
+<ul>
+<li>系统调用。最好创建一个标准库，重新封装各种系统调用如<code>printf</code> 等，以避免引起不必要的bug；</li>
+<li>避免重名。创建模块时，可以给每个文件夹都创建一个<code>.ll</code> 模块，而且变量名也以模块名为前缀，这样就能最大程度上避免重名问题；</li>
+<li>增量编译。可以检测<code>.ll</code> 文件的创建时间或者标签，如果近期有修改则重新编译；</li>
+<li>外部变量（函数）。在每个<code>.ll</code> 文件中都需要<code>decalre</code> 函数或者<code>extern</code> 变量然后通过函数或者变量的全名进行引用；</li>
+<li>语义分析。上面的的事情都需要在语义分析时处理。</li>
+</ul>
+<h3 id="坑"><a class="markdownIt-Anchor" href="#坑"></a> 坑</h3>
+<ul>
+<li>通过解析<code>.ll</code> 得到的模块，其中的函数不能直接调用，所以在创建和使用标准库的时候需要在python 源码中定义，最好不要从<code>.ll</code> 文件中读取；</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2023/04/11/llvmlite/" title="llvmlite 学习笔记">https://12tall.github.io/2023/04/11/llvmlite/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"># python</a>
+              <a href="/tags/llvm/" rel="tag"># llvm</a>
+              <a href="/tags/llvmlite/" rel="tag"># llvmlite</a>
+              <a href="/tags/clang/" rel="tag"># clang</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/04/10/01_dc_motor/" rel="prev" title="电机与驱动读书笔记（常规直流电机）">
+                  <i class="fa fa-angle-left"></i> 电机与驱动读书笔记（常规直流电机）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/04/17/04_dc_motor_simulation/" rel="next" title="电机与驱动读书笔记（直流电机仿真）">
+                  电机与驱动读书笔记（直流电机仿真） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

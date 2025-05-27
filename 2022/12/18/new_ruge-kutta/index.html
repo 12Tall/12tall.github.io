@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="有关数学原理部分，请参考龙格-库塔算法求微分方程（组），本文着重描述RK4 的Python 实现。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="新龙格-库塔算法求微分方程（组）的实现">
+<meta property="og:url" content="https://12tall.github.io/2022/12/18/new_ruge-kutta/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="有关数学原理部分，请参考龙格-库塔算法求微分方程（组），本文着重描述RK4 的Python 实现。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://12tall.github.io/2022/12/18/new_ruge-kutta/rc-circuit.png">
+<meta property="article:published_time" content="2022-12-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.175Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="微分方程">
+<meta property="article:tag" content="数值分析">
+<meta property="article:tag" content="微分代数方程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://12tall.github.io/2022/12/18/new_ruge-kutta/rc-circuit.png">
+
+
+<link rel="canonical" href="https://12tall.github.io/2022/12/18/new_ruge-kutta/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2022/12/18/new_ruge-kutta/","path":"2022/12/18/new_ruge-kutta/","title":"新龙格-库塔算法求微分方程（组）的实现"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>新龙格-库塔算法求微分方程（组）的实现 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.</span> <span class="nav-text"> 状态对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.</span> <span class="nav-text"> 模块对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97dae"><span class="nav-number">3.</span> <span class="nav-text"> 计算DAE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E5%AF%B9%E8%B1%A1"><span class="nav-number">4.</span> <span class="nav-text"> 系统对象</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/12/18/new_ruge-kutta/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="新龙格-库塔算法求微分方程（组）的实现 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          新龙格-库塔算法求微分方程（组）的实现
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-12-18 00:00:00" itemprop="dateCreated datePublished" datetime="2022-12-18T00:00:00+08:00">2022-12-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/math/" itemprop="url" rel="index"><span itemprop="name">math</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>有关数学原理部分，请参考<a href="./README.md">龙格-库塔算法求微分方程（组）</a>，本文着重描述<code>RK4</code> 的Python 实现。</p>
+</blockquote>
+<span id="more"></span>
+<p>最终效果如下：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> RK4 <span class="token keyword">import</span> Module
+m <span class="token operator">=</span> Module<span class="token punctuation">(</span><span class="token punctuation">)</span>
+m<span class="token punctuation">.</span>s3 <span class="token operator">=</span> m<span class="token punctuation">.</span>create_state<span class="token punctuation">(</span><span class="token keyword">lambda</span> m<span class="token punctuation">:</span> math<span class="token punctuation">.</span>sin<span class="token punctuation">(</span>m<span class="token punctuation">.</span>time<span class="token punctuation">.</span>val<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> init_value<span class="token operator">=</span><span class="token operator">-</span><span class="token number">1.0</span><span class="token punctuation">)</span>
+m<span class="token punctuation">.</span>s4 <span class="token operator">=</span> m<span class="token punctuation">.</span>create_state<span class="token punctuation">(</span><span class="token keyword">lambda</span> m<span class="token punctuation">:</span> <span class="token operator">-</span>math<span class="token punctuation">.</span>sin<span class="token punctuation">(</span>m<span class="token punctuation">.</span>time<span class="token punctuation">.</span>val<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> init_value<span class="token operator">=</span><span class="token number">1.0</span><span class="token punctuation">)</span>
+
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>m<span class="token punctuation">.</span>s3<span class="token punctuation">.</span>curr_value<span class="token punctuation">,</span>m<span class="token punctuation">.</span>s4<span class="token punctuation">.</span>curr_value<span class="token punctuation">)</span>
+m<span class="token punctuation">.</span>calc<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment"># 或者 </span>
+m<span class="token punctuation">.</span>simulate<span class="token punctuation">(</span>stop_at<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="状态对象"><a class="markdownIt-Anchor" href="#状态对象"></a> 状态对象</h2>
+<p>按照控制系统的叫法，我们称<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mi>x</mi><mo>˙</mo></mover><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>x</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>x</mi><mi>n</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\dot{x}=f(x_1, x_2, \dots, x_n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66786em;vertical-align:0em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.66786em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">x</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.11111000000000001em;"><span class="mord">˙</span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> 称为状态空间方程。这里我们将一个方程封装成一个对象，其：</p>
+<ul>
+<li>方程左边是对象名，也是某一变量的微分</li>
+<li>方程右边是方程的算法函数</li>
+<li>另外，该方程还应包含：
+<ul>
+<li>初始值</li>
+<li>计算结果或当前值</li>
+<li>斜率的缓存：至少包括<code>k1~k4</code></li>
+<li>计算的步长：<code>h</code></li>
+<li>当前计算的阶数：<code>1,2,3,4</code> 其中的一个</li>
+</ul>
+</li>
+</ul>
+<p>因为我们在计算过程中的需要先遍历状态方程，再遍历计算阶数。所以我们需要根据当前的阶数信息，返回不同的状态值给算法函数，所以我们封装了<code>val()</code> 闭包函数，可以根据步长等信息返回每次计算时所需要的参数值。具体请参考<a href="./README.md">龙格-库塔算法求微分方程（组）</a>。以下是代码实现：</p>
+<pre class="line-numbers language-python&#123;5,10-20&#125;" data-language="python&#123;5,10-20&#125;"><code class="language-python&#123;5,10-20&#125;">class State():
+    def __init__(self, func&#x3D;lambda module: 0, init_value&#x3D;0, h&#x3D;0.001) -&gt; None:
+        self.init_value &#x3D; init_value   # 变量初始值
+        self.curr_value &#x3D; init_value   # 暂存计算结果  
+        self.k &#x3D; [.0, .0, .0, .0, .0]  # k0 &#x3D; (k1+2*k2+2*k3+k4)&#x2F;6
+        self.index &#x3D; 1             # 当前需要计算k?: 1,2,3,4
+        self.h &#x3D; h                 # 迭代步长，不要手动修改
+        self.func &#x3D; func           # 方程右边的算法，是一个lambda 函数，参数是一个模块
+
+    def val(self):                 # 根据k_n 计算状态值，并将该状态值作为求解k_&#123;n+1&#125; 的参数返回给lambda 函数  
+        temp_value &#x3D; 0             # 该方法容易扩展到更高阶
+        if self.index &#x3D;&#x3D; 1:
+            temp_value &#x3D; self.curr_value
+        elif self.index &#x3D;&#x3D; 2:
+            temp_value &#x3D; self.curr_value + 0.5*self.h*self.k[1]
+        elif self.index &#x3D;&#x3D; 3:
+            temp_value &#x3D; self.curr_value + 0.5*self.h*self.k[2]
+        elif self.index &#x3D;&#x3D; 4:
+            temp_value &#x3D; self.curr_value + self.h*self.k[3]
+        return temp_value
+
+    def calc(self):                # 计算最终斜率存储到k0，并利用k0 算出最终结果
+        self.k[0] &#x3D; (self.k[1]+2*self.k[2]+2*self.k[3]+self.k[4])&#x2F;6
+        self.curr_value &#x3D; self.curr_value + self.h*self.k[0]
+
+    def reset(self):               # 重置状态，在重启计算时需要  
+        self.curr_value &#x3D; self.init_value<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="模块对象"><a class="markdownIt-Anchor" href="#模块对象"></a> 模块对象</h2>
+<p>模块对象是唯一对外导出的对象，相当于一个微分方程组的上下文，包含有若干状态变量与仿真步长等信息，至少包含一个默认的状态变量<code>time</code>。其代码如下：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">Module</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> h<span class="token operator">=</span><span class="token number">0.01</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>h <span class="token operator">=</span> h  <span class="token comment"># 模块的步长最终（必须）会更新到到所有状态变量中</span>
+        self<span class="token punctuation">.</span>res <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+        self<span class="token punctuation">.</span>time <span class="token operator">=</span> self<span class="token punctuation">.</span>create_state<span class="token punctuation">(</span><span class="token keyword">lambda</span> m<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># 创建一个默认状态变量time  </span>
+
+    <span class="token keyword">def</span> <span class="token function">create_state</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> func<span class="token punctuation">,</span> init_value<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">:</span>     <span class="token comment"># 创建状态变量  </span>
+        <span class="token keyword">return</span> State<span class="token punctuation">(</span>func<span class="token operator">=</span>func<span class="token punctuation">,</span> init_value<span class="token operator">=</span>init_value<span class="token punctuation">,</span> h<span class="token operator">=</span>self<span class="token punctuation">.</span>h<span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">reset</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 重置计算过程，依次重置所有状态变量</span>
+        <span class="token keyword">for</span> prop_name <span class="token keyword">in</span> <span class="token builtin">dir</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            prop <span class="token operator">=</span> <span class="token builtin">getattr</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> prop_name<span class="token punctuation">)</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token builtin">isinstance</span><span class="token punctuation">(</span>prop<span class="token punctuation">,</span> State<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token keyword">assert</span> <span class="token builtin">type</span><span class="token punctuation">(</span>prop<span class="token punctuation">)</span> <span class="token operator">==</span> State
+                prop<span class="token punctuation">.</span>reset<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">calc</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        res <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+        <span class="token keyword">for</span> index <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 计算每个属性的 k1,k2,k3,k4</span>
+            <span class="token keyword">for</span> prop_name <span class="token keyword">in</span> <span class="token builtin">dir</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                prop <span class="token operator">=</span> <span class="token builtin">getattr</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> prop_name<span class="token punctuation">)</span>  <span class="token comment"># 遍历所有属性，筛选State 类型用于计算，似乎是按属性名排序的</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token builtin">isinstance</span><span class="token punctuation">(</span>prop<span class="token punctuation">,</span> State<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                    <span class="token keyword">assert</span> <span class="token builtin">type</span><span class="token punctuation">(</span>prop<span class="token punctuation">)</span> <span class="token operator">==</span> State
+                    prop<span class="token punctuation">.</span>index <span class="token operator">=</span> index  <span class="token comment"># 更新状态变量的阶数，使得prop.val() 函数能返回正确的值</span>
+                    prop<span class="token punctuation">.</span>k<span class="token punctuation">[</span>index<span class="token punctuation">]</span> <span class="token operator">=</span> prop<span class="token punctuation">.</span>func<span class="token punctuation">(</span>self<span class="token punctuation">)</span>  <span class="token comment"># 将计算结果暂存到对应的状态变量中</span>
+
+        <span class="token comment"># 根据上面计算的k1~k4 数据，计算这一步的k0 和结果，并以数组的形式返回</span>
+        <span class="token keyword">for</span> prop_name <span class="token keyword">in</span> <span class="token builtin">dir</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            prop <span class="token operator">=</span> <span class="token builtin">getattr</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> prop_name<span class="token punctuation">)</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token builtin">isinstance</span><span class="token punctuation">(</span>prop<span class="token punctuation">,</span> State<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token keyword">assert</span> <span class="token builtin">type</span><span class="token punctuation">(</span>prop<span class="token punctuation">)</span> <span class="token operator">==</span> State
+                res<span class="token punctuation">.</span>append<span class="token punctuation">(</span>prop<span class="token punctuation">.</span>curr_value<span class="token punctuation">)</span>
+                prop<span class="token punctuation">.</span>calc<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> res
+    
+    <span class="token keyword">def</span> <span class="token function">get_states</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        res <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+        <span class="token keyword">for</span> prop_name <span class="token keyword">in</span> <span class="token builtin">dir</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            prop <span class="token operator">=</span> <span class="token builtin">getattr</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> prop_name<span class="token punctuation">)</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token builtin">isinstance</span><span class="token punctuation">(</span>prop<span class="token punctuation">,</span> State<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                res<span class="token punctuation">.</span>append<span class="token punctuation">(</span>prop_name<span class="token punctuation">)</span>
+        <span class="token keyword">return</span> res
+
+    <span class="token keyword">def</span> <span class="token function">set_step</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> h<span class="token operator">=</span><span class="token number">0.01</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 重新设置步长，越小越精确</span>
+        self<span class="token punctuation">.</span>h <span class="token operator">=</span> h
+        <span class="token keyword">for</span> prop_name <span class="token keyword">in</span> <span class="token builtin">dir</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            prop <span class="token operator">=</span> <span class="token builtin">getattr</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> prop_name<span class="token punctuation">)</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token builtin">isinstance</span><span class="token punctuation">(</span>prop<span class="token punctuation">,</span> State<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token keyword">assert</span> <span class="token builtin">type</span><span class="token punctuation">(</span>prop<span class="token punctuation">)</span> <span class="token operator">==</span> State
+                prop<span class="token punctuation">.</span>h <span class="token operator">=</span> self<span class="token punctuation">.</span>h
+
+    <span class="token keyword">def</span> <span class="token function">simulate</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> stop_at <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"----- simulation started -----"</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>reset<span class="token punctuation">(</span><span class="token punctuation">)</span>       
+        self<span class="token punctuation">.</span>res<span class="token punctuation">.</span>append<span class="token punctuation">(</span>self<span class="token punctuation">.</span>get_states<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+        i <span class="token operator">=</span> <span class="token number">0</span>
+        <span class="token keyword">while</span> i <span class="token operator">&lt;=</span> stop_at<span class="token operator">+</span>self<span class="token punctuation">.</span>h<span class="token punctuation">:</span>  <span class="token comment"># 保证计算覆盖范围</span>
+            self<span class="token punctuation">.</span>res<span class="token punctuation">.</span>append<span class="token punctuation">(</span>m<span class="token punctuation">.</span>calc<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            i <span class="token operator">+=</span> self<span class="token punctuation">.</span>h<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="计算dae"><a class="markdownIt-Anchor" href="#计算dae"></a> 计算DAE</h2>
+<p>龙格库塔算法在计算常微分方程（ODE）时，很好用，但是它需要方程组具有标准的形式，即每个方程的左边是一个微分，且微分符号只能存在于左边。而在工程上我们会用到很多守恒定律，例如<code>KCL/KVL</code>。这样会有一些方程左右两边都是代数方程的情况，混合有微分方程和代数方程的情况被称为“微分代数方程”，简称DAE。这时，我们需要将方程移项、微分处理，手工转换成标准ODE 形式，然后再进行计算。虽然比较麻烦，但是如果手头上没有专门的DAE 求解器的话，这也是一个很好的思路。例如最开始的算例中，实际上等效于：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo fence="true">{</mo><mtable rowspacing="0.15999999999999992em" columnalign="left left left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mover accent="true"><msub><mi>s</mi><mn>3</mn></msub><mo>˙</mo></mover><mo>=</mo><mi>s</mi><mi>i</mi><mi>n</mi><mo stretchy="false">(</mo><mi>t</mi><mi>i</mi><mi>m</mi><mi>e</mi><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msub><mi>s</mi><mn>4</mn></msub><mo>=</mo><msub><mi>s</mi><mn>3</mn></msub></mrow></mstyle></mtd></mtr></mtable></mrow><annotation encoding="application/x-tex">\left\{\begin{array}{lll}
+    \dot{s_3} = sin(time)  \\  
+    s_4 = s_3
+\end{array}\right.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.40003em;vertical-align:-0.95003em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">{</span></span><span class="mord"><span class="mtable"><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6678599999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.13889em;"><span class="mord">˙</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal">n</span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mord mathnormal">i</span><span class="mord mathnormal">m</span><span class="mord mathnormal">e</span><span class="mclose">)</span></span></span><span style="top:-2.4099999999999997em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9500000000000004em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p>但是不能写作下面的形式，因为ODE 右边不能包含微分：</p>
+<pre class="line-numbers language-python&#123;4&#125;" data-language="python&#123;4&#125;"><code class="language-python&#123;4&#125;">from RK4 import Module
+m &#x3D; Module()
+m.s3 &#x3D; m.create_state(lambda m: math.sin(m.time.val()), init_value&#x3D;-1.0)
+m.s4 &#x3D; m.create_state(lambda m: -m.s3.val(), init_value&#x3D;1.0)
+
+m.set_step(0.001)
+m.simulate(stop_at&#x3D;1)
+print(m.res)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="系统对象"><a class="markdownIt-Anchor" href="#系统对象"></a> 系统对象</h2>
+<p>2022-12-18 更新。上面的代码直接可以复制运行，而下面的部分是根据上述想法，将模块提取为一个中间层，方便复杂系统的建模与抽象。代码已经更新到<a href="./rk4.py">rk4.py</a>，具体改动为：</p>
+<ol>
+<li>最大的改动是要代码能够满足IDE 的提示需求</li>
+<li><code>create_*()</code> 函数会自动创建并添加到<code>self</code> 对象，同时返回创建对象的引用
+<ol>
+<li>需要注意的是，不要有重名的现象</li>
+</ol>
+</li>
+<li>无论是模块、还是状态，都会根据<code>System</code> 获取步长<code>h</code> 和<code>index</code> 信息</li>
+<li>取消状态方程的传入参数，因为复杂的系统通过引用传递更方便</li>
+<li>龙哥-库塔的迭代过程也由<code>System</code> 完成</li>
+<li>考虑系统的复杂程度，<code>System.calc()</code> 不再自动记录计算结果，需要用户自己统计需要的数据。不排除后面会添加，但是现在能写出来就不错了。</li>
+</ol>
+<p>下面是<code>System</code> 类的代码：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">System</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> h<span class="token operator">=</span><span class="token number">0.01</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>h <span class="token operator">=</span> h
+        self<span class="token punctuation">.</span>index <span class="token operator">=</span> <span class="token number">1</span>
+        self<span class="token punctuation">.</span>create_timer<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">pass</span>
+
+    <span class="token keyword">def</span> <span class="token function">get_h</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> self<span class="token punctuation">.</span>h
+
+    <span class="token keyword">def</span> <span class="token function">create_module</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"module"</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        module_name <span class="token operator">=</span> <span class="token string">"/"</span><span class="token operator">+</span>name
+        module <span class="token operator">=</span> Module<span class="token punctuation">(</span>module_name<span class="token punctuation">,</span> get_h<span class="token operator">=</span><span class="token keyword">lambda</span><span class="token punctuation">:</span> self<span class="token punctuation">.</span>h<span class="token punctuation">,</span>
+                        get_index<span class="token operator">=</span><span class="token keyword">lambda</span><span class="token punctuation">:</span> self<span class="token punctuation">.</span>index<span class="token punctuation">)</span>
+        <span class="token builtin">setattr</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> module_name<span class="token punctuation">,</span> module<span class="token punctuation">)</span>
+        <span class="token keyword">return</span> module
+
+    <span class="token keyword">def</span> <span class="token function">create_timer</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># system 的timer 是一个状态的引用，如果是一个模块的引用的话，将会导致该timer 被计算两次</span>
+        timer <span class="token operator">=</span> self<span class="token punctuation">.</span>create_module<span class="token punctuation">(</span><span class="token string">"timer"</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>timer <span class="token operator">=</span> timer<span class="token punctuation">.</span>create_state<span class="token punctuation">(</span>
+            <span class="token string">"time"</span><span class="token punctuation">,</span> <span class="token keyword">lambda</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span> init_value<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">calc_k1_to_k4</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">for</span> index <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 计算每个属性的 k1,k2,k3,k4</span>
+            self<span class="token punctuation">.</span>index <span class="token operator">=</span> index
+            <span class="token keyword">for</span> module_name <span class="token keyword">in</span> <span class="token builtin">dir</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token comment"># 遍历所有属性，筛选State 类型用于计算，似乎是按属性名排序的</span>
+                module<span class="token punctuation">:</span> Module <span class="token operator">=</span> <span class="token builtin">getattr</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> module_name<span class="token punctuation">)</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token builtin">isinstance</span><span class="token punctuation">(</span>module<span class="token punctuation">,</span> Module<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                    module<span class="token punctuation">.</span>index <span class="token operator">=</span> index  <span class="token comment"># 更新状态变量的阶数，使得prop.val() 函数能返回正确的值</span>
+                    module<span class="token punctuation">.</span>calc_k1_to_k4<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">calc_k0</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># 根据上面计算的k1~k4 数据，计算这一步的k0 和结果，并以数组的形式返回</span>
+        <span class="token keyword">for</span> module_name <span class="token keyword">in</span> <span class="token builtin">dir</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token comment"># 遍历所有属性，筛选State 类型用于计算，似乎是按属性名排序的</span>
+            module<span class="token punctuation">:</span> Module <span class="token operator">=</span> <span class="token builtin">getattr</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> module_name<span class="token punctuation">)</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token builtin">isinstance</span><span class="token punctuation">(</span>module<span class="token punctuation">,</span> Module<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                module<span class="token punctuation">.</span>calc_k0<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">reset</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">for</span> module_name <span class="token keyword">in</span> <span class="token builtin">dir</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            module<span class="token punctuation">:</span> Module <span class="token operator">=</span> <span class="token builtin">getattr</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> module_name<span class="token punctuation">)</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token builtin">isinstance</span><span class="token punctuation">(</span>module<span class="token punctuation">,</span> Module<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                module<span class="token punctuation">.</span>reset<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">calc</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>calc_k1_to_k4<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>calc_k0<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">simulate</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">pass</span>
+    <span class="token keyword">pass</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>测试代码如下：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">##### Test #####</span>
+<span class="token comment"># u = 5v</span>
+<span class="token comment"># r = 1 Ω</span>
+<span class="token comment"># c = 1 H</span>
+<span class="token comment"># 三种元件串联，得：</span>
+<span class="token comment"># 1. du_vol = 0, u_vol_0 = 5</span>
+<span class="token comment"># 2. dc_vol = i/c  = r_vol/r/c,  c_vol_0 = 0  # 流入为正</span>
+<span class="token comment"># 3. dr_vol = -i/c = -r_vol/r/c, r_vol = -5</span>
+
+sys <span class="token operator">=</span> System<span class="token punctuation">(</span><span class="token number">0.01</span><span class="token punctuation">)</span>
+U <span class="token operator">=</span> <span class="token number">5</span>
+R <span class="token operator">=</span> <span class="token number">1</span>
+C <span class="token operator">=</span> <span class="token number">1</span>
+
+
+u <span class="token operator">=</span> sys<span class="token punctuation">.</span>create_module<span class="token punctuation">(</span><span class="token string">"u"</span><span class="token punctuation">)</span>  <span class="token comment"># 电源模型</span>
+u_h <span class="token operator">=</span> u<span class="token punctuation">.</span>create_state<span class="token punctuation">(</span><span class="token string">"u_h"</span><span class="token punctuation">,</span> func<span class="token operator">=</span><span class="token keyword">lambda</span><span class="token punctuation">:</span> U<span class="token operator">*</span>math<span class="token punctuation">.</span>cos<span class="token punctuation">(</span>sys<span class="token punctuation">.</span>timer<span class="token punctuation">.</span>val<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> init_value<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
+u_l <span class="token operator">=</span> u<span class="token punctuation">.</span>create_state<span class="token punctuation">(</span><span class="token string">"u_l"</span><span class="token punctuation">,</span> func<span class="token operator">=</span><span class="token keyword">lambda</span><span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span> init_value<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
+
+r <span class="token operator">=</span> sys<span class="token punctuation">.</span>create_module<span class="token punctuation">(</span><span class="token string">"r"</span><span class="token punctuation">)</span>  <span class="token comment"># 电阻模型</span>
+r_i <span class="token operator">=</span> r<span class="token punctuation">.</span>create_state<span class="token punctuation">(</span><span class="token string">"r_i"</span><span class="token punctuation">,</span> func<span class="token operator">=</span><span class="token keyword">lambda</span><span class="token punctuation">:</span> <span class="token punctuation">(</span>
+    u_h<span class="token punctuation">.</span>func<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-</span>r_l<span class="token punctuation">.</span>func<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">/</span>R<span class="token punctuation">,</span> init_value<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>  <span class="token comment"># lambda 函数中可以通过.fun()调用其他状态的微分 # 初始值在某种程度上决定了电路的运行状态</span>
+
+c <span class="token operator">=</span> sys<span class="token punctuation">.</span>create_module<span class="token punctuation">(</span><span class="token string">"c"</span><span class="token punctuation">)</span>  <span class="token comment"># 电容模型</span>
+c_h <span class="token operator">=</span> c<span class="token punctuation">.</span>create_state<span class="token punctuation">(</span><span class="token string">"c_h"</span><span class="token punctuation">,</span> func<span class="token operator">=</span><span class="token keyword">lambda</span><span class="token punctuation">:</span> u_l<span class="token punctuation">.</span>func<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span>
+                     r_i<span class="token punctuation">.</span>val<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">/</span>C<span class="token punctuation">)</span>
+
+<span class="token comment"># 连接点处电压相同</span>
+r_h <span class="token operator">=</span> u_h
+c_l <span class="token operator">=</span> u_l
+r_l <span class="token operator">=</span> c_h
+<span class="token comment"># 环路电流处处相等</span>
+u_i <span class="token operator">=</span> c_i <span class="token operator">=</span> r_i
+
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">3200</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    sys<span class="token punctuation">.</span>calc<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>i<span class="token operator">*</span><span class="token number">0.01</span><span class="token punctuation">,</span>c_h<span class="token punctuation">.</span>curr_value<span class="token punctuation">,</span> c_i<span class="token punctuation">.</span>curr_value<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>电感的响应如下：<br />
+<img src="rc-circuit.png" alt="" /></p>
+<p>如果需要更高的精度，还可以升级到更高的阶数。只需修改状态变量中高亮的代码部分就行了。<a href="rk4.py">源代码</a>。需要用户对物理模型非常非常熟悉才行，算是一种不完整的模块化吧。照着真正的建模语言还有很大的差距 😦</p>
+<hr />
+<p>2022-12-18 上海</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2022/12/18/new_ruge-kutta/" title="新龙格-库塔算法求微分方程（组）的实现">https://12tall.github.io/2022/12/18/new_ruge-kutta/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B/" rel="tag"># 微分方程</a>
+              <a href="/tags/%E6%95%B0%E5%80%BC%E5%88%86%E6%9E%90/" rel="tag"># 数值分析</a>
+              <a href="/tags/%E5%BE%AE%E5%88%86%E4%BB%A3%E6%95%B0%E6%96%B9%E7%A8%8B/" rel="tag"># 微分代数方程</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/12/08/julia/" rel="prev" title="Julia 编程语言">
+                  <i class="fa fa-angle-left"></i> Julia 编程语言
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/12/27/openhydraulics/oil/" rel="next" title="液压油 Oil">
+                  液压油 Oil <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

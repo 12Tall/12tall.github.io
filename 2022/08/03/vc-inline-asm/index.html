@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="虽然C++ 是C 语言的超集，但是二者并不能做到无缝衔接。这里记一下C 和C++是如何以静态链接库的形式调用彼此的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C 语言内联汇编">
+<meta property="og:url" content="https://12tall.github.io/2022/08/03/vc-inline-asm/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="虽然C++ 是C 语言的超集，但是二者并不能做到无缝衔接。这里记一下C 和C++是如何以静态链接库的形式调用彼此的。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.046Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="asm">
+<meta property="article:tag" content="c">
+<meta property="article:tag" content="cpp">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://12tall.github.io/2022/08/03/vc-inline-asm/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2022/08/03/vc-inline-asm/","path":"2022/08/03/vc-inline-asm/","title":"C 语言内联汇编"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>C 语言内联汇编 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#c-%E8%AF%AD%E8%A8%80%E8%B0%83%E7%94%A8c-%E7%9A%84%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text"> C 语言调用C++ 的成员函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E9%87%8D%E8%BD%BD"><span class="nav-number">2.</span> <span class="nav-text"> 函数的重载</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-%E8%AF%AD%E8%A8%80%E8%B0%83%E7%94%A8go"><span class="nav-number"></span> <span class="nav-text"> C 语言调用Go</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text"> 准备工作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text"> 变量类型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="nav-number">2.</span> <span class="nav-text"> 示例代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vc-%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96"><span class="nav-number"></span> <span class="nav-text"> VC 内联汇编</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%BA%A6%E5%AE%9A"><span class="nav-number">1.</span> <span class="nav-text"> 函数调用约定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E6%98%93%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text"> 简易实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mingw-%E7%9B%B8%E5%85%B3"><span class="nav-number"></span> <span class="nav-text"> Mingw 相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E5%8F%91dll"><span class="nav-number">1.</span> <span class="nav-text"> 开发dll</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%98%85%E8%AF%BB"><span class="nav-number"></span> <span class="nav-text"> 参考阅读</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#c-cpp-%E7%9B%B8%E5%85%B3"><span class="nav-number">1.</span> <span class="nav-text"> C-Cpp 相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#go-%E7%9B%B8%E5%85%B3"><span class="nav-number">2.</span> <span class="nav-text"> Go 相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vc-%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96-2"><span class="nav-number">3.</span> <span class="nav-text"> VC 内联汇编</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/vc-inline-asm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="C 语言内联汇编 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C 语言内联汇编
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-03 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-03T00:00:00+08:00">2022-08-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/c-cpp/" itemprop="url" rel="index"><span itemprop="name">c_cpp</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>虽然C++ 是C 语言的超集，但是二者并不能做到无缝衔接。这里记一下C 和C++是如何以静态链接库的形式调用彼此的。</p>
+<span id="more"></span>
+<CodeGroup>
+<CodeGroupItem title="C++ 调用C">  
+<pre class="line-numbers language-c++&#123;13&#125;" data-language="c++&#123;13&#125;"><code class="language-c++&#123;13&#125;">&#x2F;&#x2F; + folder
+&#x2F;&#x2F;     + c_code.c  
+&#x2F;&#x2F;     + cpp_code.cpp  
+&#x2F;&#x2F;     + makefile
+
+&#x2F;***** c_code.c *****&#x2F;
+int add(int a, int b)&#123;
+    return a + b;
+&#125;
+
+&#x2F;***** cpp_code.cpp *****&#x2F;
+#include &lt;iostream&gt;
+extern &quot;C&quot; int add(int a, int b);
+
+int main()&#123;
+    std::cout &lt;&lt; add(1, 2) &lt;&lt; std::endl;
+    return 0;
+&#125;
+
+&#x2F;** makefile
+ * build_c: c_code.c  
+ *     gcc -c c_code.c 
+ * build_cpp: build_c cpp_code.cpp
+ *     g++ cpp_code.cpp c_code.o
+ *&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+<CodeGroupItem title="C 调用C++">
+<pre class="line-numbers language-c++&#123;16&#125;" data-language="c++&#123;16&#125;"><code class="language-c++&#123;16&#125;">&#x2F;&#x2F; + folder
+&#x2F;&#x2F;     + c_code.c  
+&#x2F;&#x2F;     + cpp_code.cpp  
+&#x2F;&#x2F;     + makefile
+
+&#x2F;***** c_code.c *****&#x2F;
+#include &lt;stdio.h&gt;
+int sub(int, int);
+
+int main()&#123;
+    printf(&quot;%d\n&quot;, sub(1, 2));
+    return 0;
+&#125;
+
+&#x2F;***** cpp_code.cpp *****&#x2F;
+extern &quot;C&quot; int sub(int a, int b)&#123;
+    return a - b;
+&#125;
+
+&#x2F;** makefile
+ * build_c: build_cpp c_code.c  
+ *     gcc c_code.c  *.o
+ * build_cpp:  build_c cpp_code.cpp
+ *     g++ -c cpp_code.cpp 
+ *&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+</CodeGroup>
+<h3 id="c-语言调用c-的成员函数"><a class="markdownIt-Anchor" href="#c-语言调用c-的成员函数"></a> C 语言调用C++ 的成员函数</h3>
+<p>因为C 语言没有对象的概念，所有成员函数都需要写成method(Obj *, int param) 这种形式才行。所以，如果想在C 语言中调用C++ 中的成员函数，则需要提供（手写）一个wrapper，将其转化为C 风格。<br />
+<CodeGroup>
+<CodeGroupItem title="C 代码"></p>
+<pre class="line-numbers language-c++&#123;7&#125;" data-language="c++&#123;7&#125;"><code class="language-c++&#123;7&#125;">#include &lt;stdio.h&gt;
+
+void *Create(int);
+int GetAge(void *stu);
+
+int main()&#123;
+    void *stu &#x3D; Create(13);
+    printf(&quot;%d\n&quot;, GetAge(stu));
+    return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+<CodeGroupItem title="C++ 类">
+<pre class="line-numbers language-c++&#123;17-23&#125;" data-language="c++&#123;17-23&#125;"><code class="language-c++&#123;17-23&#125;">&#x2F;&#x2F; cpp_code.cpp
+#include &lt;iostream&gt;
+using namespace std;
+
+class Student&#123;
+public:
+    int _age;
+    Student(int age);
+    ~Student();
+&#125;;
+
+Student::Student(int age)&#123;
+    this-&gt;_age &#x3D; age;
+    cout &lt;&lt; &quot;age: &quot; &lt;&lt; age &lt;&lt; endl;
+&#125;
+
+extern &quot;C&quot; void *Create(int age)&#123;
+    return new Student(age);
+&#125;
+
+extern &quot;C&quot; int GetAge(void *stu)&#123;
+    return ((Student *)stu)-&gt;_age;
+&#125;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+<CodeGroupItem title="makefile">  
+<pre class="line-numbers language-makefile" data-language="makefile"><code class="language-makefile"><span class="token target symbol">build_cpp</span><span class="token punctuation">:</span> cpp_code.cpp  
+	g++ -c cpp_code.cpp  
+
+<span class="token comment"># 在编译C++ 类的时候需要添加 -lstdc++ 标记  </span>
+<span class="token comment"># 否则gcc 不能识别C++ 的语法</span>
+<span class="token target symbol">build_c</span><span class="token punctuation">:</span> build_cpp c_code.c  
+	gcc c_code.c  *.o -lstdc++<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+</CodeGroup>
+<h3 id="函数的重载"><a class="markdownIt-Anchor" href="#函数的重载"></a> 函数的重载</h3>
+<p>重载函数同成员函数没有区别，只是需要额外的字符来区分返回值或者参数，一般会用宏命令来自动生成，不多赘述。</p>
+<h2 id="c-语言调用go"><a class="markdownIt-Anchor" href="#c-语言调用go"></a> C 语言调用Go</h2>
+<p>在很多专业软件里面会提供C/C++，的接口，但是C 语言的内存管理操作过于复杂。于是想到是否可以通过C 做胶水语言，实际上调用golang 来完成任务。不过golang 导出到C 的数据，也是需要手工回收的，但是只需对接口交换的数据处理一次就够了。</p>
+<h3 id="准备工作"><a class="markdownIt-Anchor" href="#准备工作"></a> 准备工作</h3>
+<p>安装Golang、MinGW，这里要注意的是<strong>Golang 与MinGW 的位宽一定要是一致的，否则在编译时会出错</strong>。因为主要是采用动态链接库的形式来调用Go 函数。本文选择的都是64 位的程序。</p>
+<h4 id="变量类型"><a class="markdownIt-Anchor" href="#变量类型"></a> 变量类型</h4>
+<p>通过引入<code>C</code> 包，可以使用C 兼容的变量类型。</p>
+<table>
+<thead>
+<tr>
+<th>C</th>
+<th>Golang</th>
+<th>宽度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>char</td>
+<td>C.char</td>
+<td>byte</td>
+</tr>
+<tr>
+<td>signed char</td>
+<td>C.schar</td>
+<td>int8</td>
+</tr>
+<tr>
+<td>unsigned char</td>
+<td>C.uchar</td>
+<td>uint8</td>
+</tr>
+<tr>
+<td>short int</td>
+<td>C.short</td>
+<td>int16</td>
+</tr>
+<tr>
+<td>short unsigned int</td>
+<td>C.ushort</td>
+<td>uint16</td>
+</tr>
+<tr>
+<td>int</td>
+<td>C.int</td>
+<td>int</td>
+</tr>
+<tr>
+<td>unsigned int</td>
+<td>C.uint</td>
+<td>uint32</td>
+</tr>
+<tr>
+<td>long int</td>
+<td>C.long</td>
+<td>int32 or int64</td>
+</tr>
+<tr>
+<td>long unsigned int</td>
+<td>C.ulong</td>
+<td>uint32 or uint64</td>
+</tr>
+<tr>
+<td>long long int</td>
+<td>C.longlong</td>
+<td>int64</td>
+</tr>
+<tr>
+<td>long long unsigned int</td>
+<td>C.ulonglong</td>
+<td>uint64</td>
+</tr>
+<tr>
+<td>float</td>
+<td>C.float</td>
+<td>float32</td>
+</tr>
+<tr>
+<td>double</td>
+<td>C.double</td>
+<td>float64</td>
+</tr>
+<tr>
+<td>wchar_t</td>
+<td>C.wchar_t</td>
+<td></td>
+</tr>
+<tr>
+<td>void *</td>
+<td>unsafe.Pointer</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>在使用时注意内存的释放:</p>
+<pre class="line-numbers language-go" data-language="go"><code class="language-go">cs <span class="token operator">:=</span> C<span class="token punctuation">.</span><span class="token function">CString</span><span class="token punctuation">(</span><span class="token string">"PN"</span><span class="token punctuation">)</span>
+<span class="token comment">// ...</span>
+C<span class="token punctuation">.</span><span class="token function">free</span><span class="token punctuation">(</span>unsafe<span class="token punctuation">.</span><span class="token function">Pointer</span><span class="token punctuation">(</span>cs<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h3 id="示例代码"><a class="markdownIt-Anchor" href="#示例代码"></a> 示例代码</h3>
+<p>示例包含两个文件：trj.go 和main.c。
+需要注意的是，golang 中需要有特殊的注释来声明导出函数。</p>
+<CodeGroup>
+<CodeGroupItem title="trj.go">  
+<pre class="line-numbers language-go&#123;13&#125;" data-language="go&#123;13&#125;"><code class="language-go&#123;13&#125;">package main
+
+import &quot;C&quot;
+&#x2F;&#x2F; 添加C 库的支持，用于类型转换
+&#x2F;&#x2F; 使用C.free 时，必须按照上面格式引入C 语言的头文件。
+
+import (
+	&quot;fmt&quot;
+	&quot;unsafe&quot;
+)
+
+&#x2F;&#x2F; 下面的注释是必须的，声明该函数会被导出
+&#x2F;&#x2F; export 前后分别必须只有0 个和1 个空格
+
+&#x2F;&#x2F;export PrintBye
+func PrintBye() &#123;
+	fmt.Println(&quot;bye&quot;)
+&#125;
+
+&#x2F;&#x2F;export Sum
+func Sum(a C.int, b C.int) C.int &#123;
+	return a + b
+&#125;
+
+&#x2F;&#x2F;export GetStr
+func GetStr() *C.char &#123;
+	var a &#x3D; &quot;1&quot;
+	var b &#x3D; &quot;2&quot;
+	return C.CString(a + b)
+&#125;
+
+&#x2F;&#x2F;export FreeStr
+func FreeStr(str unsafe.Pointer) &#123;
+	C.free(str)
+&#125;
+
+func main() &#123;
+    &#x2F;&#x2F; main 方法是必须的
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+<CodeGroupItem title="main.c">
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;windows.h&gt;
+#include &lt;stdio.h&gt;
+
+typedef void (*LPPrintBye)();
+typedef int (*Sum)(int, int);
+typedef char *(*GetStr)();
+typedef void (*FreeStr)(void *);
+
+int main()
+&#123;
+    HMODULE hTrj &#x3D; LoadLibrary(&quot;trj.dll&quot;);
+    printf(&quot;dll addr: %p\n&quot;, hTrj);
+    LPPrintBye printBye &#x3D; (LPPrintBye)GetProcAddress(hTrj, &quot;PrintBye&quot;);
+    Sum sum &#x3D; (Sum)GetProcAddress(hTrj, &quot;Sum&quot;);
+    printf(&quot;Sum addr: %p\n&quot;, sum);
+    printf(&quot;1+2 &#x3D; %d\n&quot;, sum(1, 2));
+    GetStr getStr &#x3D; (GetStr)GetProcAddress(hTrj, &quot;GetStr&quot;);
+    printf(&quot;GetStr addr: %p\n&quot;, getStr);
+    char *str &#x3D; getStr();
+    printf(&quot;str &#x3D; %p\n&quot;, str);
+    printf(&quot;str addr: %s\n&quot;, str);
+
+    FreeStr freeStr &#x3D; (FreeStr)GetProcAddress(hTrj, &quot;FreeStr&quot;);
+    printf(&quot;FreeStr addr: %p\n&quot;, freeStr);
+    freeStr(str);
+    
+    &#x2F;&#x2F; 注意这里字符串已经被回收了，但是指针的指向还没变
+    printf(&quot;----- free str -----\n&quot;);
+    printf(&quot;str &#x3D; %p\n&quot;, str);
+    printf(&quot;str addr: %s\n&quot;, str);
+    str &#x3D; NULL; &#x2F;&#x2F; 指针指向安全位置
+
+    printBye();
+    FreeLibrary(hTrj);
+    return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+<CodeGroupItem title="编译执行">  
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 编译命令很简单，编译后会产生.dll 和.h 两个文件</span>
+go build <span class="token parameter variable">-ldflags</span> <span class="token string">"-s -w"</span> <span class="token parameter variable">-buildmode</span><span class="token operator">=</span>c-shared <span class="token parameter variable">-o</span> trj.dll trj.go  
+<span class="token comment"># -s, -w 用于减小动态链接库的体积  </span>
+<span class="token comment"># -s 压缩  </span>
+<span class="token comment"># -w 去掉调试信息  </span>
+
+<span class="token comment"># 但是一般用更简单的命令 </span>
+go build <span class="token parameter variable">-buildmode</span><span class="token operator">=</span>c-shared <span class="token parameter variable">-o</span> trj.dll trj.go
+
+<span class="token comment"># 当然，也可以生成静态链接库文件  </span>
+go build <span class="token parameter variable">-buildmode</span><span class="token operator">=</span>c-archive trj.go    
+<span class="token comment"># 此命令会生成`.a` 和`.h` 文件</span>
+
+gcc .<span class="token punctuation">\</span>main.c  
+.<span class="token punctuation">\</span>a.exe <span class="token comment"># 即可看到执行的结果  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+</CodeGroup>
+<h2 id="vc-内联汇编"><a class="markdownIt-Anchor" href="#vc-内联汇编"></a> VC 内联汇编</h2>
+<p>在Windows 下开发<a href="./n-api.md">N-API</a>插件时，有时候会遇到回调函数的问题。WIN32 的API 给约定好了回调函数传递的参数类型和数量。如果我们需要添加额外的参数时，应该怎么办呢？</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// 为方便理解，以JS 代替C 来做说明  </span>
+<span class="token constant">BOOL</span> <span class="token function">EnumWindows</span><span class="token punctuation">(</span>
+  <span class="token constant">WNDENUMPROC</span> lpEnumFunc<span class="token punctuation">,</span>  <span class="token comment">// 回调函数lpEnumFunc 接受两个参数</span>
+  <span class="token comment">// BOOL CALLBACK EnumWindowsProc(_In_ HWND hwnd, _In_ LPARAM lParam);</span>
+  <span class="token constant">LPARAM</span>      lParam
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+<span class="token comment">// 下面是JS 演示的闭包的用法  </span>
+<span class="token keyword">function</span> <span class="token function">closure</span><span class="token punctuation">(</span><span class="token parameter">int a</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token comment">// 返回一个函数</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token parameter">_In_ <span class="token constant">HWND</span> hwnd<span class="token punctuation">,</span> _In_ <span class="token constant">LPARAM</span> lParam</span><span class="token punctuation">)</span><span class="token operator">=></span><span class="token punctuation">&#123;</span>
+        a <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token comment">// 函数内部可以访问外层函数的局部变量</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function">EnumWindows</span><span class="token punctuation">(</span><span class="token function">closure</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 传递生成的回调函数</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可惜的是，这种混合风格的代码在C 语言中并未得到支持。而网络上比较流行的关于C 语言实现闭包的方法是通过<a target="_blank" rel="noopener" href="https://github.com/libffi/libffi">libffi</a> 来实现，本质上是通过汇编语言，按照不同平台下的函数调用约定来动态构造函数。在谷歌了许久之后，发现网络上并没有很易懂的原理说明，遂放弃继续研究，因为看别人写的源码实在是太麻烦了，尤其是汇编语言。不得不说，汇编似乎是唯一的选择，而我们知道许多C 编译器都支持内联汇编，那我们能不能通过内联汇编来实现我们的需求呢？</p>
+<h3 id="函数调用约定"><a class="markdownIt-Anchor" href="#函数调用约定"></a> 函数调用约定</h3>
+<p>函数的调用约定主要是函数参数传递的约定，例如在x86 VC中，函数传递参数的方式如下：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// 代码取自官方文档：</span>
+<span class="token comment">// https://docs.microsoft.com/zh-cn/cpp/assembler/inline/calling-c-functions-in-inline-assembly?view=msvc-160</span>
+<span class="token comment">// InlineAssembler_Calling_C_Functions_in_Inline_Assembly.cpp</span>
+<span class="token comment">// processor: x86</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+
+<span class="token keyword">char</span> format<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"%s %s\n"</span><span class="token punctuation">;</span>
+<span class="token keyword">char</span> hello<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"Hello"</span><span class="token punctuation">;</span>
+<span class="token keyword">char</span> world<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"world"</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span> <span class="token keyword">void</span> <span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// printf( format, hello, world );</span>
+   __asm
+   <span class="token punctuation">&#123;</span>
+      mov  eax<span class="token punctuation">,</span> offset world  <span class="token comment">// 参数从右至左依次压栈</span>
+      push eax
+      mov  eax<span class="token punctuation">,</span> offset hello
+      push eax
+      mov  eax<span class="token punctuation">,</span> offset format
+      push eax
+      call printf            <span class="token comment">// 调用函数</span>
+      <span class="token comment">//clean up the stack so that main can exit cleanly</span>
+      <span class="token comment">//use the unused register ebx to do the cleanup</span>
+                             <span class="token comment">// 函数调用之后参数出栈，使得堆栈平衡</span>
+      pop  ebx
+      pop  ebx
+      pop  ebx
+   <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>那我们很容易想到，在调用函数之前，我们提前将某些参数放入堆栈，然后再在函数体中取得这些参数，不就可以不受函数签名的限制了嘛？事实证明，这么做是可行的，只是稍微有些麻烦。</p>
+<h3 id="简易实现"><a class="markdownIt-Anchor" href="#简易实现"></a> 简易实现</h3>
+<p>为了减少其他因素的影响，这里推荐使用VS 来开发调试，因为VS 调试时支持查看汇编代码，这样会方便不少，而且不需要配置编译器环境等信息。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span><span class="token string">&lt;stdio.h></span></span>
+
+<span class="token keyword">int</span> <span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+	__asm <span class="token punctuation">&#123;</span>
+	    <span class="token keyword">int</span> val <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token comment">// 3. 在汇编语言中获取参数，可以直接将形参名当作地址用</span>
+        <span class="token comment">// 函数内部的局部变量应该都可以通过这种方式获取</span>
+		mov eax<span class="token punctuation">,</span> dword ptr<span class="token punctuation">[</span>a <span class="token operator">+</span> <span class="token number">0x04</span><span class="token punctuation">]</span><span class="token punctuation">;</span>  <span class="token comment">// 4. 取得我们手动压入的参数</span>
+                                       <span class="token comment">// 这里有意思的一点就是，我们手动压入的参数地址都大于第一个形参</span>
+		mov dword ptr<span class="token punctuation">[</span>val<span class="token punctuation">]</span><span class="token punctuation">,</span> eax<span class="token punctuation">;</span>       <span class="token comment">// 5. 因为内存间不能直接赋值，我们采用eax 作为中转</span>
+                                       <span class="token comment">// 不用担心eax 受到污染，因为我们的代码是在函数最前面的</span>
+	<span class="token punctuation">&#125;</span>
+	<span class="token comment">// 似乎只要变量未使用，就不会提前占用寄存器</span>
+	<span class="token keyword">return</span> a <span class="token operator">+</span> val<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+	<span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+	__asm push dword ptr<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>  <span class="token comment">// 1. 手动压入参数</span>
+	<span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token function">add</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>           <span class="token comment">// 2. 调用函数</span>
+	__asm add esp<span class="token punctuation">,</span> <span class="token number">0x04</span><span class="token punctuation">;</span>      <span class="token comment">// 6. 平衡堆栈，即恢复原先的栈顶指针，也可以用pop 指令</span>
+	<span class="token keyword">return</span> a<span class="token punctuation">;</span>                 <span class="token comment">// 7. 这里a 等于8，验证我们的想法是正确的</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// y由上述代码，也可以看出，VC 内联汇编主要有两种方式：  </span>
+<span class="token comment">// 1. __asm 单条汇编指令  </span>
+<span class="token comment">// 2. __asm&#123; 汇编代码块 &#125;  </span>
+<span class="token comment">// 而在汇编语言中要取得C 代码中的变量，也是非常简单，dword ptr[a] 就可以得到数值了   </span>
+<span class="token comment">// 需要注意的是，针对不同的目标平台，有不同的调用约定，这里只针对于x86 Windows</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="mingw-相关"><a class="markdownIt-Anchor" href="#mingw-相关"></a> Mingw 相关</h2>
+<h3 id="开发dll"><a class="markdownIt-Anchor" href="#开发dll"></a> 开发dll</h3>
+<p>在mingw 下生成dll 文件很简单。</p>
+<CodeGroup>
+<CodeGroupItem title="开发">  
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">&#x2F;&#x2F; my_dll.c  
+#include&lt;windows.h&gt;
+#include&lt;stdio.h&gt;
+
+int add(int a, int b)&#123;
+    return a+b;
+&#125;  
+
+&#x2F;&#x2F; dll 入口函数
+BOOL APIENTRY DllMain( 
+    HMODULE hModule,
+    DWORD  ul_reason_for_call,
+    LPVOID lpReserved)
+&#123;
+    printf(&quot;my_dll is loaded\n&quot;);
+    return TRUE;
+&#125;
+&#x2F;&#x2F; 执行&#96;gcc .&#x2F;my_dll.c -shared -o my_dll.dll&#96;，
+&#x2F;&#x2F; 将会在当前目录生成生成&#96;my_dll.dll&#96;。  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+<CodeGroupItem title="调用">
+<pre class="line-numbers language-c++&#123;16&#125;" data-language="c++&#123;16&#125;"><code class="language-c++&#123;16&#125;">#include &lt;windows.h&gt;
+#include&lt;stdio.h&gt;
+
+typedef int (*Add)(int ,int);  &#x2F;&#x2F; 定义函数指针类型
+
+int main(void)&#123;
+    HMODULE hDll &#x3D; LoadLibrary(&quot;my_dll.dll&quot;);
+    if (hDll !&#x3D; NULL)&#123;
+        &#x2F;&#x2F; 从my_dll.dll 中取得函数  
+        Add add &#x3D; (Add)GetProcAddress(hDll, &quot;add&quot;);  
+
+        if (add !&#x3D; NULL)&#123;  &#x2F;&#x2F; 执行函数
+            printf(&quot;a+b&#x3D;%d\n&quot;,add(a,b));  
+        &#125;
+
+        FreeLibrary(hDll);  &#x2F;&#x2F; 释放my_dll.dll
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+<CodeGroupItem title="入口函数">
+<pre class="line-numbers language-c++&#123;16&#125;" data-language="c++&#123;16&#125;"><code class="language-c++&#123;16&#125;">BOOL APIENTRY DllMain( 
+    HMODULE hModule,  &#x2F;&#x2F; 指向dll 本身的句柄
+    DWORD  ul_reason_for_call,  &#x2F;&#x2F; 被调用的原因(触发事件)
+    LPVOID lpReserved  &#x2F;&#x2F; 保留参数，无意义  
+    )
+&#123;
+    &#x2F;&#x2F; DWORD  ul_reason_for_call
+    switch(ul_reason_for_call)&#123;
+        case DLL_PROCESS_ATTACH: break;  &#x2F;&#x2F; dll 第一次被进程加载
+        case DLL_PROCESS_DETACH: break;  &#x2F;&#x2F; 释放dll 
+        case DLL_THREAD_ATTACH: break;   &#x2F;&#x2F; 当进程创建线程时
+        case DLL_THREAD_DETACH: break;   &#x2F;&#x2F; 当进程销毁线程时
+    &#125;
+    return TRUE;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</CodeGroupItem>
+</CodeGroup>
+<h2 id="参考阅读"><a class="markdownIt-Anchor" href="#参考阅读"></a> 参考阅读</h2>
+<h3 id="c-cpp-相关"><a class="markdownIt-Anchor" href="#c-cpp-相关"></a> C-Cpp 相关</h3>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://stroustrup.com/bs_faq2.html#callCpp">Bjarne Stroustrup’s C++ Style and Technique FAQ</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/27390078/gcc-compiling-c-code-undefined-reference-to-operator-newunsigned-long-lon">gcc compiling C++ code: undefined reference to ‘operator new…’</a></li>
+</ol>
+<h3 id="go-相关"><a class="markdownIt-Anchor" href="#go-相关"></a> Go 相关</h3>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://studygolang.com/articles/6798">Go和C类型对应关系</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/adjk/p/9469845.html">golang之cgo一—go与C基本类型转换</a></li>
+<li><a target="_blank" rel="noopener" href="https://my.oschina.net/u/1431106/blog/188646?p=%7B%7BcurrentPage-1%7D%7D">golang C.CString 必须Free</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Kingram/p/12088087.html">Golang编写Windows动态链接库(DLL)及C调用范例</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhance/p/10135142.html">golang —— 语言交互性</a></li>
+</ol>
+<h3 id="vc-内联汇编-2"><a class="markdownIt-Anchor" href="#vc-内联汇编-2"></a> VC 内联汇编</h3>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/4024492/can-anyone-help-me-interpret-this-simple-disassembly-from-windbg">Can anyone help me interpret this simple disassembly from WinDbg?</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2022/08/03/vc-inline-asm/" title="C 语言内联汇编">https://12tall.github.io/2022/08/03/vc-inline-asm/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/asm/" rel="tag"># asm</a>
+              <a href="/tags/c/" rel="tag"># c</a>
+              <a href="/tags/cpp/" rel="tag"># cpp</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/08/03/win32/" rel="prev" title="Win32 SDK编程">
+                  <i class="fa fa-angle-left"></i> Win32 SDK编程
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/08/03/win-high-accuracy-timmer/" rel="next" title="Windows 平台上的高精度定时器">
+                  Windows 平台上的高精度定时器 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

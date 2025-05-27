@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="因为水平有限，本文暂不讨论复杂度等专业话题，专心实现即可。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前缀树 Trie">
+<meta property="og:url" content="https://12tall.github.io/2022/10/07/trie/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="因为水平有限，本文暂不讨论复杂度等专业话题，专心实现即可。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-10-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.203Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="tree">
+<meta property="article:tag" content="Javascript">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://12tall.github.io/2022/10/07/trie/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2022/10/07/trie/","path":"2022/10/07/trie/","title":"前缀树 Trie"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>前缀树 Trie | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%89%8D%E7%BC%80%E6%A0%91"><span class="nav-number">1.</span> <span class="nav-text"> 什么是前缀树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text"> 实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E5%AE%9A%E4%B9%89"><span class="nav-number">2.1.</span> <span class="nav-text"> 类型定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E4%B8%80-%E5%88%86%E9%9A%94%E7%AC%A6"><span class="nav-number">2.2.</span> <span class="nav-text"> 扩展一 分隔符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E4%BA%8C-%E5%87%BD%E6%95%B0"><span class="nav-number">2.3.</span> <span class="nav-text"> 扩展二 函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E4%B8%89-%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="nav-number">2.4.</span> <span class="nav-text"> 扩展三 通配符</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%8F%E6%8A%80%E5%B7%A7"><span class="nav-number">2.4.1.</span> <span class="nav-text"> 小技巧</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%A6%E7%BB%86%E4%BB%A3%E7%A0%81"><span class="nav-number">2.4.2.</span> <span class="nav-text"> 详细代码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/10/07/trie/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="前缀树 Trie | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          前缀树 Trie
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-10-07 00:00:00" itemprop="dateCreated datePublished" datetime="2022-10-07T00:00:00+08:00">2022-10-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/nodejs/" itemprop="url" rel="index"><span itemprop="name">nodejs</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>因为水平有限，本文暂不讨论复杂度等专业话题，专心实现即可。</p>
+<span id="more"></span>
+<h2 id="什么是前缀树"><a class="markdownIt-Anchor" href="#什么是前缀树"></a> 什么是前缀树</h2>
+<p>前缀树<code>Trie</code>，又叫做字典树，是一种哈希树的变种。一般用于保存、匹配大量的字符串，最典型的应用应该就是<code>输入预测</code>和<code>路由统计</code>了。顾名思义，前缀树是一个树形数据结构，其大致形状如下：</p>
+<pre class="line-numbers language-none"><code class="language-none">0 |1 |2 |3   深度
+
+  ,i--e (tie)
+ &#x2F;
+t
+ \  ,-e--e (tree)
+  &#96;r
+    &#96;-i--e (trie)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>一般来说，前缀树的主要操作有：</p>
+<ol>
+<li><code>insert(string)</code> 插入</li>
+<li><code>search(string)</code> 查找</li>
+<li><code>remove(string)</code> 删除（比较少用）</li>
+<li><code>beginWith(string)</code> 查找以参数开头的字符串</li>
+</ol>
+<h2 id="实现"><a class="markdownIt-Anchor" href="#实现"></a> 实现</h2>
+<p>为简单以及后续扩展需要，仅实现<code>insert()</code> 和<code>search()</code> 方法</p>
+<h3 id="类型定义"><a class="markdownIt-Anchor" href="#类型定义"></a> 类型定义</h3>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">Trie</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>root <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TrieNode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>end <span class="token operator">=</span> <span class="token function">Symbol</span><span class="token punctuation">(</span><span class="token string">'end'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 用于表示字符串结尾</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token function">insert</span><span class="token punctuation">(</span><span class="token parameter">str</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 将字符串切分为子串，在某些情况下，TrieNode 节点保存的并不一定是单个字符</span>
+        <span class="token keyword">let</span> arr <span class="token operator">=</span> str<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>arr<span class="token punctuation">[</span>arr<span class="token punctuation">.</span>length <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">!==</span> <span class="token string">""</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 对于分隔符结尾的字符串，例如"a/"，跳过结尾的空字符。</span>
+            arr<span class="token punctuation">.</span><span class="token function">pop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">let</span> node <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>root<span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> len <span class="token operator">=</span> arr<span class="token punctuation">.</span>length<span class="token punctuation">;</span> i <span class="token operator">&lt;</span> len<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>  <span class="token comment">// 逐层遍历trie</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>node<span class="token punctuation">.</span>children<span class="token punctuation">[</span>arr<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token comment">// 如果子节点不存在则创建新的子节点</span>
+                node<span class="token punctuation">.</span>children<span class="token punctuation">[</span>arr<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TrieNode</span><span class="token punctuation">(</span>arr<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+            <span class="token punctuation">&#125;</span>
+            node <span class="token operator">=</span> node<span class="token punctuation">.</span>children<span class="token punctuation">[</span>arr<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span>  <span class="token comment">// 如果子节点存在则进入子节点继续遍历</span>
+        <span class="token punctuation">&#125;</span>
+        node<span class="token punctuation">.</span>children<span class="token punctuation">[</span><span class="token keyword">this</span><span class="token punctuation">.</span>end<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>  <span class="token comment">// 添加结束标志</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token function">search</span><span class="token punctuation">(</span><span class="token parameter">str</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>  <span class="token comment">// 查找的方法类似于插入，也是逐级遍历</span>
+        <span class="token keyword">let</span> arr <span class="token operator">=</span> str<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> node <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>root<span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> len <span class="token operator">=</span> arr<span class="token punctuation">.</span>length<span class="token punctuation">;</span> i <span class="token operator">&lt;</span> len<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>node<span class="token punctuation">.</span>children<span class="token punctuation">[</span>arr<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>  <span class="token comment">// 如果没有对应子节点，则直接返回失败</span>
+                <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            node <span class="token operator">=</span> node<span class="token punctuation">.</span>children<span class="token punctuation">[</span>arr<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token comment">// 如果完全匹配到目标则返回失败；如果要匹配开头的话，直接返回true 即可</span>
+        <span class="token keyword">return</span> <span class="token operator">!</span><span class="token operator">!</span>node<span class="token punctuation">.</span>children<span class="token punctuation">[</span><span class="token keyword">this</span><span class="token punctuation">.</span>end<span class="token punctuation">]</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">TrieNode</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">constructor</span><span class="token punctuation">(</span>content <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>children <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>  <span class="token comment">// 这里可以选择用数组或者hashMap，显然后者更简单一些  </span>
+
+        <span class="token keyword">this</span><span class="token punctuation">.</span>content <span class="token operator">=</span> content<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">let</span> trie <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Trie</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+trie<span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">(</span><span class="token string">"tie"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+trie<span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">(</span><span class="token string">"tree"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+trie<span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">(</span><span class="token string">"trie"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>trie<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 简单查看数据结构</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>trie<span class="token punctuation">.</span><span class="token function">search</span><span class="token punctuation">(</span><span class="token string">"ti"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 查找字串，false</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>trie<span class="token punctuation">.</span><span class="token function">search</span><span class="token punctuation">(</span><span class="token string">"tie"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 查找，true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="扩展一-分隔符"><a class="markdownIt-Anchor" href="#扩展一-分隔符"></a> 扩展一 分隔符</h3>
+<p>使用指定地分隔符来切分字符串，而不是单纯的拆分为单个字符。以基本类型做修改</p>
+<pre class="line-numbers language-diff" data-language="diff"><code class="language-diff">class Trie &#123;
+<span class="token deleted-sign deleted"><span class="token prefix deleted">-</span><span class="token line">   constructor() &#123;
+</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">   constructor(delimiter="") &#123;  //用于指定分隔符
+</span><span class="token prefix inserted">+</span><span class="token line">       this.delimiter=delimiter;
+</span></span><span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">       ...
+</span><span class="token prefix unchanged"> </span><span class="token line">   &#125;
+</span></span>
+<span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   insert(str) &#123;
+</span></span><span class="token deleted-sign deleted"><span class="token prefix deleted">-</span><span class="token line">       let arr = str.split(""); 
+</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">       let arr = str.split(this.delimiter); 
+</span></span><span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">       ...
+</span><span class="token prefix unchanged"> </span><span class="token line">   &#125;
+</span><span class="token prefix unchanged"> </span><span class="token line">   search(str) &#123;  
+</span></span><span class="token deleted-sign deleted"><span class="token prefix deleted">-</span><span class="token line">       let arr = str.split(""); 
+</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">       let arr = str.split(this.delimiter); 
+</span></span><span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">       ...
+</span><span class="token prefix unchanged"> </span><span class="token line">   &#125;
+</span></span>&#125;
+
+<span class="token deleted-sign deleted"><span class="token prefix deleted">-</span><span class="token line"> let trie = new Trie();
+</span><span class="token prefix deleted">-</span><span class="token line"> trie.insert("tie");
+</span><span class="token prefix deleted">-</span><span class="token line"> trie.insert("tree");
+</span><span class="token prefix deleted">-</span><span class="token line"> trie.insert("trie");
+</span><span class="token prefix deleted">-</span><span class="token line"> console.log(JSON.stringify(trie)); 
+</span><span class="token prefix deleted">-</span><span class="token line"> console.log(trie.search("ti"));
+</span><span class="token prefix deleted">-</span><span class="token line"> console.log(trie.search("tie"));
+</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line"> let trie = new Trie("/");
+</span><span class="token prefix inserted">+</span><span class="token line"> trie.insert("tie");
+</span><span class="token prefix inserted">+</span><span class="token line"> trie.insert("tr/ee");
+</span><span class="token prefix inserted">+</span><span class="token line"> trie.insert("tr/ie");
+</span><span class="token prefix inserted">+</span><span class="token line"> console.log(JSON.stringify(trie));  // 简单查看数据结构
+</span><span class="token prefix inserted">+</span><span class="token line"> console.log(trie.search("trie"));  // false
+</span><span class="token prefix inserted">+</span><span class="token line"> console.log(trie.search("tr/ie"));  // true</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="扩展二-函数"><a class="markdownIt-Anchor" href="#扩展二-函数"></a> 扩展二 函数</h3>
+<p>可以给字符串指定函数，此函数还可用来充当<code>end</code> 结束标识，用以在匹配成功之后运行，比如：路由处理</p>
+<pre class="line-numbers language-diff" data-language="diff"><code class="language-diff">class Trie &#123;
+<span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   ...
+</span></span><span class="token deleted-sign deleted"><span class="token prefix deleted">-</span><span class="token line">   insert(str) &#123;
+</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">   insert(str,handler= false) &#123;
+</span></span><span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">       ...
+</span></span><span class="token deleted-sign deleted"><span class="token prefix deleted">-</span><span class="token line">       node.children[this.end] = true;
+</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">       node.children[this.end] = handler;
+</span></span><span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   &#125;
+</span><span class="token prefix unchanged"> </span><span class="token line">   search(str) &#123;
+</span><span class="token prefix unchanged"> </span><span class="token line">       ...
+</span></span><span class="token deleted-sign deleted"><span class="token prefix deleted">-</span><span class="token line">       return !!node.children[this.end];  
+</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">       return node.children[this.end];  
+</span></span><span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   &#125;
+</span></span>&#125;
+
+...
+<span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line"> trie.search("tr/ie")();  // (｡･∀･)ﾉﾞ嗨</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="扩展三-通配符"><a class="markdownIt-Anchor" href="#扩展三-通配符"></a> 扩展三 通配符</h3>
+<p>通配符只要用来匹配<code>RESTful</code> 类型的路由，关于匹配优先级的判断稍微有些复杂，例如：对于字符串<code>n1/n2/n3</code> 来说，会优先匹配到下面拿一条规则？</p>
+<ol>
+<li><code>:i/:j/n3</code></li>
+<li><code>n1/:j/:k</code></li>
+</ol>
+<p>在这里约定，我们的前缀树会最大限度地匹配静态值，例如：<code>n1</code>；然后再去匹配通配符，例如：<code>:i</code>。最终，还需要获取到通配符所对应的值。</p>
+<h4 id="小技巧"><a class="markdownIt-Anchor" href="#小技巧"></a> 小技巧</h4>
+<ul>
+<li>因为字符串的长度和内容都是随机的，所以要求我们需要将通配符单独存储</li>
+<li>节点结束标识应该提升到节点下，而不是在<code>children</code> 中</li>
+<li>因为在匹配过程中，可能会有多条（疑似）满足的字符串，这就要求我们的函数可以进行<code>递归</code>地遍历（新增一个<code>parse()</code> 函数）</li>
+<li>最终的参数会放进一个临时的<code>Map</code>，并且有可能的话，会传递给<a href="#%E6%89%A9%E5%B1%95%E4%BA%8C-%E5%87%BD%E6%95%B0">扩展二</a> 中定义的函数</li>
+</ul>
+<h4 id="详细代码"><a class="markdownIt-Anchor" href="#详细代码"></a> 详细代码</h4>
+<p>按照上述要求修改代码</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token constant">END</span> <span class="token operator">=</span> <span class="token function">symbol</span><span class="token punctuation">(</span><span class="token string">"end"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 结束标识提升至全局</span>
+
+<span class="token comment">/**
+* 首先，我们需要先修改一下TrieNode 添加一个wildcards 属性
+* 用来存放本节点下的通配符 
+*/</span>
+<span class="token keyword">class</span> <span class="token class-name">TrieNode</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">constructor</span><span class="token punctuation">(</span>content <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>children <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>wildcards <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>  <span class="token comment">// 和children 功能一样，用来存放子节点</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>content <span class="token operator">=</span> content<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">[</span><span class="token constant">END</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>  <span class="token comment">// 因为</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+
+
+<span class="token keyword">class</span> <span class="token class-name">Trie</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">constructor</span><span class="token punctuation">(</span>delimiter <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>delimiter <span class="token operator">=</span> delimiter<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>root <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TrieNode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+    * 然后修改`Trie` 中的`insert()` 方法，使其能够识别并存储通配符 
+    */</span>
+    <span class="token function">insert</span><span class="token punctuation">(</span><span class="token parameter">str<span class="token punctuation">,</span> handler <span class="token operator">=</span> <span class="token boolean">false</span></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">let</span> node <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>root<span class="token punctuation">;</span>
+        <span class="token keyword">let</span> arr <span class="token operator">=</span> str<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>delimiter<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 对于分隔符结尾的字符串，例如"a/"，跳过结尾的空字符。           </span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>arr<span class="token punctuation">[</span>arr<span class="token punctuation">.</span>length <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">===</span> <span class="token string">""</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> arr<span class="token punctuation">.</span><span class="token function">pop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> len <span class="token operator">=</span> arr<span class="token punctuation">.</span>length<span class="token punctuation">;</span> i <span class="token operator">&lt;</span> len<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>arr<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">===</span> <span class="token string">":"</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token comment">// 解析通配符</span>
+                <span class="token keyword">let</span> wildcard <span class="token operator">=</span> arr<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">":"</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>wildcard <span class="token operator">===</span> <span class="token string">""</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    <span class="token keyword">throw</span> <span class="token string">"需要给参数指定名字"</span>
+                <span class="token punctuation">&#125;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>node<span class="token punctuation">.</span>wildcards<span class="token punctuation">[</span>wildcard<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    node<span class="token punctuation">.</span>wildcards<span class="token punctuation">[</span>wildcard<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TrieNode</span><span class="token punctuation">(</span>wildcard<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+                node <span class="token operator">=</span> node<span class="token punctuation">.</span>wildcards<span class="token punctuation">[</span>wildcard<span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+                <span class="token comment">// 静态值</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>node<span class="token punctuation">.</span>children<span class="token punctuation">[</span>arr<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    node<span class="token punctuation">.</span>children<span class="token punctuation">[</span>arr<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TrieNode</span><span class="token punctuation">(</span>arr<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+                node <span class="token operator">=</span> node<span class="token punctuation">.</span>children<span class="token punctuation">[</span>arr<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+        node<span class="token punctuation">.</span>children<span class="token punctuation">[</span><span class="token keyword">this</span><span class="token punctuation">.</span>end<span class="token punctuation">]</span> <span class="token operator">=</span> handler<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+
+    <span class="token comment">/**
+     * 递归地匹配路由节点
+     * @param &#123;Array&#125; arr 节点数组
+     * @param &#123;Number&#125; index 当前节点指针
+     * @param &#123;TrieNode&#125; node 当前节点，注意引用传值的问题
+     * @param &#123;Object&#125; params 通配符表示的参数
+     */</span>
+    <span class="token function">parse</span><span class="token punctuation">(</span>arr <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">""</span><span class="token punctuation">]</span><span class="token punctuation">,</span> index <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> node <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>root<span class="token punctuation">,</span> params <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>index <span class="token operator">>=</span> arr<span class="token punctuation">.</span>length<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">return</span> node<span class="token punctuation">[</span><span class="token constant">END</span><span class="token punctuation">]</span> <span class="token operator">?</span> node<span class="token punctuation">[</span><span class="token constant">END</span><span class="token punctuation">]</span> <span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">;</span>  <span class="token comment">// 结尾判断</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">let</span> result <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>node<span class="token punctuation">.</span>children<span class="token punctuation">[</span>arr<span class="token punctuation">[</span>index<span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 优先匹配静态值</span>
+            <span class="token comment">// node = node.children[arr[index]] // 这种写法会污染node 变量</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>result <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>arr<span class="token punctuation">,</span> index <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> node<span class="token punctuation">.</span>children<span class="token punctuation">[</span>arr<span class="token punctuation">[</span>index<span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">,</span> params<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token comment">// 因为通配符的关系，只能对所有通配符都进行匹配，</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> key <span class="token keyword">of</span> Object<span class="token punctuation">.</span><span class="token function">keys</span><span class="token punctuation">(</span>node<span class="token punctuation">.</span>wildcards<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            result <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+            <span class="token comment">// 只要有一个符合的，且到达结尾，就立刻退出循环  </span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>result <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>arr<span class="token punctuation">,</span> index <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> node<span class="token punctuation">.</span>wildcards<span class="token punctuation">[</span>key<span class="token punctuation">]</span><span class="token punctuation">,</span> params<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                params<span class="token punctuation">[</span>key<span class="token punctuation">]</span> <span class="token operator">=</span> arr<span class="token punctuation">[</span>index<span class="token punctuation">]</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token comment">// 否则返回失败</span>
+        <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+
+    <span class="token function">search</span><span class="token punctuation">(</span><span class="token parameter">str</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">let</span> node <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>root<span class="token punctuation">;</span>
+        <span class="token keyword">let</span> arr <span class="token operator">=</span> str<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>delimiter<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 对于分隔符结尾的字符串，例如"a/"，跳过结尾的空字符。           </span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>arr<span class="token punctuation">[</span>arr<span class="token punctuation">.</span>length <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">===</span> <span class="token string">""</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> arr<span class="token punctuation">.</span><span class="token function">pop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">let</span> params <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token punctuation">[</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>arr<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> node<span class="token punctuation">,</span> params<span class="token punctuation">)</span><span class="token punctuation">,</span> params<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">//==================测试===================//  </span>
+<span class="token keyword">let</span> trie <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Trie</span><span class="token punctuation">(</span><span class="token string">"/"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+trie<span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">(</span><span class="token string">":a/:b/c"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+trie<span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">(</span><span class="token string">"a/b/c"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 测试</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>trie<span class="token punctuation">.</span><span class="token function">search</span><span class="token punctuation">(</span><span class="token string">"a/b"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// [ false, &#123;&#125; ]</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>trie<span class="token punctuation">.</span><span class="token function">search</span><span class="token punctuation">(</span><span class="token string">"a/c"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// [ false, &#123;&#125; ]</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>trie<span class="token punctuation">.</span><span class="token function">search</span><span class="token punctuation">(</span><span class="token string">"a/b/c"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// [ [Function], &#123;&#125; ]</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>trie<span class="token punctuation">.</span><span class="token function">search</span><span class="token punctuation">(</span><span class="token string">"a/d/c"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// [ [Function], &#123; b: 'd', a: 'a' &#125; ]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>第一遍写的时候，在递归的地方纠结了一下午。这次复习时，有了之前版本的对照，思路更加清晰了，更能专注地去梳理函数之间的配合，而不去想想要什么的功能。递归中两次用到了函数引用传值<code>this.parse(arr, index + 1, node.children[arr[index]], params))</code>：</p>
+<ul>
+<li><code>params</code> 利用引用传值来更新属性</li>
+<li><code>node.children[arr[index]]</code> 避免引用传值污染变量</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2022/10/07/trie/" title="前缀树 Trie">https://12tall.github.io/2022/10/07/trie/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/tree/" rel="tag"># tree</a>
+              <a href="/tags/Javascript/" rel="tag"># Javascript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/07/integral_transform/convolution/" rel="prev" title="卷积">
+                  <i class="fa fa-angle-left"></i> 卷积
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/07/ruge-kutta/" rel="next" title="龙格-库塔算法求微分方程（组）">
+                  龙格-库塔算法求微分方程（组） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

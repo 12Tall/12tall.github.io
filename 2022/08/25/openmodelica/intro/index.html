@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="笔记摘自：Modelica by Example 的中文翻译，因为Modelica 语言是一种规范，所以无论哪种实现在使用上是不应有区别的！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初识Modelica">
+<meta property="og:url" content="https://12tall.github.io/2022/08/25/openmodelica/intro/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="笔记摘自：Modelica by Example 的中文翻译，因为Modelica 语言是一种规范，所以无论哪种实现在使用上是不应有区别的！">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.183Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="modeling">
+<meta property="article:tag" content="OpenModelica">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://12tall.github.io/2022/08/25/openmodelica/intro/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2022/08/25/openmodelica/intro/","path":"2022/08/25/openmodelica/intro/","title":"初识Modelica"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>初识Modelica | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#modelica-%E6%98%AF%E4%B8%80%E7%A7%8D%E6%8F%8F%E8%BF%B0%E8%AF%AD%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text"> Modelica 是一种描述语言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B-model"><span class="nav-number">2.</span> <span class="nav-text"> 模型 model</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E7%A8%8B"><span class="nav-number">2.1.</span> <span class="nav-text"> 方程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E9%87%8A%E4%B8%8E%E8%AF%B4%E6%98%8E"><span class="nav-number">2.2.</span> <span class="nav-text"> 注释与说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%80%BC"><span class="nav-number">2.3.</span> <span class="nav-text"> 初始值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%A7%E6%89%BF"><span class="nav-number">2.4.</span> <span class="nav-text"> 继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E6%B3%A8"><span class="nav-number">2.5.</span> <span class="nav-text"> 标注</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%A9%E7%90%86%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text"> 物理模型</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/25/openmodelica/intro/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="初识Modelica | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          初识Modelica
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-25 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-25T00:00:00+08:00">2022-08-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/math/" itemprop="url" rel="index"><span itemprop="name">math</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>笔记摘自：<a target="_blank" rel="noopener" href="http://modelicabyexample.globalcrown.com.cn/">Modelica by Example 的中文翻译</a>，因为<code>Modelica</code> 语言是一种规范，所以无论哪种实现在使用上是不应有区别的！</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="modelica-是一种描述语言"><a class="markdownIt-Anchor" href="#modelica-是一种描述语言"></a> Modelica 是一种描述语言</h2>
+<blockquote>
+<p>因为Prism 插件还未支持Modelica 语言，所以代码块暂时无法高亮显示 😦</p>
+</blockquote>
+<p>Modelica 是一种用来描述模型、系统的语言，而描述是基于方程的、变量在等式左右两边的位置对模型没有影响：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mover accent="true"><mi>x</mi><mo>˙</mo></mover><mo>=</mo><mn>1</mn><mo>−</mo><mi>x</mi></mrow><annotation encoding="application/x-tex">\dot{x} = 1-x
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66786em;vertical-align:0em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.66786em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">x</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.11111000000000001em;"><span class="mord">˙</span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">x</span></span></span></span></span></p>
+<pre class="line-numbers language-modelica" data-language="modelica"><code class="language-modelica">model FirstOrder  &#x2F;&#x2F; 定义一个模块
+    Real x;       &#x2F;&#x2F; 模块中的属性
+equation          &#x2F;&#x2F; 描述模块属性的方程（组）
+    der(x) &#x3D; 1-x;  
+end FirstOrder;   &#x2F;&#x2F; 结束
+
+
+&#x2F;&#x2F;&#x2F;&#x2F;&#x2F; 另一种定义方式 &#x2F;&#x2F;&#x2F;&#x2F;&#x2F;
+model FirstOrder2  &#x2F;&#x2F; 定义一个模块
+    Real x &#x3D; 1 - der(x);       &#x2F;&#x2F; 同时定义变量和方程
+equation          
+    &#x2F;&#x2F; 可以少写一条equation  
+    &#x2F;&#x2F; 不推荐这样做，因为这样会让你的模型变得不清晰  
+    &#x2F;&#x2F; 但是看到这样的用法要明白
+end FirstOrder;   &#x2F;&#x2F; 结束<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上面代码的含义就是：我们有一个模型<code>FirstOrder</code>，模型内有一个状态变量<code>x</code>、并且<code>x</code> 与它对时间的导数<code>x'</code>之和为<code>1</code>。我们关注的<strong>重点并不是如何去求解微分方程，而是如何去建立这个微分方程</strong></p>
+<blockquote>
+<p>需要注意的是Modelica 语法要求严格，千万不要忘记结尾的分号！</p>
+</blockquote>
+<h2 id="模型-model"><a class="markdownIt-Anchor" href="#模型-model"></a> 模型 model</h2>
+<p><code>Modelica</code> 的建模是基于物理模型的，也就是说，计算应基于<code>model</code>。而模型的定义，大致就是上面代码的样子。</p>
+<h3 id="方程"><a class="markdownIt-Anchor" href="#方程"></a> 方程</h3>
+<p>在Modelica 中，变量的数量要等于方程的数量（<code>initial equation</code> 不算），方程可以是带有条件的：</p>
+<pre class="line-numbers language-modelica" data-language="modelica"><code class="language-modelica">if a&gt;b then
+  x &#x3D; 5*time;
+else
+  x &#x3D; 3*time;
+end if;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>但是最终方程的有效数量应该是一致的。</p>
+<h3 id="注释与说明"><a class="markdownIt-Anchor" href="#注释与说明"></a> 注释与说明</h3>
+<p>还是以上面的代码为例：</p>
+<pre class="line-numbers language-modelica" data-language="modelica"><code class="language-modelica">&#x2F;&#x2F; &#39;&#x2F;&#x2F;&#39; 后面跟的是注释  
+&#x2F;&#x2F; &#39;&quot;&quot;&#39; 内部填充的是说明，说明只能紧跟在模型、属性、方程等有意义的符号后面
+model FirstOrderDocumented &quot;A simple first order differential equation&quot;
+  Real x &quot;State variable&quot;;
+equation
+  der(x) &#x3D; 1-x &quot;Drives value of x toward 1.0&quot;;
+end FirstOrderDocumented;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="初始值"><a class="markdownIt-Anchor" href="#初始值"></a> 初始值</h3>
+<p>因为求解微分方程一般会用到各个状态量的初始值，在Modelica 语言中可以在<code>initial equation</code> 部分去初始化某些变量：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.15999999999999992em" columnalign="left left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mover accent="true"><mi>x</mi><mo>˙</mo></mover><mo>=</mo><mn>1</mn><mo>−</mo><mi>x</mi><mo separator="true">;</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>x</mi><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo><mo>=</mo><mn>2</mn></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{array}{ll}    
+    \dot{x} = 1-x;  \\  
+    x(0) = 2
+\end{array}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.4000000000000004em;vertical-align:-0.9500000000000004em;"></span><span class="mord"><span class="mtable"><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.66786em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">x</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.11111000000000001em;"><span class="mord">˙</span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathnormal">x</span><span class="mpunct">;</span></span></span><span style="top:-2.4099999999999997em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="mopen">(</span><span class="mord">0</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9500000000000004em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span></span></span></span></span></span></span></p>
+<pre class="line-numbers language-modelica" data-language="modelica"><code class="language-modelica">model FirstOrderInitial &quot;First order equation with initial value&quot;
+  Real x &quot;State variable&quot;;
+initial equation
+  x &#x3D; 2 &quot;在计算之前初始化x&quot;;  
+  &#x2F;&#x2F; der(x) &#x3D; 2 &quot;同样地，也可以初始化x&#39;&quot; ;
+equation
+  der(x) &#x3D; 1-x &quot;Drives value of x toward 1.0&quot;;
+end FirstOrderInitial;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="继承"><a class="markdownIt-Anchor" href="#继承"></a> 继承</h3>
+<p>既然是面向对象的，那么模型自然可以继承其他模型。继承采用<code>extends</code> 关键字：</p>
+<pre class="line-numbers language-modelica" data-language="modelica"><code class="language-modelica">model FirstOrder_Extends  
+  extends FirstOrder;  &#x2F;* 继承会继承所有的属性和方法 *&#x2F;
+  
+initial equation    &#x2F;&#x2F; 设置初始值（如果原先没有的话）
+  x &#x3D; .5;
+equation
+  &#x2F;&#x2F; der(x) &#x3D; 2;    &#x2F;&#x2F; 不能重写父类模型中的方程
+end FirstOrder_Extends;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>继承的概念在Modelica 中不如在其它语言中那么灵活。</p>
+<h3 id="标注"><a class="markdownIt-Anchor" href="#标注"></a> 标注</h3>
+<p>当搭建模型时，建模人员可能希望为模型关联特定的试验条件。这可以通过应用<code>annotation（标注）</code>来完成。如仿真的开始时间、结束时间和容差范围等。以<code>experiment</code> 标注为例：</p>
+<pre class="line-numbers language-modelica" data-language="modelica"><code class="language-modelica">model FirstOrder  &#x2F;&#x2F; 定义一个模块
+    Real x;        &#x2F;&#x2F; 模块中的属性
+equation          &#x2F;&#x2F; 描述模块属性的方程（组）
+    der(x) &#x3D; 1-x;  
+    annotation(
+      experiment(StartTime&#x3D;2,StopTime&#x3D;8),
+      Documentation(info&#x3D;&quot;&lt;html&gt;
+        &lt;p&gt;以html 写一些说明文档:&lt;&#x2F;p&gt;
+        &lt;pre&gt;
+          x&#39; &#x3D; 1-x;
+        &lt;&#x2F;pre&gt;
+        &lt;&#x2F;html&gt;&quot;));  &#x2F;&#x2F; 设置实验的起始时间和终止时间
+end FirstOrder;    &#x2F;&#x2F; 结束<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>同时，在标注中还可以添加模型的样式、说明等信息，以<code>,</code> 分隔。</p>
+<blockquote>
+<p>虽然experiment标注在建立模型时被广泛的应用，但是也要注意到，一般情况下，建模工具是可以忽略任何或者全部标注内容的。Openmodelica 不会忽略！</p>
+</blockquote>
+<p>需要注意的是，一般模型的说明文档和位置、图标等信息都是通过标注实现的。标注可以有自己的命名空间：</p>
+<pre class="line-numbers language-modelica" data-language="modelica"><code class="language-modelica">annotation(XogenyIndustries(PartNumber&#x3D;&quot;FF78-E4B879&quot;),
+           experiment(StartTime&#x3D;0,StopTime&#x3D;8));
+
+&#x2F;&#x2F; XogenyIndustries 就相当于命名空间<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="物理模型"><a class="markdownIt-Anchor" href="#物理模型"></a> 物理模型</h2>
+<blockquote>
+<p>现实世界中，我们在使用数学计算时还会关心它的单位<code>unit</code>。</p>
+</blockquote>
+<p>有了变量的基础，我们就可以在建模时添加单位或者其他限制属性了。以牛顿冷却定律为例：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>m</mi><msub><mi>c</mi><mi>p</mi></msub><mover accent="true"><mi>T</mi><mo>˙</mo></mover><mo>=</mo><mi>h</mi><mi>A</mi><mo stretchy="false">(</mo><msub><mi>T</mi><mi mathvariant="normal">∞</mi></msub><mo>−</mo><mi>T</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">m c_p \dot{T} = h A (T_{\infty} - T)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.206298em;vertical-align:-0.286108em;"></span><span class="mord mathnormal">m</span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9201900000000001em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span></span><span style="top:-3.25233em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.055550000000000016em;"><span class="mord">˙</span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mord mathnormal">A</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">∞</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mclose">)</span></span></span></span></span></p>
+<pre class="line-numbers language-modelica" data-language="modelica"><code class="language-modelica">model NewtonCoolingWithTypes &quot;Cooling example with physical types&quot;
+  &#x2F;&#x2F; 首先由Real 派生各种带有单位的数值类型
+  type Temperature&#x3D;Real(unit&#x3D;&quot;K&quot;, min&#x3D;0) &quot;开尔文，最小为0&quot;;
+  type ConvectionCoefficient&#x3D;Real(unit&#x3D;&quot;W&#x2F;(m2.K)&quot;, min&#x3D;0);
+  type Area&#x3D;Real(unit&#x3D;&quot;m2&quot;, min&#x3D;0);
+  type Mass&#x3D;Real(unit&#x3D;&quot;kg&quot;, min&#x3D;0);
+  type SpecificHeat&#x3D;Real(unit&#x3D;&quot;J&#x2F;(K.kg)&quot;, min&#x3D;0);
+
+  &#x2F;&#x2F; 然后根据派生类型定义实际的变量
+  parameter Temperature T_inf&#x3D;298.15 &quot;Ambient temperature&quot;;
+  parameter Temperature T0&#x3D;363.15 &quot;Initial temperature&quot;;  &#x2F;&#x2F; 变量初始值，写在这里的好处就是可以随时修改
+  parameter ConvectionCoefficient h&#x3D;0.7 &quot;Convective cooling coefficient&quot;;
+  parameter Area A&#x3D;1.0 &quot;Surface area&quot;;
+  parameter Mass m&#x3D;0.1 &quot;Mass of thermal capacitance&quot;;
+  parameter SpecificHeat c_p&#x3D;1.2 &quot;Specific heat&quot;;
+
+  &#x2F;&#x2F; 内部变量
+  Temperature T &quot;Temperature&quot;;
+initial equation
+  T &#x3D; T0 &quot;Specify initial value for T&quot;;  &#x2F;&#x2F; 变量的初始化
+equation
+  &#x2F;&#x2F; 牛顿冷却定律的公式描述  
+  m*c_p*der(T) &#x3D; h*A*(T_inf-T) &quot;Newton&#39;s law of cooling&quot;;
+end NewtonCoolingWithTypes;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2022/08/25/openmodelica/intro/" title="初识Modelica">https://12tall.github.io/2022/08/25/openmodelica/intro/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/modeling/" rel="tag"># modeling</a>
+              <a href="/tags/OpenModelica/" rel="tag"># OpenModelica</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/08/25/openmodelica/package/" rel="prev" title="Package 包">
+                  <i class="fa fa-angle-left"></i> Package 包
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/08/25/openmodelica/faq/" rel="next" title="常见问题">
+                  常见问题 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

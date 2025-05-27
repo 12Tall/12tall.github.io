@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="一般来说，使用gettext 为程序添加多语言支持时，需要遵循一些标准的步骤。另外就是，对于在main() 函数之前就初始化的变量需要特殊处理。 为此，特整理笔记备忘。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用gettext 进行国际化">
+<meta property="og:url" content="https://12tall.github.io/2025/05/15/gettext/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="一般来说，使用gettext 为程序添加多语言支持时，需要遵循一些标准的步骤。另外就是，对于在main() 函数之前就初始化的变量需要特殊处理。 为此，特整理笔记备忘。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-05-15T06:27:44.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.055Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="gettext">
+<meta property="article:tag" content="多语言">
+<meta property="article:tag" content="国际化">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://12tall.github.io/2025/05/15/gettext/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2025/05/15/gettext/","path":"2025/05/15/gettext/","title":"使用gettext 进行国际化"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>使用gettext 进行国际化 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%B0%8F%E5%8F%AF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.</span> <span class="nav-text"> 最小可用示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E5%8F%96-%E7%BF%BB%E8%AF%91"><span class="nav-number">1.1.</span> <span class="nav-text"> 提取、翻译</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F%E7%BF%BB%E8%AF%91"><span class="nav-number">2.</span> <span class="nav-text"> 静态变量翻译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E8%AF%AD%E8%A8%80%E5%88%9D%E5%A7%8B%E5%8C%96%E6%A0%87%E8%AF%86%E7%AC%A6"><span class="nav-number">2.1.</span> <span class="nav-text"> 多语言初始化标识符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8"><span class="nav-number">2.2.</span> <span class="nav-text"> 多线程安全</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">3.</span> <span class="nav-text"> 其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9fltk-%E6%94%AF%E6%8C%81%E5%AD%97%E4%BD%93"><span class="nav-number">3.1.</span> <span class="nav-text"> 修改FLTK 支持字体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%B9%E9%87%8F%E6%9B%BF%E6%8D%A2%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9"><span class="nav-number">3.2.</span> <span class="nav-text"> 批量替换文件内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cmake"><span class="nav-number">3.3.</span> <span class="nav-text"> CMAKE</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2025/05/15/gettext/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用gettext 进行国际化 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用gettext 进行国际化
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-05-15 14:27:44" itemprop="dateCreated datePublished" datetime="2025-05-15T14:27:44+08:00">2025-05-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/c-cpp/" itemprop="url" rel="index"><span itemprop="name">c_cpp</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>991</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>一般来说，使用<code>gettext</code> 为程序添加多语言支持时，需要遵循一些标准的步骤。另外就是，对于在<code>main()</code> 函数之前就初始化的变量需要特殊处理。
+为此，特整理笔记备忘。</p>
+<span id="more"></span>
+<h2 id="最小可用示例"><a class="markdownIt-Anchor" href="#最小可用示例"></a> 最小可用示例</h2>
+<p>该示例代码仅保证多语言功能可用：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;locale.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;libintl.h></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">_</span><span class="token expression"><span class="token punctuation">(</span>STRING<span class="token punctuation">)</span> <span class="token function">gettext</span><span class="token punctuation">(</span>STRING<span class="token punctuation">)</span></span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">setlocale</span><span class="token punctuation">(</span>LC_ALL<span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 指定语言，例如en_US，zh_CN，zh_CN.UTF-8 等</span>
+    <span class="token function">bindtextdomain</span><span class="token punctuation">(</span><span class="token string">"myapp"</span><span class="token punctuation">,</span> <span class="token string">"./locale"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// .locale 是语言包的路径，可以是相对路径也可以是绝对路径</span>
+    <span class="token function">textdomain</span><span class="token punctuation">(</span><span class="token string">"myapp"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 上面的myapp 可以改成自己喜欢的名字，但是文件路径需要遵循以下规则  </span>
+    <span class="token comment">// ./locale/&#123;zh_CN&#125;/LC_MESSAGES/&#123;myapp&#125;.mo  </span>
+    <span class="token comment">// 其中.mo 可以通过以下步骤生成</span>
+
+    std<span class="token double-colon punctuation">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token function">_</span><span class="token punctuation">(</span><span class="token string">"Hello, world!"</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> std<span class="token double-colon punctuation">::</span>endl<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="提取-翻译"><a class="markdownIt-Anchor" href="#提取-翻译"></a> 提取、翻译</h3>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 从main.cpp 中提取待翻译的内容</span>
+xgettext --from-code<span class="token operator">=</span>UTF-8 <span class="token parameter variable">-k_</span> main.cpp <span class="token parameter variable">-o</span> messages.pot
+
+<span class="token comment"># 同时提取多个文件</span>
+<span class="token function">find</span> <span class="token builtin class-name">.</span> <span class="token parameter variable">-name</span> <span class="token string">"*.cpp"</span> <span class="token operator">|</span> <span class="token function">xargs</span> xgettext --from-code<span class="token operator">=</span>UTF-8 <span class="token parameter variable">-k_</span> <span class="token parameter variable">-o</span> messages.pot<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>通过<a target="_blank" rel="noopener" href="https://poedit.net/">poedit</a> 可以打开.pot 文件，并将翻译结果保存到相应的路径下。</p>
+<h2 id="静态变量翻译"><a class="markdownIt-Anchor" href="#静态变量翻译"></a> 静态变量翻译</h2>
+<p>上面内容不太重要，多试试就好了。但是静态变量的翻译就很有意思了。</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;locale.h&gt;
+#include &lt;libintl.h&gt;
+
+#define _(STRING) gettext(STRING)
+
+const char * bye &#x3D; _(&quot;Goodbye!&quot;);
+
+int main() &#123;
+    setlocale(LC_ALL, &quot;&quot;);  &#x2F;&#x2F; 指定语言，例如en_US，zh_CN，zh_CN.UTF-8 等
+    bindtextdomain(&quot;myapp&quot;, &quot;.&#x2F;locale&quot;); &#x2F;&#x2F; .locale 是语言包的路径，可以是相对路径也可以是绝对路径
+    textdomain(&quot;myapp&quot;);
+
+    std::cout &lt;&lt; _(&quot;Hello, world!&quot;) &lt;&lt; std::endl;  &#x2F;&#x2F; 可以正常显示对应语言
+    std::cout &lt;&lt; bye &lt;&lt; std::endl;  &#x2F;&#x2F; 无法正常显示对应语言
+    return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>因为<code>bye</code> 是在<code>main()</code> 之前初始化的，所以在<code>main()</code> 执行时就获取不到对应的译文了。为此，可以封装一个函数：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">_</span><span class="token expression"><span class="token punctuation">(</span>STRING<span class="token punctuation">)</span> <span class="token function">_translate</span><span class="token punctuation">(</span>STRING<span class="token punctuation">)</span></span></span>
+<span class="token keyword">void</span> <span class="token function">_translate</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> msg<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">setlocale</span><span class="token punctuation">(</span>LC_ALL<span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 指定语言，例如en_US，zh_CN，zh_CN.UTF-8 等</span>
+    <span class="token function">bindtextdomain</span><span class="token punctuation">(</span><span class="token string">"myapp"</span><span class="token punctuation">,</span> <span class="token string">"./locale"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// .locale 是语言包的路径，可以是相对路径也可以是绝对路径</span>
+    <span class="token function">textdomain</span><span class="token punctuation">(</span><span class="token string">"myapp"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> <span class="token function">gettext</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="多语言初始化标识符"><a class="markdownIt-Anchor" href="#多语言初始化标识符"></a> 多语言初始化标识符</h3>
+<p>每次运行<code>_()</code> 前都设置下语言就好了。但是这样会造成额外的开销，为此我们可以通过一个全局的标识符<code>gettext_initialized</code> 来表示语言是否初始化过了。</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">_</span><span class="token expression"><span class="token punctuation">(</span>STRING<span class="token punctuation">)</span> <span class="token function">_translate</span><span class="token punctuation">(</span>STRING<span class="token punctuation">)</span></span></span>
+
+<span class="token keyword">bool</span> gettext_initialized <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+
+<span class="token keyword">void</span> <span class="token function">ensure_gettext_initialized</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>gettext_initialized<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">setlocale</span><span class="token punctuation">(</span>LC_ALL<span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">bindtextdomain</span><span class="token punctuation">(</span><span class="token string">"gmsh"</span><span class="token punctuation">,</span> <span class="token string">"./locale"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">textdomain</span><span class="token punctuation">(</span><span class="token string">"gmsh"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        gettext_initialized <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> <span class="token function">_translate</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> msg<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">ensure_gettext_initialized</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token function">gettext</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="多线程安全"><a class="markdownIt-Anchor" href="#多线程安全"></a> 多线程安全</h3>
+<p>其实上面的代码在大部分情况下已经可用了，但是多线程的情况下可能会有一丢丢的问题（但仔细想想其实无关紧要，最多是多初始化几次而已）。为此，可以添加线程锁，以下是完整代码（未作验证）：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;locale.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;libintl.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;mutex></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">_</span><span class="token expression"><span class="token punctuation">(</span>STRING<span class="token punctuation">)</span> <span class="token function">_translate</span><span class="token punctuation">(</span>STRING<span class="token punctuation">)</span></span></span>
+std<span class="token double-colon punctuation">::</span>mutex gettext_mutex<span class="token punctuation">;</span>
+<span class="token keyword">bool</span> gettext_initialized <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+
+<span class="token keyword">void</span> <span class="token function">ensure_gettext_initialized</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    std<span class="token double-colon punctuation">::</span>lock_guard<span class="token operator">&lt;</span>std<span class="token double-colon punctuation">::</span>mutex<span class="token operator">></span> <span class="token function">lock</span><span class="token punctuation">(</span>gettext_mutex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>gettext_initialized<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">setlocale</span><span class="token punctuation">(</span>LC_ALL<span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 也可用export LC_MESSAGES=zh_CN.UTF-8 指定语言</span>
+        <span class="token function">bindtextdomain</span><span class="token punctuation">(</span><span class="token string">"myapp"</span><span class="token punctuation">,</span> <span class="token string">"./locale"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">textdomain</span><span class="token punctuation">(</span><span class="token string">"myapp"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        gettext_initialized <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> <span class="token function">_translate</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> msg<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">ensure_gettext_initialized</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token function">gettext</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+
+<span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> messages<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">_</span><span class="token punctuation">(</span><span class="token string">"Hello"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token function">_</span><span class="token punctuation">(</span><span class="token string">"Goodbye!"</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span> bye <span class="token operator">=</span> <span class="token function">_</span><span class="token punctuation">(</span><span class="token string">"Goodbye!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    std<span class="token double-colon punctuation">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token function">_</span><span class="token punctuation">(</span><span class="token string">"Hello, world!"</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> std<span class="token double-colon punctuation">::</span>endl<span class="token punctuation">;</span>
+    
+    std<span class="token double-colon punctuation">::</span>cout <span class="token operator">&lt;&lt;</span> bye <span class="token operator">&lt;&lt;</span> std<span class="token double-colon punctuation">::</span>endl<span class="token punctuation">;</span> 
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">auto</span> key <span class="token operator">:</span> messages<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        std<span class="token double-colon punctuation">::</span>cout <span class="token operator">&lt;&lt;</span> key <span class="token operator">&lt;&lt;</span> std<span class="token double-colon punctuation">::</span>endl<span class="token punctuation">;</span>  <span class="token comment">// 运行时翻译</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>该操作甚至可以翻译数组<code>messages[]</code> 中的字符串。😮</p>
+<h2 id="其他"><a class="markdownIt-Anchor" href="#其他"></a> 其他</h2>
+<h3 id="修改fltk-支持字体"><a class="markdownIt-Anchor" href="#修改fltk-支持字体"></a> 修改FLTK 支持字体</h3>
+<p>默认显示汉语乱码，可以修改<code>FlGui::FlGui()</code> 构造函数，添加：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token class-name">FlGui</span><span class="token double-colon punctuation">::</span><span class="token function">FlGui</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>argv<span class="token punctuation">,</span> <span class="token keyword">bool</span> quitShouldExit<span class="token punctuation">,</span>
+             <span class="token keyword">void</span> <span class="token punctuation">(</span><span class="token operator">*</span>error_handler<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>fmt<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token operator">:</span> <span class="token function">_quitShouldExit</span><span class="token punctuation">(</span>quitShouldExit<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">lastContextWindow</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token class-name">Fl</span><span class="token double-colon punctuation">::</span><span class="token function">set_font</span><span class="token punctuation">(</span>FL_HELVETICA<span class="token punctuation">,</span> <span class="token string">"Noto Sans CJK SC"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 确保系统已安装该字体</span>
+
+  <span class="token comment">// ...</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="批量替换文件内容"><a class="markdownIt-Anchor" href="#批量替换文件内容"></a> 批量替换文件内容</h3>
+<p>在vscode 中，使用<code>ctrl+shift+f</code> 可以全局查询，并按正则表达式替换内容：</p>
+<pre class="line-numbers language-txt" data-language="txt"><code class="language-txt">Msg::Error\s*\(\s*"((?:[^"\\]|\\.)*)"\s*\)
+
+匹配"" 中的字符串，支持转义字符。并替换为
+
+Msg::Error(_("$1"))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在<code>Msg</code> 中常见的消息类型有：<code>Warning</code>、<code>Debug</code>、<code>Error</code>、<code>Info</code>、<code>StatuBar</code>，其他例如窗口图标，则需要具体考虑了。</p>
+<h3 id="cmake"><a class="markdownIt-Anchor" href="#cmake"></a> CMAKE</h3>
+<p>添加了<code>I18n.h</code> 之后，要记得在对应的<code>.cpp</code> 文件中实现方法，并且在同级的<code>CMAKELIST.txt</code> 中检查是否将文件添加进去，否则可能造成编译时找不到定义的错误。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2025/05/15/gettext/" title="使用gettext 进行国际化">https://12tall.github.io/2025/05/15/gettext/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/gettext/" rel="tag"># gettext</a>
+              <a href="/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" rel="tag"># 多语言</a>
+              <a href="/tags/%E5%9B%BD%E9%99%85%E5%8C%96/" rel="tag"># 国际化</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/03/20/pm2/" rel="prev" title="简单PM2 使用笔记">
+                  <i class="fa fa-angle-left"></i> 简单PM2 使用笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/05/21/pseudo-dll/" rel="next" title="Python 实现动态链接库效果">
+                  Python 实现动态链接库效果 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

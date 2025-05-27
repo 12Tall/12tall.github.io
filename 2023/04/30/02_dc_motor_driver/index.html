@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="据说在1960 年之前，人们还只能通过直流发电机来控制直流电动机，并且要求发电机转速恒定，通过调整励磁来改变输出电压。好不辛苦  现代直流电机的转子部分多采用堆叠硅钢片来减少涡流，这在以前的电机中是不常有的。在励磁恒定（没有饱和）时，直流电机可以看作是一个线性系统。而现在的电机驱动器多采用晶体管电路，使得控制器的效率可以达到95%95\%95% 以上，并且成本也更低廉。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="电机与驱动读书笔记（直流电机驱动电路）">
+<meta property="og:url" content="https://12tall.github.io/2023/04/30/02_dc_motor_driver/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="据说在1960 年之前，人们还只能通过直流发电机来控制直流电动机，并且要求发电机转速恒定，通过调整励磁来改变输出电压。好不辛苦  现代直流电机的转子部分多采用堆叠硅钢片来减少涡流，这在以前的电机中是不常有的。在励磁恒定（没有饱和）时，直流电机可以看作是一个线性系统。而现在的电机驱动器多采用晶体管电路，使得控制器的效率可以达到95%95\%95% 以上，并且成本也更低廉。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://12tall.github.io/2023/04/30/02_dc_motor_driver/armature_voltage_current_waves.png">
+<meta property="og:image" content="https://12tall.github.io/2023/04/30/02_dc_motor_driver/lighter_load.png">
+<meta property="og:image" content="https://12tall.github.io/2023/04/30/02_dc_motor_driver/torque-speed.png">
+<meta property="og:image" content="https://12tall.github.io/2023/04/30/02_dc_motor_driver/overlap.png">
+<meta property="og:image" content="https://12tall.github.io/2023/04/30/02_dc_motor_driver/mechanical-switch.png">
+<meta property="og:image" content="https://12tall.github.io/2023/04/30/02_dc_motor_driver/alpha-Vdc.png">
+<meta property="og:image" content="https://12tall.github.io/2023/04/30/02_dc_motor_driver/double-converter-reserving.png">
+<meta property="og:image" content="https://12tall.github.io/2023/04/30/02_dc_motor_driver/supply-effects.png">
+<meta property="og:image" content="https://12tall.github.io/2023/04/30/02_dc_motor_driver/two-loop_control.png">
+<meta property="og:image" content="https://12tall.github.io/2023/04/30/02_dc_motor_driver/current-protection.png">
+<meta property="og:image" content="https://12tall.github.io/2023/04/30/02_dc_motor_driver/chopper-fed_drive.png">
+<meta property="og:image" content="https://12tall.github.io/2023/04/30/02_dc_motor_driver/ironless-servo.png">
+<meta property="og:image" content="https://12tall.github.io/2023/04/30/02_dc_motor_driver/position-control.png">
+<meta property="og:image" content="https://12tall.github.io/2023/04/30/02_dc_motor_driver/servo-control_tacho-loop.png">
+<meta property="article:published_time" content="2023-04-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.060Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="电机">
+<meta property="article:tag" content="控制理论">
+<meta property="article:tag" content="PID">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://12tall.github.io/2023/04/30/02_dc_motor_driver/armature_voltage_current_waves.png">
+
+
+<link rel="canonical" href="https://12tall.github.io/2023/04/30/02_dc_motor_driver/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2023/04/30/02_dc_motor_driver/","path":"2023/04/30/02_dc_motor_driver/","title":"电机与驱动读书笔记（直流电机驱动电路）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>电机与驱动读书笔记（直流电机驱动电路） | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%B5%E6%9E%A2%E7%94%B5%E5%8E%8B%E5%92%8C%E7%94%B5%E6%B5%81%E6%B3%A2%E5%BD%A2"><span class="nav-number">1.</span> <span class="nav-text"> 电枢电压和电流波形</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E8%BF%9E%E7%BB%AD%E7%9A%84%E7%94%B5%E6%9E%A2%E7%94%B5%E6%B5%81"><span class="nav-number">1.1.</span> <span class="nav-text"> 不连续的电枢电流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E5%8F%A0%E6%97%B6%E9%97%B4"><span class="nav-number">1.2.</span> <span class="nav-text"> 重叠时间</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E8%B1%A1%E9%99%90%E5%B7%A5%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text"> 四象限工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%9F%E7%8E%87%E5%9B%A0%E6%95%B0"><span class="nav-number">2.1.</span> <span class="nav-text"> 功率因数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8C%E9%97%AD%E7%8E%AF%E6%8E%A7%E5%88%B6"><span class="nav-number">3.</span> <span class="nav-text"> 双闭环控制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%B5%E6%B5%81%E6%8E%A7%E5%88%B6"><span class="nav-number">3.1.</span> <span class="nav-text"> 电流控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E9%80%9F%E6%8E%A7%E5%88%B6"><span class="nav-number">3.2.</span> <span class="nav-text"> 转速控制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B4%E6%B5%81%E6%96%A9%E6%B3%A2"><span class="nav-number">4.</span> <span class="nav-text"> 直流斩波</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%BA%E6%9C%8D%E7%94%B5%E6%9C%BA"><span class="nav-number">5.</span> <span class="nav-text"> 伺服电机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E9%93%81%E8%8A%AF%E7%94%B5%E6%9C%BA"><span class="nav-number">5.1.</span> <span class="nav-text"> 无铁芯电机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%B0%E5%88%B6%E7%94%B5%E6%9E%A2%E7%94%B5%E6%9C%BA"><span class="nav-number">5.2.</span> <span class="nav-text"> 印制电枢电机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E7%94%B5%E8%B7%AF"><span class="nav-number">5.3.</span> <span class="nav-text"> 控制电路</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2023/04/30/02_dc_motor_driver/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="电机与驱动读书笔记（直流电机驱动电路） | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          电机与驱动读书笔记（直流电机驱动电路）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-04-30 00:00:00" itemprop="dateCreated datePublished" datetime="2023-04-30T00:00:00+08:00">2023-04-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/em/" itemprop="url" rel="index"><span itemprop="name">em</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>据说在1960 年之前，人们还只能通过直流发电机来控制直流电动机，并且要求发电机转速恒定，通过调整励磁来改变输出电压。好不辛苦</p>
+</blockquote>
+<p>现代直流电机的转子部分多采用堆叠硅钢片来减少涡流，这在以前的电机中是不常有的。在励磁恒定（没有饱和）时，直流电机可以看作是一个线性系统。而现在的电机驱动器多采用晶体管电路，使得控制器的效率可以达到<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>95</mn><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">95\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80556em;vertical-align:-0.05556em;"></span><span class="mord">9</span><span class="mord">5</span><span class="mord">%</span></span></span></span> 以上，并且成本也更低廉。</p>
+<span id="more"></span>
+<h2 id="电枢电压和电流波形"><a class="markdownIt-Anchor" href="#电枢电压和电流波形"></a> 电枢电压和电流波形</h2>
+<p>因为电枢绕组存在着电感，并且电机自身和负载也存在着一定的转动惯量，这就使得尽管驱动电路的电压输出波形变化很大但是电枢电流却相对稳定、平滑，如下图（单相全桥）：<br />
+<img src="armature_voltage_current_waves.png" alt="" /></p>
+<p>其中电枢电流可以看作由直流分量和交流分量复合而成，并且在不是空载时，交流分量所占的比例很小。一个周期下来，交流分量的作用为0，因此，直流电机的电压平衡方程又可以写作以下形式：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable width="100%"><mtr><mtd width="50%"></mtd><mtd><mrow><msub><mi>V</mi><mrow><mi>d</mi><mi>c</mi></mrow></msub><mo>=</mo><mi>E</mi><mo>+</mo><msub><mi>I</mi><mrow><mi>d</mi><mi>c</mi></mrow></msub><mi>R</mi></mrow></mtd><mtd width="50%"></mtd><mtd><mtext>(1)</mtext></mtd></mtr></mtable><annotation encoding="application/x-tex">V_{dc} = E + I_{dc}R \tag{1}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">c</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">c</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span></span><span class="tag"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">(</span><span class="mord"><span class="mord">1</span></span><span class="mord">)</span></span></span></span></span></span></p>
+<p>因为电枢绕组具有电阻，电机带载和空载时电枢的平均电流不一样：空载时要小很多。但是，电枢电流中的交流分量是不变的，似乎其至于电枢电感有关？</p>
+<h3 id="不连续的电枢电流"><a class="markdownIt-Anchor" href="#不连续的电枢电流"></a> 不连续的电枢电流</h3>
+<p>在上图中，如果负载减小，电枢电流就会下移。当下移到一定程度时，电流的波谷就会与时间轴重合，这时候如果再下移，因为晶闸管不能反向导电，所以电流的波谷部分被强行削平。这种情况在小型电机和轻载的时候容易出现：</p>
+<p><img src="lighter_load.png" alt="" /></p>
+<p>因为驱动电路电流为0 时，电机两端存在反电动势，就会导致电机实际输入的平均电压高于理论值，导致电机转速增加。应用上应当避免此类情况的发生：<br />
+<img src="torque-speed.png" alt="" /></p>
+<p>可以看到上图中的转速曲线在轻载时明显右偏，但是通过一些手段可以减缓这种现象：</p>
+<ol>
+<li>电枢串联电感，来使得电枢电流变化尽量小，提高波谷</li>
+<li>或者采用三相全桥来代替单相桥，使得输出更加平滑</li>
+</ol>
+<p>如果采用闭环控制电路的话，则不用担心不连续电流的情况，因为控制器会自动调整驱动电路以达到稳定的转速和扭矩。</p>
+<h3 id="重叠时间"><a class="markdownIt-Anchor" href="#重叠时间"></a> 重叠时间</h3>
+<p>一般我们假设整流电路的输出只与其导通角有关，但实际上因为电机存在着阻抗，导致晶闸管在交替开启和关断存在着延迟，表现为驱动电路在极短的时间内输出为0（半开半关形成短路）：<br />
+<img src="overlap.png" alt="" /></p>
+<p>一般这段时间只有微秒级，在使用<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>50</mn><mi>H</mi><mi>z</mi><mtext> </mtext><mn>60</mn><mi>H</mi><mi>z</mi></mrow><annotation encoding="application/x-tex">50Hz ~ 60Hz</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">5</span><span class="mord">0</span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="mspace nobreak"> </span><span class="mord">6</span><span class="mord">0</span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mord mathnormal" style="margin-right:0.04398em;">z</span></span></span></span> 的交流电源时，这段时间一般不应超过<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>m</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">1ms</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord mathnormal">m</span><span class="mord mathnormal">s</span></span></span></span>。</p>
+<h2 id="四象限工作"><a class="markdownIt-Anchor" href="#四象限工作"></a> 四象限工作</h2>
+<p>正常的整流电路都只能单向供电，如果我们在某一段时间内需要将电动机应用为发电机，则需要一个机械开关，来对调电机的接线：<br />
+<img src="mechanical-switch.png" alt="" /></p>
+<p>并且要保证整流电路的触发角<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>π</mi><mn>2</mn></mfrac><mo>&lt;</mo><mi>α</mi><mo>&lt;</mo><mi>π</mi></mrow><annotation encoding="application/x-tex">\frac{\pi}{2} &lt; \alpha &lt; \pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.040392em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.695392em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">π</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span>，输出电压为负：<br />
+<img src="alpha-Vdc.png" alt="" /></p>
+<p>电机由正转到反转一般需要经历下面几个阶段：<code>正转</code>-(降压)-(反接)-<code>正转制动</code>-(转速为0)-(反向升压)-<code>反转加速</code>。一般机械开关的响应时间在200~400ms，通过反向励磁也能达到此类效果，但是响应要更慢一些。在要求切换速度较快的场景下，可以通过两个反向并联的转换器来实现：<br />
+<img src="double-converter-reserving.png" alt="" /></p>
+<p>需要只注意的是，在正向制动的过程中要控制电枢电流，不能过大，否则可能损坏电机。</p>
+<h3 id="功率因数"><a class="markdownIt-Anchor" href="#功率因数"></a> 功率因数</h3>
+<p>这种驱动电路有一个缺点就是在高转矩或者低转速的情况下功率因数特别低，甚至在额定转速是其功率因数也小于1。晶闸管交替导通时甚至会影响电源电压的波形，所以必要时还需要假装功率因数校正装置。<br />
+<img src="supply-effects.png" alt="" /></p>
+<h2 id="双闭环控制"><a class="markdownIt-Anchor" href="#双闭环控制"></a> 双闭环控制</h2>
+<p>双闭环控制一般是采用两个<code>pid</code> 控制器，电流环在内、转速环在外，来实现对电机转速的控制，其原理图如下：<br />
+<img src="two-loop_control.png" alt="" /></p>
+<p>虽然单独的转速控制也可以，但是响应不如双闭环快，静态误差也有可能会更大。</p>
+<h3 id="电流控制"><a class="markdownIt-Anchor" href="#电流控制"></a> 电流控制</h3>
+<p>电流控制是驱动系统的核心，因为电枢电流不仅要随着控制信号变化，还不能超过安全区间：<br />
+<img src="current-protection.png" alt="" /></p>
+<p>而电流的控制，其实也就是电机输出转矩的控制。</p>
+<h3 id="转速控制"><a class="markdownIt-Anchor" href="#转速控制"></a> 转速控制</h3>
+<p>好的控制器稳态误差为0。<br />
+但是任何闭环控制都不能丢失反馈信号，否则可能会伤害设备或人员。</p>
+<h2 id="直流斩波"><a class="markdownIt-Anchor" href="#直流斩波"></a> 直流斩波</h2>
+<p>如果电源本身就是直流，则需要通过斩波降压电路来进行控制：<br />
+<img src="chopper-fed_drive.png" alt="" /></p>
+<p>假设开关电路的导通关断时间比是：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><msub><mi>T</mi><mrow><mi>o</mi><mi>n</mi></mrow></msub><msub><mi>T</mi><mrow><mi>o</mi><mi>f</mi><mi>f</mi></mrow></msub></mfrac><mo>=</mo><mfrac><mi>k</mi><mrow><mn>1</mn><mo>−</mo><mi>k</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{T_{on}}{T_{off}}=\frac{k}{1-k}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.4365109999999999em;vertical-align:-0.5480799999999999em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8884309999999999em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.13889em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29011428571428566em;"><span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.4101em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.16454285714285719em;"><span style="top:-2.357em;margin-left:-0.13889em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.5480799999999999em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.283439em;vertical-align:-0.403331em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8801079999999999em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mbin mtight">−</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.403331em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>，那么其输出电压就是：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable width="100%"><mtr><mtd width="50%"></mtd><mtd><mrow><msub><mi>V</mi><mrow><mi>d</mi><mi>c</mi></mrow></msub><mo>=</mo><mi>k</mi><mi>V</mi></mrow></mtd><mtd width="50%"></mtd><mtd><mtext>(2)</mtext></mtd></mtr></mtable><annotation encoding="application/x-tex">V_{dc}=kV \tag{2}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">c</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span><span class="tag"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">(</span><span class="mord"><span class="mord">2</span></span><span class="mord">)</span></span></span></span></span></span></p>
+<p>在控制器导通时，电机处于加速状态；关断时，电机处于制动状态。通过增加电感、开关频率或者闭环控制，可以使电机运行更加平稳。</p>
+<h2 id="伺服电机"><a class="markdownIt-Anchor" href="#伺服电机"></a> 伺服电机</h2>
+<p>直流伺服电机一般都是封装好的，其扭矩一般很大，并且会经常有突然转向的操作。这就要求电机自身的转动惯量和自身电感比较小。</p>
+<h3 id="无铁芯电机"><a class="markdownIt-Anchor" href="#无铁芯电机"></a> 无铁芯电机</h3>
+<ul>
+<li>转子几乎只包含绕组线圈，斜形缠绕</li>
+<li>没有齿槽</li>
+<li>转子内部放有永磁体与钢制外壳构成磁路</li>
+</ul>
+<p><img src="ironless-servo.png" alt="" /></p>
+<h3 id="印制电枢电机"><a class="markdownIt-Anchor" href="#印制电枢电机"></a> 印制电枢电机</h3>
+<ul>
+<li>一般为盘状或饼状</li>
+<li>磁通是轴向的，电流是径向的</li>
+<li>功率大，且因为其外形，适合一些特殊工况</li>
+</ul>
+<p>简单的构造可以参考这个<a target="_blank" rel="noopener" href="https://www.raypcb.com/wp-content/uploads/2023/03/PCB-Motor.webp">链接</a></p>
+<h3 id="控制电路"><a class="markdownIt-Anchor" href="#控制电路"></a> 控制电路</h3>
+<p>一般的电机我们要控制速度，而伺服电机需要控制的是位置，也可以说是角度。一般也采用双闭环控制，外环是位置，内环是转速，因为要求转矩尽可能的大，所以对电流倒没有严格限制：<br />
+<img src="position-control.png" alt="" /></p>
+<p>而有无内环的响应比较也如下所示：<br />
+<img src="servo-control_tacho-loop.png" alt="" /></p>
+<p>记一个名词<code>tacho</code>，表示转速计的意思。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2023/04/30/02_dc_motor_driver/" title="电机与驱动读书笔记（直流电机驱动电路）">https://12tall.github.io/2023/04/30/02_dc_motor_driver/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E7%94%B5%E6%9C%BA/" rel="tag"># 电机</a>
+              <a href="/tags/%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA/" rel="tag"># 控制理论</a>
+              <a href="/tags/PID/" rel="tag"># PID</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/04/26/rk4-pid/" rel="prev" title="RK4 中PID 算法的初值问题">
+                  <i class="fa fa-angle-left"></i> RK4 中PID 算法的初值问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/05/04/05_induction_motor/" rel="next" title="电机与驱动读书笔记（感应电机基础）">
+                  电机与驱动读书笔记（感应电机基础） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

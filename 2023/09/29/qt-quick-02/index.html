@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="和Electron 类似，PyQt 与PySide 也支持向QML 的前端暴露对象以实现前后端的通信；但是呢，似乎QML 可以往任意子元素暴露对象变量">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Qt Quick 的学习笔记（二）">
+<meta property="og:url" content="https://12tall.github.io/2023/09/29/qt-quick-02/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="和Electron 类似，PyQt 与PySide 也支持向QML 的前端暴露对象以实现前后端的通信；但是呢，似乎QML 可以往任意子元素暴露对象变量">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-09-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.264Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="qt">
+<meta property="article:tag" content="pyside">
+<meta property="article:tag" content="qml">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://12tall.github.io/2023/09/29/qt-quick-02/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2023/09/29/qt-quick-02/","path":"2023/09/29/qt-quick-02/","title":"Qt Quick 的学习笔记（二）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Qt Quick 的学习笔记（二） | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E4%BF%A1"><span class="nav-number">1.</span> <span class="nav-text"> 通信</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%AB%AF%E8%B0%83%E7%94%A8%E5%90%8E%E7%AB%AF"><span class="nav-number">1.1.</span> <span class="nav-text"> 前端调用后端</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E7%AB%AF%E8%B0%83%E7%94%A8%E5%89%8D%E7%AB%AF"><span class="nav-number">2.</span> <span class="nav-text"> 后端调用前端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">3.</span> <span class="nav-text"> 参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2023/09/29/qt-quick-02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Qt Quick 的学习笔记（二） | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Qt Quick 的学习笔记（二）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-09-29 00:00:00" itemprop="dateCreated datePublished" datetime="2023-09-29T00:00:00+08:00">2023-09-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>和Electron 类似，PyQt 与PySide 也支持向QML 的前端暴露对象以实现前后端的通信；但是呢，似乎QML 可以往任意子元素暴露对象变量</p>
+</blockquote>
+<span id="more"></span>
+<p>本笔记中的所有内容均摘自<a target="_blank" rel="noopener" href="https://www.cnblogs.com/linuxAndMcu/">Feng Misaka - 博客园</a>。重点在于前后端的通信与动态组件的绘制。</p>
+<h2 id="通信"><a class="markdownIt-Anchor" href="#通信"></a> 通信</h2>
+<p>前后端通信是所有做用户界面不可避免的问题，说简单也简单，无非就是函数的调用与数据的传输罢了。但是怎么做得高效优雅就是一门学问了。PySide 中也使用了向前端暴露对象变量的方法。</p>
+<h3 id="前端调用后端"><a class="markdownIt-Anchor" href="#前端调用后端"></a> 前端调用后端</h3>
+<p>前端调用后端，需要后端向前端暴露一个槽函数（<code>@Slot()</code>），槽函数装饰器的签名如下：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">Slot</span><span class="token punctuation">(</span>
+    <span class="token operator">*</span>types<span class="token punctuation">:</span> <span class="token builtin">type</span><span class="token punctuation">,</span>  <span class="token comment"># 参数类型</span>
+    name<span class="token punctuation">:</span> <span class="token builtin">str</span> <span class="token operator">|</span> <span class="token boolean">None</span> <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span>  <span class="token comment"># 函数名，默认与Python 函数同名</span>
+    result<span class="token punctuation">:</span> <span class="token builtin">str</span> <span class="token operator">|</span> <span class="token boolean">None</span> <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>  <span class="token comment"># 结果类型</span>
+<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>示例代码如下：</p>
+<pre class="line-numbers language-python&#123;18,20-23,30&#125;" data-language="python&#123;18,20-23,30&#125;"><code class="language-python&#123;18,20-23,30&#125;"># main.py  
+import sys
+
+from PySide6.QtCore import QObject, Slot
+from PySide6.QtGui import QGuiApplication
+from PySide6.QtQml import QQmlApplicationEngine
+
+
+class Api(QObject):
+    &#39;&#39;&#39;
+    1. 暴露的变量对象必须继承自QObject
+    &#39;&#39;&#39;
+
+    def __init__(self, parent&#x3D;None) -&gt; None:
+        &#39;&#39;&#39;
+        2. 并且需要通过父类方法进行初始化
+        &#39;&#39;&#39;
+        super().__init__(parent)  #
+
+    @Slot(str, result&#x3D;str)  # 装饰器用于告诉QML 该函数的签名
+    def clickme(self, arg):  # 真正的函数定义
+        print(f&quot;&#123;arg&#125; clicked&quot;)
+        return &quot;123&quot;
+
+
+app &#x3D; QGuiApplication(sys.argv)
+engine &#x3D; QQmlApplicationEngine()
+engine.quit.connect(app.quit)
+# 暴露该对象到rootContext
+engine.rootContext().setContextProperty(&#39;api&#39;, Api(app))
+# 也可以暴露到某个组件，但是不如直接放在全局简单粗暴
+# engine.rootObjects()[0].setProperty(&#39;backend&#39;, backend)
+engine.load(&#39;main.qml&#39;)
+
+sys.exit(app.exec_())<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-qml" data-language="qml"><code class="language-qml"><span class="token keyword">import</span> QtQuick 2.15
+<span class="token keyword">import</span> QtQuick.Controls 2.15
+
+<span class="token class-name">ApplicationWindow</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">visible</span><span class="token punctuation">:</span> <span class="token javascript-expression language-javascript"><span class="token boolean">true</span></span>
+    <span class="token comment">// ...</span>
+    <span class="token class-name">Button</span> <span class="token punctuation">&#123;</span>
+        <span class="token property">id</span><span class="token punctuation">:</span> <span class="token javascript-expression language-javascript">btn</span>
+        <span class="token property">text</span><span class="token punctuation">:</span> <span class="token javascript-expression language-javascript"><span class="token string">"'click me'"</span></span>
+        <span class="token property">onClicked</span><span class="token punctuation">:</span><span class="token javascript-expression language-javascript"><span class="token punctuation">&#123;</span>
+            <span class="token keyword">var</span> res <span class="token operator">=</span> api<span class="token punctuation">.</span><span class="token function">clickme</span><span class="token punctuation">(</span><span class="token string">"123"</span><span class="token punctuation">)</span><span class="token operator">?</span><span class="token number">1</span><span class="token operator">:</span><span class="token number">2</span>
+            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>res<span class="token punctuation">)</span>
+        <span class="token punctuation">&#125;</span></span>
+    <span class="token punctuation">&#125;</span>    
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="后端调用前端"><a class="markdownIt-Anchor" href="#后端调用前端"></a> 后端调用前端</h2>
+<p>正常后端可以通过同步的方法修改。也可以通过以事件的形式进行。这时就需要后台向前端发送信号<code>Signal()</code>。然后在前端监听信号的变化：</p>
+<pre class="line-numbers language-python&#123;16,18,25&#125;" data-language="python&#123;16,18,25&#125;"><code class="language-python&#123;16,18,25&#125;">from PySide6.QtCore import QObject, Slot, Signal
+from PySide6.QtGui import QGuiApplication
+from PySide6.QtQml import QQmlApplicationEngine
+
+
+class Api(QObject):
+    &#39;&#39;&#39;
+    1. 暴露的变量对象必须继承自QObject
+    &#39;&#39;&#39;
+    def __init__(self, parent&#x3D;None) -&gt; None:
+        &#39;&#39;&#39;
+        2. 并且需要通过父类方法进行初始化
+        &#39;&#39;&#39;
+        super().__init__(parent)  #
+        # 不能将信号定义为实例变量
+        # self.sig &#x3D; Signal(str, arguments&#x3D;[&#39;arg1&#39;])
+    # 只能将信号定义为类变量，不然的话会找不到emit 方法
+    sig &#x3D; Signal(str, arguments&#x3D;[&#39;arg1&#39;])
+    
+
+    @Slot(str, result&#x3D;str)  # 装饰器用于告诉QML 该函数的签名
+    def clickme(self, arg):  # 真正的函数定义
+        print(f&quot;&#123;arg&#125; clicked&quot;)
+        # 在槽方法中发送信号
+        self.sig.emit(arg)
+        return &quot;123&quot;
+# ...        <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在前端则需要<code>Connect</code> 到<code>api</code> 变量，并且使用<code>onSig</code> 监听<code>sig</code> 信号：</p>
+<pre class="line-numbers language-qml&#123;9-11&#125;" data-language="qml&#123;9-11&#125;"><code class="language-qml&#123;9-11&#125;">import QtQuick 2.2
+import QtQuick.Controls 2.2
+
+ApplicationWindow &#123;
+    &#x2F;&#x2F; ...
+    Connections&#123;
+        target: api  
+        
+        function onSig(arg1) &#123;
+            btn.text &#x3D; arg1
+        &#125;
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>Signal</code> 构造参数及意义：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">```python
+<span class="token keyword">class</span> <span class="token class-name">Signal</span><span class="token punctuation">(</span>
+    <span class="token operator">*</span>types<span class="token punctuation">:</span> <span class="token builtin">type</span><span class="token punctuation">,</span>  <span class="token comment"># 参数类型</span>
+    name<span class="token punctuation">:</span> <span class="token builtin">str</span> <span class="token operator">|</span> <span class="token boolean">None</span> <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span>  <span class="token comment"># 函数名，默认与Python 对象同名</span>
+    arguments<span class="token operator">=</span><span class="token punctuation">[</span><span class="token builtin">str</span><span class="token punctuation">]</span> <span class="token operator">|</span> <span class="token boolean">None</span> <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>  <span class="token comment"># 形参名</span>
+<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-none"><code class="language-none">
+## 动态元素  
+QML 中提供了&#96;ListView&#96; 和&#96;GridView&#96; 来展示数据，并且提供了相应的&#96;*Model&#96; 容器来管理数据，以实现实时更新的效果。下面的代码取自[QML中动态与静态模型应用详解](https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;639430500)，仅作部分删减修改并添加注释：  
+&#96;&#96;&#96;qml&#123;13-17,42,45-53,71-75&#125;
+import QtQuick 2.2
+import QtQuick.Window 2.2
+Window &#123;
+    visible: true
+    width: 640
+    height: 480
+    title: qsTr(&quot;动态添加和删除元素&quot;)
+    Rectangle&#123;
+        width: 480
+        height: 300
+        color: &quot;white&quot;
+        &#x2F;&#x2F; 初始化数据模型
+        ListModel&#123;
+            id: theModel
+            ListElement&#123;number:0&#125;
+            ListElement&#123;number:1&#125;
+        &#125;
+        Rectangle&#123;
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.margins: 20
+            height: 40
+            color: &quot;darkGreen&quot;
+            Text &#123;
+                anchors.centerIn: parent
+                text: &quot;add item&quot;
+            &#125;
+            MouseArea&#123;
+                anchors.fill: parent
+                onClicked: &#123;
+                    theModel.append(&#123;&quot;number&quot;: parent.count++&#125;)
+                &#125;
+            &#125;
+            property int count: 2
+        &#125;
+        GridView&#123;
+            anchors.fill: parent
+            anchors.margins: 20
+            anchors.bottomMargin: 80
+            clip: true
+            model: theModel &#x2F;&#x2F; 绑定模型
+            cellWidth: 45
+            cellHeight: 45
+            delegate: numberDelegate  &#x2F;&#x2F; 子元素模板
+            add: Transition &#123;  &#x2F;&#x2F; 添加元素的动画，最新的写法
+                    NumberAnimation &#123; properties: &quot;x,y&quot;; from: 100; duration: 1000 &#125;
+                &#125;
+            remove: Transition &#123;
+                        ParallelAnimation &#123;
+                            NumberAnimation &#123; property: &quot;opacity&quot;; to: 0; duration: 1000 &#125;
+                        &#125;
+                &#125;
+        &#125;
+
+        &#x2F;&#x2F; 子元素的模板
+        Component&#123;
+            id:numberDelegate
+            Rectangle&#123;
+                id: wrapper
+                width: 40
+                height: 40
+                color: &quot;lightGreen&quot;
+                Text &#123;
+                    anchors.centerIn: parent
+                    font.pixelSize: 10
+                    text: number  &#x2F;&#x2F; 模型的number 属性
+                &#125;
+                MouseArea&#123;
+                    anchors.fill: parent
+                    onClicked: &#123;  &#x2F;&#x2F; 子元素的事件监听
+                            &#x2F;&#x2F; 这里要判断元素是否已经被移除，所以仅凭index 还是不够的
+                            &#x2F;&#x2F; 默认index 属性
+                            theModel.remove(index)
+                        &#125;
+                &#125;
+                &#x2F;&#x2F;模型元素移除时候的动画
+            &#125;
+        &#125;
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>关于动画的部分，以后有时间在学习吧。总之学了数据的增删改查一般的小项目就足够用了。而且比web 和qtdesigner 考虑的都要单纯些。</p>
+<h2 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/linuxAndMcu/">Feng Misaka - 博客园</a></li>
+<li><a target="_blank" rel="noopener" href="https://qmlonline.kde.org/">QML 在线预览</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/patrickelectric/qmlonline">QML 在线预览的仓库</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/a/54011163">Connect python signal to QML ui slot with PySide2</a> 包含退出程序前清理线程的代码</li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/a/68613783">Is there a cleaner way for backend in PySide6 for QML?</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/639430500">QML中动态与静态模型应用详解</a> 文中关于动画的写法过时了</li>
+<li><a target="_blank" rel="noopener" href="https://doc.qt.io/qt-6/qml-qtquick-gridview.html#attached-signals">QML - GrideView - Attached Signals</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2023/09/29/qt-quick-02/" title="Qt Quick 的学习笔记（二）">https://12tall.github.io/2023/09/29/qt-quick-02/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"># python</a>
+              <a href="/tags/qt/" rel="tag"># qt</a>
+              <a href="/tags/pyside/" rel="tag"># pyside</a>
+              <a href="/tags/qml/" rel="tag"># qml</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/09/27/qt-quick-01/" rel="prev" title="Qt Quick 的学习笔记（一）">
+                  <i class="fa fa-angle-left"></i> Qt Quick 的学习笔记（一）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/10/11/fmu/" rel="next" title="Python FMU 相关">
+                  Python FMU 相关 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="本文受How to terminate running Python threads using signals 文章启发，但只保留了多线程相关的部分。 起因是最近想用Python 模拟信号发生器的功能，自然需要通过主线程控制子线程发送数据（开始，暂停，继续，停止等状态）。第一版是通过lock 锁加上各种标志属性来实现的，总感觉思路不太清晰。于是参考上面的链接，采用event 来重构代码，总算得到">
+<meta property="og:type" content="article">
+<meta property="og:title" content="信号发生器的实现">
+<meta property="og:url" content="https://12tall.github.io/2022/08/03/signal-generator/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="本文受How to terminate running Python threads using signals 文章启发，但只保留了多线程相关的部分。 起因是最近想用Python 模拟信号发生器的功能，自然需要通过主线程控制子线程发送数据（开始，暂停，继续，停止等状态）。第一版是通过lock 锁加上各种标志属性来实现的，总感觉思路不太清晰。于是参考上面的链接，采用event 来重构代码，总算得到">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.235Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="通信">
+<meta property="article:tag" content="多进程">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://12tall.github.io/2022/08/03/signal-generator/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2022/08/03/signal-generator/","path":"2022/08/03/signal-generator/","title":"信号发生器的实现"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>信号发生器的实现 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#v01-%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF"><span class="nav-number">1.</span> <span class="nav-text"> V0.1 的设计思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#igenerator-%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.1.</span> <span class="nav-text"> IGenerator 接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87event-%E6%8E%A7%E5%88%B6%E7%BA%BF%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text"> 通过Event() 控制线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AB%AF%E5%8F%A3"><span class="nav-number">1.3.</span> <span class="nav-text"> 端口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81"><span class="nav-number">1.4.</span> <span class="nav-text"> 测试代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E9%87%87%E6%A0%B7%E9%A2%91%E7%8E%87"><span class="nav-number">2.</span> <span class="nav-text"> 关于采样频率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#v02-%E7%89%88%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF"><span class="nav-number">3.</span> <span class="nav-text"> V0.2 版设计思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AB%AF%E5%8F%A3%E6%8E%A5%E5%8F%A3"><span class="nav-number">3.1.</span> <span class="nav-text"> 端口接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E7%94%9F%E6%88%90%E5%87%BD%E6%95%B0"><span class="nav-number">3.2.</span> <span class="nav-text"> 信号生成函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E5%8F%91%E7%94%9F%E5%99%A8"><span class="nav-number">3.3.</span> <span class="nav-text"> 信号发生器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81-2"><span class="nav-number">3.4.</span> <span class="nav-text"> 测试代码</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/signal-generator/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="信号发生器的实现 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          信号发生器的实现
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-03 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-03T00:00:00+08:00">2022-08-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>10 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>本文受<a target="_blank" rel="noopener" href="https://www.g-loaded.eu/2016/11/24/how-to-terminate-running-python-threads-using-signals/">How to terminate running Python threads using signals</a> 文章启发，但只保留了多线程相关的部分。<br />
+起因是最近想用Python 模拟信号发生器的功能，自然需要通过主线程控制子线程发送数据（开始，暂停，继续，停止等状态）。第一版是通过<code>lock</code> 锁加上各种标志属性来实现的，总感觉思路不太清晰。于是参考上面的链接，采用<code>event</code> 来重构代码，总算得到了一个自己较为满意的（可扩展的）版本。</p>
+<span id="more"></span>
+<h2 id="v01-的设计思路"><a class="markdownIt-Anchor" href="#v01-的设计思路"></a> V0.1 的设计思路</h2>
+<p><code>v0.0</code> 的设计思路是通过系统定时器来向端口定时发送数据，但Windows 平台的实时性不够，详见<a href="#%E5%85%B3%E4%BA%8E%E9%87%87%E6%A0%B7%E9%A2%91%E7%8E%87">关于采样频率的说明</a>。于是在基本逻辑不变的情况下采用了人为设置<code>Δt</code> 的策略，也就是<code>v0.1</code>。</p>
+<h3 id="igenerator-接口"><a class="markdownIt-Anchor" href="#igenerator-接口"></a> IGenerator 接口</h3>
+<p>考虑我们的信号发生器，最重要的就是将信号及时准确地发送出去。所以我们需要一个发送信号的方法：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> time <span class="token keyword">import</span> sleep
+
+<span class="token keyword">class</span> <span class="token class-name">IGenerator</span><span class="token punctuation">(</span><span class="token builtin">object</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
+    ISender 接口  
+    可以发送数据、被重置
+    """</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+        <span class="token keyword">pass</span>  
+
+    <span class="token keyword">def</span> <span class="token function">reset</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 重置功能</span>
+        <span class="token keyword">pass</span>  
+
+    <span class="token keyword">def</span> <span class="token function">generate_data</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 生成数据</span>
+        <span class="token keyword">pass</span>
+
+    <span class="token keyword">def</span> <span class="token function">send</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>   <span class="token comment"># 发送功能</span>
+        <span class="token comment"># sleep(0.1)  # 可以通过sleep 函数控制数据发送的频率</span>
+        <span class="token keyword">pass</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里我们通过类来表示接口的定义，通过实现接口方法，我们可以获取不同的信号发生器子类。</p>
+<h3 id="通过event-控制线程"><a class="markdownIt-Anchor" href="#通过event-控制线程"></a> 通过Event() 控制线程</h3>
+<p>为了可以不间断地发送正确地数据，我们需要在一个独立的线程中调用<code>IGenerator</code> 对象的<code>generate_data/send</code> 方法，并且需要在主线程中控制子线程的<code>开始/暂停/停止</code> 等功能。这里我们通过<code>threading.Event()</code> 来实现：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> threading <span class="token keyword">import</span> Event<span class="token punctuation">,</span> Thread  
+
+<span class="token keyword">class</span> <span class="token class-name">Executor</span><span class="token punctuation">(</span>Thread<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> generator<span class="token punctuation">:</span> IGenerator<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        Thread<span class="token punctuation">.</span>__init__<span class="token punctuation">(</span>self<span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>daemon <span class="token operator">=</span> <span class="token boolean">True</span>  <span class="token comment"># 设置为守护线程，当主线程退出时自动结束</span>
+        self<span class="token punctuation">.</span>generator <span class="token operator">=</span> generator  <span class="token comment"># 接收一个IGenerator 对象，用于发送数据</span>
+        self<span class="token punctuation">.</span>pause_flag <span class="token operator">=</span> Event<span class="token punctuation">(</span><span class="token punctuation">)</span>   <span class="token comment"># 暂停线程</span>
+        self<span class="token punctuation">.</span>stop_flag <span class="token operator">=</span> Event<span class="token punctuation">(</span><span class="token punctuation">)</span>    <span class="token comment"># 结束线程</span>
+
+    <span class="token keyword">def</span> <span class="token function">resume</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 开始/继续发送</span>
+        self<span class="token punctuation">.</span>pause_flag<span class="token punctuation">.</span><span class="token builtin">set</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">pause</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>   <span class="token comment"># 暂停发送  </span>
+        self<span class="token punctuation">.</span>pause_flag<span class="token punctuation">.</span>clear<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">stop</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>    <span class="token comment"># 停止发送，结束线程</span>
+        self<span class="token punctuation">.</span>stop_flag<span class="token punctuation">.</span><span class="token builtin">set</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">run</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>     <span class="token comment"># 线程体</span>
+        <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>pause_flag<span class="token punctuation">.</span>wait<span class="token punctuation">(</span><span class="token punctuation">)</span>  
+            <span class="token keyword">if</span> self<span class="token punctuation">.</span>stop_flag<span class="token punctuation">.</span>is_set<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token keyword">break</span>
+            self<span class="token punctuation">.</span>generator<span class="token punctuation">.</span>send<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>关于上面代码关于<code>threading.Event</code> 有以下几点可以帮助理解：</p>
+<ul>
+<li><code>threading.Event</code> 对象作为一个特殊的标志，<code>is_set()</code>默认为<code>False</code>;</li>
+<li><code>threading.Event</code> 对象的<code>wait</code> 方法会在<code>is_set()</code> 标志位为<code>True</code> 的时候阻塞线程，直到其变为<code>False</code>;</li>
+<li><code>threading.Event</code> 对象的<code>clear</code> 方法可以将<code>is_set()</code> 设置为<code>False</code>；相反，<code>set</code> 方法可以将其设置为<code>True</code>。</li>
+</ul>
+<h3 id="端口"><a class="markdownIt-Anchor" href="#端口"></a> 端口</h3>
+<p>信号发生器需要通过端口连接到设备，端口可以是RS232、USB，抑或是并行端口。为了便于扩展，我们就需要抽象一个端口的接口，约定他要实现的功能：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">IPort</span><span class="token punctuation">(</span><span class="token builtin">object</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
+    IPort 输出接口
+    需要重写接口函数
+    """</span>
+
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>_is_on <span class="token operator">=</span> <span class="token boolean">False</span>
+        <span class="token keyword">pass</span>
+
+    <span class="token keyword">def</span> <span class="token function">turn_on</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># 模拟端口打开，需要避免重复打开</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> self<span class="token punctuation">.</span>_is_on<span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>_is_on <span class="token operator">=</span> <span class="token boolean">True</span>
+
+    <span class="token keyword">def</span> <span class="token function">turn_off</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># 端口关闭</span>
+        self<span class="token punctuation">.</span>_is_on <span class="token operator">=</span> <span class="token boolean">False</span>
+
+    <span class="token keyword">def</span> <span class="token function">wait_writable</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 等待端口可用</span>
+        <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+            sleep<span class="token punctuation">(</span><span class="token number">0.5</span><span class="token punctuation">)</span>
+            <span class="token keyword">break</span>
+
+    <span class="token keyword">def</span> <span class="token function">write</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> data<span class="token punctuation">:</span> <span class="token builtin">any</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"[%s] Port send: %s"</span> <span class="token operator">%</span> <span class="token punctuation">(</span>datetime<span class="token punctuation">.</span>now<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> data<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    <span class="token comment">##################################################</span>
+    <span class="token comment"># send 方法可以不用重写  </span>
+    <span class="token comment">##################################################</span>
+    <span class="token keyword">def</span> <span class="token function">send</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> data<span class="token punctuation">:</span> <span class="token builtin">any</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># 模拟端口发送数据的过程</span>
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>_is_on<span class="token punctuation">:</span>  <span class="token comment"># 模拟检查端口状态，如果端口已关闭就不再发送</span>
+            self<span class="token punctuation">.</span>wait_writable<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            self<span class="token punctuation">.</span>write<span class="token punctuation">(</span>data<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="测试代码"><a class="markdownIt-Anchor" href="#测试代码"></a> 测试代码</h3>
+<p>我们新建一个简单的类来实现<code>IGenerator</code> 接口来验证我们的想法：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> datetime <span class="token keyword">import</span> datetime
+
+<span class="token keyword">class</span> <span class="token class-name">BaseGenerator</span><span class="token punctuation">(</span>IGenerator<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span>deltaT<span class="token operator">=</span><span class="token number">0.001</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""
+        deltaT: 采样周期，单位是s
+        """</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>__init__<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>_is_on <span class="token operator">=</span> <span class="token boolean">False</span>
+        self<span class="token punctuation">.</span>counter <span class="token operator">=</span> <span class="token number">0</span>
+        self<span class="token punctuation">.</span>deltaT <span class="token operator">=</span> deltaT
+        self<span class="token punctuation">.</span>exe <span class="token operator">=</span> Executor<span class="token punctuation">(</span>self<span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">generate_data</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>counter <span class="token operator">+=</span> self<span class="token punctuation">.</span>deltaT
+
+    <span class="token keyword">def</span> <span class="token function">reset</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>counter <span class="token operator">=</span> <span class="token number">0</span>
+
+    <span class="token keyword">def</span> <span class="token function">send</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>port<span class="token punctuation">.</span>turn_on<span class="token punctuation">(</span><span class="token punctuation">)</span>   <span class="token comment"># 保证端口已经打开</span>
+        self<span class="token punctuation">.</span>generate_data<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 生成信号</span>
+        self<span class="token punctuation">.</span>port<span class="token punctuation">.</span>send<span class="token punctuation">(</span>self<span class="token punctuation">.</span>counter<span class="token punctuation">)</span>  <span class="token comment"># 模拟发送数据</span>
+    
+
+    <span class="token comment">###########################################################    </span>
+    <span class="token comment"># 将Executor 嵌套进信号发生器，将会使我们的代码更整洁  </span>
+    <span class="token comment"># 而且只需要在基类中定义一次以下方法就好了</span>
+    <span class="token comment">###########################################################</span>
+    <span class="token keyword">def</span> <span class="token function">turn_on</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>  
+        <span class="token keyword">if</span> <span class="token keyword">not</span> self<span class="token punctuation">.</span>_is_on<span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>exe<span class="token punctuation">.</span>start<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 开启线程，此方法只能执行一次  </span>
+            self<span class="token punctuation">.</span>_is_on <span class="token operator">=</span> <span class="token boolean">True</span>
+    
+    <span class="token keyword">def</span> <span class="token function">resume</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>  
+        self<span class="token punctuation">.</span>exe<span class="token punctuation">.</span>resume<span class="token punctuation">(</span><span class="token punctuation">)</span> 
+    
+    <span class="token keyword">def</span> <span class="token function">pasue</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>exe<span class="token punctuation">.</span>pause<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    
+    <span class="token keyword">def</span> <span class="token function">stop</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>  
+        self<span class="token punctuation">.</span>exe<span class="token punctuation">.</span>stop<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>port<span class="token punctuation">.</span>turn_off<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>exe <span class="token operator">=</span> Executor<span class="token punctuation">(</span>self<span class="token punctuation">)</span>  <span class="token comment"># 为开始新一轮任务做准备</span>
+        self<span class="token punctuation">.</span>_is_on <span class="token operator">=</span> <span class="token boolean">False</span>
+
+<span class="token comment"># 开始功能验证  </span>
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
+    bg <span class="token operator">=</span> BaseGenerator<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    bg<span class="token punctuation">.</span>turn_on<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 开启</span>
+    bg<span class="token punctuation">.</span>resume<span class="token punctuation">(</span><span class="token punctuation">)</span>   <span class="token comment"># 开始输出</span>
+    sleep<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>
+
+    bg<span class="token punctuation">.</span>pasue<span class="token punctuation">(</span><span class="token punctuation">)</span>    <span class="token comment"># 暂停</span>
+    sleep<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>
+
+    bg<span class="token punctuation">.</span>resume<span class="token punctuation">(</span><span class="token punctuation">)</span>   <span class="token comment"># 继续输出</span>
+    sleep<span class="token punctuation">(</span><span class="token number">1.5</span><span class="token punctuation">)</span>
+
+    bg<span class="token punctuation">.</span>reset<span class="token punctuation">(</span><span class="token punctuation">)</span>    <span class="token comment"># 中间重置状态</span>
+    sleep<span class="token punctuation">(</span><span class="token number">2.5</span><span class="token punctuation">)</span>
+
+    bg<span class="token punctuation">.</span>stop<span class="token punctuation">(</span><span class="token punctuation">)</span>     <span class="token comment"># 停止</span>
+    sleep<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以将上面的代码保存为<code>app.py</code> 并在命令行中执行：</p>
+<pre class="line-numbers language-shell-session" data-language="shell-session"><code class="language-shell-session"><span class="token output">$> python ./app.py  # 执行过程中Ctrl-C 中断进程
+</span><span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">信号发生器打开</span></span>
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">开始发送数据</span></span>
+<span class="token output">[2022-07-28 21:14:40.003383] Port send: 0.001
+[2022-07-28 21:14:40.521429] Port send: 0.002
+[2022-07-28 21:14:41.050418] Port send: 0.003
+[2022-07-28 21:14:41.579746] Port send: 0.004
+[2022-07-28 21:14:42.107661] Port send: 0.005
+[2022-07-28 21:14:42.637441] Port send: 0.006
+Traceback (most recent call last):
+  File "./app.py", line 113, in &lt;module>
+    sleep(3)
+KeyboardInterrupt
+$> 
+$> 
+$> python ./app.py  # 正常退出
+</span><span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">发生器已打开</span></span>
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">开始发送数据</span></span>
+<span class="token output">[2022-07-28 21:14:54.380992] Port send: 0.001
+[2022-07-28 21:14:54.909388] Port send: 0.002
+[2022-07-28 21:14:55.439230] Port send: 0.003
+[2022-07-28 21:14:55.956788] Port send: 0.004
+[2022-07-28 21:14:56.487928] Port send: 0.005
+[2022-07-28 21:14:57.018972] Port send: 0.006
+[2022-07-28 21:15:00.378835] Port send: 0.007
+[2022-07-28 21:15:00.910546] Port send: 0.008
+</span><span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">发生器即将暂停，然后再次开始发送数据</span></span>
+<span class="token output">[2022-07-28 21:15:31.822823] Port send: 0.007
+[2022-07-28 21:15:32.340982] Port send: 0.008
+[2022-07-28 21:15:32.860573] Port send: 0.0
+</span><span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">中间人为重置信号</span></span>
+<span class="token output">[2022-07-28 21:15:33.378901] Port send: 0.001
+[2022-07-28 21:15:33.897071] Port send: 0.002
+[2022-07-28 21:15:34.414886] Port send: 0.003
+[2022-07-28 21:15:34.931465] Port send: 0.004
+</span><span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">信号发生器停止并退出</span></span>
+<span class="token output">$></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可见程序运行符合预期。并且可以通过继承<code>BaseGenerator</code> 重写<code>generate_data/send</code> 方法产生不同波形的数据向不同的设备发送数据。这也是这篇笔记最重要的想法。</p>
+<hr />
+<p>📅2022-07-22 Aachen</p>
+<h2 id="关于采样频率"><a class="markdownIt-Anchor" href="#关于采样频率"></a> 关于采样频率</h2>
+<p>因为通信中最重要的就是数据的准确、及时，而Python 中的<code>sleep</code> 函数的精确度是不稳定的，所以我们就需要给产生的信号以时间信息，这里有三种方法：</p>
+<ol>
+<li>采用C/C++ 扩展，但是这是一种出力不讨好的事情，因为很难保证Python 的其他代码的执行效率；</li>
+<li>给发送数据带上时间戳，这样会占用一部分带宽；</li>
+<li>我们按照某个步长产生数据，接收器按照同样的步长采集数据。</li>
+</ol>
+<p>经过与做电子产品设计的同学讨论，方案三是生产中最常用的方法。如果对精度要求更高，可以考虑常采用实时的设备、给数据带上时间戳等方案。<br />
+关于Windows 平台下精确延时的方案可以参见<a href="../../notes/c-like/win-high-accuracy-timmer.md">这篇笔记</a>。<a target="_blank" rel="noopener" href="https://www.vofa.plus/docs/learning/widgets/wave#%CE%B4t">VOFA+</a> 中同样也采用<code>Δt</code> 来人为地调整数据的采样周期。</p>
+<h2 id="v02-版设计思路"><a class="markdownIt-Anchor" href="#v02-版设计思路"></a> V0.2 版设计思路</h2>
+<p>在实现<code>v0.1</code> 的过程中，逐渐意识到：信号发生器本身是一个空壳子，最核心的部分是其中包含的函数部分与通信端口。于是将<code>Generator</code> 设计为一个线程类，通过<code>Generator</code> 对象直接控制线程的运行，并且引入了生成函数的概念，使得信号的产生和输出更加灵活。</p>
+<h3 id="端口接口"><a class="markdownIt-Anchor" href="#端口接口"></a> 端口接口</h3>
+<p>通过引入抽象类的概念，我们现在可以理直气壮地称呼端口为接口了。其中仍然只包含端口打开、关闭、等待可用、发送数据的逻辑功能。具体功能需要在子类中实现。需要注意的是，<code>send</code> 函数可以接收一个<code>list</code> 对象，也就是不止一个信号生成函数的返回值，可以在写入端口时进一步筛选和加工：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> abc
+<span class="token keyword">from</span> threading <span class="token keyword">import</span> Event<span class="token punctuation">,</span> Thread
+<span class="token keyword">from</span> typing <span class="token keyword">import</span> List<span class="token punctuation">,</span> Union
+
+
+<span class="token keyword">class</span> <span class="token class-name">IPort</span><span class="token punctuation">(</span>abc<span class="token punctuation">.</span>ABC<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
+    IPort 信号发生器的输出接口    
+    内置了一个状态标志self._is_on = False
+    """</span>
+
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>__init__<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>_is_on <span class="token operator">=</span> <span class="token boolean">False</span>
+
+    <span class="token decorator annotation punctuation">@abc<span class="token punctuation">.</span>abstractmethod</span>
+    <span class="token keyword">def</span> <span class="token function">turn_on</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""
+        打开端口，而且只能打开一次。
+        最后需要修改self._is_on = True
+        """</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> self<span class="token punctuation">.</span>_is_on<span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>_is_on <span class="token operator">=</span> <span class="token boolean">True</span>
+
+    <span class="token decorator annotation punctuation">@abc<span class="token punctuation">.</span>abstractmethod</span>
+    <span class="token keyword">def</span> <span class="token function">turn_off</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""
+        关闭端口。
+        需要修改self._is_on = False 
+        """</span>
+        self<span class="token punctuation">.</span>_is_on <span class="token operator">=</span> <span class="token boolean">False</span>
+
+    <span class="token decorator annotation punctuation">@abc<span class="token punctuation">.</span>abstractmethod</span>
+    <span class="token keyword">def</span> <span class="token function">wait_port_available</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 等待端口可用</span>
+        <span class="token triple-quoted-string string">"""
+        等待端口可用
+        """</span>
+
+    <span class="token decorator annotation punctuation">@abc<span class="token punctuation">.</span>abstractmethod</span>
+    <span class="token keyword">def</span> <span class="token function">send_data</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> data<span class="token punctuation">:</span> List<span class="token punctuation">[</span><span class="token builtin">float</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""
+        向端口写入数据
+        可以自定义写入数据的格式
+        """</span>
+
+    <span class="token keyword">def</span> <span class="token function">send</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> data<span class="token punctuation">:</span> List<span class="token punctuation">[</span><span class="token builtin">float</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""
+        等待端口可用后写入数据
+        """</span>
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>_is_on<span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>wait_port_available<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            self<span class="token punctuation">.</span>send_data<span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            <span class="token keyword">raise</span> IOError<span class="token punctuation">(</span><span class="token string">"端口未打开或不可用"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="信号生成函数"><a class="markdownIt-Anchor" href="#信号生成函数"></a> 信号生成函数</h3>
+<p>信号生成函数其实是一个对象，有自己的计数器属性，但是步长需要在<code>Generator</code> 对象中统一管理（也可以不这样设置，但是担心使用起来会比较混乱）。也可以在子类中添加其他自定义属性，用来生成更复杂的波形：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> abc
+<span class="token keyword">from</span> threading <span class="token keyword">import</span> Event<span class="token punctuation">,</span> Thread
+<span class="token keyword">from</span> typing <span class="token keyword">import</span> List<span class="token punctuation">,</span> Union
+
+<span class="token keyword">class</span> <span class="token class-name">IFunction</span><span class="token punctuation">(</span>abc<span class="token punctuation">.</span>ABC<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
+    信号产生函数，包含以下属性：  
+    - timer: 计数器  
+    - value: 输出结果的缓存  
+    - deltaT: 0.001s 函数产生的步长，在Generator 中自动设定
+    """</span>
+
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> deltaT<span class="token operator">=</span><span class="token number">0.001</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>timer <span class="token operator">=</span> <span class="token number">0.</span>
+        self<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token number">0.</span>
+        self<span class="token punctuation">.</span>setDeltaT<span class="token punctuation">(</span>deltaT<span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">setDeltaT</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> deltaT<span class="token operator">=</span><span class="token number">0.001</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>deltaT <span class="token operator">=</span> deltaT
+
+    <span class="token decorator annotation punctuation">@abc<span class="token punctuation">.</span>abstractmethod</span>
+    <span class="token keyword">def</span> <span class="token function">call</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""
+        进行一步计算，返回信号值
+        """</span>
+
+    <span class="token decorator annotation punctuation">@abc<span class="token punctuation">.</span>abstractmethod</span>
+    <span class="token keyword">def</span> <span class="token function">reset</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""
+        重置函数：计数器、当前值等
+        """</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="信号发生器"><a class="markdownIt-Anchor" href="#信号发生器"></a> 信号发生器</h3>
+<p>信号发生器的基本控制逻辑没有变，还是通过<code>Event()</code> 事件控制线程的运行。不过将所有的控制函数都绑定在线程对象本身了，并且理论上可以添加任意多个信号生成函数和端口：</p>
+<pre class="line-numbers language-python&#123;25-27&#125;" data-language="python&#123;25-27&#125;"><code class="language-python&#123;25-27&#125;">import abc
+from threading import Event, Thread
+from typing import List, Union
+
+class Generator(Thread):
+    &quot;&quot;&quot;
+    Generator 信号发生器类:
+    本质上是一个线程，其中包含一个run() 函数，用于不间断地产生信号。此线程为守护线程，会在主线程退出后自动结束。 
+    &quot;&quot;&quot;
+
+    def __init__(self, deltaT: float, funcs: Union[IFunction, List[IFunction]], ports: Union[IPort, List[IPort]]):
+        &quot;&quot;&quot; 
+        参数说明：  
+        - deltaT: 产生信号的步长，非负数；  
+        - funcs: 用于产生信号的函数规则集合；  
+        - ports: 用于发送信号的（物理）端口，数据会以list 的形式传递给port 端口。  
+
+
+        私有属性：  
+        - self.pause_flag &#x3D; Event() 默认为False，会造成self.pause_flag.wait 方法阻塞  
+        - self.stop_flag &#x3D; Event() 默认为False，会造成self.stop_flag.wait 方法阻塞
+        &quot;&quot;&quot;
+        Thread.__init__(self)
+        self.daemon &#x3D; True  # 设置为守护线程，当主线程退出时自动结束
+        self.deltaT &#x3D; deltaT if deltaT &gt; 0. else 0.001
+        self.funcs &#x3D; funcs if isinstance(funcs, list) else [funcs]
+        self.ports &#x3D; ports if isinstance(ports, list) else [ports]
+
+        # 私有属性
+        self.pause_flag &#x3D; Event()
+        self.stop_flag &#x3D; Event()
+
+        self.setDeltaT()
+
+    def setDeltaT(self):
+        &quot;&quot;&quot;
+        更改信号产生的步长
+        &quot;&quot;&quot;
+        for func in self.funcs:
+            func.setDeltaT(self.deltaT)
+
+    def turn_on(self):
+        for port in self.ports:
+            port.turn_on()
+        self.start()
+
+    def resume(self):
+        &quot;&quot;&quot;
+        继续执行
+        &quot;&quot;&quot;
+        self.pause_flag.set()
+
+    def pause(self):
+        &quot;&quot;&quot;
+        暂停执行
+        &quot;&quot;&quot;
+        self.pause_flag.clear()
+
+    def reset(self):
+        &quot;&quot;&quot;
+        重置所有的函数  
+        在信号发生器运行时执行此函数可能造成意料之外的后果
+        &quot;&quot;&quot;
+        for func in self.funcs:
+            func.reset()
+
+    def stop(self):
+        &quot;&quot;&quot;
+        停止执行并退出
+        &quot;&quot;&quot;
+        self.stop_flag.set()
+        for port in self.ports:
+            port.turn_off()
+
+    def run(self):
+        while True:
+            self.pause_flag.wait()  # 暂停线程
+            if self.stop_flag.is_set():
+                break  # 退出线程
+            data &#x3D; [func.call() for func in self.funcs]
+            for port in self.ports:
+                port.send(data)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="测试代码-2"><a class="markdownIt-Anchor" href="#测试代码-2"></a> 测试代码</h3>
+<p>可以通过查看或下载<a target="_blank" rel="noopener" href="https://github.com/12Tall/yan_serial_tools/tree/31e693f90a2dbfd8f258837080fe0cd3df88b9c5">Github</a> 中的代码熟悉逻辑，并且其中也定义了几个基本的端口和信号生成函数。</p>
+<pre class="line-numbers language-python&#123;5,6&#125;" data-language="python&#123;5,6&#125;"><code class="language-python&#123;5,6&#125;">from time import sleep
+from SignalGenerator import Generator, DefaultFunction, DefaultPort, DIntTFunction, CIntTFunction
+
+
+bg &#x3D; Generator(0.1, [DefaultFunction(), DIntTFunction(),  ## 初始化信号发生器时可以设置多路输出
+               CIntTFunction()], [DefaultPort(),DefaultPort()])
+bg.turn_on()  # 开启
+bg.resume()   # 开始输出
+sleep(3)
+
+bg.pause()    # 暂停
+sleep(3)
+
+bg.resume()   # 继续输出
+sleep(5)
+
+bg.reset()    # 中间重置状态
+sleep(2.5)
+
+bg.stop()     # 停止
+sleep(3)
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>经测试，代码的运行符合预期。</p>
+<hr />
+<p>📅2022-08-03 Aachen</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2022/08/03/signal-generator/" title="信号发生器的实现">https://12tall.github.io/2022/08/03/signal-generator/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"># python</a>
+              <a href="/tags/%E9%80%9A%E4%BF%A1/" rel="tag"># 通信</a>
+              <a href="/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/" rel="tag"># 多进程</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/08/03/uac/" rel="prev" title="Python 请求UAC">
+                  <i class="fa fa-angle-left"></i> Python 请求UAC
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/08/03/pyinstaller-inversion/" rel="next" title="PyInstaller 程序逆向">
+                  PyInstaller 程序逆向 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

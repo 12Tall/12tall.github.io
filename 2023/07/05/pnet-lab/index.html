@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="内网环境建议先配置OpenWRT 透明路由，只用Proxy 代理的话还是会有问题 PNet-Lab 应该是我见过最好用的网工实验室了。它一般运行于VMware 或VBox 之上，也可以裸机安装。并且：  相比于普通的客户端，它具有一个Web 界面，可以多用户同时使用 相比于EVE，它支持热插拔 自带了一款镜像管理软件ishare2，可以方便地下载很多镜像 不建议再安装pnetlab-v5.*，因">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PNet-Lab 使用笔记">
+<meta property="og:url" content="https://12tall.github.io/2023/07/05/pnet-lab/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="内网环境建议先配置OpenWRT 透明路由，只用Proxy 代理的话还是会有问题 PNet-Lab 应该是我见过最好用的网工实验室了。它一般运行于VMware 或VBox 之上，也可以裸机安装。并且：  相比于普通的客户端，它具有一个Web 界面，可以多用户同时使用 相比于EVE，它支持热插拔 自带了一款镜像管理软件ishare2，可以方便地下载很多镜像 不建议再安装pnetlab-v5.*，因">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://12tall.github.io/2023/07/05/pnet-lab/demo.png">
+<meta property="og:image" content="https://12tall.github.io/2023/07/05/pnet-lab/ishare2_web_gui.png">
+<meta property="article:published_time" content="2023-07-05T07:45:02.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.137Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="ssh">
+<meta property="article:tag" content="cisco">
+<meta property="article:tag" content="switch">
+<meta property="article:tag" content="router">
+<meta property="article:tag" content="image">
+<meta property="article:tag" content="dynamipshe">
+<meta property="article:tag" content="iol">
+<meta property="article:tag" content="scp">
+<meta property="article:tag" content="vmware">
+<meta property="article:tag" content="chmod">
+<meta property="article:tag" content="pnet-lab">
+<meta property="article:tag" content="fortigate">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://12tall.github.io/2023/07/05/pnet-lab/demo.png">
+
+
+<link rel="canonical" href="https://12tall.github.io/2023/07/05/pnet-lab/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2023/07/05/pnet-lab/","path":"2023/07/05/pnet-lab/","title":"PNet-Lab 使用笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>PNet-Lab 使用笔记 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text"> 安装过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A3%B8%E6%9C%BA%E5%AE%89%E8%A3%85"><span class="nav-number">1.1.</span> <span class="nav-text"> 裸机安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E8%B8%A9%E5%9D%91"><span class="nav-number">1.2.</span> <span class="nav-text"> 使用踩坑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text"> 使用代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#v2raya-%E4%BB%A3%E7%90%86%E7%9A%84%E5%AE%89%E8%A3%85"><span class="nav-number">3.</span> <span class="nav-text"> V2rayA 代理的安装</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2023/07/05/pnet-lab/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="PNet-Lab 使用笔记 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PNet-Lab 使用笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-07-05 15:45:02" itemprop="dateCreated datePublished" datetime="2023-07-05T15:45:02+08:00">2023-07-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/maintenance/" itemprop="url" rel="index"><span itemprop="name">maintenance</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>911</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p><strong>内网环境建议先<a href="../openwrt/README.md">配置OpenWRT 透明路由</a>，只用Proxy 代理的话还是会有问题</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.pnetlab.com/">PNet-Lab</a> 应该是我见过最好用的网工实验室了。它一般运行于VMware 或VBox 之上，也可以<a target="_blank" rel="noopener" href="https://www.pnetlab.com/pages/documentation?slug=install-bare-metal">裸机安装</a>。并且：</p>
+<ul>
+<li>相比于普通的客户端，它具有一个Web 界面，可以多用户同时使用</li>
+<li>相比于EVE，它支持热插拔</li>
+<li>自带了一款镜像管理软件<code>ishare2</code>，可以方便地下载很多镜像</li>
+<li>不建议再安装pnetlab-v5.*，因为维护起来好复杂</li>
+</ul>
+</blockquote>
+<span id="more"></span>
+<p><img src="demo.png" alt="" /></p>
+<h2 id="安装过程"><a class="markdownIt-Anchor" href="#安装过程"></a> 安装过程</h2>
+<p>通过下载官方提供的<a target="_blank" rel="noopener" href="https://labhub.eu.org/api/raw/?path=/UNETLAB%20I/OVA/PNETLab-6.ova">v6.ova 镜像</a>。下载并运行虚拟机后可以使用<code>root/pnet</code> 登录。<br />
+但是在安装<code>ishare2</code> 的时候，会遇到<code>sourcelist</code> 报404 的问题，这时需要将其注释掉（在<code>/etc/apt/sources.list</code> 文件中注释掉含<code>repo.pnetlab.com</code> 字样的行）。<br />
+然后再安装并更新<code>ishare2</code> 和<code>ishare2 gui</code>。
+<img src="ishare2_web_gui.png" alt="" /></p>
+<pre class="line-numbers language-shell-session" data-language="shell-session"><code class="language-shell-session"><span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash"><span class="token function">curl</span> <span class="token parameter variable">-o</span> /usr/sbin/ishare2 https://raw.githubusercontent.com/pnetlabrepo/ishare2/main/ishare2 <span class="token operator">></span> /dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span> <span class="token operator">&amp;&amp;</span> <span class="token function">chmod</span> +x /usr/sbin/ishare2 <span class="token operator">&amp;&amp;</span> ishare2  </span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash">ishare2 upgrade  </span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash">ishare2  </span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash">ishare2 gui <span class="token function">install</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="裸机安装"><a class="markdownIt-Anchor" href="#裸机安装"></a> 裸机安装</h3>
+<p>裸机安装分两步，先是安装系统，这一步与官网的<a target="_blank" rel="noopener" href="https://www.pnetlab.com/pages/documentation?slug=install-bare-metal">教程</a>一致。但是后面因为<code>repo</code> 不再可用，所以需要使用以下命令安装：</p>
+<pre class="line-numbers language-shell-session" data-language="shell-session"><code class="language-shell-session"><span class="token command"><span class="token info punctuation"><span class="token user">user@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">sudo</span> <span class="token parameter variable">-i</span> <span class="token comment"># 进入root 账号  </span></span></span>
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">升级到安装v5，前提是必须安装v4.10  </span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span>  <span class="token bash language-bash"><span class="token function">bash</span> <span class="token parameter variable">-c</span> <span class="token string">"<span class="token variable"><span class="token variable">$(</span><span class="token function">curl</span> <span class="token parameter variable">-sL</span> https://labhub.eu.org/api/raw/?path<span class="token operator">=</span>/UNETLAB%20I/upgrades_pnetlab/bionic/install_pnetlab_latest_v5.sh<span class="token variable">)</span></span>"</span> </span></span>
+
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">安装v6</span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span>  <span class="token bash language-bash"><span class="token function">bash</span> <span class="token parameter variable">-c</span> <span class="token string">"<span class="token variable"><span class="token variable">$(</span><span class="token function">curl</span> <span class="token parameter variable">-sL</span> https://labhub.eu.org/api/raw/?path<span class="token operator">=</span>/UNETLAB%20I/upgrades_pnetlab/Focal/install_pnetlab_v6.sh<span class="token variable">)</span></span>"</span> </span></span>
+
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span>  <span class="token bash language-bash"><span class="token function">reboot</span>  </span></span>
+
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">安装ishare2  </span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash"><span class="token function">curl</span> <span class="token parameter variable">-o</span> /usr/sbin/ishare2 https://raw.githubusercontent.com/pnetlabrepo/ishare2/main/ishare2 <span class="token operator">></span> /dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span> <span class="token operator">&amp;&amp;</span> <span class="token function">chmod</span> +x /usr/sbin/ishare2 <span class="token operator">&amp;&amp;</span> ishare2  </span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash">ishare2 upgrade  </span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash">ishare2  </span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash">ishare2 gui <span class="token function">install</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="使用踩坑"><a class="markdownIt-Anchor" href="#使用踩坑"></a> 使用踩坑</h3>
+<ol>
+<li>在VMware 中运行虚拟机时，要注意勾选<a target="_blank" rel="noopener" href="https://www.pnetlab.com/pages/documentation?slug=install-PNETlab">VT-x 虚拟化支持</a>。否则基于QEMU 的镜像在启动后会闪退。</li>
+<li>部分qemu 镜像会启动失败，可以切换qemu 版本重试，或者干脆换个版本的镜像试试。</li>
+<li>在下载了镜像之后，最好通过网页中的<code>System --&gt; System Setting --&gt; Fix Permission</code> 修复一下权限，尤其是下载了Windows 的镜像之后。</li>
+<li></li>
+</ol>
+<hr />
+<h2 id="使用代理"><a class="markdownIt-Anchor" href="#使用代理"></a> 使用代理</h2>
+<p>可能会用到，在当前会话中使用代理，配置了OpenWRT 透明路由后此节将不再需要：</p>
+<pre class="line-numbers language-shell-session" data-language="shell-session"><code class="language-shell-session"><span class="token output">## 在国内设置系统代理，如果本地局域网中没有代理的话，可以安装v2raya 服务在系统上  
+## 因为aria2c 工具需要用到下面两个环境变量，所以最好不要只使用all_proxy：  
+</span><span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash"><span class="token builtin class-name">export</span> <span class="token assign-left variable">http_proxy</span><span class="token operator">=</span>http://ip:port </span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash"><span class="token builtin class-name">export</span> <span class="token assign-left variable">https_proxy</span><span class="token operator">=</span>http://ip:port </span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash"><span class="token builtin class-name">export</span> <span class="token assign-left variable">ftp_proxy</span><span class="token operator">=</span>http://ip:port </span></span>
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">root@pnetlab:~<span class="token comment"># export all_proxy=http://ip:port  </span></span></span>
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">因为代理的原因 ishare2 gui 不可用  </span></span>
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">并且ishare2 必须要走代理，所以可以将环境变量写入/etc/environment</span></span>
+
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash"><span class="token function">docker</span> 切换国内源  </span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash"><span class="token function">vim</span> /etc/docker/daemon.json</span></span>
+
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">添加如下属性：  </span></span>
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash"><span class="token string">"registry-mirrors"</span><span class="token builtin class-name">:</span> <span class="token punctuation">[</span></span></span>
+<span class="token command"><span class="token shell-symbol important">#</span>     <span class="token bash language-bash"><span class="token string">"https://dockerproxy.com"</span>,</span></span>
+<span class="token command"><span class="token shell-symbol important">#</span>     <span class="token bash language-bash"><span class="token string">"https://hub-mirror.c.163.com"</span>,</span></span>
+<span class="token command"><span class="token shell-symbol important">#</span>     <span class="token bash language-bash"><span class="token string">"https://mirror.baidubce.com"</span>,</span></span>
+<span class="token command"><span class="token shell-symbol important">#</span>     <span class="token bash language-bash"><span class="token string">"https://ccr.ccs.tencentyun.com"</span></span></span>
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash"><span class="token punctuation">]</span></span></span>
+
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">重启docker 服务</span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash">systemctl daemon-reload</span></span>
+<span class="token command"><span class="token info punctuation"><span class="token user">root@pnetlab</span><span class="token punctuation">:</span><span class="token path">~</span></span><span class="token shell-symbol important">#</span> <span class="token bash language-bash">systemctl restart <span class="token function">docker</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="v2raya-代理的安装"><a class="markdownIt-Anchor" href="#v2raya-代理的安装"></a> V2rayA 代理的安装</h2>
+<p>配置了OpenWRT 透明路由后此节将不再需要。如果本地电脑上已经安装了<code>v2ray</code> 则只需启用局域网代理功能即可。如果没有，则可以在<code>Ubuntu</code> 上安装<code>v2raya</code> 服务，此服务会启动一个web 管理接口。万不得已再用此方法：</p>
+<pre class="line-numbers language-shell-session" data-language="shell-session"><code class="language-shell-session"><span class="token output">## 安装v2ray-core  
+</span><span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash">访问raw.githubusercontent.com 可能需要修改hosts  </span></span>
+<span class="token output">curl  https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh > install-release.sh
+sudo chmod +x install-release.sh
+sudo ./install-release.sh
+
+sudo systemctl disable v2ray --now  
+
+## 安装v2raya 服务
+wget -qO - https://apt.v2raya.org/key/public-key.asc | sudo tee /etc/apt/trusted.gpg.d/v2raya.asc  
+
+echo "deb https://apt.v2raya.org/ v2raya main" | sudo tee /etc/apt/sources.list.d/v2raya.list
+sudo apt update
+
+sudo apt install v2raya
+
+sudo systemctl start v2raya.service
+sudo systemctl enable v2raya.service</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2023/07/05/pnet-lab/" title="PNet-Lab 使用笔记">https://12tall.github.io/2023/07/05/pnet-lab/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/ssh/" rel="tag"># ssh</a>
+              <a href="/tags/cisco/" rel="tag"># cisco</a>
+              <a href="/tags/switch/" rel="tag"># switch</a>
+              <a href="/tags/router/" rel="tag"># router</a>
+              <a href="/tags/image/" rel="tag"># image</a>
+              <a href="/tags/dynamipshe/" rel="tag"># dynamipshe</a>
+              <a href="/tags/iol/" rel="tag"># iol</a>
+              <a href="/tags/scp/" rel="tag"># scp</a>
+              <a href="/tags/vmware/" rel="tag"># vmware</a>
+              <a href="/tags/chmod/" rel="tag"># chmod</a>
+              <a href="/tags/pnet-lab/" rel="tag"># pnet-lab</a>
+              <a href="/tags/fortigate/" rel="tag"># fortigate</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/07/05/heidisql/" rel="prev" title="HeidiSQL 工具">
+                  <i class="fa fa-angle-left"></i> HeidiSQL 工具
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/07/10/fem/1-D_FEM/" rel="next" title="一维静电场有限元例子">
+                  一维静电场有限元例子 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

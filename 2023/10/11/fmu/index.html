@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="同事在需要在Modelica 中使用状态机建模，并且导出FMU 用于在环测试。苦于Modelica 的语法要求方程个数必须等于变量个数，实现起来比较繁琐。于是谷歌一下Python 的解决方案。结果还发现了新大陆：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python FMU 相关">
+<meta property="og:url" content="https://12tall.github.io/2023/10/11/fmu/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="同事在需要在Modelica 中使用状态机建模，并且导出FMU 用于在环测试。苦于Modelica 的语法要求方程个数必须等于变量个数，实现起来比较繁琐。于是谷歌一下Python 的解决方案。结果还发现了新大陆：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://12tall.github.io/2023/10/11/fmu/fmupy.png">
+<meta property="og:image" content="https://12tall.github.io/2023/10/11/fmu/pythonfmu-cpp.png">
+<meta property="article:published_time" content="2023-10-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.246Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="fmi">
+<meta property="article:tag" content="fmu">
+<meta property="article:tag" content="simulation">
+<meta property="article:tag" content="modelica">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://12tall.github.io/2023/10/11/fmu/fmupy.png">
+
+
+<link rel="canonical" href="https://12tall.github.io/2023/10/11/fmu/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2023/10/11/fmu/","path":"2023/10/11/fmu/","title":"Python FMU 相关"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Python FMU 相关 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#python-%E7%94%9F%E6%88%90fmu"><span class="nav-number">1.</span> <span class="nav-text"> Python 生成FMU</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-%E8%B0%83%E7%94%A8fmu"><span class="nav-number">2.</span> <span class="nav-text"> Python 调用FMU</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E7%BB%AD%E8%B0%83%E7%94%A8%E4%B8%8E%E6%AD%A5%E9%95%BF"><span class="nav-number">2.1.</span> <span class="nav-text"> 连续调用与步长</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A9%E5%B1%95"><span class="nav-number">3.</span> <span class="nav-text"> 扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8Epythonfmu-%E4%B8%ADc-%E8%B0%83%E7%94%A8%E5%85%B3%E7%B3%BB%E7%9A%84%E7%AC%94%E8%AE%B0"><span class="nav-number">4.</span> <span class="nav-text"> 关于PythonFMU 中C++ 调用关系的笔记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">5.</span> <span class="nav-text"> 参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2023/10/11/fmu/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Python FMU 相关 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python FMU 相关
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-10-11 00:00:00" itemprop="dateCreated datePublished" datetime="2023-10-11T00:00:00+08:00">2023-10-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>同事在需要在Modelica 中使用状态机建模，并且导出FMU 用于在环测试。苦于Modelica 的语法要求方程个数必须等于变量个数，实现起来比较繁琐。于是谷歌一下Python 的解决方案。结果还发现了新大陆：</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="python-生成fmu"><a class="markdownIt-Anchor" href="#python-生成fmu"></a> Python 生成FMU</h2>
+<p><a target="_blank" rel="noopener" href="https://github.com/NTNU-IHB/PythonFMU">NTNU-IHB/PythonFMU</a> 可以将Python 代码嵌入到FMU 中，且支持Windows、Linux 和MacOS，支持到FMU 2.0 标准。原理就是：</p>
+<ul>
+<li>通过C/C++ 实现了FMU 文件头</li>
+<li>在具体功能函数中调用Python 文件</li>
+</ul>
+<p>在调用FMU 时需要依赖Python 环境，也就是Python 套壳。下面来看一下其项目的定义：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># https://github.com/NTNU-IHB/PythonFMU/blob/master/examples/demoslave.py  </span>
+<span class="token keyword">from</span> pythonfmu <span class="token keyword">import</span> Fmi2Causality<span class="token punctuation">,</span> Fmi2Variability<span class="token punctuation">,</span> Fmi2Slave<span class="token punctuation">,</span> Real
+
+<span class="token comment">#</span>
+<span class="token keyword">class</span> <span class="token class-name">Resistor</span><span class="token punctuation">(</span>Fmi2Slave<span class="token punctuation">)</span><span class="token punctuation">:</span>
+
+    author <span class="token operator">=</span> <span class="token string">"John Doe"</span>
+    description <span class="token operator">=</span> <span class="token string">"A simple description"</span>
+
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>__init__<span class="token punctuation">(</span><span class="token operator">**</span>kwargs<span class="token punctuation">)</span>
+        <span class="token comment"># 定义变量和初始值</span>
+        self<span class="token punctuation">.</span>positive_pin_v <span class="token operator">=</span> <span class="token number">20.</span>
+        self<span class="token punctuation">.</span>positive_pin_i <span class="token operator">=</span> <span class="token number">0.001</span>
+        self<span class="token punctuation">.</span>negative_pin_v <span class="token operator">=</span> <span class="token number">10.</span>
+        self<span class="token punctuation">.</span>negative_pin_i <span class="token operator">=</span> <span class="token number">0.001</span>
+        self<span class="token punctuation">.</span>delta_v <span class="token operator">=</span> <span class="token number">10.</span>
+        self<span class="token punctuation">.</span>i <span class="token operator">=</span> <span class="token number">0.001</span>
+        self<span class="token punctuation">.</span>R <span class="token operator">=</span> <span class="token number">10000.</span>
+        <span class="token comment"># 注册可变参数，电阻R</span>
+        self<span class="token punctuation">.</span>register_variable<span class="token punctuation">(</span>Real<span class="token punctuation">(</span><span class="token string">"R"</span><span class="token punctuation">,</span> causality<span class="token operator">=</span>Fmi2Causality<span class="token punctuation">.</span>parameter<span class="token punctuation">,</span> variability<span class="token operator">=</span>Fmi2Variability<span class="token punctuation">.</span>tunable<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token comment"># 注册输入输出变量</span>
+        self<span class="token punctuation">.</span>register_variable<span class="token punctuation">(</span>Real<span class="token punctuation">(</span><span class="token string">"positive_pin_v"</span><span class="token punctuation">,</span> causality<span class="token operator">=</span>Fmi2Causality<span class="token punctuation">.</span><span class="token builtin">input</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>register_variable<span class="token punctuation">(</span>Real<span class="token punctuation">(</span><span class="token string">"positive_pin_i"</span><span class="token punctuation">,</span> causality<span class="token operator">=</span>Fmi2Causality<span class="token punctuation">.</span>output<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>register_variable<span class="token punctuation">(</span>Real<span class="token punctuation">(</span><span class="token string">"negative_pin_v"</span><span class="token punctuation">,</span> causality<span class="token operator">=</span>Fmi2Causality<span class="token punctuation">.</span><span class="token builtin">input</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>register_variable<span class="token punctuation">(</span>Real<span class="token punctuation">(</span><span class="token string">"negative_pin_i"</span><span class="token punctuation">,</span> causality<span class="token operator">=</span>Fmi2Causality<span class="token punctuation">.</span>output<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token comment"># 注册本地变量，本地变量</span>
+        self<span class="token punctuation">.</span>register_variable<span class="token punctuation">(</span>Real<span class="token punctuation">(</span><span class="token string">"delta_v"</span><span class="token punctuation">,</span> causality<span class="token operator">=</span>Fmi2Causality<span class="token punctuation">.</span>local<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>register_variable<span class="token punctuation">(</span>Real<span class="token punctuation">(</span><span class="token string">"i"</span><span class="token punctuation">,</span> causality<span class="token operator">=</span>Fmi2Causality<span class="token punctuation">.</span>local<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">do_step</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> current_time<span class="token punctuation">,</span> step_size<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""实际任务，会被循环调用"""</span>
+        self<span class="token punctuation">.</span>delta_v <span class="token operator">=</span> self<span class="token punctuation">.</span>positive_pin_v <span class="token operator">-</span> self<span class="token punctuation">.</span>negative_pin_v
+        self<span class="token punctuation">.</span>i <span class="token operator">=</span> i <span class="token operator">=</span> self<span class="token punctuation">.</span>delta_v <span class="token operator">/</span> self<span class="token punctuation">.</span>R
+        self<span class="token punctuation">.</span>positive_pin_i <span class="token operator">=</span> i
+        self<span class="token punctuation">.</span>negative_pin_i <span class="token operator">=</span> <span class="token operator">-</span>i
+        <span class="token keyword">return</span> <span class="token boolean">True</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>通过以下命令就可以打包生成<code>Resistor.fmu</code>：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pythonfmu build <span class="token parameter variable">-f</span> demoslave.py<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="python-调用fmu"><a class="markdownIt-Anchor" href="#python-调用fmu"></a> Python 调用FMU</h2>
+<p>安装<a target="_blank" rel="noopener" href="https://github.com/CATIA-Systems/FMPy">CATIA-Systems/FMPy</a> 并执行<code>python -m fmpy.gui</code>。选择上一步生成的<code>Resistor.fmu</code> 模型，需改参数后可以运行仿真，结果如下图：<br />
+<img src="fmupy.png" alt="Alt text" /></p>
+<h3 id="连续调用与步长"><a class="markdownIt-Anchor" href="#连续调用与步长"></a> 连续调用与步长</h3>
+<p>有时我们需要动态调试，这是就需要手工通过代码来覅用FMPy 了，下面为官方示例：</p>
+<pre class="line-numbers language-python&#123;23,29-33,37,43,54&#125;" data-language="python&#123;23,29-33,37,43,54&#125;"><code class="language-python&#123;23,29-33,37,43,54&#125;">&quot;&quot;&quot; This example demonstrates how continue a simulation e.g. to
+ retrieve outputs or set tunable parameters at certain intervals while
+ keeping the FMU instance alive. &quot;&quot;&quot;
+
+import os
+import tempfile
+import shutil
+import numpy as np
+from fmpy import extract, read_model_description, instantiate_fmu, simulate_fmu, plot_result
+from fmpy.simulation import apply_start_values
+from fmpy.util import download_file
+
+
+def continue_simulation(fmu_filename):
+
+    # extract the FMU to a temporary directory
+    unzipdir &#x3D; extract(fmu_filename)
+
+    # read the model description
+    model_description &#x3D; read_model_description(unzipdir)
+    # 1. 创建FMU 实例
+    # instantiate the FMU beforehand, so we can keep it alive
+    fmu_instance &#x3D; instantiate_fmu(unzipdir&#x3D;unzipdir, model_description&#x3D;model_description)
+    # 2. 开始第一次仿真
+    # simulate to 1 s
+    result1 &#x3D; simulate_fmu(
+        filename&#x3D;unzipdir,
+        model_description&#x3D;model_description,
+        fmu_instance&#x3D;fmu_instance,
+        start_values&#x3D;&#123;&#39;e&#39;: 0.95&#125;, # 如果不设置stop_time 的话，默认是start_time+1
+        stop_time&#x3D;1,          # 下面参数表示，不设置停止时间，并且保持FMU 在线
+        set_stop_time&#x3D;False,  # don&#39;t communicate the stop time, so we can continue
+        terminate&#x3D;False  # keep the FMU instance alive
+    )
+    # 3. 修改部分参数
+    # change a tunable parameter
+    apply_start_values(fmu&#x3D;fmu_instance, model_description&#x3D;model_description, start_values&#x3D;&#123;&#39;e&#39;: 0.55&#125;)
+    # 4. 继续第二次仿真
+    # continue to 2 s
+    result2 &#x3D; simulate_fmu(
+        filename&#x3D;unzipdir,
+        model_description&#x3D;model_description,
+        fmu_instance&#x3D;fmu_instance,
+        initialize&#x3D;False,  # the FMU instance is already instantiated
+        start_time&#x3D;1,  # start where we left off
+        stop_time&#x3D;2,
+        terminate&#x3D;False
+    )
+    # 绘制结果图像
+    # concatenate and plot the results
+    plot_result(np.concatenate((result1, result2)), events&#x3D;True)
+
+    # clean up
+    fmu_instance.terminate()
+    fmu_instance.freeInstance()
+    shutil.rmtree(unzipdir)
+
+
+if __name__ &#x3D;&#x3D; &#39;__main__&#39;:
+
+    archive_filename &#x3D; download_file(
+        url&#x3D;&#39;https:&#x2F;&#x2F;github.com&#x2F;modelica&#x2F;Reference-FMUs&#x2F;releases&#x2F;download&#x2F;v0.0.23&#x2F;Reference-FMUs-0.0.23.zip&#39;,
+        checksum&#x3D;&#39;d6ad6fc08e53053fe413540016552387257971261f26f08a855f9a6404ef2991&#39;
+    )
+
+    with tempfile.TemporaryDirectory() as tempdir:
+
+        extract(archive_filename, unzipdir&#x3D;tempdir)
+
+        # works also for &#39;1.0&#x2F;cs&#39; and &#39;2.0&#39;
+        continue_simulation(os.path.join(tempdir, &#39;3.0&#39;, &#39;BouncingBall.fmu&#39;))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="扩展"><a class="markdownIt-Anchor" href="#扩展"></a> 扩展</h2>
+<p>其实有了这些基础之后可以玩点更疯狂的举动，比如在第一节定义FMU 时，我们可以在<code>do_step</code> 内部初始化一个虚拟的微控制器，像AVR 或者ARM。感觉还是要学一下状态机了。</p>
+<h2 id="关于pythonfmu-中c-调用关系的笔记"><a class="markdownIt-Anchor" href="#关于pythonfmu-中c-调用关系的笔记"></a> 关于PythonFMU 中C++ 调用关系的笔记</h2>
+<p><code>PythonFMU</code> 通过<code>fmi-native-export</code> 模块导出FMU 文件（For Co-simulation Only）。其中分为三个部分：</p>
+<ol>
+<li><code>fmi</code> 模块表示fmi 标准函数</li>
+<li><code>cppfmu</code> 中定义了二进制文件的导出（接口）函数，用于和其他程序进行通信</li>
+<li><code>pythonfmu</code> 中通过C/C++ 调用Python 完成实际的运算</li>
+</ol>
+<p>其中承上启下的函数名字是<code>CppfmuInstantiateSlave</code> 定义在<code>pythonfmu/PySlaveInstance.cpp</code> 而在<code>cppfmu/fmi_functions.cpp</code> 中被调用。看命名应该在<code>cppfmu</code> 但其实并不是。</p>
+<p><img src="pythonfmu-cpp.png" alt="Alt text" /></p>
+<h2 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://github.com/NTNU-IHB/PythonFMU">NTNU-IHB/PythonFMU</a> 其中的示例比文档更好懂</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/CATIA-Systems/FMPy">CATIA-Systems/FMPy</a> 同样看示例和函数的注释更好懂一些</li>
+<li><a target="_blank" rel="noopener" href="https://fmi-standard.org/">https://fmi-standard.org/</a> FMI 标准与头文件的下载</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/hyumo/qFMU/tree/main/src/qfmu/codegen/templates">hyumo/qFMU</a> 这个仓库更是硬核，利用<code>jinja</code> 来生成C 代码，进而编译成原生的dll。不过其中关于控制系统的功能还是蛮值得借鉴的</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2023/10/11/fmu/" title="Python FMU 相关">https://12tall.github.io/2023/10/11/fmu/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"># python</a>
+              <a href="/tags/fmi/" rel="tag"># fmi</a>
+              <a href="/tags/fmu/" rel="tag"># fmu</a>
+              <a href="/tags/simulation/" rel="tag"># simulation</a>
+              <a href="/tags/modelica/" rel="tag"># modelica</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/09/29/qt-quick-02/" rel="prev" title="Qt Quick 的学习笔记（二）">
+                  <i class="fa fa-angle-left"></i> Qt Quick 的学习笔记（二）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/10/12/fastapi/" rel="next" title="FastAPI 工程化">
+                  FastAPI 工程化 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

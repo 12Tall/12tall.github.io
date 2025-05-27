@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="摘自：C语言内存系列-漫漫程序之路】  经常听说的计算机存储单元主要包括：寄存器，高速缓存、内存、外部存储器（固态硬盘、机械硬盘）等。读写速度也是由高到低依次排列。其中高速缓存无需程序员管理；无论是程序还是数据，都需要加载（Load） 到内存中才能被读取执行；外部存储器空间最大，但并不能被CPU 直接访问。如果我们的程序所需的内存空间太大，操作系统就会在硬盘上划出一部分空间用于暂时存储用不着的内">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C 语言内存管理">
+<meta property="og:url" content="https://12tall.github.io/2022/08/03/mem-mgmt/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="摘自：C语言内存系列-漫漫程序之路】  经常听说的计算机存储单元主要包括：寄存器，高速缓存、内存、外部存储器（固态硬盘、机械硬盘）等。读写速度也是由高到低依次排列。其中高速缓存无需程序员管理；无论是程序还是数据，都需要加载（Load） 到内存中才能被读取执行；外部存储器空间最大，但并不能被CPU 直接访问。如果我们的程序所需的内存空间太大，操作系统就会在硬盘上划出一部分空间用于暂时存储用不着的内">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.045Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="c&#x2F;cpp">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="x86">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://12tall.github.io/2022/08/03/mem-mgmt/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2022/08/03/mem-mgmt/","path":"2022/08/03/mem-mgmt/","title":"C 语言内存管理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>C 语言内存管理 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80"><span class="nav-number">1.</span> <span class="nav-text"> 虚拟地址</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E6%95%B4%E4%B8%AA%E5%8F%91%E5%B1%95%E8%BF%87%E7%A8%8B%E5%B0%B1%E6%98%AF%E4%B8%8D%E6%96%AD%E5%BC%95%E5%85%A5%E6%96%B0%E7%9A%84%E4%B8%AD%E9%97%B4%E5%B1%82"><span class="nav-number">1.1.</span> <span class="nav-text"> 计算机的整个发展过程就是不断引入新的中间层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text"> 编译模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90"><span class="nav-number">1.3.</span> <span class="nav-text"> 内存对齐</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%A1%B5"><span class="nav-number">2.</span> <span class="nav-text"> 内存分页</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B5%E8%A1%A8%E8%BD%AC%E6%8D%A2"><span class="nav-number">2.1.</span> <span class="nav-text"> 页表转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%8D%95%E5%85%83"><span class="nav-number">2.2.</span> <span class="nav-text"> 内存管理单元</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text"> C 程序的内存模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#linux"><span class="nav-number">3.1.</span> <span class="nav-text"> Linux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#windows"><span class="nav-number">3.2.</span> <span class="nav-text"> Windows</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E6%A0%B8%E6%A8%A1%E5%BC%8F%E4%B8%8E%E7%94%A8%E6%88%B7%E6%A8%A1%E5%BC%8F"><span class="nav-number">4.</span> <span class="nav-text"> 内核模式与用户模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%BA%A6%E5%AE%9A"><span class="nav-number">5.</span> <span class="nav-text"> 函数调用约定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="nav-number">6.</span> <span class="nav-text"> C 语言内存分配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A0%86%E6%A0%88%E6%BA%A2%E5%87%BA%E6%94%BB%E5%87%BB"><span class="nav-number">7.</span> <span class="nav-text"> 堆栈溢出攻击</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%B1%A0"><span class="nav-number">8.</span> <span class="nav-text"> 内存池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#register-%E5%8F%98%E9%87%8F"><span class="nav-number">9.</span> <span class="nav-text"> Register 变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">10.</span> <span class="nav-text"> 参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/mem-mgmt/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="C 语言内存管理 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C 语言内存管理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-03 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-03T00:00:00+08:00">2022-08-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/c-cpp/" itemprop="url" rel="index"><span itemprop="name">c_cpp</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>摘自：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/still-smile/p/14900288.html">C语言内存系列-漫漫程序之路</a>】</p>
+</blockquote>
+<p>经常听说的计算机存储单元主要包括：寄存器，高速缓存、内存、外部存储器（固态硬盘、机械硬盘）等。读写速度也是由高到低依次排列。其中高速缓存无需程序员管理；无论是程序还是数据，都需要<strong>加载（Load）</strong> 到内存中才能被读取执行；外部存储器空间最大，但并不能被CPU 直接访问。如果我们的程序所需的内存空间太大，操作系统就会在硬盘上划出一部分空间用于暂时存储用不着的内存中的数据，这块空间被称为<strong>虚拟内存（virtual memory）</strong>。但是频繁与硬盘交互数据会拖慢计算机的运行速度。</p>
+<span id="more"></span>
+<h2 id="虚拟地址"><a class="markdownIt-Anchor" href="#虚拟地址"></a> 虚拟地址</h2>
+<p>以下代码摘自：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/still-smile/p/14900347.html">https://www.cnblogs.com/still-smile/p/14900347.html</a></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h></span></span>
+<span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span> b <span class="token operator">=</span> <span class="token number">255</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> <span class="token operator">*</span>pa <span class="token operator">=</span> <span class="token operator">&amp;</span>a<span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"pa = %#X, &amp;b = %#X\n"</span><span class="token punctuation">,</span> pa<span class="token punctuation">,</span> <span class="token operator">&amp;</span>b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">system</span><span class="token punctuation">(</span><span class="token string">"pause"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>全局变量<code>a,b</code> 的地址在链接时就是确定的了。操作系统一般会运行多个任务，为了确保每个任务中相同地址的内存数据不会冲突，操作系统会通过某些手段将程序中的内存（虚拟）地址映射到不同的物理内存地址。虚拟地址对于程序代码来说是真实存在的，但是对于操作系统和CPU 来说是虚拟的。而且这样做还有一个好处，就是可以将不同程序的内存相互隔离，避免误操作。</p>
+<h3 id="计算机的整个发展过程就是不断引入新的中间层"><a class="markdownIt-Anchor" href="#计算机的整个发展过程就是不断引入新的中间层"></a> 计算机的整个发展过程就是不断引入新的中间层</h3>
+<p>如果一层指针不能解决问题，那就再加一层。中间层的增加使得我们程序的灵活性增加，也更加容易理解。</p>
+<h3 id="编译模式"><a class="markdownIt-Anchor" href="#编译模式"></a> 编译模式</h3>
+<ul>
+<li>32 位操作系统可以通过两次寻址访问超过4GB 的内存；</li>
+<li>64 位操作系统，一般限制只能访问256TB 的内存空间。</li>
+</ul>
+<h3 id="内存对齐"><a class="markdownIt-Anchor" href="#内存对齐"></a> 内存对齐</h3>
+<p>CPU 总是按数据总线宽度进行寻址，比如32 位CPU 一次会读取4 字节（起始位置为4 的整数倍：0x00,0x04,0x08,…），64 位一次读取8 字节。如果能保证内存中的数据都是按4 或8 整齐排列，那么就能提高程序的运行效率。为此，程序在编译时一般都会将变量、结构体等基于内存对齐，当然这样做可能会造成内存资源的浪费。全局变量在release 版本会对齐，局部变量不会自动对齐，跟编译器软件有关。</p>
+<h2 id="内存分页"><a class="markdownIt-Anchor" href="#内存分页"></a> 内存分页</h2>
+<p>在程序运行时，某个时间段内只会频繁的用到某一小部分数据，大部分数据不需要加载到内存。于是我们可以通过分页（paging）的方法减小内存换入换出的粒度，提高程序运行效率。一般来说，一页的大小是4 KB。我们把虚拟空间中的页叫做虚拟页（VP，virtual Page），物理内存中的页叫做物理页（PP，Physical Page），同理还有磁盘页（DP，Disk Page）。有些虚拟页会被映射到同一块物理页以共享内存。<strong>当程序访问到不存在的虚拟页时会触发页错误（Page Fault），操作系统将会接管进程，加载相关内容到物理页，同时建立与虚拟页之间的联系。</strong></p>
+<h3 id="页表转换"><a class="markdownIt-Anchor" href="#页表转换"></a> 页表转换</h3>
+<p>现代计算机操作系统都使用分页来管理内存，程序内只能访问到虚拟内存，需要通过页表（Page Table）数据结构才能映射到物理内存地址。</p>
+<ul>
+<li>一级页表：长度为4 字节，高20 位表示页表数组下标，低16 位表示页内偏移。不管程序多大，都要分配4M 的内存空间用于页表管理，包括这4M（1M 页表项 x 4 字节）也应在页表中。</li>
+</ul>
+<blockquote>
+<p>因为默认页大小为4K，虚拟内存按4GB 计算刚好有1M 个，用20 位刚好能表示，低12 位刚好能表示4K 大小的页内偏移。</p>
+</blockquote>
+<ul>
+<li>二级页表：为了节省空间，可以将一级页表拆分为页目录（高10 位）+页表项（次10 位）+业内偏移（低12 位）。</li>
+</ul>
+<blockquote>
+<p>相当于我们把4GB 内存先分成了1024 个4MB 的页表项，又把每个页表项分成了1024 个4KB 的页。这样我们最多需要用到4KB + 4MB 空间存储页表信息。其中页目录的4KB 是固定大小，页表项的4MB 是按需要在内存中不同的位置灵活创建的。参考：<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/63375062">https://www.zhihu.com/question/63375062</a></p>
+</blockquote>
+<ul>
+<li>更多级页表：对于64 位系统可以分更多等级，原理一致</li>
+</ul>
+<blockquote>
+<p>只要能保证一级页表能覆盖整个虚拟内存地址，各次级页表可以在需要时被创建即可，这样在一般情况下是可以节省内存空间的，而且让程序更灵活。</p>
+</blockquote>
+<p><strong>想一想：</strong> 于是我们需要首先分配4KB 给页目录，然后再分配4KB 给第一个页表项，其中页表项的第一个页指向页目录，第二个页指向它自己，剩余的空间可以用于分配其他内存？这些操作都应该是人为规定的才对！</p>
+<h3 id="内存管理单元"><a class="markdownIt-Anchor" href="#内存管理单元"></a> 内存管理单元</h3>
+<p>CPU 有一个专门的内存管理单元（MMU），负责将虚拟地址映射到物理地址，并且其中内置了高速缓存，用于存储页目录和页表数据。但是MMU 并不会参与构建页表，在操作系统运行时会不断更新页表信息，并将页目录的物理地址保存到<code>CR3</code> 寄存器，MMU 则会根据这个寄存器找到页目录、页表，最终完整内存转换。<br />
+每个进程都有自己的一套页表，切换程序时需要刷新CR3 寄存器。<br />
+此外，MMU 还能控制内存的访问权限：通过二级页表的第12 位，来表示页是在物理内存还是在磁盘，是否可读写等。</p>
+<p>以<a target="_blank" rel="noopener" href="https://www.cnblogs.com/still-smile/p/14900421.html">https://www.cnblogs.com/still-smile/p/14900421.html</a> 中的代码为例，程序访问了受保护的虚拟内存地址，则报运行时错误：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">char</span> <span class="token operator">*</span>str <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">char</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token number">0XFFF00000</span><span class="token punctuation">;</span>  <span class="token comment">//使用数值表示一个明确的地址</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%s\n"</span><span class="token punctuation">,</span> str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>想一想：</strong> 虽然每个进程都有自己的页表，但是这个页表并不是自己创建的，而且有一部分内容是进程自己也不能访问的，需要操作系统给分配可访问的内容才行。</p>
+<h2 id="c-程序的内存模型"><a class="markdownIt-Anchor" href="#c-程序的内存模型"></a> C 程序的内存模型</h2>
+<h3 id="linux"><a class="markdownIt-Anchor" href="#linux"></a> Linux</h3>
+<p>一般在32 位系统中，操作系统要占高地址的1~2GB 的空间（内核空间kernel）。用户进程最多只能寻址到3GB（用户空间user space）。在64 位系统中是128TB+128TB 对半分的设计。<br />
+而用户程序从低到高一般可分为：代码区、常量区、全局数据区、堆区、动态链接库区和栈区。程序员唯一能自由管理的就是堆区，但是如果不能及时释放无效数据，可能会造成内存泄露，直到主程序退出。<br />
+32 位程序的栈空间一般为2~10MB。</p>
+<h3 id="windows"><a class="markdownIt-Anchor" href="#windows"></a> Windows</h3>
+<p>相关资料较少，但分区的思路应该是一致的。</p>
+<h2 id="内核模式与用户模式"><a class="markdownIt-Anchor" href="#内核模式与用户模式"></a> 内核模式与用户模式</h2>
+<p>讲到内核模式就要讲进程切换，进程切换需要考虑重置页表、寄存器等操作。</p>
+<p><strong>想一想：</strong> CPU 在某一时刻只能执行一个进程，那该如何调用内核进程呢？应该是用户进程试图发出一个信号（可以是中断、也可以是其他信号）用于唤醒内核进程，内核进程执行完之后重新休眠吧。然后就算是内核进程休眠了，她所拥有的内存空间也不能直接被用户进程访问。</p>
+<h2 id="函数调用约定"><a class="markdownIt-Anchor" href="#函数调用约定"></a> 函数调用约定</h2>
+<h2 id="c-语言内存分配"><a class="markdownIt-Anchor" href="#c-语言内存分配"></a> C 语言内存分配</h2>
+<h2 id="堆栈溢出攻击"><a class="markdownIt-Anchor" href="#堆栈溢出攻击"></a> 堆栈溢出攻击</h2>
+<p>略</p>
+<h2 id="内存池"><a class="markdownIt-Anchor" href="#内存池"></a> 内存池</h2>
+<p>操作系统分配内存应该是先查看页表数据，然后根据物理内存的空闲情况然后再分配吧，在程序推出后，操作系统会统一回收相关的页表信息。但实际上这样的效率不高，还不如直接分配给程序一段内存，让程序自己管理。<code>malloc</code> 函数就是一次向程序申请开通一大块儿内存，然后自己再按需分配给程序。为了避免程序反复申请、释放内存造成大量碎片，则需要设计内存池的管理算法。</p>
+<h2 id="register-变量"><a class="markdownIt-Anchor" href="#register-变量"></a> Register 变量</h2>
+<p>大量简单循环的数学运算可以在变量声明前加<code>register</code> 选项，可能会加快运算速度。</p>
+<h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/63375062">操作系统中的多级页表到底是为了解决什么问题？</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2022/08/03/mem-mgmt/" title="C 语言内存管理">https://12tall.github.io/2022/08/03/mem-mgmt/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/c-cpp/" rel="tag"># c/cpp</a>
+              <a href="/tags/OS/" rel="tag"># OS</a>
+              <a href="/tags/x86/" rel="tag"># x86</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/08/03/tinyos/" rel="prev" title="x86 操作系统笔记">
+                  <i class="fa fa-angle-left"></i> x86 操作系统笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/08/03/dll-injection/" rel="next" title="DLL 注入相关">
+                  DLL 注入相关 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="只有在注册以后，才能得到技术支持、产品特性信息、最新威胁防护">
+<meta property="og:type" content="article">
+<meta property="og:title" content="飞塔防火墙">
+<meta property="og:url" content="https://12tall.github.io/2022/08/03/fortigate/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="只有在注册以后，才能得到技术支持、产品特性信息、最新威胁防护">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-03T07:59:25.000Z">
+<meta property="article:modified_time" content="2025-05-27T12:49:31.112Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="防火墙">
+<meta property="article:tag" content="fortinet">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://12tall.github.io/2022/08/03/fortigate/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2022/08/03/fortigate/","path":"2022/08/03/fortigate/","title":"飞塔防火墙"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>飞塔防火墙 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#fortigate-%E9%85%8D%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text"> Fortigate 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.</span> <span class="nav-text"> 浏览器配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%80%E5%9F%9F%E7%BD%91%E7%AE%A1%E7%90%86%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.2.</span> <span class="nav-text"> 局域网管理接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%88%E7%AB%AF%E9%85%8D%E7%BD%AE"><span class="nav-number">1.3.</span> <span class="nav-text"> 终端配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ios-%E9%85%8D%E7%BD%AE"><span class="nav-number">1.4.</span> <span class="nav-text"> iOS 配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sfp-%E6%94%B6%E5%8F%91%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text"> SFP 收发器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">2.1.</span> <span class="nav-text"> 安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A7%BB%E9%99%A4"><span class="nav-number">2.2.</span> <span class="nav-text"> 移除</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8nat-%E6%A8%A1%E5%BC%8F%E4%B8%8B%E5%AE%89%E8%A3%85fortigate"><span class="nav-number">3.</span> <span class="nav-text"> 在NAT 模式下安装FortiGate</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E8%AE%BE%E5%A4%87"><span class="nav-number">3.1.</span> <span class="nav-text"> 连接设备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%8E%A5%E5%8F%A3"><span class="nav-number">3.2.</span> <span class="nav-text"> 配置接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E9%BB%98%E8%AE%A4%E8%B7%AF%E7%94%B1"><span class="nav-number">3.3.</span> <span class="nav-text"> 添加默认路由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AEdns%E6%9C%8D%E5%8A%A1%E5%8F%AF%E9%80%89"><span class="nav-number">3.4.</span> <span class="nav-text"> 设置DNS服务（可选</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%AD%96%E7%95%A5"><span class="nav-number">3.5.</span> <span class="nav-text"> 创建策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C"><span class="nav-number">3.6.</span> <span class="nav-text"> 结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8zones%E6%9D%A5%E7%AE%80%E5%8C%96%E9%98%B2%E7%81%AB%E5%A2%99%E7%AD%96%E7%95%A5"><span class="nav-number">4.</span> <span class="nav-text"> 使用Zones来简化防火墙策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAvlan"><span class="nav-number">4.1.</span> <span class="nav-text"> 创建VLAN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAzone"><span class="nav-number">4.2.</span> <span class="nav-text"> 创建zone</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAzone%E7%9A%84%E7%AD%96%E7%95%A5"><span class="nav-number">4.3.</span> <span class="nav-text"> 创建zone的策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C-2"><span class="nav-number">4.4.</span> <span class="nav-text"> 结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A9%E7%94%A8sd-wan%E6%9D%A5%E5%86%97%E4%BD%99internet"><span class="nav-number">5.</span> <span class="nav-text"> 利用SD-WAN来冗余Internet</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E9%98%B2%E7%81%AB%E5%A2%99%E6%8E%A5%E5%85%A5isp"><span class="nav-number">5.1.</span> <span class="nav-text"> 将防火墙接入ISP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E7%8E%B0%E6%9C%89%E7%AD%96%E7%95%A5"><span class="nav-number">5.2.</span> <span class="nav-text"> 修改现有策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAsd-wan%E6%8E%A5%E5%8F%A3"><span class="nav-number">5.3.</span> <span class="nav-text"> 创建SD-WAN接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEsd-wan%E7%8A%B6%E6%80%81%E6%A3%80%E6%9F%A5%E5%8F%AF%E9%80%89"><span class="nav-number">5.4.</span> <span class="nav-text"> 配置SD-WAN状态检查（可选</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%81%E8%AE%B8%E5%86%85%E7%BD%91%E6%B5%81%E9%87%8F%E9%80%9A%E8%BF%87sd-wan"><span class="nav-number">5.5.</span> <span class="nav-text"> 允许内网流量通过SD-WAN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C-3"><span class="nav-number">5.6.</span> <span class="nav-text"> 结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB"><span class="nav-number">5.7.</span> <span class="nav-text"> 测试故障转移</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E6%A1%86%E6%9E%B6%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E8%AE%A4%E8%AF%81"><span class="nav-number">6.</span> <span class="nav-text"> 安全框架的安装与认证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%8F%E6%98%8Eweb%E4%BB%A3%E7%90%86"><span class="nav-number">7.</span> <span class="nav-text"> 透明web代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%A6%E5%AE%BD%E9%99%90%E5%88%B6%E4%B8%8E%E6%B5%81%E9%87%8F%E6%95%B4%E5%BD%A2"><span class="nav-number">8.</span> <span class="nav-text"> 带宽限制与流量整形</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E7%AD%96%E7%95%A5%E7%9A%84%E6%A8%A1%E5%BC%8F"><span class="nav-number">9.</span> <span class="nav-text"> 基于策略的模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E7%94%A8%E5%9F%BA%E4%BA%8E%E7%AD%96%E7%95%A5%E7%9A%84%E6%A8%A1%E5%BC%8F"><span class="nav-number">9.1.</span> <span class="nav-text"> 启用基于策略的模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAcentral-snat-%E7%AD%96%E7%95%A5"><span class="nav-number">9.2.</span> <span class="nav-text"> 创建Central SNAT 策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAipv4%E7%AD%96%E7%95%A5"><span class="nav-number">9.3.</span> <span class="nav-text"> 创建IPv4策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E8%A1%A8%E6%8E%92%E5%BA%8F"><span class="nav-number">9.4.</span> <span class="nav-text"> 策略表排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C-4"><span class="nav-number">9.5.</span> <span class="nav-text"> 结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%85%E6%8D%95%E8%8E%B7"><span class="nav-number">10.</span> <span class="nav-text"> 包捕获</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">212</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/fortigate/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="飞塔防火墙 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          飞塔防火墙
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-03 15:59:25" itemprop="dateCreated datePublished" datetime="2022-08-03T15:59:25+08:00">2022-08-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/maintenance/" itemprop="url" rel="index"><span itemprop="name">maintenance</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>只有在注册以后，才能得到技术支持、产品特性信息、最新威胁防护</p>
+<span id="more"></span>
+<h2 id="fortigate-配置"><a class="markdownIt-Anchor" href="#fortigate-配置"></a> Fortigate 配置</h2>
+<h3 id="浏览器配置"><a class="markdownIt-Anchor" href="#浏览器配置"></a> 浏览器配置</h3>
+<ol>
+<li>通过网线连接<code>MGMT</code>口或者<code>MGMT 1</code>口</li>
+<li>将计算机IP 地址设置到同一网段，如：<code>192.168.1.2/24</code></li>
+<li>通过浏览器访问访问&lt;192.168.1.99&gt;</li>
+<li>登录，用户名<code>admin</code>、密码为空</li>
+<li>修改并保存配置</li>
+<li>通过仪表盘注册设备</li>
+</ol>
+<h3 id="局域网管理接口"><a class="markdownIt-Anchor" href="#局域网管理接口"></a> 局域网管理接口</h3>
+<p>在视频<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=XcUXoe3q_OA&amp;t=655s">PNETLab - How to setup Fortinet Firewall Lab with win 10 client , Fortinet internet connectivity .</a>第22 分有演示，注意按下面配置好后，客户端需要通过<code>http</code> 协议才能访问防火墙的Web 服务。</p>
+<pre class="line-numbers language-console" data-language="console"><code class="language-console">FortiGate-VM64-KVM (port1) # show 
+config system interface
+    edit &quot;port1&quot;
+        set vdom &quot;root&quot;
+        set ip 192.168.1.1 255.255.255.0
+        set allowaccess ping https ssh http fgfm
+        set type physical
+        set snmp-index 1
+    next
+end<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="终端配置"><a class="markdownIt-Anchor" href="#终端配置"></a> 终端配置</h3>
+<ol>
+<li>通过<code>console</code> 线连接<code>console</code> 接口</li>
+<li>通过<code>PuTTY</code> 连接<code>COM</code> 口<br />
+Baud rate: 9600<br />
+Data bits: 8<br />
+Parity: None<br />
+Stop bits: 1<br />
+Flow control: None</li>
+<li>按<code>Enter</code> 键进入<code>cli</code></li>
+<li>通过<code>admin</code> 和空密码登录</li>
+<li>按<code>?</code> 打开命令提示（同Cisco</li>
+</ol>
+<h3 id="ios-配置"><a class="markdownIt-Anchor" href="#ios-配置"></a> iOS 配置</h3>
+<ol>
+<li>下载并启动<code>FortiExplorer iOS App</code></li>
+<li>通过USB 线连接手机与防火墙</li>
+<li>通过用户密码登录</li>
+<li>修改并保存配置</li>
+</ol>
+<h2 id="sfp-收发器"><a class="markdownIt-Anchor" href="#sfp-收发器"></a> SFP 收发器</h2>
+<h3 id="安装"><a class="markdownIt-Anchor" href="#安装"></a> 安装</h3>
+<p>略</p>
+<h3 id="移除"><a class="markdownIt-Anchor" href="#移除"></a> 移除</h3>
+<p>略</p>
+<h2 id="在nat-模式下安装fortigate"><a class="markdownIt-Anchor" href="#在nat-模式下安装fortigate"></a> 在NAT 模式下安装FortiGate</h2>
+<p>防火墙安装于内外网之间，用于隐藏内网IP，并提供NAT 转换。是最为常用的工作模式。</p>
+<h3 id="连接设备"><a class="markdownIt-Anchor" href="#连接设备"></a> 连接设备</h3>
+<p>将防火墙与服务商提供的网络设备连接。并通过Web 访问防火墙管理界面。</p>
+<h3 id="配置接口"><a class="markdownIt-Anchor" href="#配置接口"></a> 配置接口</h3>
+<ol>
+<li>进入<code>Network &gt; Interfaces</code> 界面，编辑互联网端的接口（如：<code>wan1</code></li>
+<li>设置上下行速率（<code>Estimated Bandwidth</code></li>
+<li>将接口设置为<code>WAN</code></li>
+<li>设置<code>WAN</code>口地址：静态、动态、PPPoE</li>
+<li>编辑局域网接口，也被叫做内网接口</li>
+<li>设置<code>LAN</code>接口角色</li>
+<li>设置<code>LAN</code>接口IP，或者启用DHCP</li>
+<li>管理权限：HTTPS、PING、SNMP 等等</li>
+</ol>
+<h3 id="添加默认路由"><a class="markdownIt-Anchor" href="#添加默认路由"></a> 添加默认路由</h3>
+<ol>
+<li>进入<code>Network &gt; Static Routes</code>。一般来说只需要配置一条默认路由；</li>
+<li>设置<code>Destination</code>为<code>Subnet</code>（以子网匹配）并且IP 为<code>0.0.0.0/0.0.0.0</code></li>
+<li>设置网关（ISP 提供），接口为之前设置的<code>wan1</code></li>
+</ol>
+<h3 id="设置dns服务可选"><a class="markdownIt-Anchor" href="#设置dns服务可选"></a> 设置DNS服务（可选</h3>
+<p>进入<code>Network &gt; DNS</code> 指定DNS 服务器即可。也可以使用默认的FortiGuard DNS服务</p>
+<h3 id="创建策略"><a class="markdownIt-Anchor" href="#创建策略"></a> 创建策略</h3>
+<ol>
+<li>进入<code>Policy &amp; Objects &gt; IPv4 Policy</code>。设置一条用于流向Internet 的流量策略（名为Internet）</li>
+<li>设置输入端口为<code>lan</code>、输出端口为<code>wan1</code>，设置源、目的、周期和服务信息</li>
+<li>设置动作为允许</li>
+<li>开启<code>NAT</code>并选择<code>Using Outgoing Interface Address</code></li>
+<li>启用<code>Log Allowed Traffic</code>并选择所有会话</li>
+</ol>
+<h3 id="结果"><a class="markdownIt-Anchor" href="#结果"></a> 结果</h3>
+<ol>
+<li>使用浏览器浏览内网</li>
+<li>可以通过<code>FortiView &gt; Traffic From LAN/DMZ &gt; Sources</code>观察流量信息</li>
+<li>右键<code>Drill Down to Details</code>查看详情</li>
+</ol>
+<p>如果防火墙拥有内置存储并且启用了日志，那么我们可以查看历史日志信息。查看<a target="_blank" rel="noopener" href="https://docs.fortinet.com/document/fortigate/5.6.0/fortigatefortiosfeatureplatformmatrix">特性-平台矩阵</a></p>
+<h2 id="使用zones来简化防火墙策略"><a class="markdownIt-Anchor" href="#使用zones来简化防火墙策略"></a> 使用Zones来简化防火墙策略</h2>
+<p>通过将多个接口加入一个<code>zone</code>可以简化防火墙策略。例如：我们可以创建<code>VLAN10,20,30</code>，并将它们加入名称为<code>LAN</code>的<code>zone</code>。那么我们就可以使用这一个<code>zone</code>来达到分开管理每个vlan 的效果。<br />
+除了vlan，zones 嗐可以用来管理物理接口和<code>IPsec</code> 隧道。</p>
+<h3 id="创建vlan"><a class="markdownIt-Anchor" href="#创建vlan"></a> 创建VLAN</h3>
+<ol>
+<li>进入<code>Network &gt; Interfaces</code>，选择<code>Create New &gt; Interface</code></li>
+<li>创建VLAN 接口，并设置VLAN ID 为10，启用DHCP 服务</li>
+<li>同理创建VLAN 20、VLAN 30</li>
+</ol>
+<h3 id="创建zone"><a class="markdownIt-Anchor" href="#创建zone"></a> 创建zone</h3>
+<ol>
+<li>进入<code>Network &gt; Interfaces</code>，选择<code>New &gt; Zone</code></li>
+<li>设置一个名字（如：<code>LAN Zone</code>），并添加新创建的vlan
+<ul>
+<li>注意：可以选择<code>Block intra-zone traffic</code>来阻止vlan 间的通信</li>
+</ul>
+</li>
+</ol>
+<h3 id="创建zone的策略"><a class="markdownIt-Anchor" href="#创建zone的策略"></a> 创建zone的策略</h3>
+<ol>
+<li>进入<code>Policy &amp; Objectes &gt; IPv4</code>，创建一条策略：赋予<code>LAN Zone</code>内所有vlan 访问互联网的权限</li>
+<li>根据需要，设置安全选项（Security Profiles</li>
+</ol>
+<h3 id="结果-2"><a class="markdownIt-Anchor" href="#结果-2"></a> 结果</h3>
+<p>当有新的vlan 时，只需将vlan 加入zone 就可以应用已创建的策略了。</p>
+<h2 id="利用sd-wan来冗余internet"><a class="markdownIt-Anchor" href="#利用sd-wan来冗余internet"></a> 利用SD-WAN来冗余Internet</h2>
+<p>SD-WAN 可以无缝管理OSI 模型中的二层流量，而不需要硬件交换机和控制器。<br />
+通过基于基于<code>volume</code>的加权平均，我们分配流量wan1：wan2=3：1。当其中一条线路不可用时，将自动将流量转移到另一条线路。</p>
+<h3 id="将防火墙接入isp"><a class="markdownIt-Anchor" href="#将防火墙接入isp"></a> 将防火墙接入ISP</h3>
+<p>按上文步骤，将防火墙的wan1、wan2 口，分别接入两个ISP 网络。</p>
+<h3 id="修改现有策略"><a class="markdownIt-Anchor" href="#修改现有策略"></a> 修改现有策略</h3>
+<p>任何在用的接口都不能被加入到SD-WAN 接口。所以我们必须先删除掉wan1、wan2 上已有的策略。</p>
+<ol>
+<li>进入<code>Policy &amp; Objects &gt; IPv4 Policy</code>并删除所有wan1、wan2 上的策略</li>
+</ol>
+<h3 id="创建sd-wan接口"><a class="markdownIt-Anchor" href="#创建sd-wan接口"></a> 创建SD-WAN接口</h3>
+<ol>
+<li>进入<code>Network &gt; SD-WAN</code></li>
+<li>设置接口状态为<code>Enable</code></li>
+<li>在SD-WAN 下，添加两个WAN 口</li>
+<li>在<code>Load Balancing Algorithm</code>下，选择基于卷的算法，并配置权重百分比</li>
+<li><code>SD-WAN Usage</code>可以看到使用情况</li>
+</ol>
+<h3 id="配置sd-wan状态检查可选"><a class="markdownIt-Anchor" href="#配置sd-wan状态检查可选"></a> 配置SD-WAN状态检查（可选</h3>
+<ol>
+<li>进入<code>Network &gt; SD WAN Status Check</code>，选择<code>Create New</code>。可以设置检测方法</li>
+</ol>
+<h3 id="允许内网流量通过sd-wan"><a class="markdownIt-Anchor" href="#允许内网流量通过sd-wan"></a> 允许内网流量通过SD-WAN</h3>
+<ol>
+<li>进入<code>Policy &amp; Objects &gt; IPv4</code>创建新的策略</li>
+<li>设置出入端口</li>
+<li>启用NAT 和安全配置</li>
+<li>启用日志功能</li>
+</ol>
+<h3 id="结果-3"><a class="markdownIt-Anchor" href="#结果-3"></a> 结果</h3>
+<ol>
+<li>访问互联网，在防火墙<code>Network &gt; SD-WAN &gt; SD-WAN Usage</code>可以看到使用情况</li>
+<li>通过<code>Network &gt; SD-WAN Status Check</code>检测状态</li>
+<li>通过<code>Monitor &gt; SD-WAN Monitor</code>显示每个wan 口的使用情况</li>
+</ol>
+<h3 id="测试故障转移"><a class="markdownIt-Anchor" href="#测试故障转移"></a> 测试故障转移</h3>
+<p>就直接拔掉wan1 的线即可。然后还是通过上方的面板去查看结果。</p>
+<h2 id="安全框架的安装与认证"><a class="markdownIt-Anchor" href="#安全框架的安装与认证"></a> 安全框架的安装与认证</h2>
+<p>略</p>
+<h2 id="透明web代理"><a class="markdownIt-Anchor" href="#透明web代理"></a> 透明web代理</h2>
+<p>略</p>
+<h2 id="带宽限制与流量整形"><a class="markdownIt-Anchor" href="#带宽限制与流量整形"></a> 带宽限制与流量整形</h2>
+<p>略</p>
+<h2 id="基于策略的模式"><a class="markdownIt-Anchor" href="#基于策略的模式"></a> 基于策略的模式</h2>
+<p>在策略模式下，可以直接将web 和应用添加到策略里面。切换防火墙模式会修改配置文件，需要提前备份配置文件。而且基于策略的模式可能会阻止合法流量。还需要设置<code>Central SNAT</code>策略来配置NAT。</p>
+<p>演示阻止Facebook</p>
+<h3 id="启用基于策略的模式"><a class="markdownIt-Anchor" href="#启用基于策略的模式"></a> 启用基于策略的模式</h3>
+<ol>
+<li>进入<code>System &gt; Settings</code>，滚动至<code>System Operation Settings</code></li>
+<li>选择<code>Flow-based</code>、<code>Policy-based.</code>以及一个<code>Select an SSL/SSH Inspection</code>配置</li>
+</ol>
+<h3 id="创建central-snat-策略"><a class="markdownIt-Anchor" href="#创建central-snat-策略"></a> 创建Central SNAT 策略</h3>
+<ol>
+<li>进入<code>Policy &amp; Objects &gt; Central SNAT</code>点击创建，并设置：
+<ul>
+<li>入口</li>
+<li>出口</li>
+<li>源、目的IP</li>
+<li>协议</li>
+</ul>
+</li>
+</ol>
+<h3 id="创建ipv4策略"><a class="markdownIt-Anchor" href="#创建ipv4策略"></a> 创建IPv4策略</h3>
+<ol>
+<li>进入<code>Policy &amp; Objects</code>创建策略，设置端口与源、目的地址（默认</li>
+<li>在应用选项中，选择添加需要的应用</li>
+</ol>
+<h3 id="策略表排序"><a class="markdownIt-Anchor" href="#策略表排序"></a> 策略表排序</h3>
+<ol>
+<li>进入<code>Policy &amp; Objects &gt; IPv4 Policy</code> 可以查看策略表。一般要将更具体的策略放在顶部</li>
+<li>直接拖动行就可以了</li>
+</ol>
+<h3 id="结果-4"><a class="markdownIt-Anchor" href="#结果-4"></a> 结果</h3>
+<ol>
+<li>浏览Facebook 打不开</li>
+<li>查看<code>FortiView &gt; Threats</code>发现流量被阻止</li>
+</ol>
+<h2 id="包捕获"><a class="markdownIt-Anchor" href="#包捕获"></a> 包捕获</h2>
+<p>用于流量分析，略</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2022/08/03/fortigate/" title="飞塔防火墙">https://12tall.github.io/2022/08/03/fortigate/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/" rel="tag"># 防火墙</a>
+              <a href="/tags/fortinet/" rel="tag"># fortinet</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/08/03/eve-ng/" rel="prev" title="Eve-Ng使用笔记">
+                  <i class="fa fa-angle-left"></i> Eve-Ng使用笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/08/03/aruba/" rel="next" title="aruba 设备">
+                  aruba 设备 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>
