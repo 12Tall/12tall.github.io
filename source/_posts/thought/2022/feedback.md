@@ -20,7 +20,7 @@ tags:
 $$\left\{ 
     \begin{array}{lll}
         E(s) = R(s) + H(s)   \\  
-        C(s) = E(s) * G(s)   \\
+        C(s) = E(s) * G(s)   
     \end{array}    
 \right.$$  
 化简后得到公式：  

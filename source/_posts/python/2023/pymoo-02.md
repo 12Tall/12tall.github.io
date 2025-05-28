@@ -25,9 +25,9 @@ tag:
 ## 定义问题  
 
 $$\begin{array}{lll}
-    min  & f_m(x)       & m=1,\dots,M  \\\\
+    min  & f_m(x)       & m=1,\dots,M  \\
     s.t. & g_j(x) \le 0 & j=1,\dots, J \\
-         & h_k(x) = 0   & k=1,\dots, K \\\\
+         & h_k(x) = 0   & k=1,\dots, K \\
          & x_i^L \le x_i \le x_i^U & i=1,\dots,N  \\
          & x \in \mathbb{\Omega}
 \end{array}$$ 

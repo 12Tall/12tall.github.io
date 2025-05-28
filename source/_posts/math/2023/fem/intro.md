@@ -137,7 +137,7 @@ $$\int^{x^e_2}_{x^e_1} (\frac{dw}{dx})\epsilon^e(\frac{dV}{dx})dx - \int^{x^e_2}
 因为我们选取的自由度等于$2$，所以结合式$(2.3.1)$，可以构造出下面两个方程，用以求解线段两端得电压（电势）：  
 $$\begin{cases}
     \int^{x^e_2}_{x^e_1} (\frac{dN_1}{dx})\epsilon^e(\sum\limits^n_{j=1}v^e_j\frac{dN_j}{dx})dx = \int^{x^e_2}_{x^e_1} N_1\rho^e_v dx - N_1(x^e_2)D^e_x(x^e_2) + N_1(x^e_1)D^e_x(x^e_1) \\    
-    \int^{x^e_2}_{x^e_1} (\frac{dN_2}{dx})\epsilon^e(\sum\limits^n_{j=1}v^e_j\frac{dN_j}{dx})dx = \int^{x^e_2}_{x^e_1} N_2\rho^e_v dx - N_2(x^e_2)D^e_x(x^e_2) + N_2(x^e_1)D^e_x(x^e_1) \\
+    \int^{x^e_2}_{x^e_1} (\frac{dN_2}{dx})\epsilon^e(\sum\limits^n_{j=1}v^e_j\frac{dN_j}{dx})dx = \int^{x^e_2}_{x^e_1} N_2\rho^e_v dx - N_2(x^e_2)D^e_x(x^e_2) + N_2(x^e_1)D^e_x(x^e_1) 
 \end{cases} \tag{2.3.5}$$  
 又因为：  
 $$\begin{cases}
@@ -149,7 +149,7 @@ $$\begin{cases}
 所以可以得到如下形式：  
 $$\begin{cases}
     \int^{x^e_2}_{x^e_1} (\frac{dN_1}{dx})\epsilon^e\frac{dN_1}{dx}dx \cdot v^e_1 + \int^{x^e_2}_{x^e_1} (\frac{dN_1}{dx})\epsilon^e\frac{dN_2}{dx}dx \cdot v^e_2 = \int^{x^e_2}_{x^e_1} N_1\rho^e_v dx + D^e_x(x^e_1) \\    
-    \int^{x^e_2}_{x^e_1} (\frac{dN_2}{dx})\epsilon^e\frac{dN_1}{dx}dx \cdot v^e_1 + \int^{x^e_2}_{x^e_1} (\frac{dN_2}{dx})\epsilon^e\frac{dN_2}{dx}dx \cdot v^e_2 = \int^{x^e_2}_{x^e_1} N_2\rho^e_v dx -D^e_x(x^e_2) \\
+    \int^{x^e_2}_{x^e_1} (\frac{dN_2}{dx})\epsilon^e\frac{dN_1}{dx}dx \cdot v^e_1 + \int^{x^e_2}_{x^e_1} (\frac{dN_2}{dx})\epsilon^e\frac{dN_2}{dx}dx \cdot v^e_2 = \int^{x^e_2}_{x^e_1} N_2\rho^e_v dx -D^e_x(x^e_2) 
 \end{cases} \tag{2.3.6}$$  
 令$K^e_{ij} = \int^{x^e_2}_{x^e_1} (\frac{dN_i}{dx})\epsilon^e\frac{dN_j}{dx}dx, f^e_i= \int^{x^e_2}_{x^e_1} N_i\rho^e_v dx, \boldsymbol{d^e}=\begin{bmatrix}
     D^e_1  \\
@@ -213,34 +213,34 @@ $$\frac{\epsilon^e}{l^e}\begin{bmatrix}
 $$\begin{cases}
     \begin{rcases}
         K^{(1)}_{11}v^{(1)}_{1} + K^{(1)}_{12}v^{(1)}_{2} & = & f^{(1)}_{1} + D^{(1)}_{1} \\
-        K^{(1)}_{21}v^{(1)}_{1} + K^{(1)}_{22}v^{(1)}_{2} & = &  f^{(1)}_{2} - D^{(1)}_{2} \\
+        K^{(1)}_{21}v^{(1)}_{1} + K^{(1)}_{22}v^{(1)}_{2} & = &  f^{(1)}_{2} - D^{(1)}_{2} 
     \end{rcases} & l1\\
     \begin{rcases}
         K^{(2)}_{11}v^{(2)}_{1} + K^{(2)}_{12}v^{(2)}_{2} & = &  f^{(2)}_{1} + D^{(2)}_{1} \\
-        K^{(2)}_{21}v^{(2)}_{1} + K^{(2)}_{22}v^{(2)}_{2} & = & f^{(2)}_{2} - D^{(2)}_{2} \\
+        K^{(2)}_{21}v^{(2)}_{1} + K^{(2)}_{22}v^{(2)}_{2} & = & f^{(2)}_{2} - D^{(2)}_{2} 
     \end{rcases} & l2 \\
     \vdots  \\
     \begin{rcases}
         K^{(n)}_{11}v^{(n)}_{1} + K^{(n)}_{12}v^{(n)}_{2} & = &  f^{(n)}_{1} + D^{(n)}_{1} \\
-        K^{(n)}_{21}v^{(n)}_{1} + K^{(n)}_{22}v^{(n)}_{2} & = & f^{(n)}_{2} - D^{(n)}_{2} \\
-    \end{rcases} & ln\\
+        K^{(n)}_{21}v^{(n)}_{1} + K^{(n)}_{22}v^{(n)}_{2} & = & f^{(n)}_{2} - D^{(n)}_{2} 
+    \end{rcases} & ln
 \end{cases} \tag{2.4.1}$$
 
 并且有$v^{e}_2 = v^{e+1}_1$，令$v^{(1)}_i = v^{(2)}_{i-1} =V_i$，则上式可写作：  
 $$\begin{cases}
     \begin{rcases}
         K^{(1)}_{11}V_1 + K^{(1)}_{12}V_2 & = & f^{(1)}_{1} + D^{(1)}_{1} \\
-        K^{(1)}_{21}V_1 + K^{(1)}_{22}V_2 & = &  f^{(1)}_{2} - D^{(1)}_{2} \\
+        K^{(1)}_{21}V_1 + K^{(1)}_{22}V_2 & = &  f^{(1)}_{2} - D^{(1)}_{2} 
     \end{rcases} & l1\\
     \begin{rcases}
         K^{(2)}_{11}V_2 + K^{(2)}_{12}V_3 & = &  f^{(2)}_{1} + D^{(2)}_{1} \\
-        K^{(2)}_{21}V_2 + K^{(2)}_{22}V_3 & = & f^{(2)}_{2} - D^{(2)}_{2} \\
+        K^{(2)}_{21}V_2 + K^{(2)}_{22}V_3 & = & f^{(2)}_{2} - D^{(2)}_{2} 
     \end{rcases} & l2 \\
     \vdots  \\
     \begin{rcases}
         K^{(n)}_{11}V_{n} + K^{(n)}_{12}V_{n+1} & = &  f^{(n)}_{1} + D^{(n)}_{1} \\
-        K^{(n)}_{21}V_{n} + K^{(n)}_{22}V_{n+1} & = & f^{(n)}_{2} - D^{(n)}_{2} \\
-    \end{rcases} & ln\\
+        K^{(n)}_{21}V_{n} + K^{(n)}_{22}V_{n+1} & = & f^{(n)}_{2} - D^{(n)}_{2} 
+    \end{rcases} & ln
 \end{cases} \tag{2.4.2}$$  
 
 考虑线段首尾相连，故将$l1.(2), l2.(1)$ 式相加可得：  

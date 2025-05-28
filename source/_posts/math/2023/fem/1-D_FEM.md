@@ -57,7 +57,7 @@ $$4.425\times10^{-10} \begin{bmatrix}
     V_2  \\
     V_3  \\
     V_4  \\
-    V_5  \\
+    V_5  
 \end{bmatrix} = -10^{-10} \begin{bmatrix}
     1 \\
     2 \\
@@ -110,7 +110,7 @@ $$\begin{bmatrix}
 \end{bmatrix} \begin{bmatrix}
     V_2  \\
     V_3  \\
-    V_4  \\
+    V_4  
 \end{bmatrix} = \begin{bmatrix}
     -0.5480226 \\
     -0.4519774 \\

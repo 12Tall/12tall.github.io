@@ -197,3 +197,25 @@ SD-WAN 可以无缝管理OSI 模型中的二层流量，而不需要硬件交换
 ## 包捕获  
 用于流量分析，略  
 
+
+## 防火墙黑名单  
+本来SSL VPN 功能上写着可以允许特定区域的IP 访问，但是尝试多次后均未能成功。无意间搜到可以通过IP 限制。  
+1. 首先设置允许特定主机访问：  
+![](ssl_vpn_black_list.png)  
+2. 源地址取反（允许变阻止）：  
+```shell
+config vpn ssl settings
+    set source-address "34.84.44.247/32" "61.112.131.0/24"
+    set source-address-negate enable
+end
+```  
+
+### 记一次内存异常的问题  
+内存使用率过高，进入保护模式。
+1. 以为是数据包捕获的问题，后面发现不是，但是内存使用率过高会造成某些GUI 空间不可见；  
+2. 查看内存占用情况`diagnose sys top`：  
+```shell
+fnbamd      189      S       0.0    34.0    6  # 内存占用34.0，经确认是FortiGate 的认证处理模块
+```  
+3. 联想一直以来的SSL VPN 恶意攻击，于是果断拉黑了一堆IP，然后重启服务`diagnose sys kill 11 189`  
+4. 问题解决。
