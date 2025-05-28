@@ -30,8 +30,8 @@
 <meta property="og:image" content="https://12tall.github.io/2025/05/27/wxformbuilder/window_design.png">
 <meta property="og:image" content="https://12tall.github.io/2025/05/27/wxformbuilder/event_handler.png">
 <meta property="og:image" content="https://12tall.github.io/2025/05/27/wxformbuilder/app.png">
-<meta property="article:published_time" content="2025-05-27T12:51:03.000Z">
-<meta property="article:modified_time" content="2025-05-27T14:24:17.526Z">
+<meta property="article:published_time" content="2025-05-27T20:51:03.000Z">
+<meta property="article:modified_time" content="2025-05-28T23:58:27.522Z">
 <meta property="article:author" content="12Tall">
 <meta property="article:tag" content="python">
 <meta property="article:tag" content="nuitka">
@@ -174,7 +174,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#wxformbuilder-%E7%95%8C%E9%9D%A2"><span class="nav-number">1.</span> <span class="nav-text"> wxFormBuilder 界面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%96%B9%E6%A1%88"><span class="nav-number">2.</span> <span class="nav-text"> 代码方案</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#wxformbuilder-%E7%95%8C%E9%9D%A2"><span class="nav-number">1.</span> <span class="nav-text"> wxFormBuilder 界面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%96%B9%E6%A1%88"><span class="nav-number">2.</span> <span class="nav-text"> 代码方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E8%B6%B3"><span class="nav-number">3.</span> <span class="nav-text"> 不足</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -269,9 +269,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2025-05-27 20:51:03 / 修改时间：22:24:17" itemprop="dateCreated datePublished" datetime="2025-05-27T20:51:03+08:00">2025-05-27</time>
+      <time title="创建时间：2025-05-27 20:51:03" itemprop="dateCreated datePublished" datetime="2025-05-27T20:51:03+00:00">2025-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-28 23:58:27" itemprop="dateModified" datetime="2025-05-28T23:58:27+00:00">2025-05-28</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -290,7 +296,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>922</span>
+      <span>959</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -458,7 +464,11 @@ app.MainLoop()
 <img src="app.png" alt="" /></p>
 <p>不过在编译时执行<code>nuitka --standalone --onefile app.py</code> 可能会提醒<code>ModuleNotFoundError: No module named 'wx._xml'</code>。
 这个时候需要添加编译参数<code>--include-module=wx._xml</code> 即可。该程序在打包之后的二进制文件体积不到12M，相对于其他GUI 库要小很多了。</p>
-<p>有一个问题：在使用numpy、pandas 这类库时很方便，但是体积很大且打包时容易出问题，有没有纯Python 写的库，性能没那么好也可以。</p>
+<h2 id="不足"><a class="markdownIt-Anchor" href="#不足"></a> 不足</h2>
+<ol>
+<li>因为追求轻量，所以对复杂UI 的支持不足，例如表格添加按钮等元素。最好做单独的编辑界面；</li>
+<li>关于打包体积在使用numpy、pandas 这类库时很方便，但是体积很大且很多功能应该都用不到，考虑是否值得引入吧。</li>
+</ol>
 
     </div>
 
@@ -542,7 +552,7 @@ app.MainLoop()
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">8:35</span>
+    <span title="站点阅读时长">8:36</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动

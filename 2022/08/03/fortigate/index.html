@@ -26,12 +26,14 @@
 <meta property="og:site_name" content="12Tall">
 <meta property="og:description" content="只有在注册以后，才能得到技术支持、产品特性信息、最新威胁防护">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-08-03T07:59:25.000Z">
-<meta property="article:modified_time" content="2025-05-27T12:49:31.112Z">
+<meta property="og:image" content="https://12tall.github.io/2022/08/03/fortigate/ssl_vpn_black_list.png">
+<meta property="article:published_time" content="2022-08-03T15:59:25.000Z">
+<meta property="article:modified_time" content="2025-05-28T23:58:27.466Z">
 <meta property="article:author" content="12Tall">
 <meta property="article:tag" content="防火墙">
 <meta property="article:tag" content="fortinet">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://12tall.github.io/2022/08/03/fortigate/ssl_vpn_black_list.png">
 
 
 <link rel="canonical" href="https://12tall.github.io/2022/08/03/fortigate/">
@@ -167,7 +169,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#fortigate-%E9%85%8D%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text"> Fortigate 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.</span> <span class="nav-text"> 浏览器配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%80%E5%9F%9F%E7%BD%91%E7%AE%A1%E7%90%86%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.2.</span> <span class="nav-text"> 局域网管理接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%88%E7%AB%AF%E9%85%8D%E7%BD%AE"><span class="nav-number">1.3.</span> <span class="nav-text"> 终端配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ios-%E9%85%8D%E7%BD%AE"><span class="nav-number">1.4.</span> <span class="nav-text"> iOS 配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sfp-%E6%94%B6%E5%8F%91%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text"> SFP 收发器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">2.1.</span> <span class="nav-text"> 安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A7%BB%E9%99%A4"><span class="nav-number">2.2.</span> <span class="nav-text"> 移除</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8nat-%E6%A8%A1%E5%BC%8F%E4%B8%8B%E5%AE%89%E8%A3%85fortigate"><span class="nav-number">3.</span> <span class="nav-text"> 在NAT 模式下安装FortiGate</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E8%AE%BE%E5%A4%87"><span class="nav-number">3.1.</span> <span class="nav-text"> 连接设备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%8E%A5%E5%8F%A3"><span class="nav-number">3.2.</span> <span class="nav-text"> 配置接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E9%BB%98%E8%AE%A4%E8%B7%AF%E7%94%B1"><span class="nav-number">3.3.</span> <span class="nav-text"> 添加默认路由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AEdns%E6%9C%8D%E5%8A%A1%E5%8F%AF%E9%80%89"><span class="nav-number">3.4.</span> <span class="nav-text"> 设置DNS服务（可选</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%AD%96%E7%95%A5"><span class="nav-number">3.5.</span> <span class="nav-text"> 创建策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C"><span class="nav-number">3.6.</span> <span class="nav-text"> 结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8zones%E6%9D%A5%E7%AE%80%E5%8C%96%E9%98%B2%E7%81%AB%E5%A2%99%E7%AD%96%E7%95%A5"><span class="nav-number">4.</span> <span class="nav-text"> 使用Zones来简化防火墙策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAvlan"><span class="nav-number">4.1.</span> <span class="nav-text"> 创建VLAN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAzone"><span class="nav-number">4.2.</span> <span class="nav-text"> 创建zone</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAzone%E7%9A%84%E7%AD%96%E7%95%A5"><span class="nav-number">4.3.</span> <span class="nav-text"> 创建zone的策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C-2"><span class="nav-number">4.4.</span> <span class="nav-text"> 结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A9%E7%94%A8sd-wan%E6%9D%A5%E5%86%97%E4%BD%99internet"><span class="nav-number">5.</span> <span class="nav-text"> 利用SD-WAN来冗余Internet</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E9%98%B2%E7%81%AB%E5%A2%99%E6%8E%A5%E5%85%A5isp"><span class="nav-number">5.1.</span> <span class="nav-text"> 将防火墙接入ISP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E7%8E%B0%E6%9C%89%E7%AD%96%E7%95%A5"><span class="nav-number">5.2.</span> <span class="nav-text"> 修改现有策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAsd-wan%E6%8E%A5%E5%8F%A3"><span class="nav-number">5.3.</span> <span class="nav-text"> 创建SD-WAN接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEsd-wan%E7%8A%B6%E6%80%81%E6%A3%80%E6%9F%A5%E5%8F%AF%E9%80%89"><span class="nav-number">5.4.</span> <span class="nav-text"> 配置SD-WAN状态检查（可选</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%81%E8%AE%B8%E5%86%85%E7%BD%91%E6%B5%81%E9%87%8F%E9%80%9A%E8%BF%87sd-wan"><span class="nav-number">5.5.</span> <span class="nav-text"> 允许内网流量通过SD-WAN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C-3"><span class="nav-number">5.6.</span> <span class="nav-text"> 结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB"><span class="nav-number">5.7.</span> <span class="nav-text"> 测试故障转移</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E6%A1%86%E6%9E%B6%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E8%AE%A4%E8%AF%81"><span class="nav-number">6.</span> <span class="nav-text"> 安全框架的安装与认证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%8F%E6%98%8Eweb%E4%BB%A3%E7%90%86"><span class="nav-number">7.</span> <span class="nav-text"> 透明web代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%A6%E5%AE%BD%E9%99%90%E5%88%B6%E4%B8%8E%E6%B5%81%E9%87%8F%E6%95%B4%E5%BD%A2"><span class="nav-number">8.</span> <span class="nav-text"> 带宽限制与流量整形</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E7%AD%96%E7%95%A5%E7%9A%84%E6%A8%A1%E5%BC%8F"><span class="nav-number">9.</span> <span class="nav-text"> 基于策略的模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E7%94%A8%E5%9F%BA%E4%BA%8E%E7%AD%96%E7%95%A5%E7%9A%84%E6%A8%A1%E5%BC%8F"><span class="nav-number">9.1.</span> <span class="nav-text"> 启用基于策略的模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAcentral-snat-%E7%AD%96%E7%95%A5"><span class="nav-number">9.2.</span> <span class="nav-text"> 创建Central SNAT 策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAipv4%E7%AD%96%E7%95%A5"><span class="nav-number">9.3.</span> <span class="nav-text"> 创建IPv4策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E8%A1%A8%E6%8E%92%E5%BA%8F"><span class="nav-number">9.4.</span> <span class="nav-text"> 策略表排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C-4"><span class="nav-number">9.5.</span> <span class="nav-text"> 结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%85%E6%8D%95%E8%8E%B7"><span class="nav-number">10.</span> <span class="nav-text"> 包捕获</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#fortigate-%E9%85%8D%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text"> Fortigate 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.</span> <span class="nav-text"> 浏览器配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%80%E5%9F%9F%E7%BD%91%E7%AE%A1%E7%90%86%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.2.</span> <span class="nav-text"> 局域网管理接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%88%E7%AB%AF%E9%85%8D%E7%BD%AE"><span class="nav-number">1.3.</span> <span class="nav-text"> 终端配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ios-%E9%85%8D%E7%BD%AE"><span class="nav-number">1.4.</span> <span class="nav-text"> iOS 配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sfp-%E6%94%B6%E5%8F%91%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text"> SFP 收发器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">2.1.</span> <span class="nav-text"> 安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A7%BB%E9%99%A4"><span class="nav-number">2.2.</span> <span class="nav-text"> 移除</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8nat-%E6%A8%A1%E5%BC%8F%E4%B8%8B%E5%AE%89%E8%A3%85fortigate"><span class="nav-number">3.</span> <span class="nav-text"> 在NAT 模式下安装FortiGate</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E8%AE%BE%E5%A4%87"><span class="nav-number">3.1.</span> <span class="nav-text"> 连接设备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%8E%A5%E5%8F%A3"><span class="nav-number">3.2.</span> <span class="nav-text"> 配置接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E9%BB%98%E8%AE%A4%E8%B7%AF%E7%94%B1"><span class="nav-number">3.3.</span> <span class="nav-text"> 添加默认路由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AEdns%E6%9C%8D%E5%8A%A1%E5%8F%AF%E9%80%89"><span class="nav-number">3.4.</span> <span class="nav-text"> 设置DNS服务（可选</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%AD%96%E7%95%A5"><span class="nav-number">3.5.</span> <span class="nav-text"> 创建策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C"><span class="nav-number">3.6.</span> <span class="nav-text"> 结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8zones%E6%9D%A5%E7%AE%80%E5%8C%96%E9%98%B2%E7%81%AB%E5%A2%99%E7%AD%96%E7%95%A5"><span class="nav-number">4.</span> <span class="nav-text"> 使用Zones来简化防火墙策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAvlan"><span class="nav-number">4.1.</span> <span class="nav-text"> 创建VLAN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAzone"><span class="nav-number">4.2.</span> <span class="nav-text"> 创建zone</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAzone%E7%9A%84%E7%AD%96%E7%95%A5"><span class="nav-number">4.3.</span> <span class="nav-text"> 创建zone的策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C-2"><span class="nav-number">4.4.</span> <span class="nav-text"> 结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A9%E7%94%A8sd-wan%E6%9D%A5%E5%86%97%E4%BD%99internet"><span class="nav-number">5.</span> <span class="nav-text"> 利用SD-WAN来冗余Internet</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E9%98%B2%E7%81%AB%E5%A2%99%E6%8E%A5%E5%85%A5isp"><span class="nav-number">5.1.</span> <span class="nav-text"> 将防火墙接入ISP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E7%8E%B0%E6%9C%89%E7%AD%96%E7%95%A5"><span class="nav-number">5.2.</span> <span class="nav-text"> 修改现有策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAsd-wan%E6%8E%A5%E5%8F%A3"><span class="nav-number">5.3.</span> <span class="nav-text"> 创建SD-WAN接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEsd-wan%E7%8A%B6%E6%80%81%E6%A3%80%E6%9F%A5%E5%8F%AF%E9%80%89"><span class="nav-number">5.4.</span> <span class="nav-text"> 配置SD-WAN状态检查（可选</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%81%E8%AE%B8%E5%86%85%E7%BD%91%E6%B5%81%E9%87%8F%E9%80%9A%E8%BF%87sd-wan"><span class="nav-number">5.5.</span> <span class="nav-text"> 允许内网流量通过SD-WAN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C-3"><span class="nav-number">5.6.</span> <span class="nav-text"> 结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB"><span class="nav-number">5.7.</span> <span class="nav-text"> 测试故障转移</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E6%A1%86%E6%9E%B6%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E8%AE%A4%E8%AF%81"><span class="nav-number">6.</span> <span class="nav-text"> 安全框架的安装与认证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%8F%E6%98%8Eweb%E4%BB%A3%E7%90%86"><span class="nav-number">7.</span> <span class="nav-text"> 透明web代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%A6%E5%AE%BD%E9%99%90%E5%88%B6%E4%B8%8E%E6%B5%81%E9%87%8F%E6%95%B4%E5%BD%A2"><span class="nav-number">8.</span> <span class="nav-text"> 带宽限制与流量整形</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E7%AD%96%E7%95%A5%E7%9A%84%E6%A8%A1%E5%BC%8F"><span class="nav-number">9.</span> <span class="nav-text"> 基于策略的模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E7%94%A8%E5%9F%BA%E4%BA%8E%E7%AD%96%E7%95%A5%E7%9A%84%E6%A8%A1%E5%BC%8F"><span class="nav-number">9.1.</span> <span class="nav-text"> 启用基于策略的模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAcentral-snat-%E7%AD%96%E7%95%A5"><span class="nav-number">9.2.</span> <span class="nav-text"> 创建Central SNAT 策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAipv4%E7%AD%96%E7%95%A5"><span class="nav-number">9.3.</span> <span class="nav-text"> 创建IPv4策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E8%A1%A8%E6%8E%92%E5%BA%8F"><span class="nav-number">9.4.</span> <span class="nav-text"> 策略表排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C-4"><span class="nav-number">9.5.</span> <span class="nav-text"> 结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%85%E6%8D%95%E8%8E%B7"><span class="nav-number">10.</span> <span class="nav-text"> 包捕获</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%B2%E7%81%AB%E5%A2%99%E9%BB%91%E5%90%8D%E5%8D%95"><span class="nav-number">11.</span> <span class="nav-text"> 防火墙黑名单</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%86%85%E5%AD%98%E5%BC%82%E5%B8%B8%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">11.1.</span> <span class="nav-text"> 记一次内存异常的问题</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -263,14 +265,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2022-08-03 15:59:25" itemprop="dateCreated datePublished" datetime="2022-08-03T15:59:25+08:00">2022-08-03</time>
+      <time title="创建时间：2022-08-03 15:59:25" itemprop="dateCreated datePublished" datetime="2022-08-03T15:59:25+00:00">2022-08-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-27 20:49:31" itemprop="dateModified" datetime="2025-05-27T20:49:31+08:00">2025-05-27</time>
+      <time title="修改时间：2025-05-28 23:58:27" itemprop="dateModified" datetime="2025-05-28T23:58:27+00:00">2025-05-28</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -289,14 +291,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.7k</span>
+      <span>1.9k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>6 分钟</span>
+      <span>7 分钟</span>
     </span>
 </div>
 
@@ -497,6 +499,30 @@ Flow control: None</li>
 </ol>
 <h2 id="包捕获"><a class="markdownIt-Anchor" href="#包捕获"></a> 包捕获</h2>
 <p>用于流量分析，略</p>
+<h2 id="防火墙黑名单"><a class="markdownIt-Anchor" href="#防火墙黑名单"></a> 防火墙黑名单</h2>
+<p>本来SSL VPN 功能上写着可以允许特定区域的IP 访问，但是尝试多次后均未能成功。无意间搜到可以通过IP 限制。</p>
+<ol>
+<li>首先设置允许特定主机访问：<br />
+<img src="ssl_vpn_black_list.png" alt="" /></li>
+<li>源地址取反（允许变阻止）：</li>
+</ol>
+<pre class="highlight"><code class="shell">config vpn ssl settings
+    set source-address &quot;34.84.44.247/32&quot; &quot;61.112.131.0/24&quot;
+    set source-address-negate enable
+end
+</code></pre>
+<h3 id="记一次内存异常的问题"><a class="markdownIt-Anchor" href="#记一次内存异常的问题"></a> 记一次内存异常的问题</h3>
+<p>内存使用率过高，进入保护模式。</p>
+<ol>
+<li>以为是数据包捕获的问题，后面发现不是，但是内存使用率过高会造成某些GUI 空间不可见；</li>
+<li>查看内存占用情况<code>diagnose sys top</code>：</li>
+</ol>
+<pre class="highlight"><code class="shell">fnbamd      189      S       0.0    34.0    6  # 内存占用34.0，经确认是FortiGate 的认证处理模块
+</code></pre>
+<ol start="3">
+<li>联想一直以来的SSL VPN 恶意攻击，于是果断拉黑了一堆IP，然后重启服务<code>diagnose sys kill 11 189</code></li>
+<li>问题解决。</li>
+</ol>
 
     </div>
 
@@ -581,7 +607,7 @@ Flow control: None</li>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">8:35</span>
+    <span title="站点阅读时长">8:36</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
