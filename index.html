@@ -264,7 +264,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-28 23:58:27" itemprop="dateModified" datetime="2025-05-28T23:58:27+00:00">2025-05-28</time>
+      <time title="修改时间：2025-05-29 00:14:20" itemprop="dateModified" datetime="2025-05-29T00:14:20+00:00">2025-05-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -379,7 +379,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-28 23:58:27" itemprop="dateModified" datetime="2025-05-28T23:58:27+00:00">2025-05-28</time>
+      <time title="修改时间：2025-05-29 00:14:20" itemprop="dateModified" datetime="2025-05-29T00:14:20+00:00">2025-05-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -486,7 +486,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-28 23:58:27" itemprop="dateModified" datetime="2025-05-28T23:58:27+00:00">2025-05-28</time>
+      <time title="修改时间：2025-05-29 00:14:20" itemprop="dateModified" datetime="2025-05-29T00:14:20+00:00">2025-05-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -593,7 +593,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-28 23:58:27" itemprop="dateModified" datetime="2025-05-28T23:58:27+00:00">2025-05-28</time>
+      <time title="修改时间：2025-05-29 00:14:20" itemprop="dateModified" datetime="2025-05-29T00:14:20+00:00">2025-05-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -701,7 +701,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-28 23:58:27" itemprop="dateModified" datetime="2025-05-28T23:58:27+00:00">2025-05-28</time>
+      <time title="修改时间：2025-05-29 00:14:20" itemprop="dateModified" datetime="2025-05-29T00:14:20+00:00">2025-05-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -809,7 +809,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-28 23:58:27" itemprop="dateModified" datetime="2025-05-28T23:58:27+00:00">2025-05-28</time>
+      <time title="修改时间：2025-05-29 00:14:20" itemprop="dateModified" datetime="2025-05-29T00:14:20+00:00">2025-05-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -918,7 +918,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-28 23:58:27" itemprop="dateModified" datetime="2025-05-28T23:58:27+00:00">2025-05-28</time>
+      <time title="修改时间：2025-05-29 00:14:20" itemprop="dateModified" datetime="2025-05-29T00:14:20+00:00">2025-05-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -937,7 +937,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>597</span>
+      <span>598</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -958,107 +958,14 @@
           <blockquote>
 <p>帮老婆绘制科研中的图像，因为接触绘图工具较少，所以跟ChatGPT 聊了好久才调整出满意的图像。于是记录下源码：</p>
 </blockquote>
-<h3 id="预设参数"><a class="markdownIt-Anchor" href="#预设参数"></a> 预设参数</h3>
-<p>提前设置几个可以手动调整的绘图参数：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
-input_csv <span class="token operator">=</span> <span class="token string">'data.csv'</span>  <span class="token comment"># 输入文件地址  </span>
-x_lim <span class="token operator">=</span> <span class="token number">2500</span>  <span class="token comment"># 横坐标最大值  </span>
-y_lim <span class="token operator">=</span> <span class="token number">50</span>    <span class="token comment"># 纵坐标最大值  </span>
-label_num <span class="token operator">=</span> <span class="token number">12</span> <span class="token comment"># 显示数据标签条数</span>
-z_scale <span class="token operator">=</span> <span class="token number">0.01</span> <span class="token comment"># z 轴数据缩放倍数</span>
-
-contour_levels <span class="token operator">=</span> np<span class="token punctuation">.</span>linspace<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1.0</span><span class="token punctuation">,</span><span class="token number">40</span><span class="token punctuation">)</span>  <span class="token comment"># 等高线条数  </span>
-contourf_levels <span class="token operator">=</span> np<span class="token punctuation">.</span>linspace<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1.0</span><span class="token punctuation">,</span><span class="token number">200</span><span class="token punctuation">)</span>  <span class="token comment"># 等高线渲染密度  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="数据预处理"><a class="markdownIt-Anchor" href="#数据预处理"></a> 数据预处理</h3>
-<p>读取数据，并获取坐标轴的名字：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> pandas <span class="token keyword">as</span> pd
-
-raw_data <span class="token operator">=</span> pd<span class="token punctuation">.</span>read_csv<span class="token punctuation">(</span>input_csv<span class="token punctuation">)</span>
-<span class="token comment"># 获取坐标名</span>
-<span class="token punctuation">[</span>axis_x<span class="token punctuation">,</span> axis_y<span class="token punctuation">,</span> axis_z<span class="token punctuation">]</span> <span class="token operator">=</span> raw_data<span class="token punctuation">.</span>columns<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">3</span><span class="token punctuation">]</span>
-
-<span class="token comment"># 排除掉x,y 轴为0 的数据</span>
-data <span class="token operator">=</span> raw_data<span class="token punctuation">[</span>
-    <span class="token punctuation">(</span>raw_data<span class="token punctuation">[</span>axis_x<span class="token punctuation">]</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> 
-    <span class="token punctuation">(</span>raw_data<span class="token punctuation">[</span>axis_y<span class="token punctuation">]</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
-
-<span class="token comment"># 获取边缘数据</span>
-data_edge <span class="token operator">=</span> data<span class="token punctuation">.</span>groupby<span class="token punctuation">(</span>axis_x<span class="token punctuation">)</span><span class="token punctuation">[</span>axis_y<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token builtin">max</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>reset_index<span class="token punctuation">(</span><span class="token punctuation">)</span>
-data_x <span class="token operator">=</span> data<span class="token punctuation">[</span>axis_x<span class="token punctuation">]</span> 
-data_y <span class="token operator">=</span> data<span class="token punctuation">[</span>axis_y<span class="token punctuation">]</span> 
-data_z <span class="token operator">=</span> data<span class="token punctuation">[</span>axis_z<span class="token punctuation">]</span><span class="token operator">*</span>z_scale  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="插值并处理异常数据"><a class="markdownIt-Anchor" href="#插值并处理异常数据"></a> 插值并处理异常数据</h3>
-<p>这里遇到了布尔掩码加速异常处理的操作，蛮有意思的：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> scipy<span class="token punctuation">.</span>interpolate <span class="token keyword">import</span> griddata
-
-<span class="token comment"># 定义要生成等高线图的网格范围</span>
-x_grid <span class="token operator">=</span> np<span class="token punctuation">.</span>linspace<span class="token punctuation">(</span><span class="token builtin">min</span><span class="token punctuation">(</span>data_x<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">max</span><span class="token punctuation">(</span>data_x<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">)</span>
-y_grid <span class="token operator">=</span> np<span class="token punctuation">.</span>linspace<span class="token punctuation">(</span><span class="token builtin">min</span><span class="token punctuation">(</span>data_y<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">max</span><span class="token punctuation">(</span>data_y<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">)</span>
-x_grid<span class="token punctuation">,</span> y_grid <span class="token operator">=</span> np<span class="token punctuation">.</span>meshgrid<span class="token punctuation">(</span>x_grid<span class="token punctuation">,</span> y_grid<span class="token punctuation">)</span>
-
-<span class="token comment"># 对数据z 进行二维线性插值</span>
-z_interp <span class="token operator">=</span> griddata<span class="token punctuation">(</span><span class="token punctuation">(</span>data_x<span class="token punctuation">,</span> data_y<span class="token punctuation">)</span><span class="token punctuation">,</span> data_z<span class="token punctuation">,</span> <span class="token punctuation">(</span>x_grid<span class="token punctuation">,</span> y_grid<span class="token punctuation">)</span><span class="token punctuation">,</span> method<span class="token operator">=</span><span class="token string">'linear'</span><span class="token punctuation">)</span>
-<span class="token comment"># 对于上边界进行线性插值</span>
-edge_interp <span class="token operator">=</span> np<span class="token punctuation">.</span>interp<span class="token punctuation">(</span>x_grid<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> data_edge<span class="token punctuation">[</span>axis_x<span class="token punctuation">]</span><span class="token punctuation">,</span> data_edge<span class="token punctuation">[</span>axis_y<span class="token punctuation">]</span><span class="token punctuation">)</span>
-
-<span class="token comment"># 处理边界问题，利用布尔掩码</span>
-mask <span class="token operator">=</span> y_grid <span class="token operator">></span> edge_interp
-<span class="token comment"># 将符合条件的值设为 NaN</span>
-z_interp<span class="token punctuation">[</span>mask<span class="token punctuation">]</span> <span class="token operator">=</span> np<span class="token punctuation">.</span>nan<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="绘制图像"><a class="markdownIt-Anchor" href="#绘制图像"></a> 绘制图像</h3>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
-<span class="token keyword">from</span> matplotlib<span class="token punctuation">.</span>colors <span class="token keyword">import</span> LinearSegmentedColormap
-
-plt<span class="token punctuation">.</span>rcParams<span class="token punctuation">[</span><span class="token string">"font.family"</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"Times New Roman"</span>  <span class="token comment"># 设置字体</span>
-plt<span class="token punctuation">.</span>rcParams<span class="token punctuation">[</span><span class="token string">"font.size"</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">16</span>  <span class="token comment"># 设置字号  </span>
-
-<span class="token comment"># 定义图像渐变色</span>
-colors <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">'blue'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>   <span class="token comment"># 起始颜色</span>
-          <span class="token punctuation">(</span><span class="token number">0.2</span><span class="token punctuation">,</span> <span class="token string">'cyan'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment"># 过渡色1</span>
-          <span class="token punctuation">(</span><span class="token number">0.5</span><span class="token punctuation">,</span> <span class="token string">'lime'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment"># 过渡色2</span>
-          <span class="token punctuation">(</span><span class="token number">0.8</span><span class="token punctuation">,</span> <span class="token string">'yellow'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment"># 过渡色3</span>
-          <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">'red'</span><span class="token punctuation">)</span><span class="token punctuation">]</span>   <span class="token comment"># 结束颜色</span>
-cmap <span class="token operator">=</span> LinearSegmentedColormap<span class="token punctuation">.</span>from_list<span class="token punctuation">(</span><span class="token string">'custom_cmap'</span><span class="token punctuation">,</span> colors<span class="token punctuation">)</span>
-
-<span class="token comment"># 调整图像大小</span>
-plt<span class="token punctuation">.</span>figure<span class="token punctuation">(</span>figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  
-
-<span class="token comment"># 绘制填充颜色的等高线图-区域上色</span>
-contourf <span class="token operator">=</span> plt<span class="token punctuation">.</span>contourf<span class="token punctuation">(</span>x_grid<span class="token punctuation">,</span> y_grid<span class="token punctuation">,</span> z_interp<span class="token punctuation">,</span>cmap<span class="token operator">=</span>cmap<span class="token punctuation">,</span>levels<span class="token operator">=</span>contourf_levels<span class="token punctuation">)</span>
-<span class="token comment"># 添加右侧颜色条  </span>
-cbar <span class="token operator">=</span> plt<span class="token punctuation">.</span>colorbar<span class="token punctuation">(</span>contourf<span class="token punctuation">)</span>  
-<span class="token comment"># 修改颜色条刻度 </span>
-ticks<span class="token operator">=</span>np<span class="token punctuation">.</span>linspace<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">11</span><span class="token punctuation">)</span>
-cbar<span class="token punctuation">.</span>set_ticks<span class="token punctuation">(</span>ticks<span class="token punctuation">)</span>
-
-<span class="token comment"># 自定义刻度标签</span>
-<span class="token comment"># tick_labels=["&#123;:.3f&#125;".format(t) for t in ticks]</span>
-<span class="token comment"># cbar.set_ticklabels(tick_labels)</span>
-
-<span class="token comment"># 设置颜色条刻度的样式和标题</span>
-cbar<span class="token punctuation">.</span>ax<span class="token punctuation">.</span>tick_params<span class="token punctuation">(</span>labelsize<span class="token operator">=</span><span class="token number">12</span><span class="token punctuation">)</span>  <span class="token comment"># 单独设置字号</span>
-cbar<span class="token punctuation">.</span>ax<span class="token punctuation">.</span>set_title<span class="token punctuation">(</span>axis_z<span class="token punctuation">)</span>
-
-<span class="token comment"># 绘制等高线</span>
-contour<span class="token operator">=</span>plt<span class="token punctuation">.</span>contour<span class="token punctuation">(</span>x_grid<span class="token punctuation">,</span> y_grid<span class="token punctuation">,</span> z_interp<span class="token punctuation">,</span> colors<span class="token operator">=</span><span class="token string">'k'</span><span class="token punctuation">,</span>levels<span class="token operator">=</span>contour_levels<span class="token punctuation">,</span> linewidths<span class="token operator">=</span><span class="token number">0.5</span><span class="token punctuation">)</span>
-<span class="token comment"># 添加数据标签</span>
-plt<span class="token punctuation">.</span>clabel<span class="token punctuation">(</span>contour<span class="token punctuation">,</span> contour<span class="token punctuation">.</span>levels<span class="token punctuation">[</span><span class="token operator">-</span>label_num<span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">,</span> fontsize<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">,</span> fmt<span class="token operator">=</span><span class="token string">'%.2f'</span><span class="token punctuation">)</span>  <span class="token comment"># 由高到低选12条</span>
-
-<span class="token comment"># 绘制转矩边界曲线</span>
-plt<span class="token punctuation">.</span>plot<span class="token punctuation">(</span>x_grid<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> edge_interp<span class="token punctuation">,</span> color<span class="token operator">=</span><span class="token string">'k'</span><span class="token punctuation">,</span> label<span class="token operator">=</span><span class="token string">"_"</span><span class="token punctuation">)</span>
-
-<span class="token comment"># 设置 x 和 y 轴的范围</span>
-plt<span class="token punctuation">.</span>xlim<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> x_lim<span class="token punctuation">)</span>
-plt<span class="token punctuation">.</span>ylim<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> y_lim<span class="token punctuation">)</span>
-
-plt<span class="token punctuation">.</span>xlabel<span class="token punctuation">(</span>axis_x<span class="token punctuation">)</span>
-plt<span class="token punctuation">.</span>ylabel<span class="token punctuation">(</span>axis_y<span class="token punctuation">)</span>
-
-plt<span class="token punctuation">.</span>tight_layout<span class="token punctuation">(</span><span class="token punctuation">)</span>
-plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>得到结果如下：<br />
-<img src="image.png" alt="alt text" /></p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/03/03/contour/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1120,7 +1027,7 @@ plt<span class="token punctuation">.</span>show<span class="token punctuation">(
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-28 23:58:27" itemprop="dateModified" datetime="2025-05-28T23:58:27+00:00">2025-05-28</time>
+      <time title="修改时间：2025-05-29 00:14:20" itemprop="dateModified" datetime="2025-05-29T00:14:20+00:00">2025-05-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1227,7 +1134,7 @@ plt<span class="token punctuation">.</span>show<span class="token punctuation">(
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-28 23:58:27" itemprop="dateModified" datetime="2025-05-28T23:58:27+00:00">2025-05-28</time>
+      <time title="修改时间：2025-05-29 00:14:20" itemprop="dateModified" datetime="2025-05-29T00:14:20+00:00">2025-05-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1341,7 +1248,7 @@ plt<span class="token punctuation">.</span>show<span class="token punctuation">(
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-28 23:58:27" itemprop="dateModified" datetime="2025-05-28T23:58:27+00:00">2025-05-28</time>
+      <time title="修改时间：2025-05-29 00:14:20" itemprop="dateModified" datetime="2025-05-29T00:14:20+00:00">2025-05-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
