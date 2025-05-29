@@ -7,8 +7,9 @@ tags:
 ---  
 
 
-轻量级目录访问协议。文中采用Python 来实现。代码运行在域控服务器上。
-<!-- more     -->
+轻量级目录访问协议。文中采用Python 来实现。代码运行在域控服务器上。  
+
+<!-- more -->
 
 ## 准备工作  
 - 微软[AD 域](../maintenance/windows/server/02_ad.md)  

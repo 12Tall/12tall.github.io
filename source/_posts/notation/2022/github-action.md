@@ -9,7 +9,7 @@ tag:
 
 
 不出意外的话，在百度上搜索`GitHub Actions 自动部署`，大概率会得到阮一峰老师的[GitHub Actions 入门教程](http://www.ruanyifeng.com/blog/2019/09/getting-started-with-github-actions.html)。然正如费曼先生所言：凡我不能创造,我就不能理解。这里记录一下在尽量不采用外部Actions 的情况下如何一步一步搭建本仓库的。  
-
+<!-- more -->
 ## 基本概念  
 按照个人理解，`GitHub Actions` 应该是Github 给提供的一个虚拟机环境，在开发者执行push、pull request 或其他指令时，自动触发事件，继而再执行一系列的脚本命令，用于打包、编译甚至发布代码的目的。  
 
@@ -84,49 +84,52 @@ git clone "https://{username}:{pat}@github.com/{username}/{repo}.git"
 首先将上文生成的PAT 添加到仓库的secrets 中，然后在仓库中创建文件`.github/workflows/ci.yml`，参考[Vuepress-部署](https://www.vuepress.cn/guide/deploy.html#github-pages)编写如下脚本：  
 
 ```yaml
-# workflow 的名称
-name: CI
-# 触发事件及分支
+name: Deploy Hexo to GitHub Pages
+
 on:
   push:
-    branches: 
-      - master
-
-  # 自动触发
-  workflow_dispatch:
+    branches:
+      - master # 或你使用的默认分支名称
 
 jobs:
-  build-and-deploy:
-    # 运行环境
+  deploy:
     runs-on: ubuntu-latest
-    steps:
-      # 从仓库迁出代码
-      # 这里用的是官方给出的Action，其实也可以通过pat 自己重写
-      - name: Checkout
-        uses: actions/checkout@v2
-        with: 
-          persist-credentials: false
-          
-      # 通过yarn 打包
-      - name: Install and Build
-        run: |
-          yarn  
-          yarn run docs:build
 
-      # 部署
-      - name: Deploy  
-        # 因为Actions 环境中不保留用户信息，所以必须指定Git 的用户名
-        run: |
-          cd ./docs/.vuepress/dist/
-          git config --global user.name "${GITHUB_ACTOR}"
-          git init
-          git add -A
-          git commit -m "Auto Deploy"
-          git push -f "https://${GITHUB_ACTOR}:${{ secrets.ACCESS_TOKEN }}@github.com/$GITHUB_REPOSITORY.git" HEAD:gh-pages
+    steps:
+      - name: Checkout blog source
+        uses: actions/checkout@v4
+        with:
+          path: blog
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20" # 设置 Node.js 版本
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./blog
+
+      - name: Install Hexo CLI
+        run: npm install -g hexo-cli
+        working-directory: ./blog
+
+      - name: Generate static pages
+        run: hexo generate
+        working-directory: ./blog
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.ACCESS_TOKEN }}
+          publish_dir: ./blog/public
+          # external_repository: 12tall/12tall.github.io # 更改为你的 GitHub Pages 仓库, username 是你的用户名
+          publish_branch: gh-pages # GitHub Pages 分支
 ```
 
 将上述代码保存、提交并推送到master 分支，就可以自动打包并部署到GitHub Pages 了。
 
 ## 参考资料  
 1. [GitHub Actions 入门教程](http://www.ruanyifeng.com/blog/2019/09/getting-started-with-github-actions.html)
-2. [Vuepress-部署](https://www.vuepress.cn/guide/deploy.html#github-pages)
+2. [Vuepress-部署](https://www.vuepress.cn/guide/deploy.html#github-pages)  
+3. [利用 GitHub Actions 实现自动化部署 Hexo 到 Github Pages](https://hackergavin.com/2024/01/11/hexo-automate-deploy/)
