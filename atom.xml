@@ -6,7 +6,7 @@
   <link href="https://12tall.github.io/atom.xml" rel="self"/>
   
   <link href="https://12tall.github.io/"/>
-  <updated>2025-06-01T06:33:46.209Z</updated>
+  <updated>2025-06-01T06:37:58.849Z</updated>
   <id>https://12tall.github.io/</id>
   
   <author>
@@ -17,36 +17,11 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>沙雕传</title>
-    <link href="https://12tall.github.io/2025/06/01/post-story-of-stupid-dicks/"/>
-    <id>https://12tall.github.io/2025/06/01/post-story-of-stupid-dicks/</id>
-    <published>2025-06-01T13:04:06.000Z</published>
-    <updated>2025-06-01T06:33:46.209Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;沙雕者，L 君也。令和6年4月任外办公室主任。听其言以为善，始有好评；观其行则极尽沙雕之事，故作文以诫之。&lt;/p&gt;
-&lt;p&gt;L 君之前，办公室权力格局，主任W 君、副总I 君与副总J 君。I 君好权而务实，J 君为股东，但为人虚浮，喜画饼而实不至。W 君为人正也。
-故W</summary>
-        
-      
-    
-    
-    
-    
-    <category term="吐槽" scheme="https://12tall.github.io/tags/%E5%90%90%E6%A7%BD/"/>
-    
-  </entry>
-  
-  <entry>
     <title>wxFormBuilder 使用笔记</title>
     <link href="https://12tall.github.io/2025/05/27/wxformbuilder/"/>
     <id>https://12tall.github.io/2025/05/27/wxformbuilder/</id>
     <published>2025-05-27T20:51:03.000Z</published>
-    <updated>2025-06-01T06:33:46.229Z</updated>
+    <updated>2025-06-01T06:37:58.849Z</updated>
     
     
     <summary type="html">&lt;p&gt;一直想找一个比较轻量、易用的Python GUI 库，同时又能比较好的兼容Nuitka 打包。常见的GUI 库多多少少有些问题：&lt;br /&gt;
@@ -79,7 +54,7 @@
     <link href="https://12tall.github.io/2025/05/22/info/"/>
     <id>https://12tall.github.io/2025/05/22/info/</id>
     <published>2025-05-22T15:50:23.000Z</published>
-    <updated>2025-06-01T06:33:46.209Z</updated>
+    <updated>2025-06-01T06:37:58.834Z</updated>
     
     
     <summary type="html">&lt;p&gt;该博客通过&lt;code&gt;Hexo Next&lt;/code&gt; 重构完成！之前数据&lt;a href=&quot;https://github.com/12Tall/12tall.github.io/commit/8f9a6e3f0581906e216e364eb09616b3e13b4365&quot;&gt;Tag&lt;/a&gt;。&lt;/p&gt;</summary>
@@ -96,7 +71,7 @@
     <link href="https://12tall.github.io/2025/05/22/linux/acme/"/>
     <id>https://12tall.github.io/2025/05/22/linux/acme/</id>
     <published>2025-05-22T08:30:26.000Z</published>
-    <updated>2025-06-01T06:33:46.185Z</updated>
+    <updated>2025-06-01T06:37:58.810Z</updated>
     
     
     <summary type="html">&lt;p&gt;通过&lt;code&gt;acme.sh&lt;/code&gt; 安装并更新Let’s Encrypt 证书。&lt;/p&gt;</summary>
@@ -133,7 +108,7 @@
     <link href="https://12tall.github.io/2025/05/21/pseudo-dll/"/>
     <id>https://12tall.github.io/2025/05/21/pseudo-dll/</id>
     <published>2025-05-21T13:56:55.000Z</published>
-    <updated>2025-06-01T06:33:46.229Z</updated>
+    <updated>2025-06-01T06:37:58.849Z</updated>
     
     
     <summary type="html">&lt;p&gt;需求来源是做&lt;code&gt;OSM&lt;/code&gt; 编辑项目中要用Python 对&lt;code&gt;.osm&lt;/code&gt; 文件进行校验，但是嘞，我的Python 代码
@@ -153,7 +128,7 @@
     <link href="https://12tall.github.io/2025/05/15/gettext/"/>
     <id>https://12tall.github.io/2025/05/15/gettext/</id>
     <published>2025-05-15T14:27:44.000Z</published>
-    <updated>2025-06-01T06:33:46.152Z</updated>
+    <updated>2025-06-01T06:37:58.777Z</updated>
     
     
     <summary type="html">&lt;p&gt;一般来说，使用&lt;code&gt;gettext&lt;/code&gt; 为程序添加多语言支持时，需要遵循一些标准的步骤。另外就是，对于在&lt;code&gt;main()&lt;/code&gt; 函数之前就初始化的变量需要特殊处理。
@@ -177,7 +152,7 @@
     <link href="https://12tall.github.io/2024/03/20/pm2/"/>
     <id>https://12tall.github.io/2024/03/20/pm2/</id>
     <published>2024-03-20T00:00:00.000Z</published>
-    <updated>2025-06-01T06:33:46.205Z</updated>
+    <updated>2025-06-01T06:37:58.830Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -206,7 +181,7 @@
     <link href="https://12tall.github.io/2024/03/03/contour/"/>
     <id>https://12tall.github.io/2024/03/03/contour/</id>
     <published>2024-03-03T00:00:00.000Z</published>
-    <updated>2025-06-01T06:33:46.229Z</updated>
+    <updated>2025-06-01T06:37:58.849Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -231,7 +206,7 @@
     <link href="https://12tall.github.io/2024/01/28/cheat-sheet/"/>
     <id>https://12tall.github.io/2024/01/28/cheat-sheet/</id>
     <published>2024-01-28T00:00:00.000Z</published>
-    <updated>2025-06-01T06:33:46.208Z</updated>
+    <updated>2025-06-01T06:37:58.833Z</updated>
     
     
     <summary type="html">&lt;p&gt;工作中发现时常做一些&lt;code&gt;Cheatsheet&lt;/code&gt; 还是比较有用的，下面是一些小&lt;code&gt;Latex&lt;/code&gt;的技巧：&lt;/p&gt;</summary>
@@ -252,7 +227,7 @@
     <link href="https://12tall.github.io/2024/01/20/code-generator/"/>
     <id>https://12tall.github.io/2024/01/20/code-generator/</id>
     <published>2024-01-20T00:00:00.000Z</published>
-    <updated>2025-06-01T06:33:46.205Z</updated>
+    <updated>2025-06-01T06:37:58.830Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -282,7 +257,7 @@
     <link href="https://12tall.github.io/2023/11/03/00_ref/"/>
     <id>https://12tall.github.io/2023/11/03/00_ref/</id>
     <published>2023-11-03T00:00:00.000Z</published>
-    <updated>2025-06-01T06:33:46.233Z</updated>
+    <updated>2025-06-01T06:37:58.852Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;链接器脚本&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#链接器脚本&quot;&gt;&lt;/a&gt; 链接器脚本&lt;/h2&gt;</summary>
@@ -311,7 +286,7 @@
     <link href="https://12tall.github.io/2023/10/19/poetry/"/>
     <id>https://12tall.github.io/2023/10/19/poetry/</id>
     <published>2023-10-19T00:00:00.000Z</published>
-    <updated>2025-06-01T06:33:46.209Z</updated>
+    <updated>2025-06-01T06:37:58.834Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -336,7 +311,7 @@
     <link href="https://12tall.github.io/2023/10/19/state-machine/"/>
     <id>https://12tall.github.io/2023/10/19/state-machine/</id>
     <published>2023-10-19T00:00:00.000Z</published>
-    <updated>2025-06-01T06:33:46.228Z</updated>
+    <updated>2025-06-01T06:37:58.848Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -359,7 +334,7 @@
     <link href="https://12tall.github.io/2023/10/12/fastapi/"/>
     <id>https://12tall.github.io/2023/10/12/fastapi/</id>
     <published>2023-10-12T00:00:00.000Z</published>
-    <updated>2025-06-01T06:33:46.218Z</updated>
+    <updated>2025-06-01T06:37:58.841Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -388,7 +363,7 @@
     <link href="https://12tall.github.io/2023/10/11/fmu/"/>
     <id>https://12tall.github.io/2023/10/11/fmu/</id>
     <published>2023-10-11T00:00:00.000Z</published>
-    <updated>2025-06-01T06:33:46.222Z</updated>
+    <updated>2025-06-01T06:37:58.844Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -417,7 +392,7 @@
     <link href="https://12tall.github.io/2023/09/29/qt-quick-02/"/>
     <id>https://12tall.github.io/2023/09/29/qt-quick-02/</id>
     <published>2023-09-29T00:00:00.000Z</published>
-    <updated>2025-06-01T06:33:46.228Z</updated>
+    <updated>2025-06-01T06:37:58.848Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -444,7 +419,7 @@
     <link href="https://12tall.github.io/2023/09/27/qt-quick-01/"/>
     <id>https://12tall.github.io/2023/09/27/qt-quick-01/</id>
     <published>2023-09-27T00:00:00.000Z</published>
-    <updated>2025-06-01T06:33:46.228Z</updated>
+    <updated>2025-06-01T06:37:58.848Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -477,7 +452,7 @@
     <link href="https://12tall.github.io/2023/09/25/pymoo-02/"/>
     <id>https://12tall.github.io/2023/09/25/pymoo-02/</id>
     <published>2023-09-25T00:00:00.000Z</published>
-    <updated>2025-06-01T06:33:46.227Z</updated>
+    <updated>2025-06-01T06:37:58.848Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -526,7 +501,7 @@
     <link href="https://12tall.github.io/2023/09/19/pymoo-01/"/>
     <id>https://12tall.github.io/2023/09/19/pymoo-01/</id>
     <published>2023-09-19T00:00:00.000Z</published>
-    <updated>2025-06-01T06:33:46.226Z</updated>
+    <updated>2025-06-01T06:37:58.847Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -558,7 +533,7 @@
     <link href="https://12tall.github.io/2023/09/15/ce/"/>
     <id>https://12tall.github.io/2023/09/15/ce/</id>
     <published>2023-09-15T00:00:00.000Z</published>
-    <updated>2025-06-01T06:33:46.205Z</updated>
+    <updated>2025-06-01T06:37:58.830Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -573,6 +548,37 @@
     <category term="Cheat Engine" scheme="https://12tall.github.io/tags/Cheat-Engine/"/>
     
     <category term="爆破" scheme="https://12tall.github.io/tags/%E7%88%86%E7%A0%B4/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ThreeJS</title>
+    <link href="https://12tall.github.io/2023/09/11/three-js/"/>
+    <id>https://12tall.github.io/2023/09/11/three-js/</id>
+    <published>2023-09-11T00:00:00.000Z</published>
+    <updated>2025-06-01T06:37:58.829Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;上周看到一个&lt;code&gt;Unity&lt;/code&gt; 的项目，可以在Web 页面中开挖掘机。感觉挺好玩的，于是想着是否可以通过&lt;code&gt;ThreeJS&lt;/code&gt; 实现一个乞丐版的demo。还有一个比较难的点在物理引擎上面吧，具体问题还描述不清楚。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="nodejs" scheme="https://12tall.github.io/categories/nodejs/"/>
+    
+    
+    <category term="ThreeJS" scheme="https://12tall.github.io/tags/ThreeJS/"/>
+    
+    <category term="3D" scheme="https://12tall.github.io/tags/3D/"/>
+    
+    <category term="Simulation" scheme="https://12tall.github.io/tags/Simulation/"/>
+    
+    <category term="HACD" scheme="https://12tall.github.io/tags/HACD/"/>
+    
+    <category term="碰撞检测" scheme="https://12tall.github.io/tags/%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B/"/>
+    
+    <category term="凸分解" scheme="https://12tall.github.io/tags/%E5%87%B8%E5%88%86%E8%A7%A3/"/>
     
   </entry>
   
