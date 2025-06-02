@@ -177,7 +177,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">128</span>
+          <span class="site-state-item-count">130</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -188,7 +188,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-count">215</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -219,6 +219,221 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/signal-generator/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/08/03/signal-generator/" class="post-title-link" itemprop="url">信号发生器的实现</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-03 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-03T00:00:00+00:00">2022-08-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-06-02 02:28:24" itemprop="dateModified" datetime="2025-06-02T02:28:24+00:00">2025-06-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>10 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>本文受<a target="_blank" rel="noopener" href="https://www.g-loaded.eu/2016/11/24/how-to-terminate-running-python-threads-using-signals/">How to terminate running Python threads using signals</a> 文章启发，但只保留了多线程相关的部分。<br />
+起因是最近想用Python 模拟信号发生器的功能，自然需要通过主线程控制子线程发送数据（开始，暂停，继续，停止等状态）。第一版是通过<code>lock</code> 锁加上各种标志属性来实现的，总感觉思路不太清晰。于是参考上面的链接，采用<code>event</code> 来重构代码，总算得到了一个自己较为满意的（可扩展的）版本。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/03/signal-generator/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/uac/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/08/03/uac/" class="post-title-link" itemprop="url">Python 请求UAC</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-03 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-03T00:00:00+00:00">2022-08-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-06-02 02:28:24" itemprop="dateModified" datetime="2025-06-02T02:28:24+00:00">2025-06-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>472</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>在编写Python 代码时，有时我们会遇到请求管理员权限的情况，比如修改hosts 文件、打开某些端口等等。我们可以在打包Python 成可执行文件时附上UAC 相关的信息。然而更一般的，我们可以在代码中判断当前进程是否以管理员权限运行，如果不是，则调用系统的<code>runas</code> 命令，通过管理员权限重新启动一个进程。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/03/uac/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -264,7 +479,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-01 06:37:58" itemprop="dateModified" datetime="2025-06-01T06:37:58+00:00">2025-06-01</time>
+      <time title="修改时间：2025-06-02 02:28:24" itemprop="dateModified" datetime="2025-06-02T02:28:24+00:00">2025-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -373,7 +588,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-01 06:37:58" itemprop="dateModified" datetime="2025-06-01T06:37:58+00:00">2025-06-01</time>
+      <time title="修改时间：2025-06-02 02:28:24" itemprop="dateModified" datetime="2025-06-02T02:28:24+00:00">2025-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -492,7 +707,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-01 06:37:58" itemprop="dateModified" datetime="2025-06-01T06:37:58+00:00">2025-06-01</time>
+      <time title="修改时间：2025-06-02 02:28:24" itemprop="dateModified" datetime="2025-06-02T02:28:24+00:00">2025-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -609,7 +824,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-01 06:37:58" itemprop="dateModified" datetime="2025-06-01T06:37:58+00:00">2025-06-01</time>
+      <time title="修改时间：2025-06-02 02:28:24" itemprop="dateModified" datetime="2025-06-02T02:28:24+00:00">2025-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -718,7 +933,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-01 06:37:58" itemprop="dateModified" datetime="2025-06-01T06:37:58+00:00">2025-06-01</time>
+      <time title="修改时间：2025-06-02 02:28:24" itemprop="dateModified" datetime="2025-06-02T02:28:24+00:00">2025-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -845,7 +1060,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-01 06:37:58" itemprop="dateModified" datetime="2025-06-01T06:37:58+00:00">2025-06-01</time>
+      <time title="修改时间：2025-06-02 02:28:24" itemprop="dateModified" datetime="2025-06-02T02:28:24+00:00">2025-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -969,7 +1184,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-01 06:37:58" itemprop="dateModified" datetime="2025-06-01T06:37:58+00:00">2025-06-01</time>
+      <time title="修改时间：2025-06-02 02:28:24" itemprop="dateModified" datetime="2025-06-02T02:28:24+00:00">2025-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1081,7 +1296,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-01 06:37:58" itemprop="dateModified" datetime="2025-06-01T06:37:58+00:00">2025-06-01</time>
+      <time title="修改时间：2025-06-02 02:28:24" itemprop="dateModified" datetime="2025-06-02T02:28:24+00:00">2025-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1151,237 +1366,6 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/ccna/trunk/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/logo.png">
-      <meta itemprop="name" content="12Tall">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="12Tall">
-      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 12Tall">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/08/03/ccna/trunk/" class="post-title-link" itemprop="url">端口聚合</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-08-03 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-03T00:00:00+00:00">2022-08-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-01 06:37:58" itemprop="dateModified" datetime="2025-06-01T06:37:58+00:00">2025-06-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/maintenance/" itemprop="url" rel="index"><span itemprop="name">maintenance</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>281</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="端口聚合"><a class="markdownIt-Anchor" href="#端口聚合"></a> 端口聚合</h2>
-<p>好处：</p>
-<ul>
-<li>带宽扩容</li>
-<li>线路冗余</li>
-<li>负载均衡</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/08/03/ccna/trunk/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/ccna/tcp-ip/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/logo.png">
-      <meta itemprop="name" content="12Tall">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="12Tall">
-      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 12Tall">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/08/03/ccna/tcp-ip/" class="post-title-link" itemprop="url">TCP/IP 基础</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-08-03 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-03T00:00:00+00:00">2022-08-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-01 06:37:58" itemprop="dateModified" datetime="2025-06-01T06:37:58+00:00">2025-06-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/maintenance/" itemprop="url" rel="index"><span itemprop="name">maintenance</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>904</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>3 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="网络协议分层"><a class="markdownIt-Anchor" href="#网络协议分层"></a> 网络协议分层</h2>
-<h3 id="osi-分层标准"><a class="markdownIt-Anchor" href="#osi-分层标准"></a> OSI 分层标准</h3>
-<p>自上而下分为七层：</p>
-<ul>
-<li>应用层：QQ、Edge</li>
-<li>表示层：对上层数据进行转码、压缩</li>
-<li>会话层：控制发送速率（下载限速）</li>
-<li>传输层：TCP/UDP（防火墙）</li>
-<li>网络层：IP（路由，以IP 地址为目的）</li>
-<li>链路层：tracert（交换，以MAC 为目的）</li>
-<li>物理层：电缆等等</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/08/03/ccna/tcp-ip/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
     <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/11/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/13/"><i class="fa fa-angle-right"></i></a>
   </nav>
@@ -1411,7 +1395,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">8:39</span>
+    <span title="站点阅读时长">8:41</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
