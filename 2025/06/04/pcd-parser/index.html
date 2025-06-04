@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="实际生产中，并不是所有数据文件都是标准的类似于csv 的形式，也有一部分是通过特殊的文件头描述，例如pcd 点云文件。 有一些C&#x2F;C++ 的程序可以解析这类文件，但是在通过python 调用这些文件是还需要单独（编译）安装依赖项。自己写解析器又比较麻烦。 于是想通过antlr4 来生成文件头解析器的骨架代码，然后手动补充关键的工作代码，即可构建好用的文件解析器。 而且可以生成不同目标语言的骨架代码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通过antlr4 开发pcd 文件解析器">
+<meta property="og:url" content="https://12tall.github.io/2025/06/04/pcd-parser/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="实际生产中，并不是所有数据文件都是标准的类似于csv 的形式，也有一部分是通过特殊的文件头描述，例如pcd 点云文件。 有一些C&#x2F;C++ 的程序可以解析这类文件，但是在通过python 调用这些文件是还需要单独（编译）安装依赖项。自己写解析器又比较麻烦。 于是想通过antlr4 来生成文件头解析器的骨架代码，然后手动补充关键的工作代码，即可构建好用的文件解析器。 而且可以生成不同目标语言的骨架代码">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://12tall.github.io/2025/06/04/pcd-parser/structure.png">
+<meta property="og:image" content="https://12tall.github.io/2025/06/04/pcd-parser/result.png">
+<meta property="article:published_time" content="2025-06-04T15:24:40.000Z">
+<meta property="article:modified_time" content="2025-06-04T08:38:51.186Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="antlr4">
+<meta property="article:tag" content="parser">
+<meta property="article:tag" content="编译原理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://12tall.github.io/2025/06/04/pcd-parser/structure.png">
+
+
+<link rel="canonical" href="https://12tall.github.io/2025/06/04/pcd-parser/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2025/06/04/pcd-parser/","path":"2025/06/04/pcd-parser/","title":"通过antlr4 开发pcd 文件解析器"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>通过antlr4 开发pcd 文件解析器 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text"> 预备工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E6%96%87%E4%BB%B6pcdg4"><span class="nav-number">2.</span> <span class="nav-text"> 语法文件PCD.g4</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E6%88%90%E4%BB%A3%E7%A0%81"><span class="nav-number">3.</span> <span class="nav-text"> 完成代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E4%B8%BB%E4%BD%93%E6%A1%86%E6%9E%B6"><span class="nav-number">3.1.</span> <span class="nav-text"> 代码主体框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mypcdlistener"><span class="nav-number">3.2.</span> <span class="nav-text"> MyPCDListener</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BD%99main%E4%BB%A3%E7%A0%81"><span class="nav-number">3.3.</span> <span class="nav-text"> 其余main()代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">4.</span> <span class="nav-text"> 参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">217</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2025/06/04/pcd-parser/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="通过antlr4 开发pcd 文件解析器 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          通过antlr4 开发pcd 文件解析器
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-06-04 15:24:40 / 修改时间：08:38:51" itemprop="dateCreated datePublished" datetime="2025-06-04T15:24:40+00:00">2025-06-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>实际生产中，并不是所有数据文件都是标准的类似于csv 的形式，也有一部分是通过特殊的文件头描述，例如pcd 点云文件。
+有一些C/C++ 的程序可以解析这类文件，但是在通过python 调用这些文件是还需要单独（编译）安装依赖项。自己写解析器又比较麻烦。
+于是想通过antlr4 来生成文件头解析器的骨架代码，然后手动补充关键的工作代码，即可构建好用的文件解析器。
+<strong>而且可以生成不同目标语言的骨架代码，灵活性强。</strong><br />
+本文只含功能验证，代码未作封装。</p>
+<span id="more"></span>
+<p><img src="structure.png" alt="" /></p>
+<h2 id="预备工作"><a class="markdownIt-Anchor" href="#预备工作"></a> 预备工作</h2>
+<p>只需要提前安装两个python 包：</p>
+<ol>
+<li><code>pip install antlr4-tools</code>
+<ul>
+<li><code>antlr4-parser &#123;语法文件.g4&#125; &#123;入口规则&#125; &#123;代码文件&#125;</code> 用于验证语法规则</li>
+<li><code>antlr4 -D=Python3 &#123;语法文件.g4&#125;</code> 用于生成目标Python 代码</li>
+</ul>
+</li>
+<li><code>pip install antlr4-python3-runtime</code> 用于构建自己的解析器</li>
+</ol>
+<h2 id="语法文件pcdg4"><a class="markdownIt-Anchor" href="#语法文件pcdg4"></a> 语法文件PCD.g4</h2>
+<p>语法文件中有几点需要注意的地方：</p>
+<ol>
+<li>关键词会按照定义的先后顺序解析，例如： <pre class="line-numbers language-antlr4" data-language="antlr4"><code class="language-antlr4"><span class="token comment">// 定义位置代表优先级，如果ID 在前，则无法解析FIELDTYPE  </span>
+<span class="token definition token constant">FIELDTYPE</span><span class="token punctuation">:</span> <span class="token character-class regex"><span class="token punctuation">[</span>fFuUiI<span class="token punctuation">]</span></span><span class="token punctuation">;</span>  
+<span class="token definition token constant">ID</span><span class="token punctuation">:</span> <span class="token character-class regex"><span class="token punctuation">[</span>a<span class="token range punctuation">-</span>zA<span class="token range punctuation">-</span>Z_<span class="token punctuation">]</span></span><span class="token operator">+</span><span class="token character-class regex"><span class="token punctuation">[</span>a<span class="token range punctuation">-</span>zA<span class="token range punctuation">-</span>Z_0<span class="token range punctuation">-</span>9<span class="token punctuation">]</span></span><span class="token operator">*</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>一般词法全大写，语法全小写；</li>
+<li>尽量减少重复定义，如<code>WS</code> 中尽量不要包含换行符，只包含空格和制表符就好了；</li>
+<li>因为没有跨行操作，所以每条基础的语法规则都是以换行结束；</li>
+<li><code>pcd</code>-&gt;<code>header_line</code> 的定义是考虑到表头顺序不一致或者不全。</li>
+</ol>
+<p><strong>完整代码如下：</strong></p>
+<pre class="line-numbers language-antlr4" data-language="antlr4"><code class="language-antlr4"><span class="token comment">// PCD.g4</span>
+<span class="token keyword">grammar</span> <span class="token constant">PCD</span><span class="token punctuation">;</span>
+<span class="token definition rule class-name">pcd</span> 
+    <span class="token punctuation">:</span> header_line<span class="token operator">+</span> 
+    <span class="token punctuation">;</span>
+
+<span class="token definition rule class-name">header_line</span>
+    <span class="token punctuation">:</span> comment 
+    <span class="token operator">|</span> version
+    <span class="token operator">|</span> fields
+    <span class="token operator">|</span> size
+    <span class="token operator">|</span> type
+    <span class="token operator">|</span> count
+    <span class="token operator">|</span> width
+    <span class="token operator">|</span> height
+    <span class="token operator">|</span> viewpoint
+    <span class="token operator">|</span> points
+    <span class="token operator">|</span> data
+    <span class="token punctuation">;</span>  
+
+<span class="token comment">/* ----- 语法定义 ----- */</span>
+<span class="token definition rule class-name">comment</span><span class="token punctuation">:</span> <span class="token constant">COMMENT</span> <span class="token constant">NEWLINE</span><span class="token punctuation">;</span>
+<span class="token definition rule class-name">version</span><span class="token punctuation">:</span> <span class="token constant">KEY_VERSION</span> <span class="token constant">NUMBER</span> <span class="token constant">NEWLINE</span><span class="token punctuation">;</span>
+<span class="token definition rule class-name">fields</span><span class="token punctuation">:</span> <span class="token constant">KEY_FIELDS</span> <span class="token constant">ID</span><span class="token operator">+</span> <span class="token constant">NEWLINE</span><span class="token punctuation">;</span>
+<span class="token definition rule class-name">size</span> <span class="token punctuation">:</span> <span class="token constant">KEY_SIZE</span> <span class="token constant">NUMBER</span><span class="token operator">+</span> <span class="token constant">NEWLINE</span><span class="token punctuation">;</span>
+<span class="token definition rule class-name">type</span> <span class="token punctuation">:</span> <span class="token constant">KEY_TYPE</span> <span class="token constant">FIELDTYPE</span><span class="token operator">+</span> <span class="token constant">NEWLINE</span><span class="token punctuation">;</span>
+<span class="token definition rule class-name">count</span><span class="token punctuation">:</span> <span class="token constant">KEY_COUNT</span> <span class="token constant">NUMBER</span><span class="token operator">+</span> <span class="token constant">NEWLINE</span><span class="token punctuation">;</span>
+<span class="token definition rule class-name">width</span><span class="token punctuation">:</span> <span class="token constant">KEY_WIDTH</span> <span class="token constant">NUMBER</span> <span class="token constant">NEWLINE</span><span class="token punctuation">;</span>
+<span class="token definition rule class-name">height</span><span class="token punctuation">:</span> <span class="token constant">KEY_HEIGHT</span> <span class="token constant">NUMBER</span> <span class="token constant">NEWLINE</span><span class="token punctuation">;</span>
+<span class="token definition rule class-name">viewpoint</span><span class="token punctuation">:</span> <span class="token constant">KEY_VIEWPOINT</span> <span class="token constant">NUMBER</span><span class="token operator">+</span> <span class="token constant">NEWLINE</span><span class="token punctuation">;</span>
+<span class="token definition rule class-name">points</span><span class="token punctuation">:</span> <span class="token constant">KEY_POINTS</span> <span class="token constant">NUMBER</span> <span class="token constant">NEWLINE</span><span class="token punctuation">;</span>
+<span class="token definition rule class-name">data</span><span class="token punctuation">:</span> <span class="token constant">KEY_DATA</span> data_type <span class="token constant">NEWLINE</span><span class="token punctuation">;</span>
+<span class="token definition rule class-name">data_type</span><span class="token punctuation">:</span> <span class="token punctuation">(</span><span class="token constant">ASCII</span> <span class="token operator">|</span> <span class="token constant">BINARY</span> <span class="token operator">|</span> <span class="token constant">COMPRESSEDBINARY</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">/* ----- 词法定义 ----- */</span>
+
+<span class="token comment">/* ----- 关键字 ----- */</span>
+<span class="token definition token constant">KEY_VERSION</span> <span class="token punctuation">:</span> <span class="token string">'VERSION'</span> <span class="token punctuation">;</span>
+<span class="token definition token constant">KEY_FIELDS</span>  <span class="token punctuation">:</span> <span class="token string">'FIELDS'</span> <span class="token punctuation">;</span>
+<span class="token definition token constant">KEY_SIZE</span>    <span class="token punctuation">:</span> <span class="token string">'SIZE'</span> <span class="token punctuation">;</span>
+<span class="token definition token constant">KEY_TYPE</span>  <span class="token punctuation">:</span> <span class="token string">'TYPE'</span> <span class="token punctuation">;</span>
+<span class="token definition token constant">KEY_COUNT</span>   <span class="token punctuation">:</span> <span class="token string">'COUNT'</span> <span class="token punctuation">;</span>
+<span class="token definition token constant">KEY_WIDTH</span>   <span class="token punctuation">:</span> <span class="token string">'WIDTH'</span> <span class="token punctuation">;</span>
+<span class="token definition token constant">KEY_HEIGHT</span>  <span class="token punctuation">:</span> <span class="token string">'HEIGHT'</span> <span class="token punctuation">;</span>
+<span class="token definition token constant">KEY_VIEWPOINT</span> <span class="token punctuation">:</span> <span class="token string">'VIEWPOINT'</span> <span class="token punctuation">;</span>
+<span class="token definition token constant">KEY_POINTS</span>  <span class="token punctuation">:</span> <span class="token string">'POINTS'</span> <span class="token punctuation">;</span>
+<span class="token definition token constant">KEY_DATA</span>    <span class="token punctuation">:</span> <span class="token string">'DATA'</span><span class="token punctuation">;</span>
+
+<span class="token definition token constant">ASCII</span><span class="token punctuation">:</span> <span class="token string">'ascii'</span><span class="token punctuation">;</span>
+<span class="token definition token constant">BINARY</span><span class="token punctuation">:</span> <span class="token string">'binary'</span><span class="token punctuation">;</span>
+<span class="token definition token constant">COMPRESSEDBINARY</span><span class="token punctuation">:</span> <span class="token string">'binary_compressed'</span><span class="token punctuation">;</span>
+<span class="token definition token constant">FIELDTYPE</span><span class="token punctuation">:</span> <span class="token character-class regex"><span class="token punctuation">[</span>fFuUiI<span class="token punctuation">]</span></span><span class="token punctuation">;</span>  <span class="token comment">// 定义位置代表优先级</span>
+
+<span class="token definition token constant">ID</span><span class="token punctuation">:</span> <span class="token character-class regex"><span class="token punctuation">[</span>a<span class="token range punctuation">-</span>zA<span class="token range punctuation">-</span>Z_<span class="token punctuation">]</span></span><span class="token operator">+</span><span class="token character-class regex"><span class="token punctuation">[</span>a<span class="token range punctuation">-</span>zA<span class="token range punctuation">-</span>Z_0<span class="token range punctuation">-</span>9<span class="token punctuation">]</span></span><span class="token operator">*</span><span class="token punctuation">;</span>
+
+<span class="token comment">/* ----- 通用 ----- */</span>
+<span class="token definition token constant">COMMENT</span><span class="token punctuation">:</span> <span class="token string">'#'</span> <span class="token operator">~</span><span class="token character-class regex"><span class="token punctuation">[</span><span class="token escape">\r</span><span class="token escape">\n</span><span class="token punctuation">]</span></span><span class="token operator">*</span><span class="token punctuation">;</span>
+<span class="token definition token constant">NUMBER</span><span class="token punctuation">:</span> <span class="token character-class regex"><span class="token punctuation">[</span>+-<span class="token punctuation">]</span></span><span class="token operator">?</span> <span class="token character-class regex"><span class="token punctuation">[</span>0<span class="token range punctuation">-</span>9<span class="token punctuation">]</span></span><span class="token operator">+</span> <span class="token punctuation">(</span><span class="token string">'.'</span> <span class="token character-class regex"><span class="token punctuation">[</span>0<span class="token range punctuation">-</span>9<span class="token punctuation">]</span></span><span class="token operator">+</span><span class="token punctuation">)</span><span class="token operator">?</span> <span class="token punctuation">(</span><span class="token character-class regex"><span class="token punctuation">[</span>eE<span class="token punctuation">]</span></span> <span class="token character-class regex"><span class="token punctuation">[</span>+-<span class="token punctuation">]</span></span><span class="token operator">?</span> <span class="token character-class regex"><span class="token punctuation">[</span>0<span class="token range punctuation">-</span>9<span class="token punctuation">]</span></span><span class="token operator">+</span><span class="token punctuation">)</span><span class="token operator">?</span> <span class="token punctuation">;</span>
+<span class="token definition token constant">NEWLINE</span><span class="token punctuation">:</span> <span class="token character-class regex"><span class="token punctuation">[</span><span class="token escape">\r</span><span class="token escape">\n</span><span class="token punctuation">]</span></span><span class="token operator">+</span> <span class="token punctuation">;</span>  <span class="token comment">// 匹配换行符</span>
+<span class="token definition token constant">WS</span>   <span class="token punctuation">:</span> <span class="token character-class regex"><span class="token punctuation">[</span> <span class="token escape">\t</span><span class="token punctuation">]</span></span><span class="token operator">+</span> <span class="token operator">-></span> <span class="token command"><span class="token function">skip</span></span> <span class="token punctuation">;</span> <span class="token comment">// 跳过空白字符</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="完成代码"><a class="markdownIt-Anchor" href="#完成代码"></a> 完成代码</h2>
+<p>通过命令<code>antlr4 -Dlanguage=Python3 .\PCD.g4</code> <a target="_blank" rel="noopener" href="http://xn--ehqyct1ah5n0qune0a.py">可以生成三个.py</a> 文件：</p>
+<ol>
+<li><code>PCDLexer.py</code> 词法分析器，无需更改；</li>
+<li><code>PCDParser.py</code> 语法分析器，无需更改；</li>
+<li><code>PCDListener.py</code> 遍历语法树，可以继承并补全关键代码；</li>
+</ol>
+<h3 id="代码主体框架"><a class="markdownIt-Anchor" href="#代码主体框架"></a> 代码主体框架</h3>
+<p><a target="_blank" rel="noopener" href="http://xn--main-955f86lt1ecs3i.py">可以编写main.py</a> 调用上面生成的代码：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># main.py</span>
+
+<span class="token comment">## 导入依赖项</span>
+<span class="token keyword">from</span> antlr4 <span class="token keyword">import</span> <span class="token operator">*</span>
+<span class="token keyword">from</span> PCDLexer <span class="token keyword">import</span> PCDLexer  
+<span class="token keyword">from</span> PCDParser <span class="token keyword">import</span> PCDParser  
+<span class="token keyword">from</span> PCDListener <span class="token keyword">import</span> PCDListener  
+
+<span class="token comment">## 测试字符串</span>
+input_str <span class="token operator">=</span> <span class="token triple-quoted-string string">""""""</span>
+
+<span class="token keyword">class</span> <span class="token class-name">MyPCDListener</span><span class="token punctuation">(</span>PCDListener<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""补充完善核心业务代码"""</span>
+    <span class="token keyword">pass</span>
+
+<span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># 读取输入字节流 </span>
+    input_stream <span class="token operator">=</span> InputStream<span class="token punctuation">(</span>input_str<span class="token punctuation">)</span>
+    <span class="token comment"># 词法分析</span>
+    lexer <span class="token operator">=</span> PCDLexer<span class="token punctuation">(</span>input_stream<span class="token punctuation">)</span>
+    tokens <span class="token operator">=</span> CommonTokenStream<span class="token punctuation">(</span>lexer<span class="token punctuation">)</span>
+    <span class="token comment"># 语法分析</span>
+    parser <span class="token operator">=</span> PCDParser<span class="token punctuation">(</span>tokens<span class="token punctuation">)</span>
+    tree <span class="token operator">=</span> parser<span class="token punctuation">.</span>pcd<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 假设入口规则是 pcd</span>
+    <span class="token comment"># 打印语法分析结果</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>tree<span class="token punctuation">.</span>toStringTree<span class="token punctuation">(</span>recog<span class="token operator">=</span>parser<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    <span class="token comment">## 遍历语法树</span>
+    walker <span class="token operator">=</span> ParseTreeWalker<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    listener <span class="token operator">=</span> MyPCDListener<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    walker<span class="token punctuation">.</span>walk<span class="token punctuation">(</span>listener<span class="token punctuation">,</span> tree<span class="token punctuation">)</span>
+
+    <span class="token comment">## 处理遍历结果</span>
+    <span class="token comment"># ...</span>
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    main<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="mypcdlistener"><a class="markdownIt-Anchor" href="#mypcdlistener"></a> MyPCDListener</h3>
+<p>通过定义<code>MyListener</code> 继承<code>PCDListener</code> 类并重写关键代码：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np  
+<span class="token keyword">from</span> demoListener <span class="token keyword">import</span> demoListener  
+
+<span class="token triple-quoted-string string">"""通过遍历语法树，生成结构化的PCD 对象"""</span>
+<span class="token keyword">class</span> <span class="token class-name">Field</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""整合PCD 头中的字段相关属性"""</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span>count<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span><span class="token builtin">type</span><span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> size<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>name <span class="token operator">=</span> name
+        self<span class="token punctuation">.</span>count <span class="token operator">=</span> count
+        self<span class="token punctuation">.</span>size <span class="token operator">=</span> size  
+        self<span class="token punctuation">.</span><span class="token builtin">type</span> <span class="token operator">=</span> <span class="token builtin">type</span>
+
+<span class="token keyword">class</span> <span class="token class-name">PCD</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""PCD 类，其实只包含文件头信息"""</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>version<span class="token operator">=</span><span class="token number">0</span>
+        self<span class="token punctuation">.</span>fields<span class="token punctuation">:</span><span class="token builtin">list</span><span class="token punctuation">[</span>Field<span class="token punctuation">]</span><span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+        self<span class="token punctuation">.</span>width<span class="token operator">=</span><span class="token number">0</span>
+        self<span class="token punctuation">.</span>height<span class="token operator">=</span><span class="token number">0</span>
+        self<span class="token punctuation">.</span>data <span class="token operator">=</span> <span class="token boolean">None</span>
+        self<span class="token punctuation">.</span>points <span class="token operator">=</span> <span class="token number">0</span>
+        self<span class="token punctuation">.</span>viepoints <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+        self<span class="token punctuation">.</span>header_comment <span class="token operator">=</span> <span class="token boolean">None</span>
+        self<span class="token punctuation">.</span>offset_line<span class="token operator">=</span><span class="token number">0</span>  
+        self<span class="token punctuation">.</span>anounymous_field_index <span class="token operator">=</span> <span class="token number">0</span>
+
+    <span class="token keyword">def</span> <span class="token function">get_dtype_fields</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""根据文件头的字段列表，构造用于解析文件的numpy 数据类型列表"""</span>
+        dtype_fileds<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+        <span class="token keyword">for</span> f <span class="token keyword">in</span> self<span class="token punctuation">.</span>fields<span class="token punctuation">:</span>
+            <span class="token keyword">if</span> f<span class="token punctuation">.</span>name <span class="token operator">==</span> <span class="token string">"_"</span><span class="token punctuation">:</span>
+                name <span class="token operator">=</span> <span class="token string-interpolation"><span class="token string">f"_</span><span class="token interpolation"><span class="token punctuation">&#123;</span>self<span class="token punctuation">.</span>anounymous_field_index<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span>
+                self<span class="token punctuation">.</span>anounymous_field_index<span class="token operator">+=</span><span class="token number">1</span>
+            <span class="token keyword">else</span><span class="token punctuation">:</span>
+                name <span class="token operator">=</span> f<span class="token punctuation">.</span>name
+            dtype_fileds<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> <span class="token string-interpolation"><span class="token string">f'</span><span class="token interpolation"><span class="token punctuation">&#123;</span>f<span class="token punctuation">.</span><span class="token builtin">type</span><span class="token punctuation">.</span>lower<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token interpolation"><span class="token punctuation">&#123;</span>f<span class="token punctuation">.</span>size<span class="token punctuation">&#125;</span></span><span class="token string">'</span></span><span class="token punctuation">,</span> <span class="token punctuation">(</span>f<span class="token punctuation">.</span>count<span class="token punctuation">,</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> np<span class="token punctuation">.</span>dtype<span class="token punctuation">(</span>dtype_fileds<span class="token punctuation">)</span>
+
+<span class="token keyword">class</span> <span class="token class-name">MyDemoListener</span><span class="token punctuation">(</span>PCDListener<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""遍历语法树的事件监听器"""</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>__init__<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>pcd <span class="token operator">=</span> PCD<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># 对于每一条语法规则都有enter 和exit 两个方法可以重写  </span>
+    <span class="token comment"># 分别对应开始解析和解析完成的操作，例如：  </span>
+    <span class="token comment"># 可以在文件开始解析时构造PCD 对象，如果迟了就可能会导致找不到对象  </span>
+    <span class="token comment"># 同样，再退出pcd 规则时记录文件头的行数，如果早了就会导致记录不准确</span>
+    <span class="token keyword">def</span> <span class="token function">enterPcd</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> ctx<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"开始解析PCD 文件"</span><span class="token punctuation">)</span>
+        
+    <span class="token keyword">def</span> <span class="token function">enterComment</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> ctx<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""
+        ctx 对象包含所有子语法/词法元素的对象，
+        可以通过函数调用的方式获得
+        通过getText() 方法可以获得对应的文本
+        """</span>
+        self<span class="token punctuation">.</span>pcd<span class="token punctuation">.</span>header_comment <span class="token operator">=</span> ctx<span class="token punctuation">.</span>COMMENT<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>getText<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        
+    <span class="token keyword">def</span> <span class="token function">enterVersion</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> ctx<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        version <span class="token operator">=</span> ctx<span class="token punctuation">.</span>NUMBER<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>getText<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>pcd<span class="token punctuation">.</span>version <span class="token operator">=</span> version
+
+    <span class="token comment"># 下面通过filed,count,size,type 构建字段清单</span>
+    <span class="token keyword">def</span> <span class="token function">enterFields</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> ctx<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""
+        对于ID+ 这种语法规则，其结果是一个数组，这就要求：
+        如果一个语法里面有多个ID+ 的定义，最好能拆分成多条子语法
+        """</span>
+        <span class="token keyword">for</span> i<span class="token punctuation">,</span> <span class="token builtin">id</span> <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>ctx<span class="token punctuation">.</span>ID<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            name<span class="token operator">=</span><span class="token builtin">id</span><span class="token punctuation">.</span>getText<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>pcd<span class="token punctuation">.</span>fields<span class="token punctuation">)</span> <span class="token operator">&lt;=</span> i<span class="token punctuation">:</span>  
+                self<span class="token punctuation">.</span>pcd<span class="token punctuation">.</span>fields<span class="token punctuation">.</span>append<span class="token punctuation">(</span>Field<span class="token punctuation">(</span>name<span class="token operator">=</span>name<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token keyword">else</span><span class="token punctuation">:</span>
+                self<span class="token punctuation">.</span>pcd<span class="token punctuation">.</span>fields<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name
+                
+    <span class="token keyword">def</span> <span class="token function">enterSize</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> ctx<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">for</span> i<span class="token punctuation">,</span> token <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>ctx<span class="token punctuation">.</span>NUMBER<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            size<span class="token operator">=</span><span class="token builtin">int</span><span class="token punctuation">(</span>token<span class="token punctuation">.</span>getText<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>pcd<span class="token punctuation">.</span>fields<span class="token punctuation">)</span> <span class="token operator">&lt;=</span> i<span class="token punctuation">:</span>  
+                self<span class="token punctuation">.</span>pcd<span class="token punctuation">.</span>fields<span class="token punctuation">.</span>append<span class="token punctuation">(</span>Field<span class="token punctuation">(</span>size<span class="token operator">=</span>size<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token keyword">else</span><span class="token punctuation">:</span>
+                self<span class="token punctuation">.</span>pcd<span class="token punctuation">.</span>fields<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>size <span class="token operator">=</span> size
+                
+    <span class="token keyword">def</span> <span class="token function">enterType</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> ctx<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">for</span> i<span class="token punctuation">,</span> token <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>ctx<span class="token punctuation">.</span>FIELDTYPE<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token builtin">type</span><span class="token operator">=</span>token<span class="token punctuation">.</span>getText<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>pcd<span class="token punctuation">.</span>fields<span class="token punctuation">)</span> <span class="token operator">&lt;=</span> i<span class="token punctuation">:</span>  
+                self<span class="token punctuation">.</span>pcd<span class="token punctuation">.</span>fields<span class="token punctuation">.</span>append<span class="token punctuation">(</span>Field<span class="token punctuation">(</span><span class="token builtin">type</span><span class="token operator">=</span><span class="token builtin">type</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token keyword">else</span><span class="token punctuation">:</span>
+                self<span class="token punctuation">.</span>pcd<span class="token punctuation">.</span>fields<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token builtin">type</span> <span class="token operator">=</span> <span class="token builtin">type</span>
+  
+    <span class="token keyword">def</span> <span class="token function">enterCount</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> ctx<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">for</span> i<span class="token punctuation">,</span> token <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>ctx<span class="token punctuation">.</span>NUMBER<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            count<span class="token operator">=</span><span class="token builtin">int</span><span class="token punctuation">(</span>token<span class="token punctuation">.</span>getText<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>pcd<span class="token punctuation">.</span>fields<span class="token punctuation">)</span> <span class="token operator">&lt;=</span> i<span class="token punctuation">:</span>  
+                self<span class="token punctuation">.</span>pcd<span class="token punctuation">.</span>fields<span class="token punctuation">.</span>append<span class="token punctuation">(</span>Field<span class="token punctuation">(</span>count<span class="token operator">=</span>count<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token keyword">else</span><span class="token punctuation">:</span>
+                self<span class="token punctuation">.</span>pcd<span class="token punctuation">.</span>fields<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>count <span class="token operator">=</span> count
+
+    <span class="token comment"># 读取其他属性，不重要</span>
+    <span class="token keyword">def</span> <span class="token function">enterViewpoint</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> ctx<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>pcd<span class="token punctuation">.</span>viepoints <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token builtin">float</span><span class="token punctuation">(</span>v<span class="token punctuation">.</span>getText<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">for</span> v <span class="token keyword">in</span> ctx<span class="token punctuation">.</span>NUMBER<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+
+    <span class="token keyword">def</span> <span class="token function">enterWidth</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> ctx<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>pcd<span class="token punctuation">.</span>width <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>ctx<span class="token punctuation">.</span>NUMBER<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>getText<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">enterHeight</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> ctx<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>pcd<span class="token punctuation">.</span>height <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>ctx<span class="token punctuation">.</span>NUMBER<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>getText<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">enterPoints</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> ctx<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>pcd<span class="token punctuation">.</span>points <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>ctx<span class="token punctuation">.</span>NUMBER<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>getText<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    
+    <span class="token keyword">def</span> <span class="token function">enterData</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> ctx<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""获取data 类型，可用于切换不同的方法解析文件"""</span>
+        self<span class="token punctuation">.</span>pcd<span class="token punctuation">.</span>data <span class="token operator">=</span> ctx<span class="token punctuation">.</span>data_type<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>getText<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    
+    <span class="token keyword">def</span> <span class="token function">exitProg</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> ctx<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""文件头的偏移行数，用于解析文件体"""</span>
+        self<span class="token punctuation">.</span>pcd<span class="token punctuation">.</span>offset_line <span class="token operator">=</span>  <span class="token builtin">int</span><span class="token punctuation">(</span>ctx<span class="token punctuation">.</span>stop<span class="token punctuation">.</span>line<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="其余main代码"><a class="markdownIt-Anchor" href="#其余main代码"></a> 其余main()代码</h3>
+<p>整体代码未作封装，因为属于是概念验证性的东西，下面是文件解析部分的测试代码：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># main.py  </span>
+<span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token comment"># ...  </span>
+
+    pcd <span class="token operator">=</span> listener<span class="token punctuation">.</span>pcd
+    pcd_dtype <span class="token operator">=</span> pcd<span class="token punctuation">.</span>get_dtype_fields<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>pcd_dtype<span class="token punctuation">)</span>
+
+    <span class="token comment"># 读取二进制 </span>
+    <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">"sampled.pcd"</span><span class="token punctuation">,</span> <span class="token string">"rb"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
+        <span class="token comment"># 跳过 header 行</span>
+        <span class="token keyword">for</span> _ <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>pcd<span class="token punctuation">.</span>offset_line<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            f<span class="token punctuation">.</span>readline<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        
+        binary_data <span class="token operator">=</span> f<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token comment">## 如果是压缩二进制（没做测试）</span>
+        <span class="token comment"># import zlib</span>
+        <span class="token comment"># decompressed_data = zlib.decompress(binary_data)</span>
+        buffer_len <span class="token operator">=</span> <span class="token builtin">len</span><span class="token punctuation">(</span>binary_data<span class="token punctuation">)</span>
+        element_size <span class="token operator">=</span> pcd_dtype<span class="token punctuation">.</span>itemsize
+        <span class="token comment"># 下面代码用于截断不完整二进制数据</span>
+        valid_len <span class="token operator">=</span> <span class="token punctuation">(</span>buffer_len <span class="token operator">//</span> element_size<span class="token punctuation">)</span> <span class="token operator">*</span> element_size
+        binary_data <span class="token operator">=</span> binary_data<span class="token punctuation">[</span><span class="token punctuation">:</span>valid_len<span class="token punctuation">]</span>
+        
+        data <span class="token operator">=</span> np<span class="token punctuation">.</span>frombuffer<span class="token punctuation">(</span>binary_data<span class="token punctuation">,</span> dtype<span class="token operator">=</span>pcd_dtype<span class="token punctuation">)</span>  <span class="token comment"># 解析文件</span>
+
+    <span class="token comment">## 读取ascii</span>
+    <span class="token comment"># data = np.loadtxt("./sampled_ascii.pcd",dtype=pcd.get_dtype_fields(), skiprows=pcd.offset_line )</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>data<span class="token punctuation">.</span>shape<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>以上代码的速度非常快，解析二进制测试文件1.23GB，包含200多万条数据，用时不到1s。结果如下：<br />
+<img src="result.png" alt="" /></p>
+<p>一个有意思的点，不要完全相信头文件里面的<code>WIDTH</code>，理论上它代表点的个数，实际上有可能是字节数。<br />
+完整示例代码参见<a href="demo.zip">demo.zip</a></p>
+<h2 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://pointclouds.org/documentation/tutorials/pcd_file_format.html">The PCD (Point Cloud Data) file format</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/MapIV/pypcd4">MapIV/pypcd4</a> 一个现代的pcd 文件解析工具</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/strawlab/python-pcl">strawlab/python-pcl</a> 该库功能强大，但是已经归档，且不好用Nuitka 打包</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2025/06/04/pcd-parser/" title="通过antlr4 开发pcd 文件解析器">https://12tall.github.io/2025/06/04/pcd-parser/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"># python</a>
+              <a href="/tags/antlr4/" rel="tag"># antlr4</a>
+              <a href="/tags/parser/" rel="tag"># parser</a>
+              <a href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" rel="tag"># 编译原理</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/06/02/rpath-patcheld/" rel="prev" title="rpath 与patchelf">
+                  <i class="fa fa-angle-left"></i> rpath 与patchelf
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">145k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:47</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>
