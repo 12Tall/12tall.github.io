@@ -72,7 +72,7 @@
   <script src="/js/third-party/math/katex.js" defer></script>
 
 
-<meta name="google-site-verification" content="3aQNNP68nNwFEpraTCstOoM3rHiVonXxsdls54cyW9Q" />
+
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
@@ -265,7 +265,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-08 23:47:47" itemprop="dateModified" datetime="2025-06-08T23:47:47+00:00">2025-06-08</time>
+      <time title="修改时间：2025-06-11 01:20:13" itemprop="dateModified" datetime="2025-06-11T01:20:13+00:00">2025-06-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -375,7 +375,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-08 23:47:47" itemprop="dateModified" datetime="2025-06-08T23:47:47+00:00">2025-06-08</time>
+      <time title="修改时间：2025-06-11 01:20:13" itemprop="dateModified" datetime="2025-06-11T01:20:13+00:00">2025-06-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -482,7 +482,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-08 23:47:47" itemprop="dateModified" datetime="2025-06-08T23:47:47+00:00">2025-06-08</time>
+      <time title="修改时间：2025-06-11 01:20:13" itemprop="dateModified" datetime="2025-06-11T01:20:13+00:00">2025-06-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -553,6 +553,114 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/win32/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/08/03/win32/" class="post-title-link" itemprop="url">Win32 SDK编程</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-03 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-03T00:00:00+00:00">2022-08-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-06-11 01:20:13" itemprop="dateModified" datetime="2025-06-11T01:20:13+00:00">2025-06-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/c-cpp/" itemprop="url" rel="index"><span itemprop="name">c_cpp</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="窗口与消息机制"><a class="markdownIt-Anchor" href="#窗口与消息机制"></a> 窗口与消息机制</h2>
+<p>首先以<a target="_blank" rel="noopener" href="https://fishc.com.cn/thread-47361-1-1.html">鱼C论坛</a>的模板代码为例，展示一下标准的Win32 程序的基本结构。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/03/win32/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/win-high-accuracy-timmer/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -589,7 +697,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-08 23:47:47" itemprop="dateModified" datetime="2025-06-08T23:47:47+00:00">2025-06-08</time>
+      <time title="修改时间：2025-06-11 01:20:13" itemprop="dateModified" datetime="2025-06-11T01:20:13+00:00">2025-06-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -662,114 +770,6 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/win32/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/logo.png">
-      <meta itemprop="name" content="12Tall">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="12Tall">
-      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 12Tall">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/08/03/win32/" class="post-title-link" itemprop="url">Win32 SDK编程</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-08-03 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-03T00:00:00+00:00">2022-08-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-08 23:47:47" itemprop="dateModified" datetime="2025-06-08T23:47:47+00:00">2025-06-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/c-cpp/" itemprop="url" rel="index"><span itemprop="name">c_cpp</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>1.2k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>4 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="窗口与消息机制"><a class="markdownIt-Anchor" href="#窗口与消息机制"></a> 窗口与消息机制</h2>
-<p>首先以<a target="_blank" rel="noopener" href="https://fishc.com.cn/thread-47361-1-1.html">鱼C论坛</a>的模板代码为例，展示一下标准的Win32 程序的基本结构。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/08/03/win32/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2022/08/03/napi/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -806,7 +806,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-08 23:47:47" itemprop="dateModified" datetime="2025-06-08T23:47:47+00:00">2025-06-08</time>
+      <time title="修改时间：2025-06-11 01:20:13" itemprop="dateModified" datetime="2025-06-11T01:20:13+00:00">2025-06-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -913,7 +913,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-08 23:47:47" itemprop="dateModified" datetime="2025-06-08T23:47:47+00:00">2025-06-08</time>
+      <time title="修改时间：2025-06-11 01:20:13" itemprop="dateModified" datetime="2025-06-11T01:20:13+00:00">2025-06-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1023,7 +1023,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-08 23:47:47" itemprop="dateModified" datetime="2025-06-08T23:47:47+00:00">2025-06-08</time>
+      <time title="修改时间：2025-06-11 01:20:13" itemprop="dateModified" datetime="2025-06-11T01:20:13+00:00">2025-06-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1130,7 +1130,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-08 23:47:47" itemprop="dateModified" datetime="2025-06-08T23:47:47+00:00">2025-06-08</time>
+      <time title="修改时间：2025-06-11 01:20:13" itemprop="dateModified" datetime="2025-06-11T01:20:13+00:00">2025-06-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1237,7 +1237,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-08 23:47:47" itemprop="dateModified" datetime="2025-06-08T23:47:47+00:00">2025-06-08</time>
+      <time title="修改时间：2025-06-11 01:20:13" itemprop="dateModified" datetime="2025-06-11T01:20:13+00:00">2025-06-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1402,6 +1402,6 @@ document.addEventListener('page:loaded', () => {
     }));
 });
 </script>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+
 </body>
 </html>
