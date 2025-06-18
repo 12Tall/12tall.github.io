@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="《自己动手写docker》 的读书笔记。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 容器技术笔记">
+<meta property="og:url" content="https://12tall.github.io/2025/06/18/container/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="《自己动手写docker》 的读书笔记。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-06-18T10:33:21.000Z">
+<meta property="article:modified_time" content="2025-06-18T05:38:00.830Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="container">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://12tall.github.io/2025/06/18/container/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2025/06/18/container/","path":"2025/06/18/container/","title":"Linux 容器技术笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Linux 容器技术笔记 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF"><span class="nav-number">1.</span> <span class="nav-text"> 基础技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#namespace-%E9%9A%94%E7%A6%BB"><span class="nav-number">1.1.</span> <span class="nav-text"> Namespace 隔离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAnamespace"><span class="nav-number">1.2.</span> <span class="nav-text"> 创建Namespace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E8%B0%83%E8%AF%95%E5%91%BD%E4%BB%A4"><span class="nav-number">1.3.</span> <span class="nav-text"> 常用的调试命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cgroups-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86"><span class="nav-number">1.4.</span> <span class="nav-text"> Cgroups 资源管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%93%8D%E4%BD%9Ccgroups"><span class="nav-number">1.4.1.</span> <span class="nav-text"> 通过命令行操作Cgroups</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#union-file-system-%E8%81%94%E5%90%88%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.5.</span> <span class="nav-text"> Union File System 联合文件系统</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">2.</span> <span class="nav-text"> 参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">217</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2025/06/18/container/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Linux 容器技术笔记 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux 容器技术笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-06-18 10:33:21 / 修改时间：05:38:00" itemprop="dateCreated datePublished" datetime="2025-06-18T10:33:21+00:00">2025-06-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/notation/" itemprop="url" rel="index"><span itemprop="name">notation</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>《自己动手写docker》 的读书笔记。</p>
+<span id="more"></span>
+<h2 id="基础技术"><a class="markdownIt-Anchor" href="#基础技术"></a> 基础技术</h2>
+<p>基础技术主要包含Namespace 隔离技术、Cgroups 资源管理以及<s>AUFS</s> 文件系统等。
+而容器技术的核心理念就是通过Linux 提供的一系列工具或者API，以类似搭积木的形式去创造一个相对独立、干净的虚拟环境。
+对于虚拟环境中的进程而言，对于外界是无感的，甚至以为自己有root 权限；但是宿主环境却是能够看到或者管理虚拟环境中的进程。</p>
+<h3 id="namespace-隔离"><a class="markdownIt-Anchor" href="#namespace-隔离"></a> Namespace 隔离</h3>
+<p>Namespace 是Linux Kernel 的一个功能，用于隔离一系列的系统资源，当前Linux 一共实现了6 种不同类型的Namespace：</p>
+<table>
+<thead>
+<tr>
+<th>Namespace 类型</th>
+<th>系统调用参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mount Namespace</td>
+<td>CLONE_NEWNS</td>
+<td>linux 2.4.19 引入，主要用来隔离文件挂载点，因为未考虑后续更多的命名空间，所以系统调用参数名与其他参数名不一致</td>
+</tr>
+<tr>
+<td>UTS Namespace</td>
+<td>CLONE_NEWUTS</td>
+<td>linux 2.6.19 引入，主要用于隔离主机名和域名</td>
+</tr>
+<tr>
+<td>IPC Namespace</td>
+<td>CLONE_NEWIPC</td>
+<td>linux 2.6.19 引入，主要用于隔离SystemV IPC 和POSIX message queue</td>
+</tr>
+<tr>
+<td>PID Namespace</td>
+<td>CLONE_NEWPID</td>
+<td>linux 2.6.24 引入，主要用于隔离PID 关系</td>
+</tr>
+<tr>
+<td>Network Namespace</td>
+<td>CLONE_NENET</td>
+<td>linux 2.6.29 引入，主要用于隔离网络环境</td>
+</tr>
+<tr>
+<td>User Namespace</td>
+<td>CLONE_NEWUSER</td>
+<td>linux 3.8 引入，主要用于隔离用户和用户组设置</td>
+</tr>
+</tbody>
+</table>
+<p>与Namespace 相关的系统API 主要有以下3 个：</p>
+<div class="markmap-wrap" 
+      
+      style="height: 300px"
+    >
+      <script type="application/json">{"content":"Namespace","children":[{"content":"<code>clone()</code> &#x7528;&#x4e8e;&#x521b;&#x5efa;&#x65b0;&#x8fdb;&#x7a0b;&#xff0c;&#x6839;&#x636e;&#x4f20;&#x5165;&#x53c2;&#x6570;&#x521b;&#x5efa;Namespace &#x9694;&#x79bb;&#xff0c;&#x5e76;&#x4e14;&#x5176;&#x5b50;&#x8fdb;&#x7a0b;&#x4e5f;&#x4f1a;&#x7ee7;&#x627f;&#x8fd9;&#x4e9b;&#x914d;&#x7f6e;","children":[],"payload":{"tag":"h2","lines":"5,6"}},{"content":"<code>unshare()</code> &#x7528;&#x4e8e;&#x5c06;&#x8fdb;&#x7a0b;&#x79fb;&#x51fa;&#x67d0;&#x4e2a;Namespace","children":[],"payload":{"tag":"h2","lines":"7,8"}},{"content":"<code>setns()</code>  &#x5c06;&#x8fdb;&#x7a0b;&#x52a0;&#x5165;&#x5230;Namespace","children":[],"payload":{"tag":"h2","lines":"8,9"}}],"payload":{"tag":"h1","lines":"4,5"}}</script>
+      <script type="application/json">{"colorFreezeLevel":2}</script>
+    </div>  
+<h3 id="创建namespace"><a class="markdownIt-Anchor" href="#创建namespace"></a> 创建Namespace</h3>
+<ol>
+<li>在Bash 中可以通过<code>unshare</code> 命令创建指定的Namespace：</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+
+<span class="token comment"># 使用 unshare 创建新 namespace</span>
+unshare <span class="token parameter variable">--fork</span> <span class="token parameter variable">--pid</span> <span class="token parameter variable">--mount</span> <span class="token parameter variable">--uts</span> <span class="token parameter variable">--ipc</span> <span class="token parameter variable">--net</span> <span class="token parameter variable">--user</span> <span class="token function">bash</span> <span class="token operator">&lt;&lt;</span><span class="token string">EOF
+echo "当前进程 PID: <span class="token variable">$$</span>"
+echo "主机名: <span class="token variable"><span class="token variable">$(</span><span class="token function">hostname</span><span class="token variable">)</span></span>"
+hostname "new-namespace"
+echo "新主机名: <span class="token variable"><span class="token variable">$(</span><span class="token function">hostname</span><span class="token variable">)</span></span>"
+EOF</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="2">
+<li>或者可以通过C 语言调用系统API 创建：</li>
+</ol>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">_GNU_SOURCE</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sched.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;unistd.h></span></span>
+
+<span class="token comment">// 注意需要预先分配栈空间，这也导致只能通过底层的编程语言实现这一功能</span>
+<span class="token comment">// 而python/node 则只能通过ffi 调用共享库的方式实现</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">STACK_SIZE</span> <span class="token expression"><span class="token punctuation">(</span><span class="token number">1024</span> <span class="token operator">*</span> <span class="token number">1024</span><span class="token punctuation">)</span></span></span>
+
+<span class="token keyword">static</span> <span class="token keyword">char</span> child_stack<span class="token punctuation">[</span>STACK_SIZE<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">child_func</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span>arg<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Child PID: %ld\n"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token keyword">long</span><span class="token punctuation">)</span><span class="token function">getpid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">execlp</span><span class="token punctuation">(</span><span class="token string">"/bin/bash"</span><span class="token punctuation">,</span> <span class="token string">"bash"</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// namespace 标志</span>
+    <span class="token keyword">int</span> flags <span class="token operator">=</span> CLONE_NEWUTS <span class="token operator">|</span> CLONE_NEWPID <span class="token operator">|</span> CLONE_NEWNS <span class="token operator">|</span> SIGCHLD<span class="token punctuation">;</span> 
+    <span class="token class-name">pid_t</span> pid <span class="token operator">=</span> <span class="token function">clone</span><span class="token punctuation">(</span>child_func<span class="token punctuation">,</span> child_stack <span class="token operator">+</span> STACK_SIZE<span class="token punctuation">,</span> flags<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>pid <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"clone"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">exit</span><span class="token punctuation">(</span>EXIT_FAILURE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token function">waitpid</span><span class="token punctuation">(</span>pid<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="3">
+<li>Go 语言则封装了<code>clone()</code> 方法，通过以上示例：</li>
+</ol>
+<pre class="line-numbers language-go" data-language="go"><code class="language-go"><span class="token keyword">package</span> main
+<span class="token keyword">import</span><span class="token punctuation">(</span>
+    <span class="token string">"log"</span>
+    <span class="token string">"oS"</span>
+    <span class="token string">"os/exec"</span>
+    <span class="token string">"syscall"</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    cmd <span class="token operator">:=</span> exec<span class="token punctuation">.</span><span class="token function">Command</span><span class="token punctuation">(</span><span class="token string">"sh"</span> <span class="token punctuation">)</span>
+    cmd<span class="token punctuation">.</span>SysProcAttr<span class="token operator">=</span><span class="token operator">&amp;</span>syscall<span class="token punctuation">.</span>SysProcAttr<span class="token punctuation">&#123;</span>
+        Cloneflags<span class="token punctuation">:</span>syscall<span class="token punctuation">.</span>CLONE_NEWUTS <span class="token operator">|</span> SyScall<span class="token punctuation">.</span>CLONE_NEWIPC
+    <span class="token punctuation">&#125;</span>
+    cmd<span class="token punctuation">.</span>Stdin <span class="token operator">=</span>os<span class="token punctuation">.</span>Stdin
+    cmd<span class="token punctuation">.</span>Stdout <span class="token operator">=</span>os<span class="token punctuation">.</span>Stdout
+    cmd<span class="token punctuation">.</span>Stderr <span class="token operator">=</span>os<span class="token punctuation">.</span>Stderr
+    <span class="token keyword">if</span> err<span class="token operator">:=</span><span class="token function">cmdRun</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>err <span class="token operator">!=</span> <span class="token boolean">nil</span><span class="token punctuation">&#123;</span>
+        log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以发现，创建Namespace 的关键操作在于设置标志位。</p>
+<h3 id="常用的调试命令"><a class="markdownIt-Anchor" href="#常用的调试命令"></a> 常用的调试命令</h3>
+<div class="markmap-wrap" 
+      
+      style="height: 500px"
+    >
+      <script type="application/json">{"content":"","children":[{"content":"Mount Namespace","children":[{"content":"<code>mount -t proc proc /proc</code> &#x6302;&#x8f7d;proc&#xff08;&#x4e3a;&#x6587;&#x4ef6;&#x7cfb;&#x7edf;&#xff09;&#xff0c;&#x5b58;&#x50a8;&#x5f53;&#x524d;&#x5185;&#x6838;&#x8fd0;&#x884c;&#x72b6;&#x6001;","children":[{"content":"<code>-t proc</code> &#x6587;&#x4ef6;&#x7cfb;&#x7edf;&#x7c7b;&#x578b;&#x4e3a;<code>proc</code>","children":[],"payload":{"tag":"li","lines":"7,8"}},{"content":"<code>proc</code> &#x6e90;&#x6587;&#x4ef6;","children":[],"payload":{"tag":"li","lines":"8,9"}},{"content":"<code>/proc</code> &#x76ee;&#x6807;&#x76ee;&#x5f55;","children":[],"payload":{"tag":"li","lines":"9,10"}},{"content":"&#x56e0;&#x4e3a;<code>proc</code> &#x8868;&#x793a;&#x5f53;&#x524d;&#x5185;&#x6838;&#x72b6;&#x6001;&#xff0c;&#x6545;&#x5728;&#x65b0;Namespace &#x4e2d;&#x4f1a;&#x66f4;&#x7b80;&#x6d01;","children":[],"payload":{"tag":"li","lines":"10,11"}},{"content":"&#x5176;&#x4e2d;&#x6570;&#x5b57;&#x8868;&#x793a;&#x7684;&#x662f;&#x8fdb;&#x7a0b;id","children":[],"payload":{"tag":"li","lines":"11,13"}}],"payload":{"tag":"h3","lines":"6,7","fold":1}}],"payload":{"tag":"h2","lines":"4,5"}},{"content":"UTC Namespace","children":[{"content":"<code>hostname</code> &#x7528;&#x4e8e;&#x73b0;&#x5b9e;&#x4e3b;&#x673a;&#x540d;&#x4fe1;&#x606f;","children":[],"payload":{"tag":"li","lines":"14,15"}},{"content":"<code>hostname -b new_hostname</code> &#x4fee;&#x6539;&#x4e3b;&#x673a;&#x540d;","children":[],"payload":{"tag":"li","lines":"15,17"}}],"payload":{"tag":"h2","lines":"13,14"}},{"content":"IPC Namespace","children":[{"content":"<code>ipcs -q</code> &#x67e5;&#x770b;&#x73b0;&#x6709;ipc &#x6d88;&#x606f;&#x961f;&#x5217;","children":[],"payload":{"tag":"li","lines":"18,19"}},{"content":"<code>ipcmk -Q</code> &#x521b;&#x5efa;&#x65b0;&#x7684;&#x6d88;&#x606f;&#x961f;&#x5217;","children":[],"payload":{"tag":"li","lines":"19,21"}}],"payload":{"tag":"h2","lines":"17,18"}},{"content":"PID Namespace","children":[{"content":"<code>echo &#x24;&#x24;</code> &#x6253;&#x5370;&#x5f53;&#x524d;&#x8fdb;&#x7a0b;id","children":[],"payload":{"tag":"li","lines":"22,23"}},{"content":"<code>readlink /proc/{pid}/ns/uts</code> &#x67e5;&#x770b;&#x6307;&#x5b9a;&#x8fdb;&#x7a0b;&#x7684;Namespace &#x4fe1;&#x606f;","children":[],"payload":{"tag":"li","lines":"23,25"}}],"payload":{"tag":"h2","lines":"21,22"}},{"content":"User Namespace","children":[{"content":"<code>id</code> &#x663e;&#x793a;&#x5f53;&#x524d;&#x7528;&#x6237;&#x548c;&#x7528;&#x6237;&#x7ec4;&#x4fe1;&#x606f;","children":[],"payload":{"tag":"li","lines":"26,27"}},{"content":"&#x4f7f;&#x7528;&#x7528;&#x6237;&#x9694;&#x79bb;&#x9700;&#x8981;&#x8c03;&#x7528;<code>clone()</code> &#x65f6;&#x9a8c;&#x8bc1;&#x7528;&#x6237;&#x8eab;&#x4efd;","children":[],"payload":{"tag":"li","lines":"27,28"}},{"content":"&#x9700;&#x8981;root &#x6743;&#x9650;&#x7684;&#x8bdd;&#x8fd8;&#x9700;&#x8981;&#x63d0;&#x524d;&#x4fee;&#x6539;&#x7528;&#x6237;&#x7ec4;&#x4fe1;&#x606f;","children":[],"payload":{"tag":"li","lines":"28,30"}}],"payload":{"tag":"h2","lines":"25,26"}},{"content":"NetWork Namespace","children":[{"content":"<code>ifconfig</code> &#x663e;&#x793a;&#x5f53;&#x524d;&#x7f51;&#x7edc;&#x4fe1;&#x606f;","children":[],"payload":{"tag":"li","lines":"31,33"}}],"payload":{"tag":"h2","lines":"30,31"}},{"content":"&#x5176;&#x4ed6;","children":[],"payload":{"tag":"h2","lines":"33,34"}}]}</script>
+      <script type="application/json">{"colorFreezeLevel":2}</script>
+    </div>  
+<h3 id="cgroups-资源管理"><a class="markdownIt-Anchor" href="#cgroups-资源管理"></a> Cgroups 资源管理</h3>
+<p>Cgroups 可以管理进程组及其子进程，闲置资源占用并可以监控和统计进程信息。Cgroups 包含三个组件：</p>
+<div class="markmap-wrap" 
+      
+      style="height: 300px"
+    >
+      <script type="application/json">{"content":"Cgroups","children":[{"content":"cgroup &#x5206;&#x7ec4;&#x7ba1;&#x7406;&#x6a21;&#x5757;","children":[],"payload":{"tag":"h2","lines":"6,7"}},{"content":"subsystem &#x8d44;&#x6e90;&#x63a7;&#x5236;&#x6a21;&#x5757;&#xff0c;&#x4e3b;&#x8981;&#x5305;&#x542b;","children":[{"content":"<code>blkio</code> &#x5757;&#x8bbe;&#x5907;IO &#x63a7;&#x5236;","children":[],"payload":{"tag":"li","lines":"9,10"}},{"content":"<code>cpu</code>","children":[],"payload":{"tag":"li","lines":"10,11"}},{"content":"<code>devices</code> &#x8bbe;&#x5907;&#x8bbf;&#x95ee;","children":[],"payload":{"tag":"li","lines":"11,12"}},{"content":"<code>memory</code> &#x5185;&#x5b58;&#x7ba1;&#x7406;","children":[],"payload":{"tag":"li","lines":"12,13"}},{"content":"<code>net_*</code> &#x7f51;&#x7edc;&#x7ba1;&#x7406;","children":[],"payload":{"tag":"li","lines":"13,14"}},{"content":"<code>freezer</code> &#x7528;&#x4e8e;&#x6302;&#x8d77;&#x548c;&#x6062;&#x590d;&#x8fdb;&#x7a0b;","children":[],"payload":{"tag":"li","lines":"14,15"}},{"content":"&#x4e00;&#x822c;&#x90fd;&#x662f;&#x9884;&#x5b9a;&#x4e49;&#x597d;&#x7684;&#x4e86;","children":[],"payload":{"tag":"li","lines":"15,17"}}],"payload":{"tag":"h2","lines":"8,9"}},{"content":"hierarchy &#x4f7f;cgroup &#x53ef;&#x4ee5;&#x7ee7;&#x627f;","children":[],"payload":{"tag":"h2","lines":"17,18"}}],"payload":{"tag":"h1","lines":"4,5"}}</script>
+      <script type="application/json">{"colorFreezeLevel":2}</script>
+    </div>  
+<h4 id="通过命令行操作cgroups"><a class="markdownIt-Anchor" href="#通过命令行操作cgroups"></a> 通过命令行操作Cgroups</h4>
+<p>Cgroups 是工作在内核中，一般在容器外进行设置。</p>
+<ol>
+<li>创建和管理cgroup</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 创建并挂载一个hierarchy（cgroup 树）  </span>
+<span class="token function">mkdir</span> cgroup-test  <span class="token comment"># 创建一个挂载点  </span>
+<span class="token comment"># 挂载proc</span>
+<span class="token function">sudo</span> <span class="token function">mount</span> <span class="token parameter variable">-t</span> cgroup <span class="token parameter variable">-o</span> none,name<span class="token operator">=</span>cgroup-test cgroup-test ./cgroup-test 
+<span class="token function">ls</span> ./cgroup-test  <span class="token comment"># 可以看到一些默认文件  </span>
+<span class="token comment"># cgroup.clone_children cpuset 会读取这个文件，如果是1 子cgroup 会继承cpuset 设置  </span>
+<span class="token comment"># cgroup.procs 当前节点的进程组id  </span>
+<span class="token comment"># notify_on_release 和release_agent 一起使用，通常用于进程退出后清理cgroup  </span>
+<span class="token comment"># tasks 当前节点下的进程id  </span>
+<span class="token builtin class-name">cd</span> cgroup-test  
+<span class="token function">sudo</span> <span class="token function">mkdir</span> cgroup-1
+<span class="token function">sudo</span> <span class="token function">mkdir</span> cgroup-2
+tree <span class="token comment"># 扩展子节点会自动添加默认文件</span>
+
+<span class="token comment"># 移动进程到cgroup  </span>
+<span class="token builtin class-name">cd</span> cgroup-1 <span class="token comment"># 切换到目标cgroup</span>
+<span class="token function">sudo</span> <span class="token function">sh</span> <span class="token parameter variable">-c</span> <span class="token string">"echo <span class="token variable">$$</span> >> tasks"</span> <span class="token comment"># 将当前终端进程移动到cgroup-1  </span>
+<span class="token function">cat</span> /proc/<span class="token punctuation">&#123;</span>pid<span class="token punctuation">&#125;</span>/cgroup <span class="token comment"># 打印cgroup 信息</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="2">
+<li>通过subsystem 限制cgroup 资源占用</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 系统会默认为每个subsystem（每种计算机资源）创建一个hierarchy（cgroup 树）， 例如内存管理  </span>
+<span class="token function">mount</span> <span class="token operator">|</span> <span class="token function">grep</span> memory  <span class="token comment"># 查看memory subsystem </span>
+<span class="token comment"># cgroup on /sys/fs/cgroup/memory type .....</span>
+<span class="token builtin class-name">cd</span> /sys/fs/cgroup/memory   
+<span class="token function">sudo</span> <span class="token function">mkdir</span> test-limit-memory <span class="token operator">&amp;&amp;</span> <span class="token builtin class-name">cd</span> test-limit-memory <span class="token comment"># 创建一个cgroup    </span>
+<span class="token function">sudo</span> <span class="token function">sh</span> <span class="token parameter variable">-c</span> <span class="token string">"echo <span class="token entity" title="\&quot;">\"</span>100m<span class="token entity" title="\&quot;">\"</span> > memory.limit_in_bytes"</span>  <span class="token comment"># 设置当前cgroup 中所有进程的总内存占用  </span>
+<span class="token function">sudo</span> <span class="token function">sh</span> <span class="token parameter variable">-c</span> <span class="token string">"echo <span class="token variable">$$</span> > tasks"</span>  <span class="token comment"># 将当前进程移动到该cgroup  </span>
+<span class="token comment"># 运行一个占用200M 内存的stress 进程  </span>
+stress --vm-bytes 200m --vm-keep <span class="token parameter variable">-m</span> <span class="token number">1</span>  
+<span class="token comment"># 通过top 命令查看该进程实际占用了100M 内存空间</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>而以内存限制为例，Docker 会为每个容器创建一个相关的cgroup，即使是通过代码实现，也是遵循上面命令的步骤。当然对于不同的计算机资源可以新增更多的cgroup。</p>
+<h3 id="union-file-system-联合文件系统"><a class="markdownIt-Anchor" href="#union-file-system-联合文件系统"></a> Union File System 联合文件系统</h3>
+<p><code>写时复制（Copy-on-Write）</code>，对于同一个文件，可能存在不同的应用场景，而今当该文件被修改时，才会创建新的资源，以减小系统开销，并且文件可以同步最新状态。<br />
+<code>AUFS</code> 对UnionFS 1.x 进行了重写，然后是Docker 选用的第一种存储驱动但是因对Linux 的支持不好，因此更推荐选择OverlayFS。 AUFS 具有分层的概念，还是值得学习的：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># cd 至任意文件夹  </span>
+<span class="token comment"># 创建文件夹container_layer 文件f1-f4 以及挂载目标目录mnt  </span>
+<span class="token function">sudo</span> <span class="token function">mount</span> <span class="token parameter variable">-t</span> aufs <span class="token parameter variable">-o</span> <span class="token assign-left variable">dirs</span><span class="token operator">=</span>./container-layer:./f1:./f2:./f3:./f4 none ./mnt  
+<span class="token comment"># dirs 后跟的第一个路径是可读写的，后面都是只读的  </span>
+
+<span class="token builtin class-name">echo</span> <span class="token parameter variable">-e</span> <span class="token string">"<span class="token entity" title="\n">\n</span>New Line!"</span> <span class="token operator">>></span> ./mnt/f4  
+<span class="token comment"># 因为f4 在mnt 挂载时是只读的，故而在该文件更新时</span>
+<span class="token comment"># 会在container-layer 文件夹中创建一个副本</span>
+
+<span class="token function">cat</span> f4  <span class="token comment"># 仍然会输出原先f4 文件中的内容  </span>
+<span class="token function">cat</span> ./mnt/f4  <span class="token comment"># 会显示更新后的f4 内容</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://markmap.org/hexo-markmap/">hexo-markmap</a> 为hexo 添加思维导图的功能。</li>
+<li><a target="_blank" rel="noopener" href="https://feng-qi.github.io/2017/04/19/linux-system-call-fork-vfork-clone/">Linux 系统调用 fork()、vfork() 和 clone()</a></li>
+<li><a target="_blank" rel="noopener" href="https://tech.meituan.com/2015/03/31/cgroups.html">Linux资源管理之cgroups简介</a></li>
+</ol>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2025/06/18/container/" title="Linux 容器技术笔记">https://12tall.github.io/2025/06/18/container/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># linux</a>
+              <a href="/tags/docker/" rel="tag"># docker</a>
+              <a href="/tags/container/" rel="tag"># container</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/06/04/pcd-parser/" rel="prev" title="通过antlr4 开发pcd 文件解析器">
+                  <i class="fa fa-angle-left"></i> 通过antlr4 开发pcd 文件解析器
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">147k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:54</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>
