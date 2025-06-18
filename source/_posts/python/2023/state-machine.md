@@ -2,7 +2,7 @@
 title: Python 状态机    
 date: 2023-10-19    
 tags:   
-    - Python   
+    - python   
     - StateMachine  
 ---   
 

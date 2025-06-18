@@ -3,7 +3,7 @@ title: 使用PyFemm 进行电磁场仿真
 date: 2023-05-12  
 tags:  
     - 仿真  
-    - Python  
+    - python  
     - 有限元  
     - 我理解的  
 ---   
