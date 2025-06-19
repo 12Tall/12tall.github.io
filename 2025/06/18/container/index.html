@@ -19,15 +19,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="《自己动手写docker》 的读书笔记。">
+    <meta name="description" content="《自己动手写docker》 的读书笔记。有些代码块并不完整，还是需要结合原书一起看。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux 容器技术笔记">
 <meta property="og:url" content="https://12tall.github.io/2025/06/18/container/index.html">
 <meta property="og:site_name" content="12Tall">
-<meta property="og:description" content="《自己动手写docker》 的读书笔记。">
+<meta property="og:description" content="《自己动手写docker》 的读书笔记。有些代码块并不完整，还是需要结合原书一起看。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-06-18T10:33:21.000Z">
-<meta property="article:modified_time" content="2025-06-18T05:38:00.830Z">
+<meta property="article:modified_time" content="2025-06-19T05:07:00.370Z">
 <meta property="article:author" content="12Tall">
 <meta property="article:tag" content="linux">
 <meta property="article:tag" content="docker">
@@ -59,6 +59,8 @@
 <script src="/js/third-party/search/local-search.js" defer></script>
 
 
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
 
 
 
@@ -169,7 +171,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF"><span class="nav-number">1.</span> <span class="nav-text"> 基础技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#namespace-%E9%9A%94%E7%A6%BB"><span class="nav-number">1.1.</span> <span class="nav-text"> Namespace 隔离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAnamespace"><span class="nav-number">1.2.</span> <span class="nav-text"> 创建Namespace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E8%B0%83%E8%AF%95%E5%91%BD%E4%BB%A4"><span class="nav-number">1.3.</span> <span class="nav-text"> 常用的调试命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cgroups-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86"><span class="nav-number">1.4.</span> <span class="nav-text"> Cgroups 资源管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%93%8D%E4%BD%9Ccgroups"><span class="nav-number">1.4.1.</span> <span class="nav-text"> 通过命令行操作Cgroups</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#union-file-system-%E8%81%94%E5%90%88%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.5.</span> <span class="nav-text"> Union File System 联合文件系统</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">2.</span> <span class="nav-text"> 参考</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF"><span class="nav-number">1.</span> <span class="nav-text"> 基础技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#namespace-%E9%9A%94%E7%A6%BB"><span class="nav-number">1.1.</span> <span class="nav-text"> Namespace 隔离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAnamespace"><span class="nav-number">1.2.</span> <span class="nav-text"> 创建Namespace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E8%B0%83%E8%AF%95%E5%91%BD%E4%BB%A4"><span class="nav-number">1.3.</span> <span class="nav-text"> 常用的调试命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cgroups-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86"><span class="nav-number">1.4.</span> <span class="nav-text"> Cgroups 资源管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%93%8D%E4%BD%9Ccgroups"><span class="nav-number">1.4.1.</span> <span class="nav-text"> 通过命令行操作Cgroups</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#union-file-system-%E8%81%94%E5%90%88%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.5.</span> <span class="nav-text"> Union File System 联合文件系统</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E5%AE%B9%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text"> 构造容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95docker-run-%E5%91%BD%E4%BB%A4"><span class="nav-number">2.1.</span> <span class="nav-text"> 实现简单docker run 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#newparentprocess-%E5%88%9B%E5%BB%BAnamespace-%E9%9A%94%E7%A6%BB%E7%9A%84%E5%AE%B9%E5%99%A8%E8%BF%9B%E7%A8%8B"><span class="nav-number">2.1.1.</span> <span class="nav-text"> NewParentProcess 创建Namespace 隔离的容器进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#runcontainerinitprocess-%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%B9%E5%99%A8%E7%8E%AF%E5%A2%83"><span class="nav-number">2.1.2.</span> <span class="nav-text"> RunContainerInitProcess 初始化容器环境</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A2%9E%E5%8A%A0%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6"><span class="nav-number">2.2.</span> <span class="nav-text"> 增加资源限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%A1%E9%81%93%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">2.3.</span> <span class="nav-text"> 管道与环境变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text"> 参考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -264,9 +266,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2025-06-18 10:33:21 / 修改时间：05:38:00" itemprop="dateCreated datePublished" datetime="2025-06-18T10:33:21+00:00">2025-06-18</time>
+      <time title="创建时间：2025-06-18 10:33:21" itemprop="dateCreated datePublished" datetime="2025-06-18T10:33:21+00:00">2025-06-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-06-19 05:07:00" itemprop="dateModified" datetime="2025-06-19T05:07:00+00:00">2025-06-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -292,14 +300,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.8k</span>
+      <span>3.3k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>6 分钟</span>
+      <span>12 分钟</span>
     </span>
 </div>
 
@@ -309,7 +317,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>《自己动手写docker》 的读书笔记。</p>
+    <div class="post-body" itemprop="articleBody"><p>《自己动手写docker》 的读书笔记。有些代码块并不完整，还是需要结合原书一起看。</p>
 <span id="more"></span>
 <h2 id="基础技术"><a class="markdownIt-Anchor" href="#基础技术"></a> 基础技术</h2>
 <p>基础技术主要包含Namespace 隔离技术、Cgroups 资源管理以及<s>AUFS</s> 文件系统等。
@@ -502,6 +510,150 @@ stress --vm-bytes 200m --vm-keep <span class="token parameter variable">-m</span
 
 <span class="token function">cat</span> f4  <span class="token comment"># 仍然会输出原先f4 文件中的内容  </span>
 <span class="token function">cat</span> ./mnt/f4  <span class="token comment"># 会显示更新后的f4 内容</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="构造容器"><a class="markdownIt-Anchor" href="#构造容器"></a> 构造容器</h2>
+<p>首先是关于<code>/proc</code> 文件系统的基础知识，该系统并不是真正的文件系统，虽然可以以文件系统的形式读取，但是它实际存在于内存中。</p>
+<div class="markmap-wrap" 
+      
+      style="height: 500px"
+    >
+      <script type="application/json">{"content":"<code>/proc</code>","children":[{"content":"<code>/N</code> &#x83b7;&#x53d6;PID &#x4e3a;N &#x7684;&#x8fdb;&#x7a0b;&#x4fe1;&#x606f;","children":[{"content":"<code>/cmdline</code> &#x8fdb;&#x7a0b;&#x7684;&#x542f;&#x52a8;&#x547d;&#x4ee4;","children":[],"payload":{"tag":"li","lines":"7,8"}},{"content":"<code>/cwd</code> &#x8fdb;&#x7a0b;&#x7684;&#x5de5;&#x4f5c;&#x76ee;&#x5f55;","children":[],"payload":{"tag":"li","lines":"8,9"}},{"content":"<code>/environ</code> &#x8fdb;&#x7a0b;&#x7684;&#x73af;&#x5883;&#x53d8;&#x91cf;","children":[],"payload":{"tag":"li","lines":"9,10"}},{"content":"<code>/exe</code> &#x6267;&#x884c;&#x547d;&#x4ee4;&#x6587;&#x4ef6;","children":[],"payload":{"tag":"li","lines":"10,11"}},{"content":"<code>/fd</code> &#x76f8;&#x5173;&#x7684;&#x6587;&#x4ef6;&#x63cf;&#x8ff0;&#x7b26;","children":[],"payload":{"tag":"li","lines":"11,12"}},{"content":"<code>/maps</code> &#x5185;&#x5b58;&#x6620;&#x5c04;&#x4fe1;&#x606f;","children":[],"payload":{"tag":"li","lines":"12,13"}},{"content":"<code>/mem</code> &#x8fdb;&#x7a0b;&#x6c60;&#x6709;&#x7684;&#x5185;&#x5b58;&#xff0c;&#x4e0d;&#x53ef;&#x8bfb;","children":[],"payload":{"tag":"li","lines":"13,14"}},{"content":"<code>/root</code> &#x94fe;&#x63a5;&#x5230;&#x8fdb;&#x7a0b;&#x7684;&#x6839;&#x76ee;&#x5f55;","children":[],"payload":{"tag":"li","lines":"14,15"}},{"content":"<code>/stat</code> &#x8fdb;&#x7a0b;&#x7684;&#x72b6;&#x6001;","children":[],"payload":{"tag":"li","lines":"15,16"}},{"content":"<code>/statm</code> &#x8fdb;&#x7a0b;&#x4f7f;&#x7528;&#x7684;&#x5185;&#x5b58;&#x72b6;&#x6001;","children":[],"payload":{"tag":"li","lines":"16,17"}},{"content":"<code>/status</code> &#x8fdb;&#x7a0b;&#x7684;&#x72b6;&#x6001;&#xff0c;&#x66f4;&#x6613;&#x8bfb;","children":[],"payload":{"tag":"li","lines":"17,18"}}],"payload":{"tag":"h2","lines":"6,7"}},{"content":"<code>/self/</code> &#x94fe;&#x63a5;&#x5230;&#x5f53;&#x524d;&#x6b63;&#x5728;&#x8fd0;&#x884c;&#x7684;&#x8fdb;&#x7a0b;","children":[],"payload":{"tag":"h2","lines":"18,19"}}],"payload":{"tag":"h1","lines":"5,6"}}</script>
+      <script type="application/json">{"title":"/proc","colorFreezeLevel":2}</script>
+    </div> 
+<h3 id="实现简单docker-run-命令"><a class="markdownIt-Anchor" href="#实现简单docker-run-命令"></a> 实现简单docker run 命令</h3>
+<p>首先分析该命令的参数<code>docker run [-ti] &#123;command&#125;</code>，抛开容器和隔离的知识不谈，该命令就是创建一个进程:</p>
+<ul>
+<li><code>run</code> 是二级命令，固定的</li>
+<li><code>-ti</code> 表示是否将子进程的输入输出转发到docker 进程</li>
+<li><code>command</code> 子进程的启动命令</li>
+</ul>
+<p>下面是大致的流程图：</p>
+<pre>
+<code class="mermaid">
+sequenceDiagram
+docker-&gt;&gt;runCommand: 1. 解析命令行参数  
+runCommand-&gt;&gt;NewParentProcess: 2. 创建Namespace 隔离的容器进程（的对象）cmd  
+NewParentProcess--&gt;&gt;runCommand: 3. 返回容器进程对象cmd  
+runCommand--&gt;&gt;docker: 4. 启动容器进程cmd，调用init 二级命令  
+docker-&gt;&gt;docker: 5. 容器内进程调用自己（为初始化子进程环境需要）
+docker-&gt;&gt;RunContainerProcess: 6. 初始化容器内容，挂载proc 文件系统，最后执行command  
+RunContainerProcess--&gt;&gt;docker: 7. 容器进程开始运行，转发标准输入输出到docker 进程
+</code>
+</pre>
+<p>下面是几个比较关键的函数的部分节选：</p>
+<h4 id="newparentprocess-创建namespace-隔离的容器进程"><a class="markdownIt-Anchor" href="#newparentprocess-创建namespace-隔离的容器进程"></a> NewParentProcess 创建Namespace 隔离的容器进程</h4>
+<pre class="line-numbers language-go" data-language="go"><code class="language-go"><span class="token comment">// 2. NewParentProcess 创建Namespace 隔离的容器进程（的对象）cmd  </span>
+<span class="token keyword">func</span> <span class="token function">NewParentProcess</span><span class="token punctuation">(</span>tty <span class="token builtin">bool</span><span class="token punctuation">,</span> command <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token operator">*</span>exec<span class="token punctuation">.</span>Cmd <span class="token punctuation">&#123;</span>
+    <span class="token comment">// tty 表示是否转发子进程stdio 这里忽略  </span>
+    args <span class="token operator">:=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">&#123;</span><span class="token string">"init"</span><span class="token punctuation">,</span>command<span class="token punctuation">&#125;</span>
+    <span class="token comment">// 将来该命令会调用自己的init 二级命令，为command 初始化环境 </span>
+    <span class="token comment">// 所以这里要有一个init 命令用于初始化容器内子进程的运行环境 RunContainerInitProcess()</span>
+    cmd <span class="token operator">:=</span> exec<span class="token punctuation">.</span><span class="token function">Command</span><span class="token punctuation">(</span><span class="token string">"/proc/self/exe"</span><span class="token punctuation">,</span> args<span class="token operator">...</span><span class="token punctuation">)</span>   
+    <span class="token comment">// 隔离Namespace  </span>
+    cmd<span class="token punctuation">.</span>SysProcAttr <span class="token operator">=</span> <span class="token operator">&amp;</span>syscall<span class="token punctuation">.</span>SysProcAttr<span class="token punctuation">&#123;</span>
+        Cloneflags<span class="token punctuation">:</span> syscall<span class="token punctuation">.</span>CLONE_NEWUNS  <span class="token operator">|</span> syscall<span class="token punctuation">.</span>CLONE_NEWUTS <span class="token operator">|</span> syscall<span class="token punctuation">.</span>CLONE_NEWPID <span class="token operator">|</span> 
+                    syscall<span class="token punctuation">.</span>CLONE_NEWUIPC <span class="token operator">|</span> syscall<span class="token punctuation">.</span>CLONE_NEWNET
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> cmd  <span class="token comment">// 这里只创建了对象，并未运行  </span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="runcontainerinitprocess-初始化容器环境"><a class="markdownIt-Anchor" href="#runcontainerinitprocess-初始化容器环境"></a> RunContainerInitProcess 初始化容器环境</h4>
+<pre class="line-numbers language-go" data-language="go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">RunContainerInitProcess</span><span class="token punctuation">(</span>command <span class="token builtin">string</span><span class="token punctuation">,</span> srgs <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">)</span><span class="token builtin">error</span><span class="token punctuation">&#123;</span>
+    <span class="token comment">// 挂载 /proc</span>
+    defaultMountFlags <span class="token operator">:=</span> syscall<span class="token punctuation">.</span>MS_NOEXEC <span class="token operator">|</span> syscall<span class="token punctuation">.</span>MS_NOSUID <span class="token operator">|</span> syscall<span class="token punctuation">.</span>MS_NODEV  
+    <span class="token comment">/*
+    * MS_NOEXEC 本文件系统中不允许其他程序运行  
+    * MS_NOSUID 本文件系统运行程序时，不允许，不允许设置userid 和group include
+    * MD_NODEV 是一个默认参数
+    */</span>
+    syscall<span class="token punctuation">.</span><span class="token function">Mount</span><span class="token punctuation">(</span><span class="token string">"proc"</span><span class="token punctuation">,</span> <span class="token string">"/proc"</span><span class="token punctuation">,</span> <span class="token string">"proc"</span><span class="token punctuation">,</span> <span class="token function">uintptr</span><span class="token punctuation">(</span>defaultMountFlags<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span>
+    argv <span class="token operator">:=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">&#123;</span>command<span class="token punctuation">&#125;</span>
+    <span class="token keyword">if</span> err<span class="token operator">:=</span> syscall<span class="token punctuation">.</span><span class="token function">Exec</span><span class="token punctuation">(</span>command<span class="token punctuation">,</span> argv<span class="token punctuation">,</span> os<span class="token punctuation">.</span><span class="token function">Environ</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span><span class="token punctuation">&#123;</span>
+        <span class="token comment">// 错误处理</span>
+        <span class="token comment">// 这里syscall.Exce 实际回到用内核的函数：</span>
+        <span class="token comment">// int execve(const char *filename, char *const argv[], char *const envp[])</span>
+        <span class="token comment">// 可以在执行filename 程序后覆盖掉当前进程的镜像、数据、堆栈信息，包括PID 这种会被重用</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token boolean">nil</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="增加资源限制"><a class="markdownIt-Anchor" href="#增加资源限制"></a> 增加资源限制</h3>
+<p>通过hierarchy 和subsystem 对容器中的资源进行限制，抛开参数解析和命令执行，修改的点在创建容器进程之后，容器初始化之前：</p>
+<pre class="line-numbers language-go" data-language="go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">Run</span><span class="token punctuation">(</span>tty <span class="token builtin">bool</span><span class="token punctuation">,</span> <span class="token comment">/* */</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    parent<span class="token punctuation">,</span> writePipe <span class="token operator">:=</span> <span class="token function">NewParentProcess</span><span class="token punctuation">(</span>tty<span class="token punctuation">)</span>
+    <span class="token comment">// 创建并应用资源管理规则</span>
+
+    <span class="token comment">// 初始化容器</span>
+    <span class="token function">sendInitCommand</span><span class="token punctuation">(</span><span class="token comment">/**/</span><span class="token punctuation">,</span> writePipe<span class="token punctuation">)</span>
+    parent<span class="token punctuation">.</span><span class="token function">Wait</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这一步骤的主要工作是在容器初始化之前<strong>封装</strong>好subsystem/hierarchy 查找、新建以及删除的方法。工作量很大，但是逻辑很直接，相当于自己实现了一个Cgroups 树和管理器：</p>
+<pre>
+<code class="mermaid">
+sequenceDiagram
+CgroupManager--&gt;&gt;Subsystem 实例: 发现并创建Subsystem 实例    
+CgroupManager-&gt;&gt;Subsystem 实例: 在每个Subsystem 对应的hierarchy 上创建cgroup  
+Subsystem 实例--&gt;&gt;CgroupManager: 创建完成
+CgroupManager-&gt;&gt;Subsystem 实例: 将容器进程加入cgroup  
+Subsystem 实例--&gt;&gt;CgroupManager: 完成
+</code>
+</pre>
+<h3 id="管道与环境变量"><a class="markdownIt-Anchor" href="#管道与环境变量"></a> 管道与环境变量</h3>
+<p>管道是进程间通信的消息通道，可以按照文件的方式读写，一般有4KB 的缓存区，缓存满时写入会被阻塞。常见的管道类型一般分为：</p>
+<ul>
+<li>匿名管道：具有亲缘关系间的进程通信</li>
+<li>具名管道：用于任意进程间通信</li>
+</ul>
+<p>因为在启动容器之后需要与容器中子进程通信，于是需要至少有一个匿名的管道来实现：</p>
+<pre class="line-numbers language-go" data-language="go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">NewPipe</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token operator">*</span>os<span class="token punctuation">.</span>File<span class="token punctuation">,</span> <span class="token operator">*</span>os<span class="token punctuation">.</span>File<span class="token punctuation">,</span> <span class="token builtin">error</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    read<span class="token punctuation">,</span> write<span class="token punctuation">,</span> err <span class="token operator">:=</span> os<span class="token punctuation">.</span><span class="token function">Pipe</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> err
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">return</span> read<span class="token punctuation">,</span> write<span class="token punctuation">,</span> <span class="token boolean">nil</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>然后再修改容器进程的构造方法<code>NewParentProcess()</code>：</p>
+<pre class="line-numbers language-go" data-language="go"><code class="language-go"><span class="token comment">// 因为无需执行固定的命令，所以就不需要传入command 了</span>
+<span class="token keyword">func</span> <span class="token function">NewParentProcess</span><span class="token punctuation">(</span>tty <span class="token builtin">bool</span><span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token operator">*</span>exec<span class="token punctuation">.</span>Cmd<span class="token punctuation">,</span> <span class="token operator">*</span>os<span class="token punctuation">.</span>File<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    read<span class="token punctuation">,</span> write<span class="token punctuation">,</span> err <span class="token operator">:=</span>  <span class="token function">NewPipe</span><span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment">// 省略判断为空的语句</span>
+
+    <span class="token comment">// tty 表示是否转发子进程stdio 这里忽略  </span>
+    args <span class="token operator">:=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">&#123;</span><span class="token string">"init"</span><span class="token punctuation">&#125;</span>
+    <span class="token comment">// 将来该命令会调用自己的init 二级命令，为command 初始化环境 </span>
+    <span class="token comment">// 所以这里要有一个init 命令用于初始化容器内子进程的运行环境 RunContainerInitProcess()</span>
+    cmd <span class="token operator">:=</span> exec<span class="token punctuation">.</span><span class="token function">Command</span><span class="token punctuation">(</span><span class="token string">"/proc/self/exe"</span><span class="token punctuation">,</span> args<span class="token operator">...</span><span class="token punctuation">)</span>   
+    <span class="token comment">// 隔离Namespace  </span>
+    cmd<span class="token punctuation">.</span>SysProcAttr <span class="token operator">=</span> <span class="token operator">&amp;</span>syscall<span class="token punctuation">.</span>SysProcAttr<span class="token punctuation">&#123;</span>
+        Cloneflags<span class="token punctuation">:</span> syscall<span class="token punctuation">.</span>CLONE_NEWUNS  <span class="token operator">|</span> syscall<span class="token punctuation">.</span>CLONE_NEWUTS <span class="token operator">|</span> syscall<span class="token punctuation">.</span>CLONE_NEWPID <span class="token operator">|</span> 
+                    syscall<span class="token punctuation">.</span>CLONE_NEWUIPC <span class="token operator">|</span> syscall<span class="token punctuation">.</span>CLONE_NEWNET
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// ※ 重点在这里，该管道的文件描述符在容器进程中的id 会是3  </span>
+    <span class="token comment">// 因为前面会有标准输入、标准输出和标准错误的id 分别为0，1，2  </span>
+    cmd<span class="token punctuation">.</span>ExtraFiles <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">*</span>os<span class="token punctuation">.</span><span class="token function">File</span><span class="token punctuation">(</span>read<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> cmd  <span class="token comment">// 这里只创建了对象，并未运行  </span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>因此在子进程中，我们需要一个获取管道并从管道读取指令的方法：</p>
+<pre class="line-numbers language-go" data-language="go"><code class="language-go"><span class="token comment">// 读取id 为3 的文件，也就是上面生成的管道</span>
+<span class="token comment">// 并从管道中读取命令，重新组合成字符串数组</span>
+<span class="token keyword">func</span> <span class="token function">readUserCommand</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">&#123;</span>
+    pipe <span class="token operator">:=</span> os<span class="token punctuation">.</span><span class="token function">NewFile</span><span class="token punctuation">(</span><span class="token function">uintptr</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"pipe"</span><span class="token punctuation">)</span>
+    msg<span class="token punctuation">,</span> err <span class="token operator">:=</span> ioutil<span class="token punctuation">.</span><span class="token function">ReadAll</span><span class="token punctuation">(</span>pipe<span class="token punctuation">)</span>
+    <span class="token comment">// 省略异常处理  </span>
+    msgStr <span class="token operator">:=</span> <span class="token function">string</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> strings<span class="token punctuation">.</span><span class="token function">Split</span><span class="token punctuation">(</span>msgStr<span class="token punctuation">,</span> <span class="token string">" "</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>最后我们需要重新在<code>RunContainerInitProcess()</code> 方法中，去尝试调用管道传入的命令：</p>
+<pre class="line-numbers language-go" data-language="go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">RunContainerInitProcess</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">error</span><span class="token punctuation">&#123;</span>
+    cmdArray <span class="token operator">:=</span> <span class="token function">readUserCommand</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token comment">// 挂载/proc</span>
+    path<span class="token punctuation">,</span> err <span class="token operator">:=</span> exec<span class="token punctuation">.</span><span class="token function">LookPath</span><span class="token punctuation">(</span>cmdArray<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment">// 此语句会让子进程</span>
+    <span class="token comment">// 在系统PATH 中寻找命令的绝对路径</span>
+
+    <span class="token keyword">if</span> err<span class="token operator">:=</span> syscall<span class="token punctuation">.</span><span class="token function">Exec</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> cmdArray<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">,</span> os<span class="token punctuation">.</span><span class="token function">Environ</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span><span class="token punctuation">&#123;</span>
+        <span class="token comment">// 错误处理</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token boolean">nil</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>但是最终还是需要手动调用在主进程写入管道，并且该命令似乎只会执行一次。而我们需要的是主进程可以循环写入，在子进程中可以循环读取并执行。</p>
 <h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
 <ol>
 <li><a target="_blank" rel="noopener" href="https://markmap.org/hexo-markmap/">hexo-markmap</a> 为hexo 添加思维导图的功能。</li>
@@ -588,13 +740,13 @@ stress --vm-bytes 200m --vm-keep <span class="token parameter variable">-m</span
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">147k</span>
+    <span title="站点总字数">148k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">8:54</span>
+    <span title="站点阅读时长">8:59</span>
   </span>
 </div>
 <div class="busuanzi-count">
