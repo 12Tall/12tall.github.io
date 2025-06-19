@@ -7,7 +7,7 @@ tags:
     - docker
 ---
 
-《自己动手写docker》 的读书笔记。  
+《自己动手写docker》 的读书笔记。有些代码块并不完整，还是需要结合原书一起看。    
 <!-- more -->
 
 ## 基础技术  
@@ -233,6 +233,181 @@ echo -e "\nNew Line!" >> ./mnt/f4
 cat f4  # 仍然会输出原先f4 文件中的内容  
 cat ./mnt/f4  # 会显示更新后的f4 内容
 ```
+
+## 构造容器  
+首先是关于`/proc` 文件系统的基础知识，该系统并不是真正的文件系统，虽然可以以文件系统的形式读取，但是它实际存在于内存中。  
+
+{% markmap 500px %}
+---
+markmap:
+  title: /proc
+  colorFreezeLevel: 2
+---
+# `/proc`
+## `/N` 获取PID 为N 的进程信息
+- `/cmdline` 进程的启动命令  
+- `/cwd` 进程的工作目录  
+- `/environ` 进程的环境变量  
+- `/exe` 执行命令文件  
+- `/fd` 相关的文件描述符  
+- `/maps` 内存映射信息  
+- `/mem` 进程池有的内存，不可读  
+- `/root` 链接到进程的根目录   
+- `/stat` 进程的状态  
+- `/statm` 进程使用的内存状态  
+- `/status` 进程的状态，更易读  
+## `/self/` 链接到当前正在运行的进程
+{% endmarkmap %} 
+
+
+### 实现简单docker run 命令     
+首先分析该命令的参数`docker run [-ti] {command}`，抛开容器和隔离的知识不谈，该命令就是创建一个进程:  
+- `run` 是二级命令，固定的  
+- `-ti` 表示是否将子进程的输入输出转发到docker 进程  
+- `command` 子进程的启动命令  
+
+下面是大致的流程图：  
+{% mermaid sequenceDiagram %}
+docker->>runCommand: 1. 解析命令行参数  
+runCommand->>NewParentProcess: 2. 创建Namespace 隔离的容器进程（的对象）cmd  
+NewParentProcess-->>runCommand: 3. 返回容器进程对象cmd  
+runCommand-->>docker: 4. 启动容器进程cmd，调用init 二级命令  
+docker->>docker: 5. 容器内进程调用自己（为初始化子进程环境需要）
+docker->>RunContainerProcess: 6. 初始化容器内容，挂载proc 文件系统，最后执行command  
+RunContainerProcess-->>docker: 7. 容器进程开始运行，转发标准输入输出到docker 进程
+{% endmermaid %}
+
+下面是几个比较关键的函数的部分节选：  
+#### NewParentProcess 创建Namespace 隔离的容器进程
+```go
+// 2. NewParentProcess 创建Namespace 隔离的容器进程（的对象）cmd  
+func NewParentProcess(tty bool, command string) *exec.Cmd {
+    // tty 表示是否转发子进程stdio 这里忽略  
+    args := []string{"init",command}
+    // 将来该命令会调用自己的init 二级命令，为command 初始化环境 
+    // 所以这里要有一个init 命令用于初始化容器内子进程的运行环境 RunContainerInitProcess()
+    cmd := exec.Command("/proc/self/exe", args...)   
+    // 隔离Namespace  
+    cmd.SysProcAttr = &syscall.SysProcAttr{
+        Cloneflags: syscall.CLONE_NEWUNS  | syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | 
+                    syscall.CLONE_NEWUIPC | syscall.CLONE_NEWNET
+    }
+    return cmd  // 这里只创建了对象，并未运行  
+}
+```
+
+#### RunContainerInitProcess 初始化容器环境
+```go
+func RunContainerInitProcess(command string, srgs []string)error{
+    // 挂载 /proc
+    defaultMountFlags := syscall.MS_NOEXEC | syscall.MS_NOSUID | syscall.MS_NODEV  
+    /*
+    * MS_NOEXEC 本文件系统中不允许其他程序运行  
+    * MS_NOSUID 本文件系统运行程序时，不允许，不允许设置userid 和group include
+    * MD_NODEV 是一个默认参数
+    */
+    syscall.Mount("proc", "/proc", "proc", uintptr(defaultMountFlags), "")
+    argv := []string{command}
+    if err:= syscall.Exec(command, argv, os.Environ()); err != nil{
+        // 错误处理
+        // 这里syscall.Exce 实际回到用内核的函数：
+        // int execve(const char *filename, char *const argv[], char *const envp[])
+        // 可以在执行filename 程序后覆盖掉当前进程的镜像、数据、堆栈信息，包括PID 这种会被重用
+    }
+    return nil
+}
+```
+
+### 增加资源限制   
+通过hierarchy 和subsystem 对容器中的资源进行限制，抛开参数解析和命令执行，修改的点在创建容器进程之后，容器初始化之前：
+```go
+func Run(tty bool, /* */){
+    parent, writePipe := NewParentProcess(tty)
+    // 创建并应用资源管理规则
+
+    // 初始化容器
+    sendInitCommand(/**/, writePipe)
+    parent.Wait()
+}
+```
+这一步骤的主要工作是在容器初始化之前**封装**好subsystem/hierarchy 查找、新建以及删除的方法。工作量很大，但是逻辑很直接，相当于自己实现了一个Cgroups 树和管理器：  
+{% mermaid sequenceDiagram %}
+CgroupManager-->>Subsystem 实例: 发现并创建Subsystem 实例    
+CgroupManager->>Subsystem 实例: 在每个Subsystem 对应的hierarchy 上创建cgroup  
+Subsystem 实例-->>CgroupManager: 创建完成
+CgroupManager->>Subsystem 实例: 将容器进程加入cgroup  
+Subsystem 实例-->>CgroupManager: 完成
+{% endmermaid %}
+
+### 管道与环境变量  
+管道是进程间通信的消息通道，可以按照文件的方式读写，一般有4KB 的缓存区，缓存满时写入会被阻塞。常见的管道类型一般分为：  
+- 匿名管道：具有亲缘关系间的进程通信   
+- 具名管道：用于任意进程间通信  
+
+因为在启动容器之后需要与容器中子进程通信，于是需要至少有一个匿名的管道来实现：  
+```go
+func NewPipe()(*os.File, *os.File, error){
+    read, write, err := os.Pipe()
+    if err != nil {
+        return nil, nil, err
+    }
+
+    return read, write, nil
+}
+```
+
+然后再修改容器进程的构造方法`NewParentProcess()`：  
+```go
+// 因为无需执行固定的命令，所以就不需要传入command 了
+func NewParentProcess(tty bool) (*exec.Cmd, *os.File) {
+    read, write, err :=  NewPipe()  // 省略判断为空的语句
+
+    // tty 表示是否转发子进程stdio 这里忽略  
+    args := []string{"init"}
+    // 将来该命令会调用自己的init 二级命令，为command 初始化环境 
+    // 所以这里要有一个init 命令用于初始化容器内子进程的运行环境 RunContainerInitProcess()
+    cmd := exec.Command("/proc/self/exe", args...)   
+    // 隔离Namespace  
+    cmd.SysProcAttr = &syscall.SysProcAttr{
+        Cloneflags: syscall.CLONE_NEWUNS  | syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | 
+                    syscall.CLONE_NEWUIPC | syscall.CLONE_NEWNET
+    }
+
+    // ※ 重点在这里，该管道的文件描述符在容器进程中的id 会是3  
+    // 因为前面会有标准输入、标准输出和标准错误的id 分别为0，1，2  
+    cmd.ExtraFiles = []*os.File(read)
+    return cmd  // 这里只创建了对象，并未运行  
+}
+```
+因此在子进程中，我们需要一个获取管道并从管道读取指令的方法：  
+```go
+// 读取id 为3 的文件，也就是上面生成的管道
+// 并从管道中读取命令，重新组合成字符串数组
+func readUserCommand() []string{
+    pipe := os.NewFile(uintptr(3), "pipe")
+    msg, err := ioutil.ReadAll(pipe)
+    // 省略异常处理  
+    msgStr := string(msg)
+    return strings.Split(msgStr, " ")
+}
+```
+最后我们需要重新在`RunContainerInitProcess()` 方法中，去尝试调用管道传入的命令：  
+```go
+func RunContainerInitProcess() error{
+    cmdArray := readUserCommand()
+    // 挂载/proc
+    path, err := exec.LookPath(cmdArray[0])  // 此语句会让子进程
+    // 在系统PATH 中寻找命令的绝对路径
+
+    if err:= syscall.Exec(path, cmdArray[0:], os.Environ()); err != nil{
+        // 错误处理
+    }
+    return nil
+}
+```
+但是最终还是需要手动调用在主进程写入管道，并且该命令似乎只会执行一次。而我们需要的是主进程可以循环写入，在子进程中可以循环读取并执行。 
+
+
 
 
 ## 参考  
