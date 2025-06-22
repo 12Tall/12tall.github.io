@@ -27,7 +27,7 @@
 <meta property="og:description" content="《自己动手写docker》 的读书笔记。有些代码块并不完整，还是需要结合原书一起看。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-06-18T10:33:21.000Z">
-<meta property="article:modified_time" content="2025-06-19T05:07:00.370Z">
+<meta property="article:modified_time" content="2025-06-22T04:28:00.171Z">
 <meta property="article:author" content="12Tall">
 <meta property="article:tag" content="linux">
 <meta property="article:tag" content="docker">
@@ -171,7 +171,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF"><span class="nav-number">1.</span> <span class="nav-text"> 基础技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#namespace-%E9%9A%94%E7%A6%BB"><span class="nav-number">1.1.</span> <span class="nav-text"> Namespace 隔离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAnamespace"><span class="nav-number">1.2.</span> <span class="nav-text"> 创建Namespace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E8%B0%83%E8%AF%95%E5%91%BD%E4%BB%A4"><span class="nav-number">1.3.</span> <span class="nav-text"> 常用的调试命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cgroups-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86"><span class="nav-number">1.4.</span> <span class="nav-text"> Cgroups 资源管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%93%8D%E4%BD%9Ccgroups"><span class="nav-number">1.4.1.</span> <span class="nav-text"> 通过命令行操作Cgroups</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#union-file-system-%E8%81%94%E5%90%88%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.5.</span> <span class="nav-text"> Union File System 联合文件系统</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E5%AE%B9%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text"> 构造容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95docker-run-%E5%91%BD%E4%BB%A4"><span class="nav-number">2.1.</span> <span class="nav-text"> 实现简单docker run 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#newparentprocess-%E5%88%9B%E5%BB%BAnamespace-%E9%9A%94%E7%A6%BB%E7%9A%84%E5%AE%B9%E5%99%A8%E8%BF%9B%E7%A8%8B"><span class="nav-number">2.1.1.</span> <span class="nav-text"> NewParentProcess 创建Namespace 隔离的容器进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#runcontainerinitprocess-%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%B9%E5%99%A8%E7%8E%AF%E5%A2%83"><span class="nav-number">2.1.2.</span> <span class="nav-text"> RunContainerInitProcess 初始化容器环境</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A2%9E%E5%8A%A0%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6"><span class="nav-number">2.2.</span> <span class="nav-text"> 增加资源限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%A1%E9%81%93%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">2.3.</span> <span class="nav-text"> 管道与环境变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text"> 参考</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF"><span class="nav-number">1.</span> <span class="nav-text"> 基础技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#namespace-%E9%9A%94%E7%A6%BB"><span class="nav-number">1.1.</span> <span class="nav-text"> Namespace 隔离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAnamespace"><span class="nav-number">1.2.</span> <span class="nav-text"> 创建Namespace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E8%B0%83%E8%AF%95%E5%91%BD%E4%BB%A4"><span class="nav-number">1.3.</span> <span class="nav-text"> 常用的调试命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cgroups-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86"><span class="nav-number">1.4.</span> <span class="nav-text"> Cgroups 资源管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%93%8D%E4%BD%9Ccgroups"><span class="nav-number">1.4.1.</span> <span class="nav-text"> 通过命令行操作Cgroups</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#union-file-system-%E8%81%94%E5%90%88%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.5.</span> <span class="nav-text"> Union File System 联合文件系统</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E5%AE%B9%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text"> 构造容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95docker-run-%E5%91%BD%E4%BB%A4"><span class="nav-number">2.1.</span> <span class="nav-text"> 实现简单docker run 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#newparentprocess-%E5%88%9B%E5%BB%BAnamespace-%E9%9A%94%E7%A6%BB%E7%9A%84%E5%AE%B9%E5%99%A8%E8%BF%9B%E7%A8%8B"><span class="nav-number">2.1.1.</span> <span class="nav-text"> NewParentProcess 创建Namespace 隔离的容器进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#runcontainerinitprocess-%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%B9%E5%99%A8%E7%8E%AF%E5%A2%83"><span class="nav-number">2.1.2.</span> <span class="nav-text"> RunContainerInitProcess 初始化容器环境</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A2%9E%E5%8A%A0%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6"><span class="nav-number">2.2.</span> <span class="nav-text"> 增加资源限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%A1%E9%81%93%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">2.3.</span> <span class="nav-text"> 管道与环境变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E9%95%9C%E5%83%8F%E6%8C%82%E8%BD%BD%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">3.</span> <span class="nav-text"> 构造镜像（挂载文件系统）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pivot_root"><span class="nav-number">3.1.</span> <span class="nav-text"> pivot_root</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87aufs-%E5%8C%85%E8%A3%85busybox"><span class="nav-number">3.2.</span> <span class="nav-text"> 通过AUFS 包装busybox</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0volume-%E6%95%B0%E6%8D%AE%E5%8D%B7"><span class="nav-number">3.3.</span> <span class="nav-text"> 实现volume 数据卷</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%95%9C%E5%83%8F%E6%89%93%E5%8C%85"><span class="nav-number">3.4.</span> <span class="nav-text"> 镜像打包</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text"> 参考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -274,7 +274,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-19 05:07:00" itemprop="dateModified" datetime="2025-06-19T05:07:00+00:00">2025-06-19</time>
+      <time title="修改时间：2025-06-22 04:28:00" itemprop="dateModified" datetime="2025-06-22T04:28:00+00:00">2025-06-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -300,14 +300,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>3.3k</span>
+      <span>4.2k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>12 分钟</span>
+      <span>15 分钟</span>
     </span>
 </div>
 
@@ -532,10 +532,10 @@ stress --vm-bytes 200m --vm-keep <span class="token parameter variable">-m</span
 sequenceDiagram
 docker-&gt;&gt;runCommand: 1. 解析命令行参数  
 runCommand-&gt;&gt;NewParentProcess: 2. 创建Namespace 隔离的容器进程（的对象）cmd  
-NewParentProcess--&gt;&gt;runCommand: 3. 返回容器进程对象cmd  
+NewParentProcess--&gt;&gt;runCommand: 3. 返回容器进程对象cmd，利用AUFS 初始化系统镜像文件  
 runCommand--&gt;&gt;docker: 4. 启动容器进程cmd，调用init 二级命令  
 docker-&gt;&gt;docker: 5. 容器内进程调用自己（为初始化子进程环境需要）
-docker-&gt;&gt;RunContainerProcess: 6. 初始化容器内容，挂载proc 文件系统，最后执行command  
+docker-&gt;&gt;RunContainerProcess: 6. 初始化容器内容，挂载proc 文件系统、系统镜像，最后执行command  
 RunContainerProcess--&gt;&gt;docker: 7. 容器进程开始运行，转发标准输入输出到docker 进程
 </code>
 </pre>
@@ -654,6 +654,111 @@ Subsystem 实例--&gt;&gt;CgroupManager: 完成
     <span class="token keyword">return</span> <span class="token boolean">nil</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>但是最终还是需要手动调用在主进程写入管道，并且该命令似乎只会执行一次。而我们需要的是主进程可以循环写入，在子进程中可以循环读取并执行。</p>
+<h2 id="构造镜像挂载文件系统"><a class="markdownIt-Anchor" href="#构造镜像挂载文件系统"></a> 构造镜像（挂载文件系统）</h2>
+<p>通过上述步骤虽然创建了独立的pid和ipc，但是子进程中还是能看到父进程所有的挂载点，
+这样文件系统便无法隔离，并且该容器也不容易迁移。因此，我们需要将常用的工具打包在一起，
+然后在子进程中将这些工具集替换掉系统默认的工具。该操作在容器init进程执行之中，容器内命令执行之前。</p>
+<h3 id="pivot_root"><a class="markdownIt-Anchor" href="#pivot_root"></a> pivot_root</h3>
+<p>在 Linux 中，/（也叫 root 目录）是文件系统的最顶层目录。
+所有文件和目录——无论是 <code>/home</code>、<code>/usr</code>、还是设备如 <code>/dev</code>——都在它下面。</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">/(root)
+├── bin/
+├── boot/
+├── dev/
+├── etc/
+├── home/
+├── lib/
+└── ...<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>pivot_root 是一个系统调用，用以改变当前的root 文件系统：将当前root 移动到put_old 文件夹并将
+new_root 设置为新的root，以摆脱对之前root 系统的依赖：</p>
+<pre class="line-numbers language-go" data-language="go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">pivotRoot</span><span class="token punctuation">(</span>root <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token builtin">error</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> err<span class="token operator">:=</span> syscall<span class="token punctuation">.</span><span class="token function">Mount</span><span class="token punctuation">(</span>root<span class="token punctuation">,</span> root<span class="token punctuation">,</span> <span class="token string">"bind"</span><span class="token punctuation">,</span> syscall<span class="token punctuation">.</span>MS_BIND<span class="token operator">|</span>syscall<span class="token punctuation">.</span>MS_REC<span class="token punctuation">,</span> 
+    <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span><span class="token punctuation">&#123;</span>
+        <span class="token comment">// 以bind mount 重新挂载老root </span>
+        <span class="token comment">// 把 root 目录“绑定挂载”到自己身上。这样是为了确保 root 是挂载点。</span>
+        <span class="token comment">// ...</span>
+    <span class="token punctuation">&#125;</span>
+
+    pivotDir <span class="token operator">:=</span> filepath<span class="token punctuation">.</span><span class="token function">Jion</span><span class="token punctuation">(</span>root<span class="token punctuation">,</span> <span class="token string">".pivot_root"</span><span class="token punctuation">)</span>  
+    <span class="token comment">// 创建.pivot_root 文件夹用于临时存储old_root  </span>
+
+    <span class="token keyword">if</span> err<span class="token operator">:=</span> syscall<span class="token punctuation">.</span><span class="token function">PivotRoot</span><span class="token punctuation">(</span>root<span class="token punctuation">,</span> pivotDir<span class="token punctuation">)</span><span class="token punctuation">;</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span><span class="token punctuation">&#123;</span>
+        <span class="token comment">// pivot_root 到新的rootfs  </span>
+        <span class="token comment">// 旧的root 必须在新root 中</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">if</span> err<span class="token operator">:=</span> syscall<span class="token punctuation">.</span><span class="token function">Chdir</span><span class="token punctuation">(</span><span class="token string">"/"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span><span class="token punctuation">&#123;</span>
+        <span class="token comment">// 修改当前工作目录到根目录，以防进程还停留在旧root，引起错误  </span>
+    <span class="token punctuation">&#125;</span>
+
+    pivotDir <span class="token operator">=</span> filepath<span class="token punctuation">.</span><span class="token function">Join</span><span class="token punctuation">(</span><span class="token string">"/"</span><span class="token punctuation">,</span> <span class="token string">".pivot_root"</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err<span class="token operator">:=</span> syscall<span class="token punctuation">.</span><span class="token function">Unmount</span><span class="token punctuation">(</span>pivotDir<span class="token punctuation">,</span> syscall<span class="token punctuation">.</span>MNT_DETACH<span class="token punctuation">)</span><span class="token punctuation">;</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span><span class="token punctuation">&#123;</span>
+        <span class="token comment">// 卸载并删除旧root  </span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> os<span class="token punctuation">.</span><span class="token function">Remove</span><span class="token punctuation">(</span>pivotDir<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>之后，我们可以在容器进程初始化时进行挂载操作：</p>
+<pre class="line-numbers language-go" data-language="go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">setMount</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    pwd<span class="token punctuation">,</span> err<span class="token operator">:=</span> os<span class="token punctuation">.</span><span class="token function">Getwd</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 获取当前路径  </span>
+    <span class="token function">pivotRoot</span><span class="token punctuation">(</span>pwd<span class="token punctuation">)</span>  <span class="token comment">// 将进程当前目录设置为root 目录</span>
+    defaultMountFlags <span class="token operator">:=</span> syscall<span class="token punctuation">.</span>MS_NOEXEC <span class="token operator">|</span> syscall<span class="token punctuation">.</span>MS_NOSUID <span class="token operator">|</span> syscall<span class="token punctuation">.</span>MS_NODEV  
+    syscall<span class="token punctuation">.</span><span class="token function">Mount</span><span class="token punctuation">(</span><span class="token string">"proc"</span><span class="token punctuation">,</span> <span class="token string">"/proc"</span><span class="token punctuation">,</span> <span class="token string">"proc"</span><span class="token punctuation">,</span> <span class="token function">uintptr</span><span class="token punctuation">(</span>defaultMountFlags<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span>
+    <span class="token comment">// 挂载 /proc, 不允许执行mount 出来的文件，且不允许访问设备文件</span>
+    syscall<span class="token punctuation">.</span><span class="token function">Mount</span><span class="token punctuation">(</span><span class="token string">"tmpfs"</span><span class="token punctuation">,</span> <span class="token string">"/dev"</span><span class="token punctuation">,</span> <span class="token string">"tempfs"</span><span class="token punctuation">,</span> syscall<span class="token punctuation">.</span>MS_NOSUID<span class="token operator">|</span>syscall<span class="token punctuation">.</span>MS_STRICTATIME<span class="token punctuation">,</span> <span class="token string">"mode=755"</span><span class="token punctuation">)</span>
+    <span class="token comment">// 通过tmpfs（内存文件系统）挂载/dev 提供设备文件目录，例如：</span>
+    <span class="token comment">// /dev/null, /dev/zero, /dev/tty 等</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>整体流程图：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">初始：              切换后：
+
+宿主机             容器进程看到的视图
+---------          -----------------------
+/                →   /
+├── rootfs/          ├── proc/    (挂载的虚拟 /proc)
+│   └── ...          ├── dev/     (tmpfs 类型)
+├── home/            └── ...
+└── etc/<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果当前程序目录包含<code>busybox</code> 这类镜像文件则相当于有了有个崭新的系统环境，对于子进程来说。</p>
+<h3 id="通过aufs-包装busybox"><a class="markdownIt-Anchor" href="#通过aufs-包装busybox"></a> 通过AUFS 包装busybox</h3>
+<p>通过AUFS 创建container-init layer 只读文件层和write layer 读写层。以避免容器内操作影响镜像本身。
+记住该操作是在宿主机进行的：</p>
+<pre class="line-numbers language-go" data-language="go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">NewWorkSpace</span><span class="token punctuation">(</span>rootURL <span class="token builtin">string</span><span class="token punctuation">,</span> mntURL <span class="token builtin">string</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token function">CreateReadOnlyLayer</span><span class="token punctuation">(</span>rootURL<span class="token punctuation">)</span>
+    <span class="token comment">// 将busybox.tar 解压到busybox 目录下，作为只读层，</span>
+    <span class="token comment">// 就是解压、创建文件夹两步操作</span>
+    <span class="token function">CreateWriteLayer</span><span class="token punctuation">(</span>rootURL<span class="token punctuation">)</span>
+    <span class="token comment">// 创建一个新的文件夹write layer  </span>
+    <span class="token function">CreateMountPoint</span><span class="token punctuation">(</span>rootURL<span class="token punctuation">,</span> mntURL<span class="token punctuation">)</span>
+    <span class="token comment">// 通过mount aufs 挂载目录，rootURL->/root/ mntURL->/root/mnt/ </span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">// 最后NewParenProcess 中将进程根目录修改为mntURL 即可  </span>
+<span class="token comment">// ...</span>
+    cmd<span class="token punctuation">.</span>Dir <span class="token operator">=</span> mntURL
+    <span class="token keyword">return</span> cmd<span class="token punctuation">,</span> writePipe
+<span class="token comment">// ...</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>有始有终，在容器进程退出时要清理诸多挂载点和文件层，在<code>parent.Wait()</code> 之后。</p>
+<h3 id="实现volume-数据卷"><a class="markdownIt-Anchor" href="#实现volume-数据卷"></a> 实现volume 数据卷</h3>
+<p>因为容器进程退出时会清理所有系统文件，如果需要持久化容器里面的数据，则需要再挂载一些可写的文件夹：</p>
+<pre class="line-numbers language-go" data-language="go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">MountVolume</span><span class="token punctuation">(</span>rootURL <span class="token builtin">string</span><span class="token punctuation">,</span> mntURL <span class="token builtin">string</span><span class="token punctuation">,</span> volumeURLs <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+<span class="token comment">// 1. 读取宿主机给定文件目录，无则创建</span>
+    parentUrl <span class="token operator">:=</span> volumeURLs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    <span class="token keyword">if</span> err <span class="token operator">:=</span> os<span class="token punctuation">.</span><span class="token function">Mkdir</span><span class="token punctuation">(</span>parentUrl<span class="token punctuation">,</span> <span class="token number">0777</span><span class="token punctuation">)</span><span class="token punctuation">;</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span><span class="token punctuation">&#123;</span>
+        <span class="token comment">// ...</span>
+    <span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 2. 在容器中创建挂载点  </span>
+    containerUrl <span class="token operator">:=</span> volumeURLs<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+    containerVolumeUrl <span class="token operator">:=</span> mntURL <span class="token operator">+</span> containerUrl
+    <span class="token keyword">if</span> err <span class="token operator">:=</span> os<span class="token punctuation">.</span><span class="token function">Mkdir</span><span class="token punctuation">(</span>containerUrl<span class="token punctuation">,</span> <span class="token number">0777</span><span class="token punctuation">)</span><span class="token punctuation">;</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span><span class="token punctuation">&#123;</span>
+        <span class="token comment">// ...</span>
+    <span class="token punctuation">&#125;</span>
+    
+<span class="token comment">// 3. 挂载文件</span>
+    dirs <span class="token operator">:=</span> <span class="token string">"dirs="</span><span class="token operator">+</span>parentUrl  
+    cmd <span class="token operator">:=</span> exec<span class="token punctuation">.</span><span class="token function">Command</span><span class="token punctuation">(</span><span class="token string">"mount"</span><span class="token punctuation">,</span> <span class="token string">"-t"</span><span class="token punctuation">,</span> <span class="token string">"aufs"</span><span class="token punctuation">,</span> <span class="token string">"-o"</span><span class="token punctuation">,</span> dirs<span class="token punctuation">,</span> <span class="token string">"none"</span><span class="token punctuation">,</span> containerVolumeUrl<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在容器退出时只清理挂载点即可，不要再删除数据。</p>
+<h3 id="镜像打包"><a class="markdownIt-Anchor" href="#镜像打包"></a> 镜像打包</h3>
+<p>如果我们需要把当前容器的状态储存成镜像保存下来，则可以通过<code>tar</code> 命令将当前系统镜像打包，需要在宿主机执行、并且要在容器退出前执行，否则可写层的数据会丢失。</p>
 <h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
 <ol>
 <li><a target="_blank" rel="noopener" href="https://markmap.org/hexo-markmap/">hexo-markmap</a> 为hexo 添加思维导图的功能。</li>
@@ -740,13 +845,13 @@ Subsystem 实例--&gt;&gt;CgroupManager: 完成
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">148k</span>
+    <span title="站点总字数">149k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">8:59</span>
+    <span title="站点阅读时长">9:03</span>
   </span>
 </div>
 <div class="busuanzi-count">
