@@ -270,10 +270,10 @@ markmap:
 {% mermaid sequenceDiagram %}
 docker->>runCommand: 1. 解析命令行参数  
 runCommand->>NewParentProcess: 2. 创建Namespace 隔离的容器进程（的对象）cmd  
-NewParentProcess-->>runCommand: 3. 返回容器进程对象cmd  
+NewParentProcess-->>runCommand: 3. 返回容器进程对象cmd，利用AUFS 初始化系统镜像文件  
 runCommand-->>docker: 4. 启动容器进程cmd，调用init 二级命令  
 docker->>docker: 5. 容器内进程调用自己（为初始化子进程环境需要）
-docker->>RunContainerProcess: 6. 初始化容器内容，挂载proc 文件系统，最后执行command  
+docker->>RunContainerProcess: 6. 初始化容器内容，挂载proc 文件系统、系统镜像，最后执行command  
 RunContainerProcess-->>docker: 7. 容器进程开始运行，转发标准输入输出到docker 进程
 {% endmermaid %}
 
@@ -406,6 +406,131 @@ func RunContainerInitProcess() error{
 }
 ```
 但是最终还是需要手动调用在主进程写入管道，并且该命令似乎只会执行一次。而我们需要的是主进程可以循环写入，在子进程中可以循环读取并执行。 
+
+## 构造镜像（挂载文件系统）  
+通过上述步骤虽然创建了独立的pid和ipc，但是子进程中还是能看到父进程所有的挂载点，
+这样文件系统便无法隔离，并且该容器也不容易迁移。因此，我们需要将常用的工具打包在一起，
+然后在子进程中将这些工具集替换掉系统默认的工具。该操作在容器init进程执行之中，容器内命令执行之前。  
+
+### pivot_root  
+在 Linux 中，/（也叫 root 目录）是文件系统的最顶层目录。
+所有文件和目录——无论是 `/home`、`/usr`、还是设备如 `/dev`——都在它下面。
+```text
+/(root)
+├── bin/
+├── boot/
+├── dev/
+├── etc/
+├── home/
+├── lib/
+└── ...
+```
+
+pivot_root 是一个系统调用，用以改变当前的root 文件系统：将当前root 移动到put_old 文件夹并将
+new_root 设置为新的root，以摆脱对之前root 系统的依赖：
+```go  
+func pivotRoot(root string) error{
+    if err:= syscall.Mount(root, root, "bind", syscall.MS_BIND|syscall.MS_REC, 
+    ""); err != nil{
+        // 以bind mount 重新挂载老root 
+        // 把 root 目录“绑定挂载”到自己身上。这样是为了确保 root 是挂载点。
+        // ...
+    }
+
+    pivotDir := filepath.Jion(root, ".pivot_root")  
+    // 创建.pivot_root 文件夹用于临时存储old_root  
+
+    if err:= syscall.PivotRoot(root, pivotDir); err != nil{
+        // pivot_root 到新的rootfs  
+        // 旧的root 必须在新root 中
+    }
+    if err:= syscall.Chdir("/"); err != nil{
+        // 修改当前工作目录到根目录，以防进程还停留在旧root，引起错误  
+    }
+
+    pivotDir = filepath.Join("/", ".pivot_root")
+    if err:= syscall.Unmount(pivotDir, syscall.MNT_DETACH); err != nil{
+        // 卸载并删除旧root  
+    }
+    return os.Remove(pivotDir)
+}
+```
+
+之后，我们可以在容器进程初始化时进行挂载操作：  
+```go
+func setMount(){
+    pwd, err:= os.Getwd() // 获取当前路径  
+    pivotRoot(pwd)  // 将进程当前目录设置为root 目录
+    defaultMountFlags := syscall.MS_NOEXEC | syscall.MS_NOSUID | syscall.MS_NODEV  
+    syscall.Mount("proc", "/proc", "proc", uintptr(defaultMountFlags), "")
+    // 挂载 /proc, 不允许执行mount 出来的文件，且不允许访问设备文件
+    syscall.Mount("tmpfs", "/dev", "tempfs", syscall.MS_NOSUID|syscall.MS_STRICTATIME, "mode=755")
+    // 通过tmpfs（内存文件系统）挂载/dev 提供设备文件目录，例如：
+    // /dev/null, /dev/zero, /dev/tty 等
+}
+```
+整体流程图：  
+```text
+初始：              切换后：
+
+宿主机             容器进程看到的视图
+---------          -----------------------
+/                →   /
+├── rootfs/          ├── proc/    (挂载的虚拟 /proc)
+│   └── ...          ├── dev/     (tmpfs 类型)
+├── home/            └── ...
+└── etc/
+```
+如果当前程序目录包含`busybox` 这类镜像文件则相当于有了有个崭新的系统环境，对于子进程来说。  
+
+### 通过AUFS 包装busybox  
+通过AUFS 创建container-init layer 只读文件层和write layer 读写层。以避免容器内操作影响镜像本身。
+记住该操作是在宿主机进行的：  
+```go
+func NewWorkSpace(rootURL string, mntURL string){
+    CreateReadOnlyLayer(rootURL)
+    // 将busybox.tar 解压到busybox 目录下，作为只读层，
+    // 就是解压、创建文件夹两步操作
+    CreateWriteLayer(rootURL)
+    // 创建一个新的文件夹write layer  
+    CreateMountPoint(rootURL, mntURL)
+    // 通过mount aufs 挂载目录，rootURL->/root/ mntURL->/root/mnt/ 
+}
+// 最后NewParenProcess 中将进程根目录修改为mntURL 即可  
+// ...
+    cmd.Dir = mntURL
+    return cmd, writePipe
+// ...
+```
+有始有终，在容器进程退出时要清理诸多挂载点和文件层，在`parent.Wait()` 之后。  
+
+### 实现volume 数据卷  
+因为容器进程退出时会清理所有系统文件，如果需要持久化容器里面的数据，则需要再挂载一些可写的文件夹： 
+```go
+func MountVolume(rootURL string, mntURL string, volumeURLs []string){
+// 1. 读取宿主机给定文件目录，无则创建
+    parentUrl := volumeURLs[0]
+    if err := os.Mkdir(parentUrl, 0777); err != nil{
+        // ...
+    }
+
+// 2. 在容器中创建挂载点  
+    containerUrl := volumeURLs[1]
+    containerVolumeUrl := mntURL + containerUrl
+    if err := os.Mkdir(containerUrl, 0777); err != nil{
+        // ...
+    }
+    
+// 3. 挂载文件
+    dirs := "dirs="+parentUrl  
+    cmd := exec.Command("mount", "-t", "aufs", "-o", dirs, "none", containerVolumeUrl)
+}
+```
+
+在容器退出时只清理挂载点即可，不要再删除数据。  
+
+### 镜像打包  
+如果我们需要把当前容器的状态储存成镜像保存下来，则可以通过`tar` 命令将当前系统镜像打包，需要在宿主机执行、并且要在容器退出前执行，否则可写层的数据会丢失。
 
 
 
