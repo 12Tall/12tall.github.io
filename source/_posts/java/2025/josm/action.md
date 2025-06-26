@@ -1,15 +1,16 @@
 ---
-title: JOSM 中自定义Action
+title: JOSM 中自定义开发
 date: 2025-06-26 16:01:52
 tags:
     - java  
-    - osm
+    - josm
 ---
 
-在JOSM 中可以通过在菜单栏中添加`Action` 来实现自定义功能。以下是整体分析。  
+在对JOSM 进行二次开发时的一些笔记，包含Action和Dialog 等。  
 <!-- more -->
 
-## 主体框架  
+## Action    
+在JOSM 中可以通过在菜单栏中添加`Action` 来实现自定义功能。
 ```java
 // 忽略导包过程
 public class AdjacentNodesAction extends JosmAction {
@@ -95,6 +96,59 @@ public class MainMenu extends JMenuBar{
     }
 }
 ```
+
+## 可折叠对话框  
+```java
+public class MeasurementDialog extends ToggleDialog implements DataSelectionListener { 
+    // 可以继承不只一个接口用于监听事件
+    public MeasurementDialog()
+    {
+        // 构造窗口，类似于Action  
+        super(tr("测量数据"), "measure", tr("打开测量窗口"),
+                Shortcut.registerShortcut("subwindow:measurement", tr("窗口: {0}", tr("测量数据")),
+                        KeyEvent.VK_U, Shortcut.CTRL_SHIFT), 150);
+
+        // 元素布局  
+
+        // 添加事件监听
+        MainApplication.getLayerManager().addLayerChangeListener(this);
+        SelectionEventManager.getInstance().addSelectionListener(this);
+        SystemOfMeasurement.addSoMChangeListener(this);
+    }
+    
+    @Override
+    public void selectionChanged(SelectionChangeEvent event) {
+        // 处理选中元素变化
+        refresh(event.getSelection());
+    }
+    
+    @Override
+    public void destroy() {
+        // 析构函数，移除事件监听和其他资源
+        super.destroy();
+        SystemOfMeasurement.removeSoMChangeListener(this);
+        SelectionEventManager.getInstance().removeSelectionListener(this);
+        MainApplication.getLayerManager().removeLayerChangeListener(this);
+    }
+    // 按需重写各类监听
+    // @Override public void nodeMoved(NodeMovedEvent event) { }
+    // ...
+}
+```
+
+可以在`MainFrame.java` 中注册使用：  
+```java
+public class MapFrame extends JPanel implements Destroyable, ActiveLayerChangeListener, LayerChangeListener {
+    public MapFrame(ViewportData viewportData) {
+        // ...
+        measurementDialog = new MeasurementDialog();
+        addToggleDialog(measurementDialog);
+        // ...
+    }
+}
+```
+
+
 
 ## 参考资料  
 1. [github.com/JOSM/josm-plugins](https://github.com/JOSM/josm-plugins/tree/master/utilsplugin2)
