@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="这是一篇阅读笔记。从PDF 中提取数据（包含格式信息）可以用在很多很多地方，比如文档总结、翻译等。本文的整体思路结构比较清晰，可以在今后的代码中重点参考下。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PDF 解析">
+<meta property="og:url" content="https://12tall.github.io/2025/07/25/pdf-parser/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="这是一篇阅读笔记。从PDF 中提取数据（包含格式信息）可以用在很多很多地方，比如文档总结、翻译等。本文的整体思路结构比较清晰，可以在今后的代码中重点参考下。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-07-25T15:48:00.000Z">
+<meta property="article:modified_time" content="2025-07-26T05:37:58.659Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="pdf">
+<meta property="article:tag" content="ocr">
+<meta property="article:tag" content="table">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://12tall.github.io/2025/07/25/pdf-parser/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2025/07/25/pdf-parser/","path":"2025/07/25/pdf-parser/","title":"PDF 解析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>PDF 解析 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-number">1.</span> <span class="nav-text"> 代码流程图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text"> 代码解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E5%8F%96%E6%96%87%E6%9C%AC"><span class="nav-number">2.1.</span> <span class="nav-text"> 提取文本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%86%E5%88%AB%E5%9B%BE%E7%89%87"><span class="nav-number">2.2.</span> <span class="nav-text"> 识别图片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E5%8F%96%E8%A1%A8%E6%A0%BC"><span class="nav-number">2.3.</span> <span class="nav-text"> 提取表格</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E6%96%87"><span class="nav-number">3.</span> <span class="nav-text"> 原文</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">138</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">230</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2025/07/25/pdf-parser/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="PDF 解析 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PDF 解析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-07-25 15:48:00" itemprop="dateCreated datePublished" datetime="2025-07-25T15:48:00+00:00">2025-07-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-07-26 05:37:58" itemprop="dateModified" datetime="2025-07-26T05:37:58+00:00">2025-07-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/notation/" itemprop="url" rel="index"><span itemprop="name">notation</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>915</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>这是一篇阅读笔记。从PDF 中提取数据（包含格式信息）可以用在很多很多地方，比如文档总结、翻译等。本文的整体思路结构比较清晰，可以在今后的代码中重点参考下。</p>
+<span id="more"></span>  
+<h2 id="代码流程图"><a class="markdownIt-Anchor" href="#代码流程图"></a> 代码流程图</h2>
+<pre>
+<code class="mermaid">
+flowchart TD
+A[PDF 文件] --&gt; |PDFMiner| B(提取页面（数组）)
+B --&gt; |PDFMiner| C[[页面布局]]
+C --&gt; D([LTTextContainer 文本容器]) --&gt; |通过pdfminer 提取文本| G([通过LTTextLine&#x2F;LTChar 逐行&#x2F;逐字符分析样式]) 
+C --&gt; E([LTFigure 图片]) --&gt; |通过pdf2image 提取图片|H([通过pytesseract OCR 识别文本])
+C --&gt; F([LTRect 二维矩形，一般为图形或图表]) --&gt; |通过pdfplumber 提取表格❌|I([将表格内容转化为字符串])
+G --&gt; J[[将解析后的内容形成字典对象]]
+H --&gt; J
+I --&gt; J
+J --&gt; |整合数据| K[输出页面文本]
+</code>
+</pre>  
+<p>需要的工具包：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pip <span class="token function">install</span> PyPDF2  <span class="token comment"># 从路径读取PDF 文件  </span>
+pip <span class="token function">install</span> pdfmner.six  <span class="token comment"># 提取文本和格式，支持Python 3  </span>
+pip <span class="token function">install</span> pdfplumber  <span class="token comment"># 识别table 并提取信息（似乎有些表格无法识别）  </span>
+pip <span class="token function">install</span> pdf2image  <span class="token comment"># 裁剪pdf 并转化为PNG 图像   </span>
+pip <span class="token function">install</span> Pillow  <span class="token comment"># 图像处理     </span>
+pip <span class="token function">install</span> tesseract  <span class="token comment"># OCR 工具，但是需要提前安装二进制文件     </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="代码解析"><a class="markdownIt-Anchor" href="#代码解析"></a> 代码解析</h2>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> pdfplumber
+<span class="token keyword">import</span> pytesseract
+<span class="token keyword">from</span> PIL <span class="token keyword">import</span> Image
+<span class="token keyword">from</span> PyPDF2 <span class="token keyword">import</span> PdfReader<span class="token punctuation">,</span>PageObject<span class="token punctuation">,</span>PdfWriter
+<span class="token keyword">from</span> pdf2image <span class="token keyword">import</span> convert_from_path
+<span class="token keyword">from</span> pdfminer<span class="token punctuation">.</span>high_level <span class="token keyword">import</span> extract_pages<span class="token punctuation">,</span> extract_text
+<span class="token keyword">from</span> pdfminer<span class="token punctuation">.</span>layout <span class="token keyword">import</span> LTTextContainer<span class="token punctuation">,</span> LTChar<span class="token punctuation">,</span> LTRect<span class="token punctuation">,</span> LTFigure
+
+pytesseract<span class="token punctuation">.</span>pytesseract<span class="token punctuation">.</span>tesseract_cmd <span class="token operator">=</span> <span class="token string">r'C:\Program Files\Tesseract-OCR\tesseract'</span>
+poppler_path<span class="token operator">=</span><span class="token string">r'D:\utils\poppler-24.08.0\Library\bin'</span>
+
+pdf_file_path <span class="token operator">=</span> <span class="token string">'DeepSeek_R1.pdf'</span>
+
+pdfFileObj <span class="token operator">=</span> <span class="token builtin">open</span><span class="token punctuation">(</span>pdf_file_path<span class="token punctuation">,</span> <span class="token string">'rb'</span><span class="token punctuation">)</span>
+pdfReaded <span class="token operator">=</span> PdfReader<span class="token punctuation">(</span>pdfFileObj<span class="token punctuation">)</span>
+
+
+pdf_pages <span class="token operator">=</span> extract_pages<span class="token punctuation">(</span>pdf_file_path<span class="token punctuation">)</span> <span class="token comment"># 读取文件</span>
+<span class="token keyword">for</span> page_num<span class="token punctuation">,</span> page <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>pdf_pages<span class="token punctuation">)</span><span class="token punctuation">:</span>  
+    <span class="token comment"># 逐页处理  </span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"正在处理第</span><span class="token interpolation"><span class="token punctuation">&#123;</span>page_num<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">&#125;</span></span><span class="token string"> 页内容"</span></span><span class="token punctuation">)</span>
+
+    pageObj <span class="token operator">=</span> pdfReaded<span class="token punctuation">.</span>pages<span class="token punctuation">[</span>page_num<span class="token punctuation">]</span>
+
+    <span class="token keyword">for</span> element <span class="token keyword">in</span> page<span class="token punctuation">:</span> 
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"  处理元素&lt;</span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token builtin">type</span><span class="token punctuation">(</span>element<span class="token punctuation">)</span><span class="token punctuation">.</span>__name__<span class="token punctuation">&#125;</span></span><span class="token string">>"</span></span><span class="token punctuation">)</span>  <span class="token comment"># 这里的element 不仅带有文本，还带有位置信息</span>
+        <span class="token keyword">if</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>element<span class="token punctuation">,</span> LTTextContainer<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 处理文本内容</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"    文本域&lt;LTTextContainer>：BBox</span><span class="token interpolation"><span class="token punctuation">&#123;</span>element<span class="token punctuation">.</span>bbox<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+            extract_text<span class="token punctuation">(</span>element<span class="token punctuation">)</span> 
+        <span class="token keyword">elif</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>element<span class="token punctuation">,</span> LTFigure<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># OCR 识别图片</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"    图片&lt;LTFigure>：BBox</span><span class="token interpolation"><span class="token punctuation">&#123;</span>element<span class="token punctuation">.</span>bbox<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+            crop_image<span class="token punctuation">(</span>element<span class="token punctuation">,</span> pageObj<span class="token punctuation">)</span>
+            convert_pdf_to_image<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            text <span class="token operator">=</span> image_to_text<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"OCR 结果:::"</span><span class="token punctuation">,</span> text<span class="token punctuation">)</span>
+        <span class="token keyword">elif</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>element<span class="token punctuation">,</span> LTRect<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"    图形图表&lt;LTRect>：BBox</span><span class="token interpolation"><span class="token punctuation">&#123;</span>element<span class="token punctuation">.</span>bbox<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+            <span class="token comment"># 处理表格，但是验证代码似乎并不完善</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"    其他元素类型：BBox</span><span class="token interpolation"><span class="token punctuation">&#123;</span>element<span class="token punctuation">.</span>bbox<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> page_num <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">:</span>
+        <span class="token keyword">break</span> <span class="token comment"># 只处理第一页用作演示</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="提取文本"><a class="markdownIt-Anchor" href="#提取文本"></a> 提取文本</h3>
+<p>提取LTTextContainer 中的内容是，并不会查找表格中的文本内容，所以不用担心混乱出错：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">extract_text</span><span class="token punctuation">(</span>element<span class="token punctuation">:</span> LTTextContainer<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    text <span class="token operator">=</span> element<span class="token punctuation">.</span>get_text<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 所有文本</span>
+
+    <span class="token comment"># # 逐字处理文本，计算量大，视情况可以忽略格式信息</span>
+    <span class="token comment"># content = []</span>
+    <span class="token comment"># for line in element:</span>
+    <span class="token comment">#     line_content = []</span>
+    <span class="token comment">#     for charactor in line:</span>
+    <span class="token comment">#         if isinstance(charactor, LTChar):</span>
+    <span class="token comment">#             line_content.append(&#123;</span>
+    <span class="token comment">#                 "v":charactor.get_text(), # 值</span>
+    <span class="token comment">#                 "f":charactor.fontname,   # 字体</span>
+    <span class="token comment">#                 "s":charactor.size        # 大小</span>
+    <span class="token comment">#             &#125;)</span>
+    <span class="token comment">#     content.append(line_content)</span>
+
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"》》》"</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>text<span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"《《《\n\n"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="识别图片"><a class="markdownIt-Anchor" href="#识别图片"></a> 识别图片</h3>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">temp_file_name <span class="token operator">=</span> <span class="token string">"temp"</span>  <span class="token comment"># 假定文件名，其实这里可以生成唯一文件名的</span>
+
+<span class="token keyword">def</span> <span class="token function">crop_image</span><span class="token punctuation">(</span>element<span class="token punctuation">:</span>LTFigure<span class="token punctuation">,</span> pageObj<span class="token punctuation">:</span>PageObject<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># 图片的边界信息，裁剪</span>
+    <span class="token punctuation">[</span>l<span class="token punctuation">,</span>t<span class="token punctuation">,</span>r<span class="token punctuation">,</span>b<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span>element<span class="token punctuation">.</span>x0<span class="token punctuation">,</span> element<span class="token punctuation">.</span>y0<span class="token punctuation">,</span> element<span class="token punctuation">.</span>x1<span class="token punctuation">,</span> element<span class="token punctuation">.</span>y1<span class="token punctuation">]</span>
+    pageObj<span class="token punctuation">.</span>mediabox<span class="token punctuation">.</span>lower_left <span class="token operator">=</span> <span class="token punctuation">(</span>l<span class="token punctuation">,</span> b<span class="token punctuation">)</span>
+    pageObj<span class="token punctuation">.</span>mediabox<span class="token punctuation">.</span>upper_right <span class="token operator">=</span> <span class="token punctuation">(</span>r<span class="token punctuation">,</span> t<span class="token punctuation">)</span>
+    <span class="token comment"># 保存裁剪后的图片</span>
+    cropped_pdf_writer <span class="token operator">=</span> PdfWriter<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    cropped_pdf_writer<span class="token punctuation">.</span>add_page<span class="token punctuation">(</span>pageObj<span class="token punctuation">)</span>
+    <span class="token comment"># 保存到临时文件</span>
+    <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'</span><span class="token interpolation"><span class="token punctuation">&#123;</span>temp_file_name<span class="token punctuation">&#125;</span></span><span class="token string">.pdf'</span></span><span class="token punctuation">,</span> <span class="token string">'wb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
+        cropped_pdf_writer<span class="token punctuation">.</span>write<span class="token punctuation">(</span>f<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">convert_pdf_to_image</span><span class="token punctuation">(</span>input_file<span class="token operator">=</span><span class="token string-interpolation"><span class="token string">f'</span><span class="token interpolation"><span class="token punctuation">&#123;</span>temp_file_name<span class="token punctuation">&#125;</span></span><span class="token string">.pdf'</span></span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># pdf 转图片  </span>
+    images <span class="token operator">=</span> convert_from_path<span class="token punctuation">(</span>input_file<span class="token punctuation">,</span>poppler_path<span class="token operator">=</span>poppler_path<span class="token punctuation">)</span>
+    image <span class="token operator">=</span> images<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    image<span class="token punctuation">.</span>save<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"</span><span class="token interpolation"><span class="token punctuation">&#123;</span>temp_file_name<span class="token punctuation">&#125;</span></span><span class="token string">.png"</span></span><span class="token punctuation">,</span> <span class="token string">"PNG"</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">image_to_text</span><span class="token punctuation">(</span>image_file <span class="token operator">=</span> <span class="token string-interpolation"><span class="token string">f"</span><span class="token interpolation"><span class="token punctuation">&#123;</span>temp_file_name<span class="token punctuation">&#125;</span></span><span class="token string">.png"</span></span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># OCR 识别文本</span>
+    image <span class="token operator">=</span> Image<span class="token punctuation">.</span><span class="token builtin">open</span><span class="token punctuation">(</span>image_file<span class="token punctuation">)</span>
+    text <span class="token operator">=</span> pytesseract<span class="token punctuation">.</span>image_to_string<span class="token punctuation">(</span>image<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> text<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="提取表格"><a class="markdownIt-Anchor" href="#提取表格"></a> 提取表格</h3>
+<p>提取表格的代码实际工作起来有些问题，最好还是通过其他工具来识别吧。或者干脆跳过图片和表格的处理：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">extract_table</span><span class="token punctuation">(</span> page_num<span class="token punctuation">,</span> table_num<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    pdf <span class="token operator">=</span> pdfplumber<span class="token punctuation">.</span><span class="token builtin">open</span><span class="token punctuation">(</span>pdf_file_path<span class="token punctuation">)</span>
+    table_page <span class="token operator">=</span> pdf<span class="token punctuation">.</span>pages<span class="token punctuation">[</span>page_num<span class="token punctuation">]</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>table_page<span class="token punctuation">)</span>
+    table <span class="token operator">=</span> table_page<span class="token punctuation">.</span>extract_tables<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span>page_num<span class="token punctuation">]</span>
+
+<span class="token keyword">def</span> <span class="token function">table_converter</span><span class="token punctuation">(</span>table<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    table_str <span class="token operator">=</span> <span class="token string">""</span>
+    <span class="token keyword">for</span> row_num <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>table<span class="token punctuation">.</span>extract<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 这里原先的方法已经不适用了</span>
+        row <span class="token operator">=</span> table<span class="token punctuation">[</span>row_num<span class="token punctuation">]</span>
+        clean_row <span class="token operator">=</span> <span class="token punctuation">[</span>item<span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span> <span class="token keyword">if</span> item <span class="token keyword">is</span> <span class="token keyword">not</span> <span class="token boolean">None</span> <span class="token keyword">and</span> <span class="token string">'\n'</span> <span class="token keyword">in</span> item <span class="token keyword">else</span> <span class="token string">'None'</span> <span class="token keyword">if</span> item <span class="token keyword">is</span> <span class="token boolean">None</span> <span class="token keyword">else</span> item <span class="token keyword">for</span> item <span class="token keyword">in</span> row<span class="token punctuation">]</span>
+        table_str <span class="token operator">+=</span> <span class="token string-interpolation"><span class="token string">f"|</span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token string">'|'</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>clean_row<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">|"</span></span><span class="token operator">+</span><span class="token string">"\n"</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span>row<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> table_str<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>相比之下，通过<a target="_blank" rel="noopener" href="https://github.com/python-openxml/python-docx">python-docx</a>/<a target="_blank" rel="noopener" href="https://openpyxl.readthedocs.io/en/stable/">openpyxl</a>/<a target="_blank" rel="noopener" href="https://python-pptx.readthedocs.io/">python-pptx</a> 处理office 更简单一些。</p>
+<h2 id="原文"><a class="markdownIt-Anchor" href="#原文"></a> 原文</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://www.luxiangdong.com/2023/10/05/extract/">全面指南———用python提取PDF中各类文本内容的方法</a></li>
+</ol>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2025/07/25/pdf-parser/" title="PDF 解析">https://12tall.github.io/2025/07/25/pdf-parser/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"># python</a>
+              <a href="/tags/pdf/" rel="tag"># pdf</a>
+              <a href="/tags/ocr/" rel="tag"># ocr</a>
+              <a href="/tags/table/" rel="tag"># table</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/07/10/chrome-remove-event-listener/" rel="prev" title="浏览器中移除事件监听">
+                  <i class="fa fa-angle-left"></i> 浏览器中移除事件监听
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">153k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">9:18</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>

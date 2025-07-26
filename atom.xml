@@ -6,7 +6,7 @@
   <link href="https://12tall.github.io/atom.xml" rel="self"/>
   
   <link href="https://12tall.github.io/"/>
-  <updated>2025-07-13T03:40:34.113Z</updated>
+  <updated>2025-07-26T05:37:58.659Z</updated>
   <id>https://12tall.github.io/</id>
   
   <author>
@@ -17,11 +17,36 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>PDF 解析</title>
+    <link href="https://12tall.github.io/2025/07/25/pdf-parser/"/>
+    <id>https://12tall.github.io/2025/07/25/pdf-parser/</id>
+    <published>2025-07-25T15:48:00.000Z</published>
+    <updated>2025-07-26T05:37:58.659Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;这是一篇阅读笔记。从PDF 中提取数据（包含格式信息）可以用在很多很多地方，比如文档总结、翻译等。本文的整体思路结构比较清晰，可以在今后的代码中重点参考下。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="notation" scheme="https://12tall.github.io/categories/notation/"/>
+    
+    
+    <category term="python" scheme="https://12tall.github.io/tags/python/"/>
+    
+    <category term="pdf" scheme="https://12tall.github.io/tags/pdf/"/>
+    
+    <category term="ocr" scheme="https://12tall.github.io/tags/ocr/"/>
+    
+    <category term="table" scheme="https://12tall.github.io/tags/table/"/>
+    
+  </entry>
+  
+  <entry>
     <title>浏览器中移除事件监听</title>
     <link href="https://12tall.github.io/2025/07/10/chrome-remove-event-listener/"/>
     <id>https://12tall.github.io/2025/07/10/chrome-remove-event-listener/</id>
     <published>2025-07-10T15:53:53.000Z</published>
-    <updated>2025-07-13T03:40:34.113Z</updated>
+    <updated>2025-07-26T05:37:58.659Z</updated>
     
     
       
@@ -49,7 +74,7 @@
     <link href="https://12tall.github.io/2025/07/10/win32clipboard/"/>
     <id>https://12tall.github.io/2025/07/10/win32clipboard/</id>
     <published>2025-07-10T13:37:42.000Z</published>
-    <updated>2025-07-13T03:40:34.130Z</updated>
+    <updated>2025-07-26T05:37:58.676Z</updated>
     
     
     <summary type="html">&lt;p&gt;在开发AI 翻译工具时，有一个功能是读取剪切板内容，像txt 内容没有问题，但是若是Office 文件这种带有格式的内容则需要特殊处理。&lt;/p&gt;</summary>
@@ -70,7 +95,7 @@
     <link href="https://12tall.github.io/2025/06/30/rtree/"/>
     <id>https://12tall.github.io/2025/06/30/rtree/</id>
     <published>2025-06-30T17:12:23.000Z</published>
-    <updated>2025-07-13T03:40:34.113Z</updated>
+    <updated>2025-07-26T05:37:58.659Z</updated>
     
     
     <summary type="html">&lt;p&gt;R 树可以用来处理高维空间信息，与B 树/B+ 树有着类似的数据结构，看起来更像是B+ 树在高维空间的扩展。笔记中除特殊说明外均以二维数据为例子。&lt;/p&gt;
@@ -94,7 +119,7 @@
     <link href="https://12tall.github.io/2025/06/26/josm/action/"/>
     <id>https://12tall.github.io/2025/06/26/josm/action/</id>
     <published>2025-06-26T16:01:52.000Z</published>
-    <updated>2025-07-13T03:40:34.070Z</updated>
+    <updated>2025-07-26T05:37:58.616Z</updated>
     
     
     <summary type="html">&lt;p&gt;在对JOSM 进行二次开发时的一些笔记，包含Action和Dialog 等。&lt;/p&gt;</summary>
@@ -115,7 +140,7 @@
     <link href="https://12tall.github.io/2025/06/26/click/"/>
     <id>https://12tall.github.io/2025/06/26/click/</id>
     <published>2025-06-26T14:11:35.000Z</published>
-    <updated>2025-07-13T03:40:34.129Z</updated>
+    <updated>2025-07-26T05:37:58.675Z</updated>
     
     
     <summary type="html">&lt;p&gt;通过click 模块，可以帮助快速创建命令行工具，仅以一个例子来分析其常用功能。&lt;/p&gt;</summary>
@@ -138,7 +163,7 @@
     <link href="https://12tall.github.io/2025/06/18/container/"/>
     <id>https://12tall.github.io/2025/06/18/container/</id>
     <published>2025-06-18T10:33:21.000Z</published>
-    <updated>2025-07-13T03:40:34.113Z</updated>
+    <updated>2025-07-26T05:37:58.659Z</updated>
     
     
     <summary type="html">&lt;p&gt;《自己动手写docker》 的读书笔记。有些代码块并不完整，还是需要结合原书一起看。&lt;/p&gt;</summary>
@@ -161,7 +186,7 @@
     <link href="https://12tall.github.io/2025/06/04/pcd-parser/"/>
     <id>https://12tall.github.io/2025/06/04/pcd-parser/</id>
     <published>2025-06-04T15:24:40.000Z</published>
-    <updated>2025-07-13T03:40:34.129Z</updated>
+    <updated>2025-07-26T05:37:58.675Z</updated>
     
     
     <summary type="html">&lt;p&gt;实际生产中，并不是所有数据文件都是标准的类似于csv 的形式，也有一部分是通过特殊的文件头描述，例如pcd 点云文件。
@@ -190,7 +215,7 @@
     <link href="https://12tall.github.io/2025/06/02/rpath-patcheld/"/>
     <id>https://12tall.github.io/2025/06/02/rpath-patcheld/</id>
     <published>2025-06-02T10:15:35.000Z</published>
-    <updated>2025-07-13T03:40:34.056Z</updated>
+    <updated>2025-07-26T05:37:58.603Z</updated>
     
     
     <summary type="html">&lt;p&gt;在&lt;code&gt;Nuitka&amp;gt;=2.7.4&lt;/code&gt; 打包含有&lt;code&gt;GDAL&lt;/code&gt; 的Python 代码时，会遇到&lt;code&gt;rpath&lt;/code&gt; 错误的问题。虽然尚未解决，但是先学一下相关知识备用。&lt;/p&gt;</summary>
@@ -213,7 +238,7 @@
     <link href="https://12tall.github.io/2025/05/30/nuitka/"/>
     <id>https://12tall.github.io/2025/05/30/nuitka/</id>
     <published>2025-05-30T08:50:14.000Z</published>
-    <updated>2025-07-13T03:40:34.129Z</updated>
+    <updated>2025-07-26T05:37:58.675Z</updated>
     
     
     <summary type="html">&lt;p&gt;Nuitka 虽然是一个比较好用的跨平台打包工具，但是有时打包也存在许多问题：&lt;/p&gt;</summary>
@@ -234,7 +259,7 @@
     <link href="https://12tall.github.io/2025/05/27/wxformbuilder/"/>
     <id>https://12tall.github.io/2025/05/27/wxformbuilder/</id>
     <published>2025-05-27T20:51:03.000Z</published>
-    <updated>2025-07-13T03:40:34.131Z</updated>
+    <updated>2025-07-26T05:37:58.676Z</updated>
     
     
     <summary type="html">&lt;p&gt;一直想找一个比较轻量、易用的Python GUI 库，同时又能比较好的兼容Nuitka 打包。常见的GUI 库多多少少有些问题：&lt;br /&gt;
@@ -267,7 +292,7 @@
     <link href="https://12tall.github.io/2025/05/22/info/"/>
     <id>https://12tall.github.io/2025/05/22/info/</id>
     <published>2025-05-22T15:50:23.000Z</published>
-    <updated>2025-07-13T03:40:34.113Z</updated>
+    <updated>2025-07-26T05:37:58.660Z</updated>
     
     
     <summary type="html">&lt;p&gt;该博客通过&lt;code&gt;Hexo Next&lt;/code&gt; 重构完成！之前数据&lt;a href=&quot;https://github.com/12Tall/12tall.github.io/commit/8f9a6e3f0581906e216e364eb09616b3e13b4365&quot;&gt;Tag&lt;/a&gt;。&lt;/p&gt;</summary>
@@ -284,7 +309,7 @@
     <link href="https://12tall.github.io/2025/05/22/linux/acme/"/>
     <id>https://12tall.github.io/2025/05/22/linux/acme/</id>
     <published>2025-05-22T08:30:26.000Z</published>
-    <updated>2025-07-13T03:40:34.089Z</updated>
+    <updated>2025-07-26T05:37:58.635Z</updated>
     
     
     <summary type="html">&lt;p&gt;通过&lt;code&gt;acme.sh&lt;/code&gt; 安装并更新Let’s Encrypt 证书。&lt;/p&gt;</summary>
@@ -321,7 +346,7 @@
     <link href="https://12tall.github.io/2025/05/21/pseudo-dll/"/>
     <id>https://12tall.github.io/2025/05/21/pseudo-dll/</id>
     <published>2025-05-21T13:56:55.000Z</published>
-    <updated>2025-07-13T03:40:34.130Z</updated>
+    <updated>2025-07-26T05:37:58.676Z</updated>
     
     
     <summary type="html">&lt;p&gt;需求来源是做&lt;code&gt;OSM&lt;/code&gt; 编辑项目中要用Python 对&lt;code&gt;.osm&lt;/code&gt; 文件进行校验，但是嘞，我的Python 代码
@@ -341,7 +366,7 @@
     <link href="https://12tall.github.io/2025/05/15/gettext/"/>
     <id>https://12tall.github.io/2025/05/15/gettext/</id>
     <published>2025-05-15T14:27:44.000Z</published>
-    <updated>2025-07-13T03:40:34.056Z</updated>
+    <updated>2025-07-26T05:37:58.602Z</updated>
     
     
     <summary type="html">&lt;p&gt;一般来说，使用&lt;code&gt;gettext&lt;/code&gt; 为程序添加多语言支持时，需要遵循一些标准的步骤。另外就是，对于在&lt;code&gt;main()&lt;/code&gt; 函数之前就初始化的变量需要特殊处理。
@@ -365,7 +390,7 @@
     <link href="https://12tall.github.io/2024/03/20/pm2/"/>
     <id>https://12tall.github.io/2024/03/20/pm2/</id>
     <published>2024-03-20T00:00:00.000Z</published>
-    <updated>2025-07-13T03:40:34.109Z</updated>
+    <updated>2025-07-26T05:37:58.655Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -394,7 +419,7 @@
     <link href="https://12tall.github.io/2024/03/03/contour/"/>
     <id>https://12tall.github.io/2024/03/03/contour/</id>
     <published>2024-03-03T00:00:00.000Z</published>
-    <updated>2025-07-13T03:40:34.129Z</updated>
+    <updated>2025-07-26T05:37:58.674Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -419,7 +444,7 @@
     <link href="https://12tall.github.io/2024/01/28/cheat-sheet/"/>
     <id>https://12tall.github.io/2024/01/28/cheat-sheet/</id>
     <published>2024-01-28T00:00:00.000Z</published>
-    <updated>2025-07-13T03:40:34.112Z</updated>
+    <updated>2025-07-26T05:37:58.658Z</updated>
     
     
     <summary type="html">&lt;p&gt;工作中发现时常做一些&lt;code&gt;Cheatsheet&lt;/code&gt; 还是比较有用的，下面是一些小&lt;code&gt;Latex&lt;/code&gt;的技巧：&lt;/p&gt;</summary>
@@ -440,7 +465,7 @@
     <link href="https://12tall.github.io/2024/01/20/code-generator/"/>
     <id>https://12tall.github.io/2024/01/20/code-generator/</id>
     <published>2024-01-20T00:00:00.000Z</published>
-    <updated>2025-07-13T03:40:34.109Z</updated>
+    <updated>2025-07-26T05:37:58.655Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -470,7 +495,7 @@
     <link href="https://12tall.github.io/2023/11/03/00_ref/"/>
     <id>https://12tall.github.io/2023/11/03/00_ref/</id>
     <published>2023-11-03T00:00:00.000Z</published>
-    <updated>2025-07-13T03:40:34.134Z</updated>
+    <updated>2025-07-26T05:37:58.679Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;链接器脚本&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#链接器脚本&quot;&gt;&lt;/a&gt; 链接器脚本&lt;/h2&gt;</summary>
@@ -491,31 +516,6 @@
     <category term="os" scheme="https://12tall.github.io/tags/os/"/>
     
     <category term="boot" scheme="https://12tall.github.io/tags/boot/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Poetry 简介</title>
-    <link href="https://12tall.github.io/2023/10/19/poetry/"/>
-    <id>https://12tall.github.io/2023/10/19/poetry/</id>
-    <published>2023-10-19T00:00:00.000Z</published>
-    <updated>2025-07-13T03:40:34.114Z</updated>
-    
-    
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;类似于&lt;code&gt;venv&lt;/code&gt;，&lt;code&gt;poetry&lt;/code&gt; 可以提供一个干净的依赖环境。因为&lt;code&gt;pip&lt;/code&gt; 是全局安装，如果项目比较多则不可避免地会出现依赖冲突。&lt;/p&gt;
-&lt;/blockquote&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
-    
-    
-    <category term="poetry" scheme="https://12tall.github.io/tags/poetry/"/>
-    
-    <category term="pip" scheme="https://12tall.github.io/tags/pip/"/>
-    
-    <category term="npm" scheme="https://12tall.github.io/tags/npm/"/>
     
   </entry>
   
