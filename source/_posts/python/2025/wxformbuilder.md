@@ -163,7 +163,7 @@ app = wx.App()
 main_window = MainWindow(None)
 main_window.Show()
 app.MainLoop()
-```  
+```
 
 程序的运行效果如下：  
 ![](app.png)  

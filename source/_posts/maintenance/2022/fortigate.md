@@ -208,7 +208,7 @@ config vpn ssl settings
     set source-address "34.84.44.247/32" "61.112.131.0/24"
     set source-address-negate enable
 end
-```  
+```
 
 ### 记一次内存异常的问题  
 内存使用率过高，进入保护模式。
@@ -216,6 +216,6 @@ end
 2. 查看内存占用情况`diagnose sys top`：  
 ```shell
 fnbamd      189      S       0.0    34.0    6  # 内存占用34.0，经确认是FortiGate 的认证处理模块
-```  
+```
 3. 联想一直以来的SSL VPN 恶意攻击，于是果断拉黑了一堆IP，然后重启服务`diagnose sys kill 11 189`  
 4. 问题解决。

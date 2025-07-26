@@ -44,7 +44,7 @@ patchelf --set-interpreter /lib64/ld-linux-x86-64.so.2 myapp
 # 查看当前设置：
 patchelf --print-rpath myapp
 patchelf --print-needed myapp
-```  
+```
 
 ## 参考资料  
 1. [rpath和patchelf](https://www.cnblogs.com/ar-cheng/p/13225342.html)
