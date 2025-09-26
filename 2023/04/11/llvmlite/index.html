@@ -21,13 +21,13 @@
 
     <meta name="description" content="通过µGo语言实现——从头开发一个迷你Go语言编译器 来学习llvmlite 的使用，以及将IR 编译为可执行程序。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="llvmlite 学习笔记">
+<meta property="og:title" content="llvmlite 学习笔记（一）">
 <meta property="og:url" content="https://12tall.github.io/2023/04/11/llvmlite/index.html">
 <meta property="og:site_name" content="12Tall">
 <meta property="og:description" content="通过µGo语言实现——从头开发一个迷你Go语言编译器 来学习llvmlite 的使用，以及将IR 编译为可执行程序。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-04-11T00:00:00.000Z">
-<meta property="article:modified_time" content="2025-09-09T05:49:24.436Z">
+<meta property="article:modified_time" content="2025-09-26T08:46:39.736Z">
 <meta property="article:author" content="12Tall">
 <meta property="article:tag" content="python">
 <meta property="article:tag" content="llvm">
@@ -39,10 +39,10 @@
 <link rel="canonical" href="https://12tall.github.io/2023/04/11/llvmlite/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2023/04/11/llvmlite/","path":"2023/04/11/llvmlite/","title":"llvmlite 学习笔记"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2023/04/11/llvmlite/","path":"2023/04/11/llvmlite/","title":"llvmlite 学习笔记（一）"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>llvmlite 学习笔记 | 12Tall</title>
+<title>llvmlite 学习笔记（一） | 12Tall</title>
   
 
 
@@ -187,7 +187,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">139</span>
+          <span class="site-state-item-count">140</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -252,12 +252,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="llvmlite 学习笔记 | 12Tall">
+      <meta itemprop="name" content="llvmlite 学习笔记（一） | 12Tall">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          llvmlite 学习笔记
+          llvmlite 学习笔记（一）
         </h1>
 
         <div class="post-meta-container">
@@ -275,7 +275,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-09-09 05:49:24" itemprop="dateModified" datetime="2025-09-09T05:49:24+00:00">2025-09-09</time>
+      <time title="修改时间：2025-09-26 08:46:39" itemprop="dateModified" datetime="2025-09-26T08:46:39+00:00">2025-09-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -334,59 +334,59 @@
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>但是要通过llvm 的IR 构建，就需要从类型声明开始、中间变量的创建与赋值都要按部就班地完成，调用<code>printf</code>的部分参考自<a target="_blank" rel="noopener" href="https://gist.github.com/alendit/defe3d518cd8f3f3e28cb46708d4c9d6">alendit/call_printf.py</a>：</p>
-<pre class="line-numbers language-python&#123;11,28&#125;" data-language="python&#123;11,28&#125;"><code class="language-python&#123;11,28&#125;">from llvmlite import ir  
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> llvmlite <span class="token keyword">import</span> ir  
 
-# 创建模块，模块名可以为空  
-module &#x3D; ir.Module(name&#x3D;&quot;main&quot;)  
+<span class="token comment"># 创建模块，模块名可以为空  </span>
+module <span class="token operator">=</span> ir<span class="token punctuation">.</span>Module<span class="token punctuation">(</span>name<span class="token operator">=</span><span class="token string">"main"</span><span class="token punctuation">)</span>  
 
-# 创建int32 类型  
-i32 &#x3D; ir.IntType(32)  
-# 创建int8 * 指针类型  
-voidptr_ty &#x3D; ir.IntType(8).as_pointer()  
+<span class="token comment"># 创建int32 类型  </span>
+i32 <span class="token operator">=</span> ir<span class="token punctuation">.</span>IntType<span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">)</span>  
+<span class="token comment"># 创建int8 * 指针类型  </span>
+voidptr_ty <span class="token operator">=</span> ir<span class="token punctuation">.</span>IntType<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">.</span>as_pointer<span class="token punctuation">(</span><span class="token punctuation">)</span>  
 
-## 没有函数体的函数在IR 中会被写作declare
-# 创建函数类型 int func(void * ...)，支持可变长参数  
-printf_ty &#x3D; ir.FunctionType(ir.IntType(32), [voidptr_ty], var_arg&#x3D;True)  
-# 声明int printf(void * ...)
-printf &#x3D; ir.Function(module, printf_ty, name&#x3D;&quot;printf&quot;)
+<span class="token comment">## 没有函数体的函数在IR 中会被写作declare</span>
+<span class="token comment"># 创建函数类型 int func(void * ...)，支持可变长参数  </span>
+printf_ty <span class="token operator">=</span> ir<span class="token punctuation">.</span>FunctionType<span class="token punctuation">(</span>ir<span class="token punctuation">.</span>IntType<span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>voidptr_ty<span class="token punctuation">]</span><span class="token punctuation">,</span> var_arg<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>  
+<span class="token comment"># 声明int printf(void * ...)</span>
+printf <span class="token operator">=</span> ir<span class="token punctuation">.</span>Function<span class="token punctuation">(</span>module<span class="token punctuation">,</span> printf_ty<span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"printf"</span><span class="token punctuation">)</span>
 
-# 注释的代码是不支持中文和emoji 的
-# fmt &#x3D; &quot;hello %s!\n\0&quot;
-# c_fmt &#x3D; ir.Constant(ir.ArrayType(ir.IntType(8), len(fmt)), bytearray(fmt.encode(&quot;utf8&quot;)))
-fmt &#x3D; bytearray(&quot;🦒 hello %s! \n\0&quot;.encode(&#39;utf-8&#39;))  # 创建一个可变字节数组对象
-c_fmt &#x3D; ir.Constant(ir.ArrayType(ir.IntType(8), len(fmt)),fmt) # 根据上面的对象创建一个字符串常量
-global_fmt &#x3D; ir.GlobalVariable(module, c_fmt.type, name&#x3D;&quot;fstr&quot;) # 创建全局变量fstr
-global_fmt.linkage &#x3D; &#39;internal&#39;  # 链接方式  
-global_fmt.global_constant &#x3D; True  # 全局常量
-global_fmt.initializer &#x3D; c_fmt  # 通过c_fmt 初始化
+<span class="token comment"># 注释的代码是不支持中文和emoji 的</span>
+<span class="token comment"># fmt = "hello %s!\n\0"</span>
+<span class="token comment"># c_fmt = ir.Constant(ir.ArrayType(ir.IntType(8), len(fmt)), bytearray(fmt.encode("utf8")))</span>
+fmt <span class="token operator">=</span> <span class="token builtin">bytearray</span><span class="token punctuation">(</span><span class="token string">"🦒 hello %s! \n\0"</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 创建一个可变字节数组对象</span>
+c_fmt <span class="token operator">=</span> ir<span class="token punctuation">.</span>Constant<span class="token punctuation">(</span>ir<span class="token punctuation">.</span>ArrayType<span class="token punctuation">(</span>ir<span class="token punctuation">.</span>IntType<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>fmt<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>fmt<span class="token punctuation">)</span> <span class="token comment"># 根据上面的对象创建一个字符串常量</span>
+global_fmt <span class="token operator">=</span> ir<span class="token punctuation">.</span>GlobalVariable<span class="token punctuation">(</span>module<span class="token punctuation">,</span> c_fmt<span class="token punctuation">.</span><span class="token builtin">type</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"fstr"</span><span class="token punctuation">)</span> <span class="token comment"># 创建全局变量fstr</span>
+global_fmt<span class="token punctuation">.</span>linkage <span class="token operator">=</span> <span class="token string">'internal'</span>  <span class="token comment"># 链接方式  </span>
+global_fmt<span class="token punctuation">.</span>global_constant <span class="token operator">=</span> <span class="token boolean">True</span>  <span class="token comment"># 全局常量</span>
+global_fmt<span class="token punctuation">.</span>initializer <span class="token operator">=</span> c_fmt  <span class="token comment"># 通过c_fmt 初始化</span>
 
 
-# 有函数体的函数会被写作define  
-# 创建函数类型int func()，无参数  
-fn_ty &#x3D; ir.FunctionType(i32,())  
-# 创建int main() 函数
-func &#x3D; ir.Function(module, fn_ty, name&#x3D;&#39;main&#39;)  
-# 添加函数体block    
-block &#x3D; func.append_basic_block(name&#x3D;&quot;entry&quot;)  
-# 构建函数体
-builder &#x3D; ir.IRBuilder(block)    
+<span class="token comment"># 有函数体的函数会被写作define  </span>
+<span class="token comment"># 创建函数类型int func()，无参数  </span>
+fn_ty <span class="token operator">=</span> ir<span class="token punctuation">.</span>FunctionType<span class="token punctuation">(</span>i32<span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  
+<span class="token comment"># 创建int main() 函数</span>
+func <span class="token operator">=</span> ir<span class="token punctuation">.</span>Function<span class="token punctuation">(</span>module<span class="token punctuation">,</span> fn_ty<span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'main'</span><span class="token punctuation">)</span>  
+<span class="token comment"># 添加函数体block    </span>
+block <span class="token operator">=</span> func<span class="token punctuation">.</span>append_basic_block<span class="token punctuation">(</span>name<span class="token operator">=</span><span class="token string">"entry"</span><span class="token punctuation">)</span>  
+<span class="token comment"># 构建函数体</span>
+builder <span class="token operator">=</span> ir<span class="token punctuation">.</span>IRBuilder<span class="token punctuation">(</span>block<span class="token punctuation">)</span>    
 
-## 创建函数体的局部变量  
-arg &#x3D; &quot;world\0&quot;  # 注意不要忘记\0
-c_arg &#x3D; ir.Constant(ir.ArrayType(ir.IntType(8), len(arg)), bytearray(arg.encode(&quot;utf8&quot;)))
-# 分配空间
-c_str &#x3D; builder.alloca(c_arg.type)
-# 赋值
-builder.store(c_arg, c_str)
+<span class="token comment">## 创建函数体的局部变量  </span>
+arg <span class="token operator">=</span> <span class="token string">"world\0"</span>  <span class="token comment"># 注意不要忘记\0</span>
+c_arg <span class="token operator">=</span> ir<span class="token punctuation">.</span>Constant<span class="token punctuation">(</span>ir<span class="token punctuation">.</span>ArrayType<span class="token punctuation">(</span>ir<span class="token punctuation">.</span>IntType<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>arg<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">bytearray</span><span class="token punctuation">(</span>arg<span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token string">"utf8"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment"># 分配空间</span>
+c_str <span class="token operator">=</span> builder<span class="token punctuation">.</span>alloca<span class="token punctuation">(</span>c_arg<span class="token punctuation">.</span><span class="token builtin">type</span><span class="token punctuation">)</span>
+<span class="token comment"># 赋值</span>
+builder<span class="token punctuation">.</span>store<span class="token punctuation">(</span>c_arg<span class="token punctuation">,</span> c_str<span class="token punctuation">)</span>
 
-# 指针类型转换
-fmt_arg &#x3D; builder.bitcast(global_fmt, voidptr_ty)
-builder.call(printf, [fmt_arg, c_str])
+<span class="token comment"># 指针类型转换</span>
+fmt_arg <span class="token operator">=</span> builder<span class="token punctuation">.</span>bitcast<span class="token punctuation">(</span>global_fmt<span class="token punctuation">,</span> voidptr_ty<span class="token punctuation">)</span>
+builder<span class="token punctuation">.</span>call<span class="token punctuation">(</span>printf<span class="token punctuation">,</span> <span class="token punctuation">[</span>fmt_arg<span class="token punctuation">,</span> c_str<span class="token punctuation">]</span><span class="token punctuation">)</span>
 
-# 创建返回值
-res &#x3D; i32(0)  
-# 添加返回值
-builder.ret(res)  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment"># 创建返回值</span>
+res <span class="token operator">=</span> i32<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>  
+<span class="token comment"># 添加返回值</span>
+builder<span class="token punctuation">.</span>ret<span class="token punctuation">(</span>res<span class="token punctuation">)</span>  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="生成ir"><a class="markdownIt-Anchor" href="#生成ir"></a> 生成IR</h3>
 <p>所有的代码都包含在<code>module</code> 变量中，可以将其以字符串的形式保存在文本文件中：</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'./a.out.ll'</span><span class="token punctuation">,</span> <span class="token string">'w'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
@@ -463,7 +463,7 @@ r <span class="token operator">=</span> p<span class="token punctuation">.</span
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://12tall.github.io/2023/04/11/llvmlite/" title="llvmlite 学习笔记">https://12tall.github.io/2023/04/11/llvmlite/</a>
+      <a href="https://12tall.github.io/2023/04/11/llvmlite/" title="llvmlite 学习笔记（一）">https://12tall.github.io/2023/04/11/llvmlite/</a>
   </li>
   <li class="post-copyright-license">
       <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -532,7 +532,7 @@ r <span class="token operator">=</span> p<span class="token punctuation">.</span
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">9:26</span>
+    <span title="站点阅读时长">9:28</span>
   </span>
 </div>
 <div class="busuanzi-count">
