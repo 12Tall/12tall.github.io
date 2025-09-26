@@ -1,5 +1,5 @@
 ---
-title: llvmlite 学习笔记  
+title: llvmlite 学习笔记（一）  
 date: 2023-04-11
 tags:   
     - python    
@@ -25,7 +25,7 @@ int main(){
 ```
 
 但是要通过llvm 的IR 构建，就需要从类型声明开始、中间变量的创建与赋值都要按部就班地完成，调用`printf`的部分参考自[alendit/call_printf.py](https://gist.github.com/alendit/defe3d518cd8f3f3e28cb46708d4c9d6)：  
-```python{11,28}  
+```python
 from llvmlite import ir  
 
 # 创建模块，模块名可以为空  
