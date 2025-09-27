@@ -107,7 +107,7 @@ st_i.initializer = ir.Constant(
 print(str(module))
 ```
 结果如下：  
-```console
+```llvm
 ; ModuleID = "module_name"
 target triple = "unknown-unknown-unknown"
 target datalayout = ""
