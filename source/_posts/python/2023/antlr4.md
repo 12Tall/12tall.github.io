@@ -219,21 +219,7 @@ decl: type ID ';'
 
 ### 词法分析器的命令  
 - `skip`: 跳过当前的token  
-- `push/popMode`，`mode()`，`more()`：用于操作模式栈  
-    ```antlr4  
-    // Default "mode": Everything OUTSIDE of a tag
-    COMMENT : '<!--' .*? '-->' ;
-    CDATA   : '<![CDATA[' .*? ']]>' ;
-    OPEN : '<' -> pushMode(INSIDE) ;
-    ...
-    XMLDeclOpen : '<?xml' S -> pushMode(INSIDE) ;
-    SPECIAL_OPEN: '<?' Name -> more, pushMode(PROC_INSTR) ;
-    // ----------------- Everything INSIDE of a tag ---------------------
-    mode INSIDE;
-    CLOSE        : '>' -> popMode ;
-    SPECIAL_CLOSE: '?>' -> popMode ; // close <?xml...?>
-    SLASH_CLOSE  : '/>' -> popMode ;
-    ```
+- `push/popMode`，`mode()`，`more()`：用于操作模式栈[example.g4](example.g4)  
 - `type()`：似乎是指定token 内容的类型？  
 - `channel()`：用于指定channel，但是如何定义channel 呢？
 
