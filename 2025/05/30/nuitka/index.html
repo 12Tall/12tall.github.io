@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.0">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
@@ -27,10 +27,10 @@
 <meta property="og:description" content="Nuitka 虽然是一个比较好用的跨平台打包工具，但是有时打包也存在许多问题：">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-05-30T08:50:14.000Z">
-<meta property="article:modified_time" content="2025-10-18T04:34:38.872Z">
+<meta property="article:modified_time" content="2025-10-29T07:42:29.980Z">
 <meta property="article:author" content="12Tall">
-<meta property="article:tag" content="python">
 <meta property="article:tag" content="Nuitka">
+<meta property="article:tag" content="python">
 <meta name="twitter:card" content="summary">
 
 
@@ -185,7 +185,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-count">143</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -196,7 +196,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">235</span>
+        <span class="site-state-item-count">238</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -273,7 +273,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-10-18 04:34:38" itemprop="dateModified" datetime="2025-10-18T04:34:38+00:00">2025-10-18</time>
+      <time title="修改时间：2025-10-29 07:42:29" itemprop="dateModified" datetime="2025-10-29T07:42:29+00:00">2025-10-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -319,10 +319,10 @@
     <div class="post-body" itemprop="articleBody"><p>Nuitka 虽然是一个比较好用的跨平台打包工具，但是有时打包也存在许多问题：</p>
 <span id="more"></span>  
 <h2 id="找不到动态链接库"><a class="markdownIt-Anchor" href="#找不到动态链接库"></a> 找不到动态链接库</h2>
-<p>基本可以通过<code>--include-data-files=&quot;&#123;src_dir/dll_file&#125;=./&quot;</code> 手动拷贝动态链接库到二进制根目录解决。此问题常见于PyQt 打包</p>
+<p>基本可以通过<code>--include-data-files=&quot;{src_dir/dll_file}=./&quot;</code> 手动拷贝动态链接库到二进制根目录解决。此问题常见于PyQt 打包</p>
 <h2 id="避免使用conda-包"><a class="markdownIt-Anchor" href="#避免使用conda-包"></a> 避免使用Conda 包</h2>
 <p>Conda 包安装方便，可以直接在Python 代码使用。但是在打包成二进制文件时容易遇到<code>rpath</code> 的问题，此问题在<code>Nuitka&gt;=2.6.8</code> 以上版本容易出现<br />
-可以使用低版本Nuitka 外加<code>--include-data-files=&quot;$CONDA_PREFIX/lib/&#123;dll_file&#125;.so*=./&quot;</code> 解决</p>
+可以使用低版本Nuitka 外加<code>--include-data-files=&quot;$CONDA_PREFIX/lib/{dll_file}.so*=./&quot;</code> 解决</p>
 <h2 id="使用预编译whl-的问题"><a class="markdownIt-Anchor" href="#使用预编译whl-的问题"></a> 使用预编译.whl 的问题</h2>
 <p>有些库为了跨平台使用了一些包，但是打包的时候会出问题，例如<code>ImportError: libtiff-d0580107.so.5.7.0: ELF load command address/offset not properly aligned</code>。<br />
 这时需要从源码编译库文件，例如<code>pip install --no-binary :all: Pillow</code></p>
@@ -420,7 +420,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">9:34</span>
+    <span title="站点阅读时长">9:35</span>
   </span>
 </div>
 <div class="busuanzi-count">

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.0">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
@@ -27,13 +27,13 @@
 <meta property="og:description" content="在第一次学习antlr4 时，其实对这个工具的工作机制并不清晰，于是笔记越记越混乱。由于回国准备婚礼中断了学习过程，于是想着从头学习，尽量将笔记做得条理清晰些吧。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-08-02T00:00:00.000Z">
-<meta property="article:modified_time" content="2025-10-18T04:34:38.863Z">
+<meta property="article:modified_time" content="2025-10-29T07:42:29.972Z">
 <meta property="article:author" content="12Tall">
+<meta property="article:tag" content="antlr4">
+<meta property="article:tag" content="java">
 <meta property="article:tag" content="python">
 <meta property="article:tag" content="词法分析">
 <meta property="article:tag" content="语法分析">
-<meta property="article:tag" content="antlr4">
-<meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
 
 
@@ -188,7 +188,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-count">143</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -199,7 +199,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">235</span>
+        <span class="site-state-item-count">238</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -276,7 +276,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-10-18 04:34:38" itemprop="dateModified" datetime="2025-10-18T04:34:38+00:00">2025-10-18</time>
+      <time title="修改时间：2025-10-29 07:42:29" itemprop="dateModified" datetime="2025-10-29T07:42:29+00:00">2025-10-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -353,7 +353,7 @@
 <h3 id="文本"><a class="markdownIt-Anchor" href="#文本"></a> 文本</h3>
 <p><code>antlr4</code> 中不区分字符和字符串，所有的内容都包含在单引号中，包括转义字符和<code>Unicode</code>。如：<code>'\''</code>, <code>'\uXXXX'</code> 等。</p>
 <h3 id="动作"><a class="markdownIt-Anchor" href="#动作"></a> 动作</h3>
-<p>动作（Action）是一个用花括号<code>&#123;&#125;</code> 包裹的由目标语言写的代码块，在存在嵌套花括号时，要注意转义。</p>
+<p>动作（Action）是一个用花括号<code>{}</code> 包裹的由目标语言写的代码块，在存在嵌套花括号时，要注意转义。</p>
 <pre class="line-numbers language-antlr4" data-language="antlr4"><code class="language-antlr4"><span class="token keyword">grammar</span> Count<span class="token punctuation">;</span>
 
 <span class="token comment">// action @header: 在文件头引入包</span>
@@ -505,19 +505,7 @@ expr<span class="token character-class regex"><span class="token punctuation">[<
 <h3 id="词法分析器的命令"><a class="markdownIt-Anchor" href="#词法分析器的命令"></a> 词法分析器的命令</h3>
 <ul>
 <li><code>skip</code>: 跳过当前的token</li>
-<li><code>push/popMode</code>，<code>mode()</code>，<code>more()</code>：用于操作模式栈  <pre class="line-numbers language-antlr4" data-language="antlr4"><code class="language-antlr4"><span class="token comment">// Default "mode": Everything OUTSIDE of a tag</span>
-<span class="token definition token constant">COMMENT</span> <span class="token punctuation">:</span> <span class="token string">'&lt;!--'</span> .<span class="token operator">*?</span> <span class="token string">'-->'</span> <span class="token punctuation">;</span>
-<span class="token definition token constant">CDATA</span>   <span class="token punctuation">:</span> <span class="token string">'&lt;![CDATA['</span> .<span class="token operator">*?</span> <span class="token string">']]>'</span> <span class="token punctuation">;</span>
-<span class="token definition token constant">OPEN</span> <span class="token punctuation">:</span> <span class="token string">'&lt;'</span> <span class="token operator">-></span> <span class="token command"><span class="token function">pushMode</span><span class="token punctuation">(</span>INSIDE<span class="token punctuation">)</span></span> <span class="token punctuation">;</span>
-<span class="token operator">..</span>.
-<span class="token definition token constant">XMLDeclOpen</span> <span class="token punctuation">:</span> <span class="token string">'&lt;?xml'</span> <span class="token constant">S</span> <span class="token operator">-></span> <span class="token command"><span class="token function">pushMode</span><span class="token punctuation">(</span>INSIDE<span class="token punctuation">)</span></span> <span class="token punctuation">;</span>
-<span class="token definition token constant">SPECIAL_OPEN</span><span class="token punctuation">:</span> <span class="token string">'&lt;?'</span> Name <span class="token operator">-></span> <span class="token command"><span class="token function">more</span><span class="token punctuation">,</span> <span class="token function">pushMode</span><span class="token punctuation">(</span>PROC_INSTR<span class="token punctuation">)</span></span> <span class="token punctuation">;</span>
-<span class="token comment">// ----------------- Everything INSIDE of a tag ---------------------</span>
-<span class="token keyword">mode</span> <span class="token constant">INSIDE</span><span class="token punctuation">;</span>
-<span class="token definition token constant">CLOSE</span>        <span class="token punctuation">:</span> <span class="token string">'>'</span> <span class="token operator">-></span> <span class="token command"><span class="token function">popMode</span></span> <span class="token punctuation">;</span>
-<span class="token definition token constant">SPECIAL_CLOSE</span><span class="token punctuation">:</span> <span class="token string">'?>'</span> <span class="token operator">-></span> <span class="token command"><span class="token function">popMode</span></span> <span class="token punctuation">;</span> <span class="token comment">// close &lt;?xml...?></span>
-<span class="token definition token constant">SLASH_CLOSE</span>  <span class="token punctuation">:</span> <span class="token string">'/>'</span> <span class="token operator">-></span> <span class="token command"><span class="token function">popMode</span></span> <span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
+<li><code>push/popMode</code>，<code>mode()</code>，<code>more()</code>：用于操作模式栈<a href="example.g4">example.g4</a></li>
 <li><code>type()</code>：似乎是指定token 内容的类型？</li>
 <li><code>channel()</code>：用于指定channel，但是如何定义channel 呢？</li>
 </ul>
@@ -685,7 +673,7 @@ main<span class="token punctuation">(</span><span class="token punctuation">)</s
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">9:34</span>
+    <span title="站点阅读时长">9:35</span>
   </span>
 </div>
 <div class="busuanzi-count">

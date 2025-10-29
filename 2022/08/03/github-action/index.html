@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.0">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
@@ -27,7 +27,7 @@
 <meta property="og:description" content="不出意外的话，在百度上搜索GitHub Actions 自动部署，大概率会得到阮一峰老师的GitHub Actions 入门教程。然正如费曼先生所言：凡我不能创造,我就不能理解。这里记录一下在尽量不采用外部Actions 的情况下如何一步一步搭建本仓库的。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-08-03T00:00:00.000Z">
-<meta property="article:modified_time" content="2025-10-18T04:34:38.850Z">
+<meta property="article:modified_time" content="2025-10-29T07:42:29.959Z">
 <meta property="article:author" content="12Tall">
 <meta property="article:tag" content="CI">
 <meta property="article:tag" content="shell">
@@ -186,7 +186,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-count">143</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -197,7 +197,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">235</span>
+        <span class="site-state-item-count">238</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -274,7 +274,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-10-18 04:34:38" itemprop="dateModified" datetime="2025-10-18T04:34:38+00:00">2025-10-18</time>
+      <time title="修改时间：2025-10-29 07:42:29" itemprop="dateModified" datetime="2025-10-29T07:42:29+00:00">2025-10-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -379,7 +379,7 @@
 <p>在账号密码、ssh 之外，GitHub 还支持第三种用户身份验证方式：Personal Access Token(PAT)。生成PAT 的步骤请见<a target="_blank" rel="noopener" href="https://docs.github.com/cn/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token">创建个人访问令牌</a>，可以通过配置项赋予其一定的权限。有了PAT 之后，我们可以通过HTTPS 来执行一些Git 操作。例如：</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># http://user:password@doamin/path 也是http 传输用户信息的标准形式</span>
 <span class="token function">git</span> clone <span class="token string">"https://&#123;username&#125;:&#123;pat&#125;@github.com/&#123;username&#125;/&#123;repo&#125;.git"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>而在<code>GitHub Actions</code> 的<code>workflow</code> 中，我们可以通过环境变量<code>$&#123; &#123;secrets.TOKEN_NAME&#125; &#125;</code> 来传递。注意这里花括号间是不应该有空格的，但是为了避免vuepress 渲染时的问题，故而添加了空格。</p>
+<p>而在<code>GitHub Actions</code> 的<code>workflow</code> 中，我们可以通过环境变量<code>${ {secrets.TOKEN_NAME} }</code> 来传递。注意这里花括号间是不应该有空格的，但是为了避免vuepress 渲染时的问题，故而添加了空格。</p>
 <h3 id="自动部署脚本"><a class="markdownIt-Anchor" href="#自动部署脚本"></a> 自动部署脚本</h3>
 <p>首先将上文生成的PAT 添加到仓库的secrets 中，然后在仓库中创建文件<code>.github/workflows/ci.yml</code>，参考<a target="_blank" rel="noopener" href="https://www.vuepress.cn/guide/deploy.html#github-pages">Vuepress-部署</a>编写如下脚本：</p>
 <pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">name</span><span class="token punctuation">:</span> Deploy Hexo to GitHub Pages
@@ -519,7 +519,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">9:34</span>
+    <span title="站点阅读时长">9:35</span>
   </span>
 </div>
 <div class="busuanzi-count">

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.0">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
@@ -56,11 +56,11 @@
 <meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/06_deep_learning/single-hidden-layer-3-nodes.svg">
 <meta property="og:image" content="https://12tall.github.io/2022/10/07/neural-network/07_my_dl_structure/loss.svg">
 <meta property="article:published_time" content="2022-10-07T15:26:23.000Z">
-<meta property="article:modified_time" content="2025-10-18T04:34:38.877Z">
+<meta property="article:modified_time" content="2025-10-29T07:42:29.986Z">
 <meta property="article:author" content="12Tall">
+<meta property="article:tag" content="neural network">
 <meta property="article:tag" content="python">
 <meta property="article:tag" content="我理解的">
-<meta property="article:tag" content="neural network">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://12tall.github.io/2022/10/07/neural-network/01_function/1in1out.svg">
 
@@ -216,7 +216,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-count">143</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -227,7 +227,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">235</span>
+        <span class="site-state-item-count">238</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -304,7 +304,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-10-18 04:34:38" itemprop="dateModified" datetime="2025-10-18T04:34:38+00:00">2025-10-18</time>
+      <time title="修改时间：2025-10-29 07:42:29" itemprop="dateModified" datetime="2025-10-29T07:42:29+00:00">2025-10-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -372,7 +372,7 @@
 <h3 id="最小二乘法"><a class="markdownIt-Anchor" href="#最小二乘法"></a> 最小二乘法</h3>
 <p>插值法可以较快地求取某一点的函数值，但是其受采样点的影响比较大，对多输入函数的效果不理想。最重要的是，我们想要一个通用的函数式来表示某个模块的功能。这时候我们就可以根据<a href="#%E6%95%A3%E7%82%B9%E5%9B%BE">散点图</a>中的函数图像，来假设一个近似的函数方程<code>f(x)</code>：参数的系数不固定，通过计算采样点到<code>f(x)</code>的竖直（比较好算）距离的最小值，来唯一确定一组系数，进而得到一条相对比较理想的曲线来拟合模块的函数式。这便是最小二乘法。<br />
 <img src="02_statistic/least-squares-method.svg" alt="最小二乘法" /></p>
-<p>以上图为例，采样点分别为：<code>(x,y)∈&#123;(0,1),(2,2.5),(3,4.5),(4,5),(5,6)&#125;</code>，我们需要假设直线<code>y=kx+b</code>。则某一个采样点<code>(xi,yi)</code>到该直线的竖直距离就是<code>di=|yi-y(xi)|</code>。为了便于计算，我们可以用平方去掉绝对值符号，求所有<code>di²</code>的和<code>D</code>的最小值。这里我们可以用<code>Python</code>的<code>Sympy</code>库来帮助求解得到<code>D</code>关于<code>(k,b)</code>变化的函数；或者直接利用<code>Matlab</code>求出相应的<code>(k,b)</code>。</p>
+<p>以上图为例，采样点分别为：<code>(x,y)∈{(0,1),(2,2.5),(3,4.5),(4,5),(5,6)}</code>，我们需要假设直线<code>y=kx+b</code>。则某一个采样点<code>(xi,yi)</code>到该直线的竖直距离就是<code>di=|yi-y(xi)|</code>。为了便于计算，我们可以用平方去掉绝对值符号，求所有<code>di²</code>的和<code>D</code>的最小值。这里我们可以用<code>Python</code>的<code>Sympy</code>库来帮助求解得到<code>D</code>关于<code>(k,b)</code>变化的函数；或者直接利用<code>Matlab</code>求出相应的<code>(k,b)</code>。</p>
 <CodeGroup>
 <CodeGroupItem title="Python">
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># pip install Sympy</span>
@@ -1329,7 +1329,7 @@ plt.show()<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">9:34</span>
+    <span title="站点阅读时长">9:35</span>
   </span>
 </div>
 <div class="busuanzi-count">

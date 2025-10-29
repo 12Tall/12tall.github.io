@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.0">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
@@ -27,10 +27,10 @@
 <meta property="og:description" content="在前端开发时，会经常用到table 元素来展示内容。虽然为每条记录都设置一个编辑的页面，会使项目结构更清晰，但是在一些要求不那么严格的场合，如果能直接编辑表格内容，则无论是对用户、还是对开发来讲，都是更友好的选择。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-03-15T00:00:00.000Z">
-<meta property="article:modified_time" content="2025-10-18T04:34:38.849Z">
+<meta property="article:modified_time" content="2025-10-29T07:42:29.958Z">
 <meta property="article:author" content="12Tall">
-<meta property="article:tag" content="Vue">
 <meta property="article:tag" content="Element-Plus">
+<meta property="article:tag" content="Vue">
 <meta name="twitter:card" content="summary">
 
 
@@ -185,7 +185,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-count">143</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -196,7 +196,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">235</span>
+        <span class="site-state-item-count">238</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -273,7 +273,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-10-18 04:34:38" itemprop="dateModified" datetime="2025-10-18T04:34:38+00:00">2025-10-18</time>
+      <time title="修改时间：2025-10-29 07:42:29" itemprop="dateModified" datetime="2025-10-29T07:42:29+00:00">2025-10-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -323,7 +323,7 @@
 <p>需要在<code>.vuepree/client.ts</code> 中启用第三方组件的支持。这样可以直接在Markdown 文件中预览组件的效果。</p>
 </blockquote>
 <h2 id="eltable-的用法"><a class="markdownIt-Anchor" href="#eltable-的用法"></a> ElTable 的用法</h2>
-<p><code>&lt;el-table&gt;&lt;/el-table&gt;</code> 组件属于<code>Element-Plus</code> 的自带组件，主要用于展示列表内容。其核心属性<code>:data=[&#123;&#125;,&#123;&#125;]</code> 即为要展示的内容。表格包含若干个<code>&lt;el-table-column&gt;&lt;/el-table-column&gt;</code> 子元素，对应数组中内元素的不同属性。 <strong>我们也可以通过插槽想表格中添加按钮等其他任何合法的元素。</strong> 以下面代码为例：</p>
+<p><code>&lt;el-table&gt;&lt;/el-table&gt;</code> 组件属于<code>Element-Plus</code> 的自带组件，主要用于展示列表内容。其核心属性<code>:data=[{},{}]</code> 即为要展示的内容。表格包含若干个<code>&lt;el-table-column&gt;&lt;/el-table-column&gt;</code> 子元素，对应数组中内元素的不同属性。 <strong>我们也可以通过插槽想表格中添加按钮等其他任何合法的元素。</strong> 以下面代码为例：</p>
 <pre class="line-numbers language-vue" data-language="vue"><code class="language-vue">&lt;template&gt;
     &lt;el-table style&#x3D;&quot;margin:0&quot; :data&#x3D;&quot;data&quot; height&#x3D;&quot;250&quot; border stripe &gt;
         &lt;el-table-column prop&#x3D;&quot;name&quot; label&#x3D;&quot;Name&quot;&gt;&lt;&#x2F;el-table-column&gt;  
@@ -361,11 +361,12 @@ const data&#x3D;[
     <el-table-column prop="gender" label="Gender"></el-table-column>  
     <el-table-column label="Operation">
         <template #default="scope">
-            <el-button type="primary">Edit </el-button>
-<pre><code>    &lt;/template&gt;
-&lt;/el-table-column&gt;  
-</code></pre>
+            <el-button type="primary">Edit {{scope.row.name}}</el-button>
+        </template>
+    </el-table-column>  
 </el-table>
+
+
 <style>
     table{
         margin:0 !important; /* 可能是Element 的样式与主题默认样式冲突，所以需要手动修复 */
@@ -374,19 +375,19 @@ const data&#x3D;[
 <h3 id="默认插槽"><a class="markdownIt-Anchor" href="#默认插槽"></a> 默认插槽</h3>
 <p>上面的代码中，通过<code>&lt;template #default=&quot;scope&quot;&gt;&lt;/template&gt;</code> 将模板中的内容添加到表格中，所利用的就是插槽。</p>
 <p>插槽是在新建元素时，提供一个占位符，以便后期向元素中添加更多元素，模板与插槽的功能也是HTML 默认所支持的<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/Web_Components/Using_templates_and_slots">模板与插槽</a>，但是使用上并没有<code>vue</code> 的插槽简单、强大：</p>
-<pre class="line-numbers language-vue" data-language="vue"><code class="language-vue">&lt;!-- 定义MyDiv 组件 --&gt;
+<pre class="line-numbers language-vue" data-language="vue"><code class="language-vue"><!-- 定义MyDiv 组件 -->
 &lt;template&gt;
     &lt;div&gt;
         &lt;slot&gt;缺省内容&lt;&#x2F;slot&gt;
     &lt;&#x2F;div&gt;
 &lt;&#x2F;template&gt;  
 
-&lt;!-- 使用MyDiv 组件 --&gt;
+<!-- 使用MyDiv 组件 -->
 &lt;MyDiv&gt;&lt;&#x2F;MyDiv&gt;
 &lt;MyDiv&gt;替换缺省内容&lt;&#x2F;MyDiv&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="具名插槽"><a class="markdownIt-Anchor" href="#具名插槽"></a> 具名插槽</h3>
 <p>顾名思义，这类插槽在定义时需要指定<code>name</code> 属性，在使用时也会按<code>name</code> 属性替换响应的内容，<code>el-table-clomun</code> 中的插槽就是这一类，只不过它的名字属于缺省名字<code>default</code>（<code>#slot-name</code> 相当于<code>v-slot:slot-name</code> 的缩写）。具名插槽可以实现一个组件中存在多个插槽：</p>
-<pre class="line-numbers language-vue" data-language="vue"><code class="language-vue">&lt;!-- 定义MyDiv 组件 --&gt;
+<pre class="line-numbers language-vue" data-language="vue"><code class="language-vue"><!-- 定义MyDiv 组件 -->
 &lt;template&gt;
     &lt;div&gt;
         &lt;slot name&#x3D;&quot;header&quot;&gt;缺省头部&lt;&#x2F;slot&gt;&lt;br&#x2F;&gt;
@@ -395,14 +396,14 @@ const data&#x3D;[
 &lt;&#x2F;template&gt;  
 
 
-&lt;!-- 使用MyDiv 组件 --&gt;
+<!-- 使用MyDiv 组件 -->
 &lt;MyDiv&gt;
     &lt;span #header&gt;header&lt;&#x2F;span&gt;
     &lt;div v-slot:body&gt;body&lt;&#x2F;div&gt;
 &lt;&#x2F;MyDiv&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="作用域插槽"><a class="markdownIt-Anchor" href="#作用域插槽"></a> 作用域插槽</h3>
 <p>因为插槽中的内容无法访问到子组件的状态，但是有时我们需要用到父、子组件域内的数据，就像我们需要在<code>&lt;el-table&gt;&lt;/el-table&gt;</code> 中使用数据一样，这时我们就需要在插槽的出口上传递一些<code>attributes</code>:</p>
-<pre class="line-numbers language-vue" data-language="vue"><code class="language-vue">&lt;!-- &lt;MyComponent&gt; 的模板 --&gt;
+<pre class="line-numbers language-vue" data-language="vue"><code class="language-vue"><!-- <MyComponent> 的模板 -->
 &lt;script setup&gt;
 import &#123;ref&#125; from &#39;vue&#39;
 
@@ -425,21 +426,21 @@ function add()&#123;
 
 
 
-&lt;!-- 使用MyComponent 组件 --&gt;
+<!-- 使用MyComponent 组件 -->
 &lt;MyComponent #slot-2&#x3D;&quot;slotProps&quot;&gt;
   	&#123;&#123; slotProps.text &#125;&#125; &#123;&#123; slotProps.count &#125;&#125;
 &lt;&#x2F;MyComponent&gt;
 
-&lt;!-- 渲染效果就是：
+<!-- 渲染效果就是：
 original slot 1
 slot2 1
---&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+--><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>也就是说， <strong>子组件通过作用域插槽向父组件暴露了一个访问其内部数据的接口。</strong> 这样回头看<code>&lt;el-table-column&gt;&lt;/el-table-column&gt;</code> 也就容易理解，这个组件默认会暴露内部的<code>row</code> 也就是行数据或者叫做某个元素到父组件。下面两种写法是等效的：</p>
 <pre class="line-numbers language-vue" data-language="vue"><code class="language-vue">&lt;el-table-column label&#x3D;&quot;Operation&quot; #default&#x3D;&quot;scope&quot;&gt;
     &lt;el-button type&#x3D;&quot;primary&quot;&gt;Edit &#123;&#123;scope.row.name&#125;&#125;&lt;&#x2F;el-button&gt;
 &lt;&#x2F;el-table-column&gt;    
 
-&lt;!-- 或者我们应该更习惯下面这种写法 --&gt;
+<!-- 或者我们应该更习惯下面这种写法 -->
 &lt;el-table-column label&#x3D;&quot;Operation&quot;&gt;
     &lt;template #default&#x3D;&quot;scope&quot;&gt;
         &lt;el-button type&#x3D;&quot;primary&quot;&gt;Edit &#123;&#123;scope.row.name&#125;&#125;&lt;&#x2F;el-button&gt;
@@ -450,7 +451,7 @@ slot2 1
 <p>我们需要的效果是要有这么一个组件，平时是文本，在被单击时，其内部的元素变成<code>input, select, date-picker</code> 等类型。首先我们可以通过<code>is</code> 属性来实现动态组件的切换。</p>
 <h3 id="动态组件"><a class="markdownIt-Anchor" href="#动态组件"></a> 动态组件</h3>
 <p>通过<code>&lt;component :is=&quot;conponent_type&quot;&gt;&lt;/component&gt;</code> 可以动态修改一个元素的类型。该动态元素内部还可以增加插槽，用于添加更多自定义的内容。<code>v-bind=&quot;$attrs&quot;</code> 可以透传组件上的所有<code>props</code> 包括<code>v-model</code> 双向绑定的指令。</p>
-<pre class="line-numbers language-vue&#123;3,8-10&#125;" data-language="vue&#123;3,8-10&#125;"><code class="language-vue&#123;3,8-10&#125;">&lt;!-- editablecell.vue  --&gt;
+<pre class="line-numbers language-vue&#123;3,8-10&#125;" data-language="vue&#123;3,8-10&#125;"><code class="language-vue&#123;3,8-10&#125;"><!-- editablecell.vue  -->
 &lt;template&gt;
     &lt;component :is&#x3D;&quot;props.component_type&quot; v-bind&#x3D;&quot;$attrs&quot;&gt;
         &lt;slot name&#x3D;&quot;edit-component-slot&quot;&gt;&quot;slot content&quot;&lt;&#x2F;slot&gt;
@@ -487,7 +488,7 @@ const editable &#x3D; ref(false)
 <p>有时我们还需要根据条件去判断表格内容是否可编辑，例如人员权限等，所以需要额外的判断条件。另外因为<code>vue</code> 在渲染空白字符串时可能会造成<code>&lt;div&gt;&lt;/div&gt;</code> 标签高度为0，所以还需要人为修复一个小bug，以下就是完整代码：</p>
 <pre class="line-numbers language-vue&#123;35-43,51&#125;" data-language="vue&#123;35-43,51&#125;"><code class="language-vue&#123;35-43,51&#125;">&lt;template&gt;
     &lt;div @click&#x3D;&quot;edit&quot; class&#x3D;&quot;editable-cell&quot;&gt;
-        &lt;!-- 如果单元格是可编辑的，则鼠标移上去之后会变形，且会有消息提示 --&gt;
+        <!-- 如果单元格是可编辑的，则鼠标移上去之后会变形，且会有消息提示 -->
         &lt;ElTooltip v-if&#x3D;&quot;editable &amp;&amp; !isBeingEdited&quot; placement&#x3D;&quot;bottom&quot;&gt;
             &lt;template v-if&#x3D;&quot;editable&quot; #content&gt;Click to edit&lt;br &#x2F;&gt;Press Enter&#x2F;Esc&#x2F;Tab to exit&lt;&#x2F;template&gt;
 
@@ -553,12 +554,11 @@ function edit(e) &#123;
     &lt;&#x2F;template&gt;
 &lt;&#x2F;editablecell&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <!-- <editablecell component="el-select" v-model="res_1" @change="test" editable="true"> 
-    <span>单击这里：--  --</span>
-<pre><code>&lt;template #sub-component&gt;
-    &lt;el-option v-for=&quot;n in 3&quot; :key=&quot;n&quot; :label=&quot;`option: $&#123;n&#125;`&quot; :value=&quot;n&quot;/&gt;
-&lt;/template&gt;
-</code></pre>
-<p></editablecell>   --&gt;</p>
+    <span>单击这里：-- {{res_1}} --</span>
+    <template #sub-component>
+        <el-option v-for="n in 3" :key="n" :label="`option: ${n}`" :value="n"/>
+    </template>
+</editablecell>   -->
 <p>关于表格的示例：</p>
 <pre class="line-numbers language-vue" data-language="vue"><code class="language-vue">&lt;div&gt;
     &lt;ElTable :data&#x3D;&quot;data&quot;&gt;
@@ -586,22 +586,21 @@ function edit(e) &#123;
         </ElTableColumn>
         <ElTableColumn label="Date">
             <template #default="scope">
-                <editablecell component="el-date-picker" editable="true" type="date" placeholder="Pick a day" v-model="scope.row.date"></editablecell>
-<pre><code>        &lt;/template&gt;
-    &lt;/ElTableColumn&gt;
-    &lt;ElTableColumn label=&quot;Gender&quot;&gt;
-            &lt;template #default=&quot;scope&quot;&gt;
-            &lt;editablecell component=&quot;el-select&quot; :editable=&quot;scope.row.name=='Tuffy'&quot; v-model=&quot;scope.row.gender&quot;&gt;&#123;&#123; scope.row.gender &#125;&#125;
-                &lt;template #sub-component&gt;
-                    &lt;el-option v-for=&quot;n in ['male','female']&quot; :key=&quot;n&quot; :label=&quot;n&quot; :value=&quot;n&quot;/&gt;
-                &lt;/template&gt;
-            &lt;/editablecell&gt;
-        &lt;/template&gt;
-    &lt;/ElTableColumn&gt;
-&lt;/ElTable&gt;
-</code></pre>
+                <editablecell component="el-date-picker" editable="true" type="date" placeholder="Pick a day" v-model="scope.row.date">{{ scope.row.date }}</editablecell>
+            </template>
+        </ElTableColumn>
+        <ElTableColumn label="Gender">
+                <template #default="scope">
+                <editablecell component="el-select" :editable="scope.row.name=='Tuffy'" v-model="scope.row.gender">{{ scope.row.gender }}
+                    <template #sub-component>
+                        <el-option v-for="n in ['male','female']" :key="n" :label="n" :value="n"/>
+                    </template>
+                </editablecell>
+            </template>
+        </ElTableColumn>
+    </ElTable>
 </div> -->
-可以看到所有的日期信息都是可以修改的，并且只有`Tuffy` 的性别可以被修改：  
+<p>可以看到所有的日期信息都是可以修改的，并且只有<code>Tuffy</code> 的性别可以被修改：</p>
 <pre class="line-numbers language-vue" data-language="vue"><code class="language-vue">&lt;div&gt;&#123;&#123; &#96;$ &#123;data[3].name&#125;: $&#123;data[3].date&#125;: $&#123;data[3].gender&#125;&#96; &#125;&#125;&lt;&#x2F;div&gt; <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <h2 id="bug-修复"><a class="markdownIt-Anchor" href="#bug-修复"></a> Bug 修复</h2>
 <ul>
@@ -784,7 +783,7 @@ function test(){
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">9:34</span>
+    <span title="站点阅读时长">9:35</span>
   </span>
 </div>
 <div class="busuanzi-count">
