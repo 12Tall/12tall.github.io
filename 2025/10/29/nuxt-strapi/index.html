@@ -27,7 +27,7 @@
 <meta property="og:description" content="曾经用Nuxt3&#x2F;Strapi 建了一个公司主页，但是将近一年没看，几乎忘完了。权且做些笔记，如果后面重构的话可以快速上手。 Nuxt的很多功能都是通过模块实现的，在集成&#x2F;模块可以搜索需要的模块。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-10-29T15:27:01.000Z">
-<meta property="article:modified_time" content="2025-10-30T01:57:06.005Z">
+<meta property="article:modified_time" content="2025-10-30T02:07:11.793Z">
 <meta property="article:author" content="12Tall">
 <meta property="article:tag" content="cms">
 <meta property="article:tag" content="nuxt4">
@@ -172,7 +172,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BD%E9%99%85%E5%8C%96i18n"><span class="nav-number">1.</span> <span class="nav-text"> 国际化&#x2F;i18n</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#strapi-%E6%A8%A1%E5%9D%97"><span class="nav-number">2.</span> <span class="nav-text"> Strapi 模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%8C%E6%96%87%E6%9C%AC"><span class="nav-number">3.</span> <span class="nav-text"> 富文本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nuxt-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">4.</span> <span class="nav-text"> Nuxt 注意事项</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BD%E9%99%85%E5%8C%96i18n"><span class="nav-number">1.</span> <span class="nav-text"> 国际化&#x2F;i18n</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E5%A4%87%E6%A3%80%E6%B5%8B"><span class="nav-number">1.1.</span> <span class="nav-text"> 设备检测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#strapi-%E6%A8%A1%E5%9D%97"><span class="nav-number">2.</span> <span class="nav-text"> Strapi 模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%8C%E6%96%87%E6%9C%AC"><span class="nav-number">3.</span> <span class="nav-text"> 富文本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nuxt-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">4.</span> <span class="nav-text"> Nuxt 注意事项</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -275,7 +275,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-10-30 01:57:06" itemprop="dateModified" datetime="2025-10-30T01:57:06+00:00">2025-10-30</time>
+      <time title="修改时间：2025-10-30 02:07:11" itemprop="dateModified" datetime="2025-10-30T02:07:11+00:00">2025-10-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -301,7 +301,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>496</span>
+      <span>564</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -321,8 +321,11 @@
     <div class="post-body" itemprop="articleBody"><p>曾经用<code>Nuxt3/Strapi</code> 建了一个公司主页，但是将近一年没看，几乎忘完了。权且做些笔记，如果后面重构的话可以快速上手。</p>
 <p><code>Nuxt</code>的很多功能都是通过模块实现的，在<a target="_blank" rel="noopener" href="https://nuxt.com.cn/modules">集成/模块</a>可以搜索需要的模块。</p>
 <span id="more"></span>  
+<p>Nuxt4 项目<a target="_blank" rel="noopener" href="https://nuxt.com/docs/4.x/guide/directory-structure/app/app">文件结构</a> 比上个版本精简来很多，也更有条理了。</p>
 <h2 id="国际化i18n"><a class="markdownIt-Anchor" href="#国际化i18n"></a> 国际化/i18n</h2>
-<p><a target="_blank" rel="noopener" href="https://nuxt.com.cn/modules/i18n">@nuxtjs/i18n </a> 通过<code>json</code> 配置多语言。在其官方仓库内有<a target="_blank" rel="noopener" href="https://github.com/nuxt-modules/i18n/tree/main/playground">示例</a>，同时该模块可以配合<a target="_blank" rel="noopener" href="https://github.com/lokalise/i18n-ally">VSCode/i18n-ally</a>插件使用。唯一需要注意的是，<s>可能需要配置一下该插件的<a target="_blank" rel="noopener" href="https://github.com/lokalise/i18n-ally/wiki/Path-Matcher#example-1">路径匹配规则</a>。</s> <strong>可以<a target="_blank" rel="noopener" href="https://i18n.nuxtjs.org/docs/api/options#langdir">修改插件的配置项</a></strong>，并且尽量<a target="_blank" rel="noopener" href="https://i18n.nuxtjs.org/docs/guide/browser-language-detection">自动检测浏览器语言</a>不要设置<a target="_blank" rel="noopener" href="https://i18n.nuxtjs.org/docs/guide#strategies">prefex前缀</a>，除非每个前缀都有内容。否则自动跳转会影响SEO。</p>
+<p><a target="_blank" rel="noopener" href="https://nuxt.com.cn/modules/i18n">@nuxtjs/i18n </a> 通过<code>json</code> 配置多语言。在其官方仓库内有<a target="_blank" rel="noopener" href="https://github.com/nuxt-modules/i18n/tree/main/playground">示例</a>，同时该模块可以配合<a target="_blank" rel="noopener" href="https://github.com/lokalise/i18n-ally">VSCode/i18n-ally</a>插件使用。唯一需要注意的是，<s>可能需要配置一下该插件的<a target="_blank" rel="noopener" href="https://github.com/lokalise/i18n-ally/wiki/Path-Matcher#example-1">路径匹配规则</a>。</s> <strong>可以<a target="_blank" rel="noopener" href="https://i18n.nuxtjs.org/docs/api/options#langdir">修改插件的配置项</a></strong>，并且尽量<a target="_blank" rel="noopener" href="https://i18n.nuxtjs.org/docs/guide/browser-language-detection">自动检测浏览器语言</a>小心设置<a target="_blank" rel="noopener" href="https://i18n.nuxtjs.org/docs/guide#strategies">prefex前缀</a>，根目录没有内容直接自动跳转会影响SEO。</p>
+<h3 id="设备检测"><a class="markdownIt-Anchor" href="#设备检测"></a> 设备检测</h3>
+<p>可以通过<a target="_blank" rel="noopener" href="https://nuxt.com/modules/device">设备检测插件</a>获取设备信息，再结合<code>Layout</code>适配不同设备，毕竟靠<code>CSS</code> 实现响应式布局难度还是太高了。</p>
 <h2 id="strapi-模块"><a class="markdownIt-Anchor" href="#strapi-模块"></a> Strapi 模块</h2>
 <p><a target="_blank" rel="noopener" href="https://nuxt.com.cn/modules/strapi">@nuxtjs/strapi </a>基本按教程配置就行，但是开发环境下可能需要配置代理服务器：</p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token function">defineNuxtConfig</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
