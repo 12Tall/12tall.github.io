@@ -14,9 +14,13 @@ tags:
 
 <!-- more -->  
 
-## 国际化/i18n  
-[@nuxtjs/i18n ](https://nuxt.com.cn/modules/i18n) 通过`json` 配置多语言。在其官方仓库内有[示例](https://github.com/nuxt-modules/i18n/tree/main/playground)，同时该模块可以配合[VSCode/i18n-ally](https://github.com/lokalise/i18n-ally)插件使用。唯一需要注意的是，可能需要配置一下该插件的[路径匹配规则](https://github.com/lokalise/i18n-ally/wiki/Path-Matcher#example-1)。
+Nuxt4 项目[文件结构](https://nuxt.com/docs/4.x/guide/directory-structure/app/app) 比上个版本精简来很多，也更有条理了。
 
+## 国际化/i18n  
+[@nuxtjs/i18n ](https://nuxt.com.cn/modules/i18n) 通过`json` 配置多语言。在其官方仓库内有[示例](https://github.com/nuxt-modules/i18n/tree/main/playground)，同时该模块可以配合[VSCode/i18n-ally](https://github.com/lokalise/i18n-ally)插件使用。唯一需要注意的是，~~可能需要配置一下该插件的[路径匹配规则](https://github.com/lokalise/i18n-ally/wiki/Path-Matcher#example-1)。~~ **可以[修改插件的配置项](https://i18n.nuxtjs.org/docs/api/options#langdir)**，并且尽量[自动检测浏览器语言](https://i18n.nuxtjs.org/docs/guide/browser-language-detection)小心设置[prefex前缀](https://i18n.nuxtjs.org/docs/guide#strategies)，根目录没有内容直接自动跳转会影响SEO。
+
+### 设备检测  
+可以通过[设备检测插件](https://nuxt.com/modules/device)获取设备信息，再结合`Layout`适配不同设备，毕竟靠`CSS` 实现响应式布局难度还是太高了。
 
 ## Strapi 模块  
 [@nuxtjs/strapi ](https://nuxt.com.cn/modules/strapi)基本按教程配置就行，但是开发环境下可能需要配置代理服务器： 
