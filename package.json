@@ -10,7 +10,7 @@
     "dev": "hexo clean && hexo g && hexo server"
   },
   "hexo": {
-    "version": "8.1.0"
+    "version": "8.1.1"
   },
   "dependencies": {
     "hexo": "^8.1.0",
