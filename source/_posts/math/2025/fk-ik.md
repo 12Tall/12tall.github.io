@@ -1,5 +1,5 @@
 ---
-title: D-H 参数表到正逆过程
+title: 机械臂笔记（二）—— D-H 参数表到正逆过程
 date: 2025-12-26 13:47:54
 tags:
     - 机械臂
@@ -25,14 +25,6 @@ def RotX( alpha: sp.Expr):
         [0, 0, 0, 1]
     ])
 
-# 按Z 轴旋转
-def RotZ(theta: sp.Expr):
-    return sp.Matrix([
-        [sp.cos(theta), -sp.sin(theta), 0, 0],
-        [sp.sin(theta), sp.cos(theta), 0, 0],
-        [0, 0,1, 0],
-        [0, 0, 0, 1]
-    ])
 
 # 沿X 轴平移
 def TransX(a: sp.Expr):
@@ -40,6 +32,15 @@ def TransX(a: sp.Expr):
         [1, 0, 0, a],
         [0, 1, 0, 0],
         [0, 0, 1, 0],
+        [0, 0, 0, 1]
+    ])
+
+# 按Z 轴旋转
+def RotZ(theta: sp.Expr):
+    return sp.Matrix([
+        [sp.cos(theta), -sp.sin(theta), 0, 0],
+        [sp.sin(theta), sp.cos(theta), 0, 0],
+        [0, 0,1, 0],
         [0, 0, 0, 1]
     ])
 

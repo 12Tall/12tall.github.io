@@ -1,5 +1,5 @@
 ---
-title: 通过PyTorch 梯度下降进行逆运动学计算
+title: 机械臂笔记（三）—— 通过PyTorch 梯度下降进行逆运动学计算
 date: 2025-12-27 10:40:40
 tags:
     - 机械臂  
@@ -8,10 +8,14 @@ tags:
     - 梯度下降
 ---  
 
-本文尚不成熟，属于学习中的偶尔尝试，回头整理
+本文尚不成熟，属于学习中的偶尔尝试，效果尚可。暂时不会整理。
 
 <!-- more -->
 
+结合下图理解代码可能更好理解一些。
+![alt text](image.png)
+
+代码部分：
 ```python
 import torch
 import math
@@ -175,3 +179,46 @@ $$ \left[\begin{matrix}0.966 & 0.257 & 0.022 & 0.069\\-0.069 & 0.174 & 0.982 & 0
 
 - 误差  
 $$θ=arccos(\frac{trace(R_1^T​R_2​)−1}{2}​)\approx 0.03 \degree$$
+
+## 缺点  
+1. 暂时无法限定取值范围，即关节转动角度可能会超过限制，需要再加一层：  
+```python
+raw = torch.nn.Parameter(torch.zeros(6))
+
+theta_min = torch.tensor([
+    -160, -225, -225, -110, -100, -266
+]) * torch.pi / 180
+
+theta_max = torch.tensor([
+     160,   45,   45,  170,  100,  266
+]) * torch.pi / 180
+
+def get_theta(raw):
+    return theta_min + (theta_max - theta_min) * torch.sigmoid(raw)
+
+
+###  
+optimizer = torch.optim.Adam([raw], lr=lr)
+
+theta = get_theta(raw)
+loss = loss_fn(theta)
+loss.backward()
+optimizer.step()
+```
+
+## 优点  
+连续运动计算比较快，因为初始值和目标值接近：
+```python
+init_theta = torch.tensor(
+    [1.2, -1, -1, 1, 0.5, 0.5],   # 初始值（弧度）
+    dtype=dtype,
+    device=device
+)
+
+theta = torch.nn.Parameter(init_theta.clone())
+# 迭代1000 步左右就可以了
+# 从0-0 开始，要迭代3000 步左右
+```
+
+## 参考资料  
+1. [電腦動畫中的反向動力法 (Inverse Kinematics) ](https://tigercosmos.xyz/post/2020/06/ca/inverse-kinematics/)
