@@ -6,7 +6,7 @@
   <link href="https://12tall.github.io/atom.xml" rel="self"/>
   
   <link href="https://12tall.github.io/"/>
-  <updated>2025-12-30T02:07:45.280Z</updated>
+  <updated>2026-01-06T01:32:17.120Z</updated>
   <id>https://12tall.github.io/</id>
   
   <author>
@@ -17,11 +17,36 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>DevContainer 构建ROS2 仿真环境</title>
+    <link href="https://12tall.github.io/2026/01/06/devcontainer/"/>
+    <id>https://12tall.github.io/2026/01/06/devcontainer/</id>
+    <published>2026-01-06T09:08:37.000Z</published>
+    <updated>2026-01-06T01:32:17.120Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;在做机械臂时用ROS2 需要Ubuntu 的环境，而自己的机器时LMDE，好在现在VSCode 支持DevContainer，可以直接在docker 镜像中做开发，省去了环境配置中的各种坑，救了老命了。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="notation" scheme="https://12tall.github.io/categories/notation/"/>
+    
+    
+    <category term="机械臂" scheme="https://12tall.github.io/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/"/>
+    
+    <category term="docker" scheme="https://12tall.github.io/tags/docker/"/>
+    
+    <category term="ros2" scheme="https://12tall.github.io/tags/ros2/"/>
+    
+    <category term="vscode" scheme="https://12tall.github.io/tags/vscode/"/>
+    
+  </entry>
+  
+  <entry>
     <title>机械臂笔记（四）—— 通过雅可比矩阵实现逆运动学运算</title>
     <link href="https://12tall.github.io/2025/12/29/fk-ik-jacobian/"/>
     <id>https://12tall.github.io/2025/12/29/fk-ik-jacobian/</id>
     <published>2025-12-29T10:38:25.000Z</published>
-    <updated>2025-12-30T02:07:45.280Z</updated>
+    <updated>2026-01-06T01:32:17.109Z</updated>
     
     
     <summary type="html">&lt;p&gt;看到雅可比矩阵就像到了大学的噩梦，慢慢多看几次反而觉得还可以理解。毕竟用到了，不会也得会。&lt;/p&gt;</summary>
@@ -44,7 +69,7 @@
     <link href="https://12tall.github.io/2025/12/27/fk-ik-torch/"/>
     <id>https://12tall.github.io/2025/12/27/fk-ik-torch/</id>
     <published>2025-12-27T10:40:40.000Z</published>
-    <updated>2025-12-30T02:07:45.280Z</updated>
+    <updated>2026-01-06T01:32:17.109Z</updated>
     
     
     <summary type="html">&lt;p&gt;本文尚不成熟，属于学习中的偶尔尝试，效果尚可。暂时不会整理。&lt;/p&gt;</summary>
@@ -69,7 +94,7 @@
     <link href="https://12tall.github.io/2025/12/26/fk-ik/"/>
     <id>https://12tall.github.io/2025/12/26/fk-ik/</id>
     <published>2025-12-26T13:47:54.000Z</published>
-    <updated>2025-12-30T02:07:45.281Z</updated>
+    <updated>2026-01-06T01:32:17.110Z</updated>
     
     
     <summary type="html">&lt;p&gt;在&lt;a href=&quot;/2025/11/18/d-h_table/&quot;&gt;D-H 参数表的建立&lt;/a&gt; 中，记录了建立D-H 表的一般步骤。现在将通过sympy 来计算机械臂运动学的正逆过程。&lt;/p&gt;</summary>
@@ -92,7 +117,7 @@
     <link href="https://12tall.github.io/2025/12/25/three-pcd/"/>
     <id>https://12tall.github.io/2025/12/25/three-pcd/</id>
     <published>2025-12-25T09:30:32.000Z</published>
-    <updated>2025-12-30T02:07:45.285Z</updated>
+    <updated>2026-01-06T01:32:17.114Z</updated>
     
     
     <summary type="html">&lt;p&gt;看过&lt;a href=&quot;https://tools.tier4.jp/vector_map_builder_ll2/&quot;&gt;Vector Map Builder&lt;/a&gt; 在线绘制lanlet2 地图，可以加载PCD 点云、并支持2D/3D 视角切换。感觉挺有意思的。仅以这篇笔记作为2025 最后的礼物。&lt;/p&gt;</summary>
@@ -117,7 +142,7 @@
     <link href="https://12tall.github.io/2025/12/15/rotnet-torch-2/"/>
     <id>https://12tall.github.io/2025/12/15/rotnet-torch-2/</id>
     <published>2025-12-15T15:58:08.000Z</published>
-    <updated>2025-12-30T02:07:45.282Z</updated>
+    <updated>2026-01-06T01:32:17.110Z</updated>
     
     
     <summary type="html">&lt;p&gt;通过迁移学习，可以利用别人预训练好的模型和权重来快速达到想要的效果。仍然以图片旋转角度学习为例。&lt;/p&gt;</summary>
@@ -142,7 +167,7 @@
     <link href="https://12tall.github.io/2025/12/14/rotnet-torch-1/"/>
     <id>https://12tall.github.io/2025/12/14/rotnet-torch-1/</id>
     <published>2025-12-14T13:12:08.000Z</published>
-    <updated>2025-12-30T02:07:45.281Z</updated>
+    <updated>2026-01-06T01:32:17.110Z</updated>
     
     
     <summary type="html">&lt;p&gt;RotNet 是一个可以判断图片旋转角度的CNN 网络，作者有着非常详细的&lt;a href=&quot;https://d4nst.github.io/2017/01/12/image-orientation/&quot;&gt;文章&lt;/a&gt;解释，用来理解CNN 以及如何复用现有的申请网络模型都非常有好处。这里先记录下如何通过MNIST 数据集训练识别手写数字的方向。&lt;/p&gt;</summary>
@@ -165,7 +190,7 @@
     <link href="https://12tall.github.io/2025/12/04/zotero/"/>
     <id>https://12tall.github.io/2025/12/04/zotero/</id>
     <published>2025-12-04T14:28:08.000Z</published>
-    <updated>2025-12-30T02:07:45.293Z</updated>
+    <updated>2026-01-06T01:32:17.123Z</updated>
     
     
     <summary type="html">&lt;p&gt;简单记录Zotero 配置坚果云WebDAV 同步数据。&lt;/p&gt;</summary>
@@ -186,7 +211,7 @@
     <link href="https://12tall.github.io/2025/11/18/d-h_table/"/>
     <id>https://12tall.github.io/2025/11/18/d-h_table/</id>
     <published>2025-11-18T16:27:30.000Z</published>
-    <updated>2025-12-30T02:07:45.278Z</updated>
+    <updated>2026-01-06T01:32:17.107Z</updated>
     
     
     <summary type="html">&lt;p&gt;记录下机械臂D-H建模的基本过程，基本不牵扯公式推导，只记录直观解释。「还不是特别清晰」&lt;/p&gt;</summary>
@@ -205,7 +230,7 @@
     <link href="https://12tall.github.io/2025/11/16/vm-switch/"/>
     <id>https://12tall.github.io/2025/11/16/vm-switch/</id>
     <published>2025-11-16T12:08:37.000Z</published>
-    <updated>2025-12-30T02:07:45.229Z</updated>
+    <updated>2026-01-06T01:32:17.057Z</updated>
     
     
     <summary type="html">&lt;p&gt;大学时说&lt;code&gt;switch&lt;/code&gt; 是逐个比较，害我一直记到现在。&lt;/p&gt;
@@ -237,7 +262,7 @@
     <link href="https://12tall.github.io/2025/11/08/ollama-mcp/"/>
     <id>https://12tall.github.io/2025/11/08/ollama-mcp/</id>
     <published>2025-11-08T17:18:48.000Z</published>
-    <updated>2025-12-30T02:07:45.309Z</updated>
+    <updated>2026-01-06T01:32:17.140Z</updated>
     
     
     <summary type="html">&lt;p&gt;本周用&lt;code&gt;Qwen3-vl&lt;/code&gt; 做了一个发票识别的玩具，忽然想到了之前&lt;code&gt;deepseek-r1&lt;/code&gt; 不支持&lt;code&gt;function call&lt;/code&gt; 的事情。于是琢磨通过MCP 服务实现，简单记录下实现过程。&lt;/p&gt;</summary>
@@ -262,7 +287,7 @@
     <link href="https://12tall.github.io/2025/10/31/oop/"/>
     <id>https://12tall.github.io/2025/10/31/oop/</id>
     <published>2025-10-31T11:29:10.000Z</published>
-    <updated>2025-12-30T02:07:45.309Z</updated>
+    <updated>2026-01-06T01:32:17.140Z</updated>
     
     
     <summary type="html">&lt;p&gt;面向对象/设计模式虽然越来越少被提及了，但并不是没用了。只是现在比较火的AI 用的相对较少。在复杂的系统中，OOP 的思想还是非常有用的，比如游戏开发。&lt;/p&gt;</summary>
@@ -283,7 +308,7 @@
     <link href="https://12tall.github.io/2025/10/30/covariance/"/>
     <id>https://12tall.github.io/2025/10/30/covariance/</id>
     <published>2025-10-30T17:01:39.000Z</published>
-    <updated>2025-12-30T02:07:45.278Z</updated>
+    <updated>2026-01-06T01:32:17.107Z</updated>
     
     
     <summary type="html">&lt;p&gt;最近在搞点云重建圆柱体，通过&lt;a href=&quot;https://leomariga.github.io/pyRANSAC-3D/&quot;&gt;ransac3d&lt;/a&gt;发现在点云部分缺失的情况下结果并不理想。但是其中有些知识点还是蛮有用的，算是复习了。&lt;br /&gt;
@@ -309,7 +334,7 @@
     <link href="https://12tall.github.io/2025/10/29/nuxt-strapi/"/>
     <id>https://12tall.github.io/2025/10/29/nuxt-strapi/</id>
     <published>2025-10-29T15:27:01.000Z</published>
-    <updated>2025-12-30T02:07:45.285Z</updated>
+    <updated>2026-01-06T01:32:17.114Z</updated>
     
     
     <summary type="html">&lt;p&gt;曾经用&lt;code&gt;Nuxt3/Strapi&lt;/code&gt; 建了一个公司主页，但是将近一年没看，几乎忘完了。权且做些笔记，如果后面重构的话可以快速上手。&lt;/p&gt;
@@ -335,7 +360,7 @@
     <link href="https://12tall.github.io/2025/10/18/synology-docker-cfd/"/>
     <id>https://12tall.github.io/2025/10/18/synology-docker-cfd/</id>
     <published>2025-10-18T12:16:04.000Z</published>
-    <updated>2025-12-30T02:07:45.291Z</updated>
+    <updated>2026-01-06T01:32:17.121Z</updated>
     
     
     <summary type="html">&lt;p&gt;以前了解过通过&lt;a href=&quot;https://null.studio/2020/02/16/access-thirdparty-web-via-synology-quickconnect/&quot;&gt;通过群晖的 QuickConnect 访问第三方应用&lt;/a&gt;,但是配置比较麻烦,于是采用cloudfare 的零信任隧道配置.算是一个比较通用的方案,而且是免费的.&lt;/p&gt;</summary>
@@ -362,7 +387,7 @@
     <link href="https://12tall.github.io/2025/09/27/llvmlite-3/"/>
     <id>https://12tall.github.io/2025/09/27/llvmlite-3/</id>
     <published>2025-09-27T14:18:39.000Z</published>
-    <updated>2025-12-30T02:07:45.309Z</updated>
+    <updated>2026-01-06T01:32:17.140Z</updated>
     
     
     <summary type="html">&lt;p&gt;本文记录函数的定义与调用&lt;/p&gt;
@@ -395,7 +420,7 @@
     <link href="https://12tall.github.io/2025/09/26/llvmlite-2/"/>
     <id>https://12tall.github.io/2025/09/26/llvmlite-2/</id>
     <published>2025-09-26T17:38:15.000Z</published>
-    <updated>2025-12-30T02:07:45.309Z</updated>
+    <updated>2026-01-06T01:32:17.140Z</updated>
     
     
     <summary type="html">&lt;p&gt;本文记录些全局变量的定义。&lt;/p&gt;</summary>
@@ -418,7 +443,7 @@
     <link href="https://12tall.github.io/2025/09/09/yolo-overview/"/>
     <id>https://12tall.github.io/2025/09/09/yolo-overview/</id>
     <published>2025-09-09T14:33:00.000Z</published>
-    <updated>2025-12-30T02:07:45.225Z</updated>
+    <updated>2026-01-06T01:32:17.053Z</updated>
     
     
     <summary type="html">&lt;p&gt;记录一些学习yolo 过程中的知识点。零基础。&lt;/p&gt;</summary>
@@ -439,7 +464,7 @@
     <link href="https://12tall.github.io/2025/07/25/pdf-parser/"/>
     <id>https://12tall.github.io/2025/07/25/pdf-parser/</id>
     <published>2025-07-25T15:48:00.000Z</published>
-    <updated>2025-12-30T02:07:45.291Z</updated>
+    <updated>2026-01-06T01:32:17.121Z</updated>
     
     
     <summary type="html">&lt;p&gt;这是一篇阅读笔记。从PDF 中提取数据（包含格式信息）可以用在很多很多地方，比如文档总结、翻译等。本文的整体思路结构比较清晰，可以在今后的代码中重点参考下。&lt;/p&gt;</summary>
@@ -464,7 +489,7 @@
     <link href="https://12tall.github.io/2025/07/10/chrome-remove-event-listener/"/>
     <id>https://12tall.github.io/2025/07/10/chrome-remove-event-listener/</id>
     <published>2025-07-10T15:53:53.000Z</published>
-    <updated>2025-12-30T02:07:45.291Z</updated>
+    <updated>2026-01-06T01:32:17.120Z</updated>
     
     
       
@@ -484,27 +509,6 @@
     <category term="hack" scheme="https://12tall.github.io/tags/hack/"/>
     
     <category term="chrome" scheme="https://12tall.github.io/tags/chrome/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python 处理HTML 格式的剪切板内容</title>
-    <link href="https://12tall.github.io/2025/07/10/win32clipboard/"/>
-    <id>https://12tall.github.io/2025/07/10/win32clipboard/</id>
-    <published>2025-07-10T13:37:42.000Z</published>
-    <updated>2025-12-30T02:07:45.311Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;在开发AI 翻译工具时，有一个功能是读取剪切板内容，像txt 内容没有问题，但是若是Office 文件这种带有格式的内容则需要特殊处理。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="https://12tall.github.io/categories/python/"/>
-    
-    
-    <category term="html" scheme="https://12tall.github.io/tags/html/"/>
-    
-    <category term="剪切板" scheme="https://12tall.github.io/tags/%E5%89%AA%E5%88%87%E6%9D%BF/"/>
     
   </entry>
   

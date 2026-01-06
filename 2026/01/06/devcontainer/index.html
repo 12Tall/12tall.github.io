@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"12tall.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"hide","padding":18,"offset":12},"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="在做机械臂时用ROS2 需要Ubuntu 的环境，而自己的机器时LMDE，好在现在VSCode 支持DevContainer，可以直接在docker 镜像中做开发，省去了环境配置中的各种坑，救了老命了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DevContainer 构建ROS2 仿真环境">
+<meta property="og:url" content="https://12tall.github.io/2026/01/06/devcontainer/index.html">
+<meta property="og:site_name" content="12Tall">
+<meta property="og:description" content="在做机械臂时用ROS2 需要Ubuntu 的环境，而自己的机器时LMDE，好在现在VSCode 支持DevContainer，可以直接在docker 镜像中做开发，省去了环境配置中的各种坑，救了老命了。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://12tall.github.io/2026/01/06/devcontainer/std-devcontainer.png">
+<meta property="article:published_time" content="2026-01-06T09:08:37.000Z">
+<meta property="article:modified_time" content="2026-01-06T01:32:17.120Z">
+<meta property="article:author" content="12Tall">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="ros2">
+<meta property="article:tag" content="vscode">
+<meta property="article:tag" content="机械臂">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://12tall.github.io/2026/01/06/devcontainer/std-devcontainer.png">
+
+
+<link rel="canonical" href="https://12tall.github.io/2026/01/06/devcontainer/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://12tall.github.io/2026/01/06/devcontainer/","path":"2026/01/06/devcontainer/","title":"DevContainer 构建ROS2 仿真环境"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>DevContainer 构建ROS2 仿真环境 | 12Tall</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+  <script class="next-config" data-name="katex" type="application/json">{"copy_tex_js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js","integrity":"sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="}}</script>
+  <script src="/js/third-party/math/katex.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="12Tall" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">12Tall</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">12Tall's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E5%87%86%E7%8E%AF%E5%A2%83%E5%BB%BA%E7%AB%8B%E8%BF%87%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text"> 标准环境建立过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ros2-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text"> ROS2 配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#devcontainerjson"><span class="nav-number">2.1.</span> <span class="nav-text"> devcontainer.json</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dockerfile"><span class="nav-number">2.2.</span> <span class="nav-text"> Dockerfile</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0"><span class="nav-number">3.</span> <span class="nav-text"> 更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A7%BB%E9%99%A4devcontainer"><span class="nav-number">4.</span> <span class="nav-text"> 移除DevContainer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">5.</span> <span class="nav-text"> 参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="12Tall"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">12Tall</p>
+  <div class="site-description" itemprop="description">蝉噪林逾静 鸟鸣山更幽</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">156</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">269</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/12tall" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;12tall" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fb.ouyang@outlook.com" title="E-Mail → mailto:fb.ouyang@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://12tall.github.io/2026/01/06/devcontainer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="12Tall">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="12Tall">
+      <meta itemprop="description" content="蝉噪林逾静 鸟鸣山更幽">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="DevContainer 构建ROS2 仿真环境 | 12Tall">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          DevContainer 构建ROS2 仿真环境
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-06 09:08:37 / 修改时间：01:32:17" itemprop="dateCreated datePublished" datetime="2026-01-06T09:08:37+00:00">2026-01-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/notation/" itemprop="url" rel="index"><span itemprop="name">notation</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>952</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在做机械臂时用ROS2 需要Ubuntu 的环境，而自己的机器时LMDE，好在现在VSCode 支持DevContainer，可以直接在docker 镜像中做开发，省去了环境配置中的各种坑，救了老命了。</p>
+<span id="more"></span>  
+<p>首先需要将当前用户添加到docker 用户组，这样就不用每次通过sudo 启动docker 了：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">usermod</span> <span class="token parameter variable">-aG</span> <span class="token function">docker</span> user_name<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="标准环境建立过程"><a class="markdownIt-Anchor" href="#标准环境建立过程"></a> 标准环境建立过程</h2>
+<ol>
+<li>安装打开VSCode，点击左下角远程连接的按钮；</li>
+<li>选择<code>New Dev Container</code>；</li>
+<li>选择预定义模板，以<code>Ubuntu</code> 为例；</li>
+<li>选择额外选项（可选）：
+<ol>
+<li>版本号：<code>jammy</code></li>
+<li>特性：
+<ul>
+<li><code>Git</code>：保持默认配置</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>完成（等待一段时间拉取镜像）。</li>
+</ol>
+<p>VSCode 就会帮我们创建好了一个Ubuntu 的环境。
+文件结构如下：<br />
+<img src="std-devcontainer.png" alt="" /></p>
+<p>其配置如下：</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+	<span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"Ubuntu"</span><span class="token punctuation">,</span>
+	<span class="token comment">// 镜像可以用链接，也可以用Dockerfile 等</span>
+    <span class="token comment">// More info: https://containers.dev/guide/dockerfile</span>
+	<span class="token property">"image"</span><span class="token operator">:</span> <span class="token string">"mcr.microsoft.com/devcontainers/base:jammy"</span><span class="token punctuation">,</span>
+	<span class="token property">"features"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>  <span class="token comment">// 启用git 特性</span>
+		<span class="token property">"ghcr.io/devcontainers/features/git:1"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+			<span class="token property">"ppa"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+			<span class="token property">"version"</span><span class="token operator">:</span> <span class="token string">"latest"</span>
+		<span class="token punctuation">&#125;</span>
+	<span class="token punctuation">&#125;</span>
+    <span class="token comment">// ... </span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="ros2-配置文件"><a class="markdownIt-Anchor" href="#ros2-配置文件"></a> ROS2 配置文件</h2>
+<p>要求工作区文件结构如下：</p>
+<pre class="line-numbers language-txt" data-language="txt"><code class="language-txt">ros_ws
+├── .devcontainer
+│   ├── devcontainer.json
+│   └── Dockerfile
+├── src
+    ├── package1
+    └── package2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="devcontainerjson"><a class="markdownIt-Anchor" href="#devcontainerjson"></a> devcontainer.json</h3>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+    <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"ROS 2 Development Container"</span><span class="token punctuation">,</span>  <span class="token comment">// 开发容器的名称，显示用</span>
+    <span class="token property">"privileged"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>                     <span class="token comment">// 以 --privileged 模式运行容器，可以访问宿主即设备、网络等</span>
+    <span class="token property">"remoteUser"</span><span class="token operator">:</span> <span class="token string">"doumiao2"</span><span class="token punctuation">,</span>               <span class="token comment">// VS Code 连接容器后使用的默认用户，一般与当前用户相同，这样不会出现权限问题</span>
+    <span class="token property">"build"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>  <span class="token comment">// 构建相关</span>
+        <span class="token property">"dockerfile"</span><span class="token operator">:</span> <span class="token string">"Dockerfile"</span><span class="token punctuation">,</span>  <span class="token comment">// Dockerfile 的路径</span>
+        <span class="token property">"args"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+            <span class="token property">"USERNAME"</span><span class="token operator">:</span> <span class="token string">"doumiao2"</span>   <span class="token comment">// Dockerfile 会读取当前属性值`ARG USERNAME`</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token property">"workspaceFolder"</span><span class="token operator">:</span> <span class="token string">"/home/ros_ws"</span><span class="token punctuation">,</span>  <span class="token comment">// 工作区文件夹（宿主机）</span>
+    <span class="token comment">// 挂载工作区文件夹到容器（指定目录）</span>
+    <span class="token property">"workspaceMount"</span><span class="token operator">:</span> <span class="token string">"source=$&#123;localWorkspaceFolder&#125;,target=/home/ros_ws,type=bind"</span><span class="token punctuation">,</span>
+    <span class="token comment">// VSCode 定制属性</span>
+    <span class="token property">"customizations"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        <span class="token property">"vscode"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+            <span class="token property">"extensions"</span><span class="token operator">:</span><span class="token punctuation">[</span> <span class="token comment">// 自动安装下面插件</span>
+                <span class="token string">"ms-vscode.cpptools"</span><span class="token punctuation">,</span>
+                <span class="token string">"ms-vscode.cpptools-themes"</span><span class="token punctuation">,</span>
+                <span class="token string">"twxs.cmake"</span><span class="token punctuation">,</span>
+                <span class="token string">"donjayamanne.python-extension-pack"</span><span class="token punctuation">,</span>
+                <span class="token string">"eamodio.gitlens"</span><span class="token punctuation">,</span>
+                <span class="token string">"ms-iot.vscode-ros"</span>
+            <span class="token punctuation">]</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token property">"containerEnv"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>  <span class="token comment">// 容器环境</span>
+        <span class="token property">"DISPLAY"</span><span class="token operator">:</span> <span class="token string">"unix:0"</span><span class="token punctuation">,</span>  <span class="token comment">// X11 GUI 转发</span>
+        <span class="token property">"ROS_LOCALHOST_ONLY"</span><span class="token operator">:</span> <span class="token string">"1"</span><span class="token punctuation">,</span>  <span class="token comment">// DDS 通信仅限于本机</span>
+        <span class="token property">"ROS_DOMAIN_ID"</span><span class="token operator">:</span> <span class="token string">"42"</span>       <span class="token comment">// DDS 域隔离</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token comment">// 运行参数，传递给docker run 的参数</span>
+    <span class="token property">"runArgs"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token string">"--net=host"</span><span class="token punctuation">,</span>   <span class="token comment">// 容器与宿主共享网络命名空间</span>
+        <span class="token string">"--pid=host"</span><span class="token punctuation">,</span>   <span class="token comment">// 共享进程命名空间</span>
+        <span class="token string">"--ipc=host"</span><span class="token punctuation">,</span>   <span class="token comment">// 共享 IPC（Gazebo、FastDDS 更稳定）</span>
+        <span class="token string">"-e"</span><span class="token punctuation">,</span> <span class="token string">"DISPLAY=$&#123;env:DISPLAY&#125;"</span>  <span class="token comment">// 从宿主机继承 DISPLAY 值，用于X11 转发</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"mounts"</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token comment">// 额外的挂载</span>
+       <span class="token comment">// X11 套接字，GUI 程序显示到宿主</span>
+       <span class="token string">"source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached"</span><span class="token punctuation">,</span>
+       <span class="token comment">// GPU / 显卡直通，RViz、Gazebo、OpenGL 加速</span>
+       <span class="token string">"source=/dev/dri,target=/dev/dri,type=bind,consistency=cached"</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token comment">// 容器首次创建完成后执行的命令：更新依赖数据库、安装依赖、修复挂载目录权限问题</span>
+    <span class="token property">"postCreateCommand"</span><span class="token operator">:</span> <span class="token string">"sudo rosdep update &amp;&amp; sudo rosdep install --from-paths src --ignore-src -y &amp;&amp; sudo chown -R $(whoami) /home/ros_ws/"</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="dockerfile"><a class="markdownIt-Anchor" href="#dockerfile"></a> Dockerfile</h3>
+<p>不用修改：</p>
+<pre class="line-numbers language-docker" data-language="docker"><code class="language-docker"><span class="token comment"># 继承镜像ros:humble</span>
+<span class="token instruction"><span class="token keyword">FROM</span> ros:humble  </span>
+<span class="token comment"># 获取构建参数：用户名、用户ID、用户组ID</span>
+<span class="token instruction"><span class="token keyword">ARG</span> USERNAME=USERNAME</span>
+<span class="token instruction"><span class="token keyword">ARG</span> USER_UID=1000</span>
+<span class="token instruction"><span class="token keyword">ARG</span> USER_GID=<span class="token variable">$USER_UID</span></span>
+
+<span class="token comment"># 如果用户存在则删除</span>
+<span class="token instruction"><span class="token keyword">RUN</span> if id -u <span class="token variable">$USER_UID</span> ; then userdel `id -un <span class="token variable">$USER_UID</span>` ; fi</span>
+
+<span class="token comment"># 创建用户</span>
+<span class="token instruction"><span class="token keyword">RUN</span> groupadd --gid <span class="token variable">$USER_GID</span> <span class="token variable">$USERNAME</span> <span class="token operator">\</span>
+    &amp;&amp; useradd --uid <span class="token variable">$USER_UID</span> --gid <span class="token variable">$USER_GID</span> -m <span class="token variable">$USERNAME</span> <span class="token operator">\</span>
+    <span class="token comment"># 安装sudo 并授权</span>
+    &amp;&amp; apt-get update <span class="token operator">\</span>
+    &amp;&amp; apt-get install -y sudo <span class="token operator">\</span>
+    &amp;&amp; echo <span class="token variable">$USERNAME</span> ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/<span class="token variable">$USERNAME</span> <span class="token operator">\</span>
+    &amp;&amp; chmod 0440 /etc/sudoers.d/<span class="token variable">$USERNAME</span></span>
+<span class="token comment"># 更新系统</span>
+<span class="token instruction"><span class="token keyword">RUN</span> apt-get update &amp;&amp; apt-get upgrade -y</span>
+<span class="token comment"># 安装python 依赖</span>
+<span class="token instruction"><span class="token keyword">RUN</span> apt-get install -y python3-pip</span>
+<span class="token comment"># 设置默认shell</span>
+<span class="token instruction"><span class="token keyword">ENV</span> SHELL /bin/bash</span>
+
+<span class="token comment"># 默认用户切换</span>
+<span class="token instruction"><span class="token keyword">USER</span> <span class="token variable">$USERNAME</span></span>
+<span class="token comment"># 默认启动命令</span>
+<span class="token instruction"><span class="token keyword">CMD</span> [<span class="token string">"/bin/bash"</span>]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样得到的容器环境在使用上与宿主机能保持一致，不会有区别。</p>
+<h2 id="更新"><a class="markdownIt-Anchor" href="#更新"></a> 更新</h2>
+<p>如果配置文件有更新，则需<code>Ctrl+Shift+P</code>，选择<code>Dev Container: Rebuild</code> 一下。</p>
+<h2 id="移除devcontainer"><a class="markdownIt-Anchor" href="#移除devcontainer"></a> 移除DevContainer</h2>
+<p>可以通过docker 命令来删除：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> images <span class="token comment"># 列出所有docker 镜像，假定ID 为b94c5c4744ef</span>
+<span class="token function">docker</span> <span class="token function">ps</span> <span class="token parameter variable">-a</span> <span class="token parameter variable">--filter</span> <span class="token assign-left variable">ancestor</span><span class="token operator">=</span>b94c5c4744ef  <span class="token comment"># 获取当前镜像创建的容器，假设容器ID 为9d9359bbb683  </span>
+<span class="token function">docker</span> stop 9d9359bbb683  <span class="token comment"># 停止容器  </span>
+<span class="token function">docker</span> <span class="token function">rm</span> 9d9359bbb683    <span class="token comment"># 移除容器  </span>
+<span class="token function">docker</span> rmi b94c5c4744ef   <span class="token comment"># 删除镜像</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>之后再在VSCode 删除历史记录就好了。</p>
+<h2 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://www.dianhsu.com/2023/06/07/devcontainer/">Dev Container：也许是一种比虚拟机更方便的虚拟开发环境</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.ros.org/en/humble/How-To-Guides/Setup-ROS-2-with-VSCode-and-Docker-Container.html">Setup ROS 2 with VSCode and Docker [community-contributed]</a></li>
+</ol>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>12Tall
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://12tall.github.io/2026/01/06/devcontainer/" title="DevContainer 构建ROS2 仿真环境">https://12tall.github.io/2026/01/06/devcontainer/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/" rel="tag"># 机械臂</a>
+              <a href="/tags/docker/" rel="tag"># docker</a>
+              <a href="/tags/ros2/" rel="tag"># ros2</a>
+              <a href="/tags/vscode/" rel="tag"># vscode</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/12/29/fk-ik-jacobian/" rel="prev" title="机械臂笔记（四）—— 通过雅可比矩阵实现逆运动学运算">
+                  <i class="fa fa-angle-left"></i> 机械臂笔记（四）—— 通过雅可比矩阵实现逆运动学运算
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">12Tall</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">174k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">10:34</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"12Tall/12tall.github.io","repo_id":"MDEwOlJlcG9zaXRvcnkyOTY1NjE5MzU=","category":"General","category_id":"DIC_kwDOEa0tD84CXgDH","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"en","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9670282672953561" crossorigin="anonymous"></script>
+</body>
+</html>
