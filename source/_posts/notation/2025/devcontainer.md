@@ -165,6 +165,21 @@ docker rmi b94c5c4744ef   # 删除镜像
 
 之后再在VSCode 删除历史记录就好了。  
 
+## 其他命令  
+```bash
+docker ps -a # 列出所有容器（包含已退出容器  
+
+sudo docker run -it --entrypoint /bin/bash  \ # 入口
+    --name ocr_docker_0_4                   \ # 容器名
+    -v ~/ocr_docker:/home/ocr_docker        \ # 挂载卷
+    -w /home/ocr_docker                     \ # 当前工作区  
+    -p 80:8889                              \ # 端口映射
+    ocr-docker:0.4                          \ # 镜像名
+    -c "python3 main.py"                    # 执行命令
+
+docker start ocr_docker_0_4     # 启动容器（无需重新指定以上参数
+docker restart ocr_docker_0_4   # 重启容器
+```
 
 
 ## 参考资料  
