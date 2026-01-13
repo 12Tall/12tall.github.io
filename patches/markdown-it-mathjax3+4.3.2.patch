@@ -1,0 +1,30 @@
+diff --git a/node_modules/markdown-it-mathjax3/index.js b/node_modules/markdown-it-mathjax3/index.js
+index e28cd62..5566780 100644
+--- a/node_modules/markdown-it-mathjax3/index.js
++++ b/node_modules/markdown-it-mathjax3/index.js
+@@ -15,7 +15,13 @@ function renderMath(content, documentOptions, convertOptions) {
+     const handler = (0, html_js_1.RegisterHTMLHandler)(adaptor);
+     (0, assistive_mml_js_1.AssistiveMmlHandler)(handler);
+     const mathDocument = mathjax_js_1.mathjax.document(content, documentOptions);
+-    const html = adaptor.outerHTML(mathDocument.convert(content, convertOptions));
++
++    const node = mathDocument.convert(content, convertOptions);
++
++    // Set data attribute on the SVG node for reference
++    adaptor.setAttribute(node, "data-tex", content);
++
++    const html = adaptor.outerHTML(node);
+     const stylesheet = adaptor.outerHTML(documentOptions.OutputJax.styleSheet(mathDocument));
+     return (0, client_1.default)(html + stylesheet);
+ }
+@@ -144,8 +150,8 @@ function math_block(state, start, end, silent) {
+     token.block = true;
+     token.content =
+         (firstLine && firstLine.trim() ? firstLine + "\n" : "") +
+-            state.getLines(start + 1, next, state.tShift[start], true) +
+-            (lastLine && lastLine.trim() ? lastLine : "");
++        state.getLines(start + 1, next, state.tShift[start], true) +
++        (lastLine && lastLine.trim() ? lastLine : "");
+     token.map = [start, state.line];
+     token.markup = "$$";
+     return true;
