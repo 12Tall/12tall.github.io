@@ -1,9 +1,9 @@
 import { Theme, useData } from "vitepress"
-import { watch } from "vue"
+import { onMounted, watch } from "vue"
 import "./custom.css"
 import Layout from "./Layout.vue"
 
-import ElementPlus from 'element-plus'
+import ElementPlus, { ElMessage } from 'element-plus'
 import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 
@@ -22,24 +22,44 @@ export default {
         app.use(ElementPlus)
         app.component('content-time-line', ContentTimeLine)
         app.component('content-categories', ContentCategories)
-        app.component('content-tags', ContentTags)    
+        app.component('content-tags', ContentTags)
         // app.component('mathjax', MathJax)    
+
+
+
     },
     setup() {
         const { isDark } = useData()
 
         // 监听 VitePress 主题变化
-        watch(
-            () => isDark.value,
-            (dark) => {
-                // 切换 Element Plus 的 dark 模式
-                if (dark) {
-                    document.documentElement.classList.add('dark')
-                } else {
-                    document.documentElement.classList.remove('dark')
+
+        onMounted(() => {
+            watch(
+                () => isDark.value,
+                (dark) => {
+                    const html = document.documentElement
+                    if (dark) {
+                        html.classList.add('dark')
+                    } else {
+                        html.classList.remove('dark')
+                    }
+                },
+                { immediate: true }
+            )
+
+            // const menu = document.getElementById('context-menu');
+            document.addEventListener('contextmenu', async (e) => {
+                // @ts-ignore
+                const mjxContainer = e.target.closest('mjx-container');
+                // @ts-ignore
+                if (mjxContainer && e.target.tagName == "svg") {
+                    e.preventDefault()
+                    const tex = mjxContainer.getAttribute("data-tex") ?? ""
+                    await navigator.clipboard.writeText(tex);
+
+                    ElMessage.success('公式已复制')
                 }
-            },
-            { immediate: true }
-        )
+            })
+        })
     }
 } as Theme

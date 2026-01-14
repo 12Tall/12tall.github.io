@@ -1,1 +1,24 @@
 @import "tailwindcss";
+
+
+.context-menu {
+    position: absolute;
+    display: none;
+    list-style: none;
+    padding: 6px 0;
+    margin: 0;
+    background: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 1000;
+}
+
+.context-menu li {
+    padding: 6px 20px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.context-menu li:hover {
+    background-color: #f5f5f5;
+}

@@ -1,5 +1,6 @@
 import { defineConfig, } from 'vitepress'
 import { genFeed } from './genFeed'
+// @ts-ignore
 import markdownItTaskLists from 'markdown-it-task-lists'
 
 
@@ -9,7 +10,6 @@ import markdownItTaskLists from 'markdown-it-task-lists'
 export default defineConfig({
   title: "逗苗二号",
   lang: "zh-CN",
-
   description: "蝉噪林愈静 鸟鸣山更幽",
   themeConfig: {
     logo: '/logo.jpeg',
@@ -23,9 +23,9 @@ export default defineConfig({
     ],
 
     sidebar: {},
-    // outline: {
-    //   level: [2, 4]
-    // },
+    outline: {
+      level: [2, 4]
+    },
     footer: {
       message: '蝉噪林愈静 鸟鸣山更幽',
       copyright: 'Copyright © 2016-present <a href="https://github.com/12Tall">12Tall</a> | <a href="/rss.xml">RSS 订阅</a>'
@@ -42,6 +42,7 @@ export default defineConfig({
   },
   markdown: {
     math: true,
+    lineNumbers: true,
     config(md) {
       md.use(markdownItTaskLists)
     },

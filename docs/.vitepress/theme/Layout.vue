@@ -12,6 +12,11 @@
             </div>
         </template>
     </Layout>
+
+    <ul id="context-menu" class="context-menu">
+        <li data-action="copy-tex">复制Tex</li>
+        <li data-action="export-svg">导出svg</li>
+    </ul>
 </template>
 
 <script lang="ts" setup>
