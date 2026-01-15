@@ -1,12 +1,14 @@
 ---
 title: 机械臂笔记（一）D-H 参数表建立
 date: 2026-01-15 08:57:39  
-description: 
+description: D-H 参数表、改进D-H 参数表的构建方法
 tags:
     - python
-    - sympy
     - 矩阵  
     - 机器人
+next: 
+    text: 机械臂笔记（二）运动学正逆过程
+    link: '../robot-arm-2/'
 ---  
 
 一般我们采用矩阵来表示机械臂**末端的位置和姿态信息**，其中位置信息可以用一个三维向量表示：  
