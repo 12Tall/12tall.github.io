@@ -12,7 +12,7 @@ prev:
     text: 机械臂笔记（三）通过PyTorch 梯度下降进行逆运动学计算
     link: '../robot-arm-3/'
 next: 
-    text: 机械臂笔记（五）机械臂的动力学模型
+    text: 机械臂笔记（五）机械臂的动力学模型（欧拉-拉格朗日方程）
     link: '../robot-arm-5/'
 ---  
 
