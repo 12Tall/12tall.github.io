@@ -5,6 +5,9 @@ description: 一些docker 的基础操作，包括离线部署、DevContainer �
 tags: 
     - 容器技术  
     - ROS
+next: 
+    text: Wechat QRCode 二维码扫描
+    link: '../wechat-qrcode/'
 ---  
 
 在软件开发完成，进入实际部署的时候，可能会遇到各种环境不兼容的问题，优势也许要将代码的运行环境与其他项目隔离，这时就需要用到容器技术，可以在不同平台上快速构建相同的开发/运行环境。  

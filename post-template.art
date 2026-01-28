@@ -4,5 +4,13 @@ date: {{ time_stamp }}
 description: 
 tags:
     - {{ tag }}
+
+
+prev: 
+    text: Todo
+    link: '.'
+next: 
+    text: Todo
+    link: '.'
 ---  
 
