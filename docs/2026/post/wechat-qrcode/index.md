@@ -92,6 +92,72 @@ res, points = detector.detectAndDecode(img)
 print(res, points)
 ```
 
+## 特殊情况处理  
+
+并不是所有图片中的二维码都可以直接被识别，如下图中二维码区域相对较小，有时就无法识别到二维码信息。
+
+![qrcode-label.png](./qrcode-label.png)
+
+这是需要先通过opencv 形态学运算找到可能存在二维码的区域。**在OpenCV 的底层逻辑中，它会将（黑色）像素值为`0` 的区域视为背景，将所有像素值大于`0`（通常是二值化后的`255`）的区域视为前景目标。形态学操作的目标是前景色。**  
+
+```python{11-14,16-17,21}
+import cv2
+import numpy as np
+
+img = cv2.imread('qrcode-label.png')  # 读取图片
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # 转化为灰度图片
+_, thresh = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY) # 图片二值化
+
+
+kernels_to_try = [(2,2), (3,3)]  # 卷积核，用于把白色区域扩大，黏合成一块
+for k in kernels_to_try:
+    # 创建卷积核，这里用的MORPH_RECT 矩形
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, k)
+    # 形态学闭运算，先膨胀后腐蚀，可以将白色区域连接起来
+    closed = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
+
+    # 白色连通域提取
+    num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(closed)
+
+    for i in range(1, num_labels):
+        # 对于每个连通区域进行判断
+        x, y, w, h, area = stats[i]
+        
+        # 计算特征指标
+        aspect_ratio = float(w) / h
+        rect_area = w * h
+        extent = float(area) / rect_area  # 填充率：连通域面积占外接矩形面积的比例
+
+        # 4. 筛选条件：
+        # - 面积不能太小 24x24 像素
+        # - 长宽比接近 1 (正方形)
+        # - 填充率高 (说明是个实心的矩形块)
+        if area > 600 and 0.8 < aspect_ratio < 1.2 and extent > 0.7:
+            # 标记可疑区域
+            cv2.rectangle(img, (x-5, y-5), (x + w+5, y + h+5), (0, 255, 0), 2)
+            print(f"检测到潜在区域: [x:{x}, y:{y}, w:{w}, h:{h}], 置信填充率: {extent:.2f}")
+        cv2.imwrite(f'prep-closed_{i}.png', closed)
+
+cv2.imwrite('prep.png', img)
+```
+
+下面是不同卷积核闭运算后得到的结果：  
+
+2x2 卷积核效果如下：    
+![](./closed-119.png)
+
+3x3 卷积核效果如下（不合格）：    
+![](./closed-74.png)
+
+最终标记出所有可能的位置：  
+![](./qrcode-det.png)
+
+对于筛选出来的多个可能存在的区域，可以进行合并重叠区域之后，再进行识别。
+![](./combine.png)
+
+然后对于有些二维码是与标准二维码是反色的，还需要进一步进行反色处理。  
+
 ## 参考资料 
 1. [微信AI设计了一种超分辨率技术，让扫二维码更方便](https://mp.weixin.qq.com/s/ZEthIoGsIm1KsHheWUviZg)  
-2. [微信二维码引擎OpenCV开源！3行代码让你拥有微信扫码能力 | 知乎](https://mp.weixin.qq.com/s/AknsKNqVmvr8aohV25_ZcQ)
+2. [微信二维码引擎OpenCV开源！3行代码让你拥有微信扫码能力](https://mp.weixin.qq.com/s/AknsKNqVmvr8aohV25_ZcQ)  
+3. [Python OpenCV 形态学应用—图像开运算与闭运算](https://juejin.cn/post/7205222965281374269)
