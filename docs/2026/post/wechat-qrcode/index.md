@@ -15,6 +15,8 @@ next:
     link: '.'
 ---  
 
+# Wechat QRCode 二维码扫描
+
 做OCR 识别时，发现物体标签上有二维码信息，用手机微信是可以扫描出来，但是用`pyzbar` 却无法识别。搜索后发现这篇文章[微信AI设计了一种超分辨率技术，让扫二维码更方便](https://mp.weixin.qq.com/s/ZEthIoGsIm1KsHheWUviZg)，进一步搜索后发现`opencv` 中已经集成了该功能。真的是踏破铁鞋无觅处，得来全不费工夫。  
 
 理论知识不多赘述，核心的思路是：  
