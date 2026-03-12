@@ -13,7 +13,7 @@
     </h3>
     <div>
         <el-timeline>
-            <el-timeline-item v-for="(_, index) in category_contents" :key="index">
+            <el-timeline-item v-for="(_, index) in category_contents.slice((currentPage-1)*pageSize,currentPage*pageSize)" :key="index">
                 <el-tag size="small">{{ moment(_.frontmatter.date).format("YYYY-MM-DD") }}</el-tag>
                 <el-link class=" ml-2" :href="_.url"> <el-text class="mx-1" size="large" truncated> {{
                     _.frontmatter.title
@@ -22,7 +22,7 @@
         </el-timeline>
     </div>
     <el-divider></el-divider>
-    <el-pagination layout=" prev, pager, next" :total="data.length" v-model:current-page="currentPage"
+    <el-pagination layout=" prev, pager, next" :total="category_contents.length" v-model:current-page="currentPage"
         :page-size="pageSize" />
 </template>
 

@@ -11,8 +11,8 @@ prev:
     text: Docker 基本操作  
     link: '../docker-basic'
 next: 
-    text: Todo
-    link: '.'
+    text: PaddleOCR 微调过程笔记
+    link: '../ppocr-fine-tuning'
 ---  
 
 # Wechat QRCode 二维码扫描
