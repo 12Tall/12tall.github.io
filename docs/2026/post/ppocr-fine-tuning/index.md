@@ -11,8 +11,8 @@ prev:
     text: Wechat QRCode 二维码扫描
     link: '../wechat-qrcode'
 next: 
-    text: Todo
-    link: '.'
+    text: Rime 输入法在Debian 上的安装过程
+    link: '../rime-install'
 ---  
 
 # PaddleOCR 微调过程笔记  
