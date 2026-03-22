@@ -1,5 +1,9 @@
 创建文章：`npm run docs:new -- -p {类别}/{文章名}`
 
+## 安装依赖  
+- `npm run postinstall` MathJax 补丁    
+- `npx npm-check -u` 更新依赖
+
 ## Todo  
 
 
