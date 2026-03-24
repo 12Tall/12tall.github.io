@@ -11,8 +11,8 @@ prev:
     text: PaddleOCR 微调过程笔记
     link: '../ppocr-fine-tuning'
 next: 
-    text: Todo
-    link: '.'
+    text: Lark websocket 长连接监听事件
+    link: '../lark-ws'
 ---  
 
 # Rime 输入法在Debian 上的安装过程  
