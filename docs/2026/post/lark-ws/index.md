@@ -11,8 +11,8 @@ prev:
   text: Rime 输入法在Debian 上的安装过程
   link: "../rime-install"
 next:
-  text: Todo
-  link: "."
+  text: Cloudflare Tunnel 配置与SSH 代理
+  link: "../cloudflare-1"
 ---
 
 # Lark websocket 长连接监听事件

@@ -1,16 +1,14 @@
 ---
-title: 
-date: {{ time_stamp }}  
-description: 
+title: &desc
+date: {{ time_stamp }}
+description: *desc
 tags:
     - {{ tag }}
 
-
-prev: 
+prev:
     text: Todo
     link: '.'
-next: 
+next:
     text: Todo
     link: '.'
----  
-
+---
